@@ -11,11 +11,50 @@ import testScheduleData from './testSchedule';
 import Map from './Map';
 
 const ScheduleWrapper = styled.div`
-    width:80vw;
-    height:80vh;
+    display:flex;
+    width:100%;
+    height:100%;
     border:1px solid red;
     gap:30px;
     `;
+
+const LeftContainer = styled.div`
+
+width:50vw;
+height:100vh;
+`;
+
+const RightContainer = styled.div`
+width:50vw;
+height:100vh;
+`;
+
+const DayContainer = styled.div`
+width:50vw;
+height:auto;
+border: 1px solid black;
+display:flex;
+flex-direction:column;
+align-items:center;
+`;
+
+const PlaceContainer = styled.div`
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+width:40vw;
+height:auto;
+border:red solid 1px;
+`;
+
+const InputBox = styled.div`
+display:flex;
+align-items:center;
+justify-content:space-between;
+width:28vw;
+height:30px;
+`;
 
 // 拿user資料並放入list
 // async function getUser() {
@@ -41,14 +80,6 @@ setSchedule();
 // const secondDate = new Date(finishDate);
 // const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
 // console.log(diffDays);
-
-// 拿一週的哪一天
-
-// const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-// const d = new Date(embarkDate);
-// // let day = weekday[d.getDay()];
-// const initIndex = d.getDay();
-// 拿一週哪一天用這種方式：{weekday[(initIndex + index) % 7]}
 
 // eslint-disable-next-line no-unused-vars
 function Schedule() {
@@ -156,74 +187,91 @@ function Schedule() {
   const endDate = new URLSearchParams(search).get('to');
   console.log(embarkDate);
   console.log(endDate);
+  // 拿一週的哪一天
+
+  const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+  const d = new Date(embarkDate);
+  // let day = weekday[d.getDay()];
+  const initIndex = d.getDay();
+  // 拿一週哪一天用這種方式：{weekday[(initIndex + index) % 7]}
 
   return (
     <ScheduleWrapper className="test">
-      <div className="date-area">
-        <h2>
-          出發時間：
-          {embarkDate}
-        </h2>
-        <h2>
-          結束時間：
-          {endDate}
-        </h2>
-      </div>
-      <div className="schedule-boxes">
-        <button type="button" onClick={() => addDayInSchedule()}>新增天數</button>
-        {scheduleData ? scheduleData.trip_days.map((dayItem, dayIndex) => (
-          <div className="schedule-box" id={dayIndex + 1} style={{ width: '50vw', height: 'auto', border: '2px solid black' }}>
-            <h2>
-              第
-              {dayIndex + 1}
-              天/
-            </h2>
-            {/* <input
+      <LeftContainer>
+        <div className="date-area">
+          <p>
+            出發時間：
+            {embarkDate}
+          </p>
+          <p>
+            結束時間：
+            {endDate}
+          </p>
+        </div>
+        <div className="schedule-boxes">
+          <button type="button" onClick={() => addDayInSchedule()}>新增天數</button>
+          {scheduleData ? scheduleData.trip_days.map((dayItem, dayIndex) => (
+            <DayContainer>
+              <p>
+                第
+                {dayIndex + 1}
+                天/
+                {weekday[(initIndex + dayIndex) % 7]}
+              </p>
+              {/* <input
               onChange={(e) => {
                 updateTitle(e.target.value);
               }}
               value={dayItem.title}
             /> */}
-            <div>
-              {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
-                <div className="place-box" style={{ border: 'red solid 2px' }}>
-                  <p>
-                    第
-                    {placeIndex + 1}
-                    個景點：
-                  </p>
-                  <input
-                    value={placeItem.place_title}
-                    onChange={(e) => {
-                      updatePlaceTitle(e.target.value, dayIndex, placeIndex);
-                    }}
-                  />
-                  <p>停留時間：</p>
-                  <input
-                    value={placeItem.stay_time}
-                    onChange={(e) => {
-                      updateStayTime(e.target.value, dayIndex, placeIndex);
-                    }}
-                  />
-                  <p>地址：</p>
-                  <input
-                    value={placeItem.place_address}
-                    onChange={(e) => {
-                      updatePlaceAddress(e.target.value, dayIndex, placeIndex);
-                    }}
-                  />
-                </div>
-              ))
-                : (
-                  <div>還沒有地點ㄛ，請新增景點</div>
-                )}
-            </div>
-            <button type="button" onClick={() => addPlaceInDay(dayIndex)}>新增行程</button>
-          </div>
-        )) : <div>沒有資料</div>}
-      </div>
-      <Map />
-
+              <div>
+                {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
+                  <PlaceContainer>
+                    <InputBox>
+                      <p>
+                        第
+                        {placeIndex + 1}
+                        個景點：
+                      </p>
+                      <input
+                        value={placeItem.place_title}
+                        onChange={(e) => {
+                          updatePlaceTitle(e.target.value, dayIndex, placeIndex);
+                        }}
+                      />
+                    </InputBox>
+                    <InputBox>
+                      <p>停留時間：</p>
+                      <input
+                        value={placeItem.stay_time}
+                        onChange={(e) => {
+                          updateStayTime(e.target.value, dayIndex, placeIndex);
+                        }}
+                      />
+                    </InputBox>
+                    <InputBox>
+                      <p>地址：</p>
+                      <input
+                        value={placeItem.place_address}
+                        onChange={(e) => {
+                          updatePlaceAddress(e.target.value, dayIndex, placeIndex);
+                        }}
+                      />
+                    </InputBox>
+                  </PlaceContainer>
+                ))
+                  : (
+                    <div>還沒有地點ㄛ，請新增景點</div>
+                  )}
+              </div>
+              <button type="button" onClick={() => addPlaceInDay(dayIndex)}>新增行程</button>
+            </DayContainer>
+          )) : <div>沒有資料</div>}
+        </div>
+      </LeftContainer>
+      <RightContainer>
+        <Map />
+      </RightContainer>
     </ScheduleWrapper>
   );
 }

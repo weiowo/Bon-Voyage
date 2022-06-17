@@ -9,22 +9,23 @@ let service;
 const libraries = ['places'];
 
 const mapContainerStyle = {
-  height: '50vh',
-  width: '50vw',
+  height: '100vh',
+  width: '47vw',
+  position: 'fixed',
 };
 const options = {
   disableDefaultUI: true,
   zoomControl: true,
 };
 const center = {
-  lat: 43.6532,
-  lng: -79.3832,
+  lat: 46.2,
+  lng: 2.2,
 };
 
 function Map() {
   // eslint-disable-next-line no-unused-vars
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyDiMgaWqWF9EWPNOI0zVF1PTxnqjji1gy8',
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
   });
   const mapRef = useRef();
@@ -39,13 +40,15 @@ function Map() {
 
     const request = {
       location: { lat, lng }, // autocomplete搜尋到的地點中心
-      radius: '500',
+      radius: '1000',
       type: ['restaurant'], // 依據這個中心點往外擴張找餐廳
     };
 
     service = new google.maps.places.PlacesService(mapRef.current);
     // eslint-disable-next-line no-use-before-define
     service.nearbySearch(request, callback);
+
+    // 放markers到選好的地方
 
     function callback(results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -64,6 +67,8 @@ function Map() {
             map,
           });
         }
+      } else {
+        console.log('沒有成功');
       }
     }
   }, []);

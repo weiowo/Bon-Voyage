@@ -7,6 +7,8 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from 'use-places-autocomplete';
 
+// 會自動建議你要搜尋什麼
+
 export default function Search({ panTo }) {
   const {
     ready,

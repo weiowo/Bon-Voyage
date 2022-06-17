@@ -19,7 +19,6 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <div className="App">
-      <div>function-test</div>
       <GlobalStyle />
       <BrowserRouter>
         <Routes>
