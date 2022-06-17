@@ -9,17 +9,20 @@ import { useLocation } from 'react-router-dom';
 import db from '../utils/firebase-init';
 import testScheduleData from './testSchedule';
 import Map from './Map';
+import AddAndSearch
+  from '../components/AddAndSearch';
 
 const ScheduleWrapper = styled.div`
     display:flex;
     width:100%;
     height:100%;
-    border:1px solid red;
     gap:30px;
     `;
 
 const LeftContainer = styled.div`
-
+display:flex;
+flex-direction:column;
+align-items:center;
 width:50vw;
 height:100vh;
 `;
@@ -54,6 +57,12 @@ align-items:center;
 justify-content:space-between;
 width:28vw;
 height:30px;
+`;
+
+const DateContainer = styled.div`
+display:flex;
+width:40vw;
+gap:30px;
 `;
 
 // 拿user資料並放入list
@@ -115,6 +124,15 @@ function Schedule() {
     place_address: '',
     stay_time: '',
   };
+
+  // 新增景點：按下去後要出現可以搜尋景點的框框
+  // 出現景點框框的component
+
+  // 出現景點框框的component
+
+  //   function chooseSearch(){
+
+  //   }
 
   // 新增景點在某一天
 
@@ -197,8 +215,9 @@ function Schedule() {
 
   return (
     <ScheduleWrapper className="test">
-      <LeftContainer>
-        <div className="date-area">
+      <AddAndSearch />
+      <LeftContainer style={{ display: 'none' }}>
+        <DateContainer>
           <p>
             出發時間：
             {embarkDate}
@@ -207,7 +226,8 @@ function Schedule() {
             結束時間：
             {endDate}
           </p>
-        </div>
+        </DateContainer>
+        {' '}
         <div className="schedule-boxes">
           <button type="button" onClick={() => addDayInSchedule()}>新增天數</button>
           {scheduleData ? scheduleData.trip_days.map((dayItem, dayIndex) => (
