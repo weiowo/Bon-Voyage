@@ -1,14 +1,14 @@
-/* eslint-disable react/prop-types */
 import styled from 'styled-components/macro';
 import React, { useEffect } from 'react';
 import {
   getDocs, collection, doc, getDoc, setDoc,
 } from 'firebase/firestore';
+// import produce from 'immer';
 import { useImmer } from 'use-immer';
-import { useLocation } from 'react-router-dom';
+// import Data from './Data';
 import db from '../utils/firebase-init';
+// import testScheduleData from './testSchedule';
 import testScheduleData from './testSchedule';
-import Map from './Map';
 
 const ScheduleWrapper = styled.div`
     width:80vw;
@@ -34,25 +34,9 @@ async function setSchedule() {
 }
 setSchedule();
 
-// 拿日期相減的天數
-
-// const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-// const firstDate = new Date(startDate);
-// const secondDate = new Date(finishDate);
-// const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
-// console.log(diffDays);
-
-// 拿一週的哪一天
-
-// const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-// const d = new Date(embarkDate);
-// // let day = weekday[d.getDay()];
-// const initIndex = d.getDay();
-// 拿一週哪一天用這種方式：{weekday[(initIndex + index) % 7]}
-
-// eslint-disable-next-line no-unused-vars
-function Schedule() {
+function Test() {
   const [scheduleData, updateScheduleData] = useImmer();
+
   // 拿到所有的schedule資料並放入list
   async function getSchedule() {
     const querySnapshot = await getDocs(collection(db, 'schedules'));
@@ -149,24 +133,14 @@ function Schedule() {
     });
   }
 
-  // 拿出發日期與結束日期
-  //   const search = useLocation().search; 為何這樣寫不行?
-  const { search } = useLocation();
-  const embarkDate = new URLSearchParams(search).get('from');
-  const endDate = new URLSearchParams(search).get('to');
-  console.log(embarkDate);
-  console.log(endDate);
-
   return (
     <ScheduleWrapper className="test">
       <div className="date-area">
         <h2>
           出發時間：
-          {embarkDate}
         </h2>
         <h2>
           結束時間：
-          {endDate}
         </h2>
       </div>
       <div className="schedule-boxes">
@@ -222,10 +196,9 @@ function Schedule() {
           </div>
         )) : <div>沒有資料</div>}
       </div>
-      <Map />
 
     </ScheduleWrapper>
   );
 }
 
-export default Schedule;
+export default Test;

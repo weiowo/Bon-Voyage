@@ -7,7 +7,6 @@ function CTA() {
         建立行程
       </Link>
     </button>
-
   );
 }
 

@@ -5,13 +5,6 @@ function ChooseDate() {
   const [embarkDate, setEmbarkDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  function choosed() {
-    console.log(embarkDate);
-    console.log(endDate);
-    localStorage.setItem('embarkDate', embarkDate);
-    localStorage.setItem('endDate', endDate);
-  }
-
   return (
     <>
       <div>
@@ -32,8 +25,8 @@ function ChooseDate() {
           onChange={(e) => setEndDate(e.target.value)}
         />
       </div>
-      <button type="button" onClick={choosed}>
-        <Link to="/schedule">OK!</Link>
+      <button type="button">
+        <Link to={`/schedule?from=${embarkDate}&to=${endDate}`}>OK!</Link>
       </button>
     </>
   );
