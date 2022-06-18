@@ -1,5 +1,6 @@
 import styled from 'styled-components/macro';
-// import React, { useState } from 'react';
+import React from 'react';
+// import PropTypes from 'prop-types';
 
 const searchedData = localStorage.getItem('places') || 0;
 console.log(JSON.parse(searchedData));
@@ -43,14 +44,12 @@ height:30px;
 //     console.log()
 // }
 
+// eslint-disable-next-line react/prop-types
 function AddAndSearch() {
-  // const [selectedSearchedPlace, setSelectedSearchedPlace] = useState();
+  // if (recommendList) {
+  //   console.log(recommendList);
+  // } else { console.log('沒拿到'); }
 
-  // const newSelectedSearchedPlace = {
-  //   place_title: parsedSearchedData,
-  //   place_address: '測試',
-  //   stay_time: '一百年',
-  // };
   return (
     <SearchAreaWrapper>
       <TopBar>
@@ -60,7 +59,11 @@ function AddAndSearch() {
       <SearhResults>
         {parsedSearchedData ? parsedSearchedData.map((item, index) => (
           <RecommendedPlaces>
-            <p>{index + item.name}</p>
+            <p>
+              {index + 1}
+              :
+              {item.name}
+            </p>
             <AddButton type="button">加入行程</AddButton>
           </RecommendedPlaces>
         )) : <div>沒有資料</div>}
@@ -68,6 +71,10 @@ function AddAndSearch() {
     </SearchAreaWrapper>
   );
 }
+
+// AddAndSearch.propTypes = {
+//   recommendList: PropTypes.func.isRequired,
+// };
 
 export default AddAndSearch;
 

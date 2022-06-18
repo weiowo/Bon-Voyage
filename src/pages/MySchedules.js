@@ -81,7 +81,7 @@ function MySchedules() {
         <p>我的行程</p>
         <button type="button">
           <Link to="/choose-date">
-            建立行程
+            建立新的行程
           </Link>
         </button>
         {schedules ? schedules.map((item, index) => (
@@ -118,7 +118,6 @@ function MySchedules() {
           </>
         ) : ''}
       </SelectedScheduleWrapper>
-
     </PageWrapper>
   );
 }
