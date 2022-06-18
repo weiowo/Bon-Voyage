@@ -1,14 +1,16 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable react/prop-types */
 import styled from 'styled-components/macro';
 import React, { useEffect } from 'react';
 import {
-  getDocs, collection, doc, getDoc, setDoc,
+  getDocs, collection, doc, getDoc,
+//   setDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import { useLocation } from 'react-router-dom';
 import db from '../utils/firebase-init';
-import testScheduleData from './testSchedule';
-import Map from './Map';
+// import testScheduleData from './testSchedule';
+// import Map from './Map';
 import AddAndSearch
   from '../components/AddAndSearch';
 
@@ -61,7 +63,7 @@ height:30px;
 
 const DateContainer = styled.div`
 display:flex;
-width:40vw;
+width:50vw;
 gap:30px;
 `;
 
@@ -75,12 +77,13 @@ gap:30px;
 
 // 嘗試放schedule資料到firestore中
 // 先創建資料再set上去，就可以拿到流水號
+// 把流水號設定成這筆schedule的id
 
-async function setSchedule() {
-  const createData = doc(collection(db, 'test'));
-  await setDoc(createData, ({ ...testScheduleData, schedule_id: createData.id }));
-}
-setSchedule();
+// async function setSchedule() {
+//   const createData = doc(collection(db, 'schedules'));
+//   await setDoc(createData, ({ ...testScheduleData, schedule_id: createData.id }));
+// }
+// setSchedule();
 
 // 拿日期相減的天數
 
@@ -100,16 +103,38 @@ function Schedule() {
     console.log(ScheduleList);
   }
 
+  // 如果是建立新行程，則從url拿出發日期與結束日期
+  //   const search = useLocation().search; 為何這樣寫不行?
+  const { search } = useLocation();
+  const embarkDateFromUrl = new URLSearchParams(search).get('from');
+  const endDateFromUrl = new URLSearchParams(search).get('to');
+  const titleFromUrl = new URLSearchParams(search).get('title');
+  console.log(embarkDateFromUrl);
+  console.log(endDateFromUrl);
+
+  // 拿日期相減的天數
+
+  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  const firstDate = new Date(embarkDateFromUrl);
+  const secondDate = new Date(endDateFromUrl);
+  const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
+  console.log(diffDays);
+
+  // 如果是選擇舊行程，則從資料庫拿出發與結束日期
+  const existScheduleId = new URLSearchParams(search).get('id');
+  console.log(existScheduleId);
+
   useEffect(() => {
     // 拿指定一個id的單一筆schedule資料
     async function getCertainSchedule() {
-      const docRef = doc(db, 'schedules', 'FjuVw0TTVDXcQgAa8QFt');
+      const docRef = doc(db, 'schedules', existScheduleId);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         console.log('Document data:', docSnap.data());
 
         updateScheduleData(docSnap.data());
+        console.log(scheduleData);
       } else {
       // doc.data() will be undefined in this case
         console.log('No such document!');
@@ -117,6 +142,7 @@ function Schedule() {
     }
     getSchedule();
     getCertainSchedule();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateScheduleData]);
 
   const newPlace = {
@@ -178,7 +204,7 @@ function Schedule() {
   //   });
   // }
 
-  console.log('aaaaa', scheduleData);
+  scheduleData ? console.log('aaaaa', scheduleData.title) : console.log('還沒拿到行程');
 
   function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
     updateScheduleData((draft) => {
@@ -198,33 +224,68 @@ function Schedule() {
     });
   }
 
-  // 拿出發日期與結束日期
-  //   const search = useLocation().search; 為何這樣寫不行?
-  const { search } = useLocation();
-  const embarkDate = new URLSearchParams(search).get('from');
-  const endDate = new URLSearchParams(search).get('to');
-  console.log(embarkDate);
-  console.log(endDate);
   // 拿一週的哪一天
 
   const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-  const d = new Date(embarkDate);
+  const dFromUrl = new Date(embarkDateFromUrl);
+
+  // let fireStoreTimestamp;
+  // let javascriptDate;
+  // scheduleData ? fireStoreTimestamp = scheduleData.embark_date : '';
+  // scheduleData ? javascriptDate = fireStoreTimestamp.toDate() : '';
+  // console.log(javascriptDate);
+  // scheduleData ? console.log('出發囉', scheduleData.embark_date) : console.log('還沒拿到行程');
+
+  // 先把從database拿出來的millisecond轉為可看的日淇
   // let day = weekday[d.getDay()];
-  const initIndex = d.getDay();
+  const weekDayFromUrl = dFromUrl.getDay();
+  // const weekDayFromDB = scheduleData ? dFromDb.getDay() : '';
+
   // 拿一週哪一天用這種方式：{weekday[(initIndex + index) % 7]}
+
+  // eslint-disable-next-line no-unused-vars
+  const newSchedule = {
+    title: titleFromUrl,
+    schedule_id: 1,
+    embark_date:
+    {
+      seconds: embarkDateFromUrl,
+    },
+    end_date:
+    {
+      seconds: endDateFromUrl,
+    },
+    trip_days: [],
+  };
+
+  if (!scheduleData) {
+    Array(diffDays).fill('').forEach(() => {
+      newSchedule.trip_days.push(newDay);
+    });
+
+    updateScheduleData(newSchedule);
+  }
+  console.log(scheduleData);
+
+  console.log(Array(diffDays));
+  console.log(newSchedule);
 
   return (
     <ScheduleWrapper className="test">
       <AddAndSearch />
-      <LeftContainer style={{ display: 'none' }}>
+      <LeftContainer>
+        <p>
+          行程title：
+          {scheduleData ? scheduleData.title : ''}
+        </p>
         <DateContainer>
           <p>
             出發時間：
-            {embarkDate}
+            {scheduleData ? scheduleData.embark_date.seconds : ''}
           </p>
           <p>
             結束時間：
-            {endDate}
+            {scheduleData ? scheduleData.end_date.seconds : '' }
           </p>
         </DateContainer>
         {' '}
@@ -236,7 +297,8 @@ function Schedule() {
                 第
                 {dayIndex + 1}
                 天/
-                {weekday[(initIndex + dayIndex) % 7]}
+                {weekday[(embarkDateFromUrl ? weekDayFromUrl + dayIndex
+                  : dayIndex) % 7] }
               </p>
               {/* <input
               onChange={(e) => {
@@ -286,11 +348,13 @@ function Schedule() {
               </div>
               <button type="button" onClick={() => addPlaceInDay(dayIndex)}>新增行程</button>
             </DayContainer>
-          )) : <div>沒有資料</div>}
+          ))
+          // 這裡是新創建行程的地方
+            : ''}
         </div>
       </LeftContainer>
       <RightContainer>
-        <Map />
+        {/* <Map /> */}
       </RightContainer>
     </ScheduleWrapper>
   );

@@ -5,6 +5,7 @@ import { createGlobalStyle } from 'styled-components';
 import Schedule from './pages/SchedulePlan';
 import CTA from './pages/Home';
 import ChooseDate from './pages/ChooseDate';
+import MySchedules from './pages/MySchedules';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<CTA />} />
           <Route path="/choose-date" element={<ChooseDate />} />
           <Route path="/schedule" element={<Schedule />} />
+          <Route path="/my-schedules" element={<MySchedules />} />
         </Routes>
       </BrowserRouter>
 

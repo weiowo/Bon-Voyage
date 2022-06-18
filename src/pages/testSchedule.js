@@ -1,6 +1,6 @@
 const testScheduleData = {
-  title: 'Tai-trip',
-  schedule_id: 112345,
+  title: 'Chiayi',
+  schedule_id: 123,
   trip_days: [
     {
       places: [

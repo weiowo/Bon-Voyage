@@ -4,9 +4,19 @@ import { Link } from 'react-router-dom';
 function ChooseDate() {
   const [embarkDate, setEmbarkDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [newScheduleTitle, setNewScheduleTitle] = useState('');
 
   return (
     <>
+      <div>
+        旅程名稱：
+        <input
+          required
+          type="text"
+          value={newScheduleTitle}
+          onChange={(e) => setNewScheduleTitle(e.target.value)}
+        />
+      </div>
       <div>
         開始日期
         <input
@@ -26,7 +36,7 @@ function ChooseDate() {
         />
       </div>
       <button type="button">
-        <Link to={`/schedule?from=${embarkDate}&to=${endDate}`}>OK!</Link>
+        <Link to={`/schedule?title=${newScheduleTitle}&from=${embarkDate}&to=${endDate}`}>OK!</Link>
       </button>
     </>
   );
