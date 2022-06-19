@@ -17,7 +17,9 @@ width: 30vw;
 height: 30px;
 `;
 
-export default function Search({ panTo, setSelected, active }) {
+export default function Search({
+  panTo, setSelected, active, selected,
+}) {
   const {
     ready,
     value,
@@ -44,7 +46,8 @@ export default function Search({ panTo, setSelected, active }) {
     console.log(selected_place); // 選到的那個地方的地址
     const selected_place_data = JSON.stringify(selected_place);
     window.localStorage.setItem('selected_recommend_place', selected_place_data);
-    // eslint-disable-next-line no-new
+    setSelected(selected_place);
+    console.log(selected);
     clearSuggestions();
 
     // Get latitude and longitude via utility functions

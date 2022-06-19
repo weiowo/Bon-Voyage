@@ -139,17 +139,21 @@ border-radius:1px;
 `;
 
 const AddAndSearchBox = styled.div`
-width:70vw;
+width:50vw;
 height:100vh;
 background-color:transparent;
 display:${(props) => (props.active ? 'block' : 'none')};
 `;
 
-// const ResultsArea = styled.div`
-// background-color:transparent;
-// height:auto;
-// width:50vw;
-// `;
+const ResultsArea = styled.div`
+display:flex;
+flex-direction:column;
+align-items:center;
+margin-top:100px;
+background-color:transparent;
+height:auto;
+width:50vw;
+`;
 
 // const SearchedPlace = styled.div`
 // width:200px;
@@ -159,17 +163,29 @@ display:${(props) => (props.active ? 'block' : 'none')};
 // border-radius:6px;
 // `;
 
-// const RecommendPlaces = styled.div`
-// height:auto;
-// width:50vw;
-// baclground-color:yellow;
-// border:2px solid red;
-// `;
+const RecommendPlaces = styled.div`
+display:flex;
+flex-direction:column;
+align-items:center;
+height:auto;
+width:50vw;
+baclground-color:yellow;
+border:2px solid red;
+gap:10px;
+`;
 
-// const RecommendPlace = styled.div`
-// height:auto;
-// width:40vw;
-// `;
+const RecommendPlace = styled.div`
+gap:30px;
+display:flex;
+justify-content:space-between;
+height:auto;
+width:40vw;
+`;
+
+const AddToPlaceButton = styled.button`
+height:30px;
+width:100px;
+`;
 
 // 拿user資料並放入list
 // async function getUser() {
@@ -217,12 +233,18 @@ function Schedule() {
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
   const [active, setActive] = useState(false);
+  const [selected, setSelected] = useState('我在這兒'); // 搜尋後根據自動推薦選擇的地點
+
   // 拿到所有的schedule資料並放入list
   // async function getSchedule() {
   //   const querySnapshot = await getDocs(collection(db, 'schedules'));
   //   const ScheduleList = querySnapshot.docs.map((item) => item.data());
   //   console.log(ScheduleList);
   // }
+
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
 
   // 如果是建立新行程，則從url拿出發日期與結束日期
   const { search } = useLocation();
@@ -426,22 +448,26 @@ function Schedule() {
   // console.log(recommendList);
   // let messageValue = '';
 
+  console.log('選到的在這Schedule！', selected);
+
   return (
     <ScheduleWrapper className="test">
       {/* <AddAndSearch recommendList={recommendList} setRecommendList={setRecommendList} /> */}
       <AddAndSearchBox active={active}>
         <button type="button" onClick={() => setActive(false)}>X</button>
-        <div>
-          {recommendList.map((place, index) => {
-            <>
-              <div>哈哈</div>
-              <div>{index + 1 }</div>
-              <div>
-                {place.name}
-              </div>
-            </>;
-          })}
-        </div>
+        <ResultsArea>
+          <RecommendPlaces>
+            {recommendList.map((place, index) => (
+              <RecommendPlace>
+                <div>{index + 1 }</div>
+                <div style={{ width: '200px;' }}>
+                  {place.name}
+                </div>
+                <AddToPlaceButton type="button">加入行程</AddToPlaceButton>
+              </RecommendPlace>
+            ))}
+          </RecommendPlaces>
+        </ResultsArea>
       </AddAndSearchBox>
       <LeftContainer active={active}>
         <p>
@@ -457,6 +483,7 @@ function Schedule() {
             結束時間：
             {scheduleData ? scheduleData.end_date.seconds : '' }
           </p>
+          <button type="button">完成行程</button>
         </DateContainer>
         {' '}
         <div className="schedule-boxes">
@@ -525,7 +552,12 @@ function Schedule() {
         </div>
       </LeftContainer>
       <RightContainer>
-        <Map recommendList={recommendList} setRecommendList={setRecommendList} />
+        <Map
+          recommendList={recommendList}
+          setRecommendList={setRecommendList}
+          selected={selected}
+          set={setSelected}
+        />
         <ChatRoom>
           <MessagesDisplayArea>
             {chatBox ? chatBox.messages.map((item, index) => (

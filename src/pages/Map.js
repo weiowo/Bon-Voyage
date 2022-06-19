@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
 /* global google */
@@ -25,8 +26,9 @@ const center = {
 };
 
 // eslint-disable-next-line react/prop-types
-function Map({ recommendList, setRecommendList, setActive }) {
-  // const [selected, setSelected] = useState('');
+function Map({
+  recommendList, setRecommendList, setActive, setSelected, selected,
+}) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ['places'],
@@ -89,9 +91,11 @@ function Map({ recommendList, setRecommendList, setActive }) {
 
   if (!isLoaded) return <div>test...</div>;
 
+  console.log('選到的在這Map！', selected);
+
   return (
     <div>
-      <Search panTo={panTo} setActive={setActive} />
+      <Search panTo={panTo} setActive={setActive} setSelected={setSelected} selected={selected} />
       <GoogleMap
         id="map"
         mapContainerStyle={mapContainerStyle}
