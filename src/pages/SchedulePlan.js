@@ -10,13 +10,14 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
 import PinkCloseIcon from './images/close-2.png';
 import db from '../utils/firebase-init';
 // import testScheduleData from './testSchedule';
 import Map from './Map';
+
 // import AddAndSearch
 //   from '../components/AddAndSearch';
 // import Search from './Search';
@@ -313,6 +314,8 @@ function Schedule() {
   const [selected, setSelected] = useState({}); // 搜尋後根據自動推薦選擇的地點
   const [clickedDayIndex, setClickedDayIndex] = useState('');
   const [openChat, setOpenChat] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams);
 
   // 拿到所有的schedule資料並放入list
   // async function getSchedule() {
@@ -364,9 +367,9 @@ function Schedule() {
   }, [updateScheduleData]);
 
   // 如果沒有id，表示是新行程，創建資料後再次把行set進去
-  // 如果有id，則是編輯既有的行程，編輯後update進去db
+  // 如果有id，則是編輯既有的行程，編輯後update進去db，並創建一個新的聊天室
 
-  async function setEditedScheduleToDb() {
+  async function setCompletedScheduleToDb() {
     if (existScheduleId) {
       console.log('修改好行程囉！');
       const scheduleRef = doc(db, 'schedules', existScheduleId);
@@ -374,17 +377,37 @@ function Schedule() {
     } else {
       const createNewScheduleData = doc(collection(db, 'schedules'));
       await setDoc(createNewScheduleData, ({ ...scheduleData, schedule_id: createNewScheduleData.id }));
+      const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
+      await setDoc(createNewChatRoomData, ({ ...chatBox, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }));
+      const params = { id: createNewScheduleData.id };
+      setSearchParams(params);
+    }
+  }
+
+  // 聊天室：如果按下聊天室按鈕時，發現無法從url上拿到行程id
+  // 就先創一個聊天室，推newChatRoom去chatBox這個immer，schedule_id先設立為123
+  // 在按下完成行程的時候，建立這個行程(會獲得id)，並同時把chat-room中的行程id設定為這個id
+
+  const newChatRoom = {
+    chat_room_id: '',
+    schedule_id: 'hfuerifhu',
+    messages: [],
+  };
+
+  async function CreateNewChatRoom() {
+    if (!existScheduleId) {
+      console.log('沒有聊天室，創一個新的在瀏覽器！');
+      updateChatBox(newChatRoom);
     }
   }
 
   // setSchedule();
 
-  // 拿指定一個schedule_id的聊天室資料
+  // 如果已經有聊天室，則拿指定一個schedule_id的聊天室資料，如果沒有，則創建一個！
 
   useEffect(() => {
     async function getChatRoom() {
       const q = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
@@ -393,7 +416,11 @@ function Schedule() {
         console.log(chatBox);
       });
     }
-    getChatRoom();
+    if (existScheduleId) {
+      getChatRoom();
+    } else {
+      CreateNewChatRoom();
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateChatBox]);
 
@@ -461,7 +488,7 @@ function Schedule() {
       draft.messages.push(newMessage);
     });
   }
-
+  // 如果已經有聊天室就拉下來
   // 有人輸入完一句話，送出時會推進chatRoom的messages array，造成chatBox改變，這時就要推上db
 
   useEffect(() => {
@@ -469,8 +496,10 @@ function Schedule() {
       const messageRef = doc(db, 'chat_rooms', chatBox.chat_room_id);
       await updateDoc(messageRef, chatBox);
     }
-    setMessageIntoDb();
-  }, [chatBox]);
+    if (existScheduleId) {
+      setMessageIntoDb();
+    }
+  }, [chatBox, existScheduleId]);
 
   console.log(chatBox);
 
@@ -605,7 +634,7 @@ function Schedule() {
             結束時間：
             {scheduleData && existScheduleId ? scheduleData.end_date.seconds : endDateFromUrl }
           </p>
-          <CompleteButton onClick={() => setEditedScheduleToDb()} type="button">完成行程</CompleteButton>
+          <CompleteButton onClick={() => setCompletedScheduleToDb()} type="button">完成行程</CompleteButton>
         </DateContainer>
 
         <div className="schedule-boxes">
