@@ -12,13 +12,13 @@ import styled from 'styled-components';
 // 會自動建議你要搜尋什麼
 
 const SearchInput = styled.input`
-display:${(props) => (props.active ? 'none' : 'flex')};
+display:${(props) => (props.clicked ? 'flex' : 'none')};
 width: 30vw;
 height: 30px;
 `;
 
 export default function Search({
-  panTo, setSelected, active, selected,
+  panTo, setSelected, selected, active,
 }) {
   const {
     ready,
@@ -28,6 +28,7 @@ export default function Search({
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
+      fields: ['formatted_address', 'geometry', 'name'], // 要放在哪？
       /* Define search scope here */
     },
     debounce: 300,
@@ -64,6 +65,8 @@ export default function Search({
     // 去拿那個地址的經緯度！
   };
 
+  console.log(active);
+
   const renderSuggestions = () => data.map((suggestion) => {
     const {
       place_id,
@@ -74,7 +77,13 @@ export default function Search({
 
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-      <li key={place_id} onClick={handleSelect(suggestion)}>
+      <li
+        style={{
+          backgroundColor: 'white', borderBottom: '1px black solid', cursor: 'pointer', borderRadius: '3px',
+        }}
+        key={place_id}
+        onClick={handleSelect(suggestion)}
+      >
         <strong>{main_text}</strong>
         {' '}
         <small>{secondary_text}</small>
@@ -84,13 +93,13 @@ export default function Search({
 
   return (
     <div style={{
-      position: 'fixed',
+      position: 'absolute',
       left: '11vw',
       top: '40px',
     }}
     >
       <SearchInput
-        active={active}
+        clicked={active}
         value={value}
         onChange={handleInput}
         disabled={!ready}

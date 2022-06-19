@@ -13,7 +13,7 @@ let service;
 
 const mapContainerStyle = {
   height: '100vh',
-  width: '47vw',
+  width: '50vw',
   position: 'fixed',
 };
 const options = {
@@ -27,7 +27,7 @@ const center = {
 
 // eslint-disable-next-line react/prop-types
 function Map({
-  recommendList, setRecommendList, setActive, setSelected, selected,
+  recommendList, setRecommendList, active, setSelected, selected,
 }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -96,7 +96,7 @@ function Map({
 
   return (
     <div>
-      <Search panTo={panTo} setActive={setActive} setSelected={setSelected} selected={selected} />
+      <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
       <GoogleMap
         id="map"
         mapContainerStyle={mapContainerStyle}

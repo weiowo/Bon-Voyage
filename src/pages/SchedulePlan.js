@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable max-len */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
@@ -9,6 +11,9 @@ import {
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import { useLocation } from 'react-router-dom';
+import SpeakIcon from './images/speak.png';
+import CloseChatIcon from './images/close-1.png';
+import PinkCloseIcon from './images/close-2.png';
 import db from '../utils/firebase-init';
 // import testScheduleData from './testSchedule';
 import Map from './Map';
@@ -25,6 +30,7 @@ const ScheduleWrapper = styled.div`
     `;
 
 const LeftContainer = styled.div`
+overflow:scroll;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -67,31 +73,95 @@ height:30px;
 
 const DateContainer = styled.div`
 display:flex;
+justify-content:space-between;
+align-items:center;
 width:50vw;
 gap:30px;
+padding-left:100px;
+padding-right:100px;
+
+`;
+
+const CompleteButton = styled.button`
+width:120px;
+height:30px;
+background-color:beige;
+color:brown;
+border-radius:3px;
+border: solid brown 2px;
+font-weight:600;
+cursor:pointer;
 `;
 
 const ChatRoom = styled.div`
+z-index:1;
 display:flex;
 flex-direction:column;
 align-items:center;
-width:25vw;
-height:200px;
+width:22vw;
+height:300px;
 border-radius:5px;
 border:blue 2px solid;
+position: fixed;
+bottom: 0px;
+right:50px;
+background-color:white;
+display:${(props) => (props.openChat ? 'flex' : 'none')};
+
+`;
+
+const ChatIcon = styled.img`
+position: fixed;
+bottom: 50px;
+right:80px;
+z-index:1;
+width:50px;
+height:50px;
+cursor:pointer;
+display:${(props) => (props.openChat ? 'none' : 'block')};
+`;
+
+const CloseIcon = styled.img`
+width:15px;
+height:15px;
+position:absolute;
+right:20px;
+cursor:pointer;
+`;
+
+const CloseSearchIcon = styled.img`
+margin-top:20px;
+width:20px;
+height:20px;
+`;
+
+const ChatRoomTitle = styled.div`
+display:flex;
+align-items:center;
+justify-content:center;
+height:30px;
+background-color:#add8e6;
+color:black;
+width:21.7vw;
+font-size:12px;
+position:relative;
 `;
 
 const MessagesDisplayArea = styled.div`
-height:170px;
-width:25vw;
+display:flex;
+flex-direction:column;
+overflow:scroll;
+height:250px;
+width:22vw;
+gap:5px;
 `;
 
 const MessageBox = styled.div`
+padding-left:10px;
 display:flex;
-width:20vw;
+width:auto;
 height:30px;
 border-radius:3px;
-border:purple 2px solid;
 align-items:center;
 align-self:flex-start;
 `;
@@ -102,6 +172,10 @@ font-size:12px;
 `;
 
 const Message = styled.div`
+padding-left:10px;
+padding-right:10px;
+border-radius:3px;
+background-color:#D3D3D3;
 font-size:12px;
 `;
 
@@ -113,7 +187,7 @@ border-radius:50%;
 `;
 
 const EnterArea = styled.div`
-width:25vw;
+width:22vw;
 height:40px;
 display:flex;
 align-items:center;
@@ -135,13 +209,13 @@ const EnterMessageButton = styled.button`
 width:auto;
 height:20px;
 border: green 2px solid;
-border-radius:1px;
+border-radius:2px;
+cursor:pointer;
 `;
 
 const AddAndSearchBox = styled.div`
 width:50vw;
 height:100vh;
-background-color:transparent;
 display:${(props) => (props.active ? 'block' : 'none')};
 `;
 
@@ -150,8 +224,7 @@ display:flex;
 flex-direction:column;
 align-items:center;
 margin-top:50px;
-background-color:transparent;
-height:auto;
+height:90vh;
 width:50vw;
 `;
 
@@ -167,10 +240,11 @@ margin-top:20px;
 `;
 
 const RecommendPlaces = styled.div`
+overflow:scroll;
 display:flex;
 flex-direction:column;
 align-items:center;
-height:auto;
+height:80vh;
 width:50vw;
 baclground-color:yellow;
 border:2px solid red;
@@ -237,6 +311,8 @@ function Schedule() {
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
   const [active, setActive] = useState(false);
   const [selected, setSelected] = useState({}); // 搜尋後根據自動推薦選擇的地點
+  const [clickedDayIndex, setClickedDayIndex] = useState('');
+  const [openChat, setOpenChat] = useState(false);
 
   // 拿到所有的schedule資料並放入list
   // async function getSchedule() {
@@ -310,12 +386,6 @@ function Schedule() {
     place_address: '',
     stay_time: '',
   };
-
-  // 新增景點：按下去後要出現可以搜尋景點的框框
-  // 出現景點框框的component
-  //   function chooseSearch(){
-
-  //   }
 
   // 新增景點在某一天
 
@@ -392,14 +462,27 @@ function Schedule() {
   const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
   const dFromUrl = new Date(embarkDateFromUrl);
 
+  // const date = scheduleData.embark_date.toDate();
+  // console.log(date);
+
   // let fireStoreTimestamp;
   // let javascriptDate;
-  // scheduleData ? fireStoreTimestamp = scheduleData.embark_date : '';
-  // scheduleData ? javascriptDate = fireStoreTimestamp.toDate() : '';
+  // scheduleData && existScheduleId ? fireStoreTimestamp = scheduleData.embark_date : '';
+  // scheduleData && existScheduleId ? javascriptDate = fireStoreTimestamp.toDate() : '';
   // console.log(javascriptDate);
   // scheduleData ? console.log('出發囉', scheduleData.embark_date) : console.log('還沒拿到行程');
   // 先把從database拿出來的millisecond轉為可看的日淇
   // let day = weekday[d.getDay()];
+
+  // useEffect(() => {
+  //   const fireBaseTime = new Date(
+  //     scheduleData.embark_date.seconds * 1000 + scheduleData.embark_date.nanoseconds / 1000000,
+  //   );
+  //   const date = fireBaseTime.toDateString();
+  //   const atTime = fireBaseTime.toLocaleTimeString();
+  //   console.log(date, atTime);
+  // }, [scheduleData.embark_date.seconds, scheduleData.embark_date.nanoseconds]);
+
   const weekDayFromUrl = dFromUrl.getDay();
   // const weekDayFromDB = scheduleData ? dFromDb.getDay() : '';
 
@@ -445,9 +528,15 @@ function Schedule() {
     });
   }
   // 按下新增行程後，會出現空白的input field，同時導向搜尋區域，搜尋後按下加入行程，把搜尋到的結果放到最新的那個行程
-  function updatePlaceBySearch(placeTitle, dayIndex, placeIndex) {
+  function updatePlaceTitleBySearch(placeTitle, clickedDayIndex) {
     updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].place_title = ;
+      draft.trip_days[clickedDayIndex].places[draft.trip_days[clickedDayIndex].places.length - 1].place_title = placeTitle;
+    });
+  }
+
+  function updatePlaceAddressBySearch(placeAddress, clickedDayIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[clickedDayIndex].places[draft.trip_days[clickedDayIndex].places.length - 1].place_address = placeAddress;
     });
   }
 
@@ -455,23 +544,31 @@ function Schedule() {
     <ScheduleWrapper className="test">
       {/* <AddAndSearch recommendList={recommendList} setRecommendList={setRecommendList} /> */}
       <AddAndSearchBox active={active}>
-        <button type="button" onClick={() => setActive(false)}>X</button>
+        <CloseSearchIcon
+          src={PinkCloseIcon}
+          onClick={() => setActive(false)}
+        />
         <ResultsArea>
           <SearchedPlace>
             <div>
               您搜尋地點：
               {selected.structured_formatting ? selected.structured_formatting.main_text : ''}
             </div>
-            <AddToPlaceButton>加入行程</AddToPlaceButton>
+            <AddToPlaceButton
+              onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); }}
+            >
+              加入行程
+            </AddToPlaceButton>
           </SearchedPlace>
           <RecommendPlaces>
+            周邊推薦景點：
             {recommendList.map((place, index) => (
               <RecommendPlace>
                 <div>{index + 1 }</div>
-                <div style={{ width: '200px' }}>
+                <div style={{ width: '35vw' }}>
                   {place.name}
                 </div>
-                <AddToPlaceButton onClick={() => console.log(place.name)} type="button">加入行程</AddToPlaceButton>
+                <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place.name, clickedDayIndex); updatePlaceAddressBySearch(place.vicinity, clickedDayIndex); }} type="button">加入行程</AddToPlaceButton>
               </RecommendPlace>
             ))}
           </RecommendPlaces>
@@ -485,15 +582,15 @@ function Schedule() {
         <DateContainer>
           <p>
             出發時間：
-            {scheduleData ? scheduleData.embark_date.seconds : ''}
+            {scheduleData && existScheduleId ? scheduleData.embark_date.seconds : embarkDateFromUrl}
           </p>
           <p>
             結束時間：
-            {scheduleData ? scheduleData.end_date.seconds : '' }
+            {scheduleData && existScheduleId ? scheduleData.end_date.seconds : endDateFromUrl }
           </p>
-          <button type="button">完成行程</button>
+          <CompleteButton type="button">完成行程</CompleteButton>
         </DateContainer>
-        {' '}
+
         <div className="schedule-boxes">
           {/* <Search /> 要怎麼讓search跑到這邊？function怎麼傳？ */}
           <button type="button" onClick={() => addDayInSchedule()}>新增天數</button>
@@ -506,12 +603,6 @@ function Schedule() {
                 {weekday[(embarkDateFromUrl ? weekDayFromUrl + dayIndex
                   : dayIndex) % 7] }
               </p>
-              {/* <input
-              onChange={(e) => {
-                updateTitle(e.target.value);
-              }}
-              value={dayItem.title}
-            /> */}
               <div>
                 {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
                   <PlaceContainer>
@@ -552,7 +643,7 @@ function Schedule() {
                     <div>還沒有地點ㄛ，請新增景點</div>
                   )}
               </div>
-              <button type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); }}>新增行程</button>
+              <button type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
             </DayContainer>
           ))
           // 這裡是新創建行程的地方
@@ -565,15 +656,18 @@ function Schedule() {
           setRecommendList={setRecommendList}
           selected={selected}
           setSelected={setSelected}
+          active={active}
         />
-        <ChatRoom>
+        <ChatRoom openChat={openChat}>
+          <ChatRoomTitle>
+            聊天室
+            <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
+          </ChatRoomTitle>
           <MessagesDisplayArea>
-            {chatBox ? chatBox.messages.map((item, index) => (
+            {chatBox ? chatBox.messages.map((item) => (
               <MessageBox>
                 <UserPhoto />
                 <Name>
-                  {index + 1}
-                  {' '}
                   {item.user_name}
                   ：
                 </Name>
@@ -593,6 +687,7 @@ function Schedule() {
             </EnterMessageButton>
           </EnterArea>
         </ChatRoom>
+        <ChatIcon src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
       </RightContainer>
     </ScheduleWrapper>
   );
