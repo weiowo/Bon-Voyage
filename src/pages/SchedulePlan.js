@@ -6,7 +6,7 @@ import styled from 'styled-components/macro';
 import React, { useEffect, useState } from 'react';
 import {
   getDocs, collection, doc, getDoc, query, where,
-  // setDoc,
+  setDoc,
   updateDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
@@ -132,7 +132,7 @@ cursor:pointer;
 const CloseSearchIcon = styled.img`
 margin-top:20px;
 width:20px;
-height:20px;
+height:20 px;
 `;
 
 const ChatRoomTitle = styled.div`
@@ -363,6 +363,22 @@ function Schedule() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateScheduleData]);
 
+  // 如果沒有id，表示是新行程，創建資料後再次把行set進去
+  // 如果有id，則是編輯既有的行程，編輯後update進去db
+
+  async function setEditedScheduleToDb() {
+    if (existScheduleId) {
+      console.log('修改好行程囉！');
+      const scheduleRef = doc(db, 'schedules', existScheduleId);
+      await updateDoc(scheduleRef, scheduleData);
+    } else {
+      const createNewScheduleData = doc(collection(db, 'schedules'));
+      await setDoc(createNewScheduleData, ({ ...scheduleData, schedule_id: createNewScheduleData.id }));
+    }
+  }
+
+  // setSchedule();
+
   // 拿指定一個schedule_id的聊天室資料
 
   useEffect(() => {
@@ -446,10 +462,11 @@ function Schedule() {
     });
   }
 
+  // 有人輸入完一句話，送出時會推進chatRoom的messages array，造成chatBox改變，這時就要推上db
+
   useEffect(() => {
     async function setMessageIntoDb() {
       const messageRef = doc(db, 'chat_rooms', chatBox.chat_room_id);
-      // Set the "capital" field of the city 'DC'
       await updateDoc(messageRef, chatBox);
     }
     setMessageIntoDb();
@@ -588,7 +605,7 @@ function Schedule() {
             結束時間：
             {scheduleData && existScheduleId ? scheduleData.end_date.seconds : endDateFromUrl }
           </p>
-          <CompleteButton type="button">完成行程</CompleteButton>
+          <CompleteButton onClick={() => setEditedScheduleToDb()} type="button">完成行程</CompleteButton>
         </DateContainer>
 
         <div className="schedule-boxes">
