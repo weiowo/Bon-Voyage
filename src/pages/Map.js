@@ -39,6 +39,7 @@ function Map({
     mapRef.current = map;
   }, []);
   // console.log(loadError);
+  console.log(process.env.REACT_APP_GOOGLE_API_KEY);
 
   const panTo = useCallback(({ lat, lng }) => {
     mapRef.current.panTo({ lat, lng });

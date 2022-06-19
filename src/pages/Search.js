@@ -55,7 +55,7 @@ export default function Search({
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
         panTo({ lat, lng });
-        setSelected({ lat, lng });
+        // setSelected({ lat, lng });
         console.log({ lat, lng });
       })
       .catch((error) => {

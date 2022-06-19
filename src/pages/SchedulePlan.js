@@ -149,19 +149,22 @@ const ResultsArea = styled.div`
 display:flex;
 flex-direction:column;
 align-items:center;
-margin-top:100px;
+margin-top:50px;
 background-color:transparent;
 height:auto;
 width:50vw;
 `;
 
-// const SearchedPlace = styled.div`
-// width:200px;
-// height:30px;
-// background-color:brown;
-// color:white;
-// border-radius:6px;
-// `;
+const SearchedPlace = styled.div`
+width:50vw;
+height:30px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:30px;
+margin-bottom:20px;
+margin-top:20px;
+`;
 
 const RecommendPlaces = styled.div`
 display:flex;
@@ -233,7 +236,7 @@ function Schedule() {
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
   const [active, setActive] = useState(false);
-  const [selected, setSelected] = useState('我在這兒'); // 搜尋後根據自動推薦選擇的地點
+  const [selected, setSelected] = useState({}); // 搜尋後根據自動推薦選擇的地點
 
   // 拿到所有的schedule資料並放入list
   // async function getSchedule() {
@@ -358,24 +361,6 @@ function Schedule() {
   //   });
   // }
 
-  function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].place_title = placeTitle;
-    });
-  }
-
-  function updatePlaceAddress(placeAddress, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].place_address = placeAddress;
-    });
-  }
-
-  function updateStayTime(stayTime, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
-    });
-  }
-
   // 把state的訊息放進去object，然後推進整個messages array
 
   const newMessage = {
@@ -442,13 +427,29 @@ function Schedule() {
 
     updateScheduleData(newSchedule);
   }
-  // console.log(scheduleData);
-  // console.log(Array(diffDays));
-  // console.log(newSchedule);
-  // console.log(recommendList);
-  // let messageValue = '';
 
-  console.log('選到的在這Schedule！', selected);
+  // 手動更改行程內容！
+  function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].place_title = placeTitle;
+    });
+  }
+  function updatePlaceAddress(placeAddress, dayIndex, placeIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].place_address = placeAddress;
+    });
+  }
+  function updateStayTime(stayTime, dayIndex, placeIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
+    });
+  }
+  // 按下新增行程後，會出現空白的input field，同時導向搜尋區域，搜尋後按下加入行程，把搜尋到的結果放到最新的那個行程
+  function updatePlaceBySearch(placeTitle, dayIndex, placeIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].place_title = ;
+    });
+  }
 
   return (
     <ScheduleWrapper className="test">
@@ -456,14 +457,21 @@ function Schedule() {
       <AddAndSearchBox active={active}>
         <button type="button" onClick={() => setActive(false)}>X</button>
         <ResultsArea>
+          <SearchedPlace>
+            <div>
+              您搜尋地點：
+              {selected.structured_formatting ? selected.structured_formatting.main_text : ''}
+            </div>
+            <AddToPlaceButton>加入行程</AddToPlaceButton>
+          </SearchedPlace>
           <RecommendPlaces>
             {recommendList.map((place, index) => (
               <RecommendPlace>
                 <div>{index + 1 }</div>
-                <div style={{ width: '200px;' }}>
+                <div style={{ width: '200px' }}>
                   {place.name}
                 </div>
-                <AddToPlaceButton type="button">加入行程</AddToPlaceButton>
+                <AddToPlaceButton onClick={() => console.log(place.name)} type="button">加入行程</AddToPlaceButton>
               </RecommendPlace>
             ))}
           </RecommendPlaces>
@@ -556,7 +564,7 @@ function Schedule() {
           recommendList={recommendList}
           setRecommendList={setRecommendList}
           selected={selected}
-          set={setSelected}
+          setSelected={setSelected}
         />
         <ChatRoom>
           <MessagesDisplayArea>
