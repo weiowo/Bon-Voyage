@@ -5,19 +5,21 @@
 import styled from 'styled-components/macro';
 import React, { useEffect, useState } from 'react';
 import {
-  getDocs, collection, doc, getDoc, query, where,
-  setDoc,
+  // getDocs,
+  collection, doc, getDoc, getDocs,
+  query, where,
+  setDoc, arrayUnion,
   updateDoc,
+  onSnapshot,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams, Link } from 'react-router-dom';
 import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
 import PinkCloseIcon from './images/close-2.png';
 import db from '../utils/firebase-init';
 // import testScheduleData from './testSchedule';
 import Map from './Map';
-
 // import AddAndSearch
 //   from '../components/AddAndSearch';
 // import Search from './Search';
@@ -306,8 +308,14 @@ width:100px;
 
 // eslint-disable-next-line no-unused-vars
 function Schedule() {
+  const newChatRoom = {
+    chat_room_id: '',
+    schedule_id: '',
+    messages: [],
+  };
   const [scheduleData, updateScheduleData] = useImmer();
-  const [chatBox, updateChatBox] = useImmer();
+  // eslint-disable-next-line no-use-before-define
+  const [chatBox, updateChatBox] = useImmer(newChatRoom);
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
   const [active, setActive] = useState(false);
@@ -317,16 +325,19 @@ function Schedule() {
   const [searchParams, setSearchParams] = useSearchParams();
   console.log(searchParams);
 
+  // async function CreateNewChatRoom() {
+  //   if (!existScheduleId) {
+  //     console.log('沒有聊天室，創一個新的在瀏覽器！');
+  //     updateChatBox(newChatRoom);
+  //   }
+  // }
+
   // 拿到所有的schedule資料並放入list
   // async function getSchedule() {
   //   const querySnapshot = await getDocs(collection(db, 'schedules'));
   //   const ScheduleList = querySnapshot.docs.map((item) => item.data());
   //   console.log(ScheduleList);
   // }
-
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
 
   // 如果是建立新行程，則從url拿出發日期與結束日期
   const { search } = useLocation();
@@ -347,24 +358,37 @@ function Schedule() {
 
   // 拿指定一個id的單一筆schedule資料
   useEffect(() => {
+    if (!existScheduleId) return;
     async function getCertainSchedule() {
       const docRef = doc(db, 'schedules', existScheduleId);
       const docSnap = await getDoc(docRef);
-
       if (docSnap.exists()) {
         console.log('Document data:', docSnap.data());
 
         updateScheduleData(docSnap.data());
-        console.log(scheduleData);
+        updateChatBox((draft) => {
+          draft.chat_room_id = docSnap.data().chat_room_id;
+        });
       } else {
       // doc.data() will be undefined in this case
         console.log('No such document!');
       }
     }
+    async function getChatRoom() {
+      console.log('getChatRoom, getChatRoom, getChatRoom');
+      const chatRoomMessageIdRef = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
+      const test = await getDocs(chatRoomMessageIdRef);
+      test.forEach((doc) => {
+        console.log('owowow', doc.data());
+        updateChatBox((draft) => {
+          draft.chat_room_id = doc.data().chat_room_id;
+        });
+      });
+    }
     // getSchedule();
     getCertainSchedule();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateScheduleData]);
+    getChatRoom();
+  }, [updateScheduleData, existScheduleId, updateChatBox]);
 
   // 如果沒有id，表示是新行程，創建資料後再次把行set進去
   // 如果有id，則是編輯既有的行程，編輯後update進去db，並創建一個新的聊天室
@@ -379,50 +403,110 @@ function Schedule() {
       await setDoc(createNewScheduleData, ({ ...scheduleData, schedule_id: createNewScheduleData.id }));
       const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
       await setDoc(createNewChatRoomData, ({ ...chatBox, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }));
+      updateChatBox((draft) => {
+        draft.chat_room_id = createNewChatRoomData.id;
+        draft.schedule_id = createNewScheduleData.id;
+      });
       const params = { id: createNewScheduleData.id };
       setSearchParams(params);
     }
   }
-
   // 聊天室：如果按下聊天室按鈕時，發現無法從url上拿到行程id
-  // 就先創一個聊天室，推newChatRoom去chatBox這個immer，schedule_id先設立為123
+  // 就先創一個聊天室，推newChatRoom去chatBox這個immer，schedule_id先設立為123-->改了！創好行程後才能有聊天室！原本都不能按！
   // 在按下完成行程的時候，建立這個行程(會獲得id)，並同時把chat-room中的行程id設定為這個id
 
-  const newChatRoom = {
-    chat_room_id: '',
-    schedule_id: 'hfuerifhu',
-    messages: [],
+  // 把state的訊息放進去object，然後推進整個messages array
+  const newMessage = {
+    user_id: 123,
+    user_name: '葳葳',
+    message: inputMessage,
+    sent_time: new Date(),
   };
 
-  async function CreateNewChatRoom() {
-    if (!existScheduleId) {
-      console.log('沒有聊天室，創一個新的在瀏覽器！');
-      updateChatBox(newChatRoom);
-    }
+  // function updataMessage() {
+  //   updateChatBox((draft) => {
+  //     draft.messages.push(newMessage);
+  //   });
+  // }
+
+  // 如果已經有聊天室就拉下來
+  // 有人輸入完一句話，送出時會推進chatRoom的messages array，造成chatBox改變，這時就要推上db-->改了！直接更新到db！再拉下來！
+  // 送出訊息的時候直接更新到db，再用OnsnapShop，有更新的話就update進immer
+  // 如果草創行程的時候就不能聊天，創好行程有id後才能有聊天室，然後導回我的行程頁面
+  // onclick送上去
+
+  // async function setMessageIntoDb() {
+  //   const messageRef = doc(db, 'chat_rooms', chatBox.chat_room_id);
+  //   await updateDoc(messageRef, chatBox);
+  // }
+  // if (existScheduleId) {
+  //   setMessageIntoDb();
+  // }
+
+  // useEffect(() => {
+  //   const ref = collection(db, 'chat_rooms');
+  //   onSnapshot(ref, (querySnapshot) => {
+  //     querySnapshot.forEach((doc) => {
+  //       // console.log(doc.id, doc.data());
+  //     });
+  //   });
+  // }, []);
+
+  async function addNewMessageToFirestoreFirst() {
+    const chatRoomMessageArray = doc(db, 'chat_rooms', chatBox.chat_room_id);
+    // Atomically add a new region to the "regions" array field.
+    await updateDoc(chatRoomMessageArray, {
+      messages: arrayUnion(newMessage),
+    });
   }
+
+  useEffect(() => {
+    if (existScheduleId) {
+      const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
+      // const chatRoomMessageArray = doc((db, 'chat_rooms'), where('schedule_id', '==', existScheduleId)));
+      onSnapshot(chatRoomMessageArray, (querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          updateChatBox(doc.data());
+        });
+      });
+    }
+  }, [existScheduleId, updateChatBox]);
+
+  // Atomically remove a region from the "regions" array field.
+  // await updateDoc(washingtonRef, {
+  //     regions: arrayRemove("east_coast")
+  // });
+
+  // async function CreateNewChatRoom() {
+  //   if (!existScheduleId) {
+  //     console.log('沒有聊天室，創一個新的在瀏覽器！');
+  //     updateChatBox(newChatRoom);
+  //   }
+  // }
 
   // setSchedule();
 
   // 如果已經有聊天室，則拿指定一個schedule_id的聊天室資料，如果沒有，則創建一個！
 
-  useEffect(() => {
-    async function getChatRoom() {
-      const q = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, ' => ', doc.data());
-        updateChatBox(doc.data());
-        console.log(chatBox);
-      });
-    }
-    if (existScheduleId) {
-      getChatRoom();
-    } else {
-      CreateNewChatRoom();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateChatBox]);
+  // useEffect(() => {
+  //   async function getChatRoom() {
+  //     const q = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
+  //     const querySnapshot = await getDocs(q);
+  //     querySnapshot.forEach((doc) => {
+  //       // doc.data() is never undefined for query doc snapshots
+  //       console.log(doc.id, ' => ', doc.data());
+  //       updateChatBox(doc.data());
+  //       console.log(chatBox);
+  //     });
+  //   }
+  //   if (existScheduleId) {
+  //     getChatRoom();
+  //   }
+  //   // else {
+  //   //   CreateNewChatRoom();
+  //   // }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [updateChatBox]);
 
   const newPlace = {
     place_title: '',
@@ -474,32 +558,15 @@ function Schedule() {
   //   });
   // }
 
-  // 把state的訊息放進去object，然後推進整個messages array
-
-  const newMessage = {
-    user_id: 123,
-    user_name: '葳葳',
-    message: inputMessage,
-    sent_time: new Date(),
-  };
-
-  function updataMessage() {
-    updateChatBox((draft) => {
-      draft.messages.push(newMessage);
-    });
-  }
-  // 如果已經有聊天室就拉下來
-  // 有人輸入完一句話，送出時會推進chatRoom的messages array，造成chatBox改變，這時就要推上db
-
-  useEffect(() => {
-    async function setMessageIntoDb() {
-      const messageRef = doc(db, 'chat_rooms', chatBox.chat_room_id);
-      await updateDoc(messageRef, chatBox);
-    }
-    if (existScheduleId) {
-      setMessageIntoDb();
-    }
-  }, [chatBox, existScheduleId]);
+  // 如果有人更新訊息，要及時更新到畫面
+  // useEffect(() => {
+  //   const ref = collection(db, 'chat_rooms');
+  //   onSnapshot(ref, (querySnapshot) => {
+  //     querySnapshot.forEach((doc) => {
+  //       // console.log(doc.id, doc.data());
+  //     });
+  //   });
+  // }, []);
 
   console.log(chatBox);
 
@@ -538,14 +605,8 @@ function Schedule() {
   const newSchedule = {
     title: titleFromUrl,
     schedule_id: 1,
-    embark_date:
-    {
-      seconds: embarkDateFromUrl,
-    },
-    end_date:
-    {
-      seconds: endDateFromUrl,
-    },
+    embark_date: embarkDateFromUrl,
+    end_date: endDateFromUrl,
     trip_days: [],
   };
 
@@ -601,7 +662,7 @@ function Schedule() {
               {selected.structured_formatting ? selected.structured_formatting.main_text : ''}
             </div>
             <AddToPlaceButton
-              onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); }}
+              onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); setActive(false); }}
             >
               加入行程
             </AddToPlaceButton>
@@ -614,13 +675,18 @@ function Schedule() {
                 <div style={{ width: '35vw' }}>
                   {place.name}
                 </div>
-                <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place.name, clickedDayIndex); updatePlaceAddressBySearch(place.vicinity, clickedDayIndex); }} type="button">加入行程</AddToPlaceButton>
+                <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place.name, clickedDayIndex); updatePlaceAddressBySearch(place.vicinity, clickedDayIndex); setActive(false); }} type="button">加入行程</AddToPlaceButton>
               </RecommendPlace>
             ))}
           </RecommendPlaces>
         </ResultsArea>
       </AddAndSearchBox>
       <LeftContainer active={active}>
+        <button type="button">
+          <Link to="/my-schedules">
+            回到我的行程
+          </Link>
+        </button>
         <p>
           行程title：
           {scheduleData ? scheduleData.title : ''}
@@ -628,11 +694,11 @@ function Schedule() {
         <DateContainer>
           <p>
             出發時間：
-            {scheduleData && existScheduleId ? scheduleData.embark_date.seconds : embarkDateFromUrl}
+            {scheduleData && existScheduleId ? scheduleData.embark_date : embarkDateFromUrl}
           </p>
           <p>
             結束時間：
-            {scheduleData && existScheduleId ? scheduleData.end_date.seconds : endDateFromUrl }
+            {scheduleData && existScheduleId ? scheduleData.end_date : endDateFromUrl }
           </p>
           <CompleteButton onClick={() => setCompletedScheduleToDb()} type="button">完成行程</CompleteButton>
         </DateContainer>
@@ -728,7 +794,7 @@ function Schedule() {
                 setInputMessage(e.target.value);
               }}
             />
-            <EnterMessageButton onClick={() => { updataMessage(); setInputMessage(''); }}>
+            <EnterMessageButton onClick={() => { setInputMessage(''); addNewMessageToFirestoreFirst(); }}>
               send
             </EnterMessageButton>
           </EnterArea>
