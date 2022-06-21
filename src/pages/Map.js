@@ -34,35 +34,24 @@ const center = {
 // eslint-disable-next-line react/prop-types
 function Map({
   recommendList, setRecommendList,
-  active, setSelected, selected,
+  active, setSelected, selected, scheduleData,
 }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ['places'],
   });
-  // console.log(selected);
   const mapRef = useRef();
   const originRef = useRef();
   const destinationRef = useRef();
-  //  const thirdRef = useRef();
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   console.log(directionsResponse);
-
-  // const map2 = useGoogleMap();
-
-  // useEffect(() => {
-  //   if (map2) {
-  //     map2.panTo(center);
-  //   }
-  // }, [map2]);
+  console.log(scheduleData);
 
   const onMapLoad = useCallback((map) => {
     mapRef.current = map;
   }, []);
-  // console.log(loadError);
-  console.log(process.env.REACT_APP_GOOGLE_API_KEY);
 
   // 宣告panTo function並傳給search components
 
@@ -96,10 +85,11 @@ function Map({
         // console.log(data);
         setRecommendList(results);
         for (let i = 0; i < results.length; i += 1) {
-          const placePhotoUrl = results[i].photos[0].getUrl({ maxWidth: 640 });
-          console.log(placePhotoUrl);
+          // 這邊可以直接拿到url
+          // const placePhotoUrl = results[i].photos[0].getUrl({ maxWidth: 640 });
+          // console.log(placePhotoUrl);
           const place = results[i];
-          console.log(place);
+          // console.log(place);
           // 把推薦景點給marker（預設樣式）
           new google.maps.Marker({
             position: place.geometry.location,
@@ -187,10 +177,10 @@ function Map({
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     });
-    console.log(originRef.current.value);
-    console.log(results);
-    console.log(results.routes[0].legs[0].end_location.lat());
-    console.log(results.routes[0].legs[0].end_location.lng());
+    // console.log(originRef.current.value);
+    // console.log(results);
+    // console.log(results.routes[0].legs[0].end_location.lat());
+    // console.log(results.routes[0].legs[0].end_location.lng());
     setDirectionsResponse(results);
     setDistance(results.routes[0].legs[0].distance.text);
     setDuration(results.routes[0].legs[0].duration.text);

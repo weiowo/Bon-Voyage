@@ -785,19 +785,14 @@ function Schedule() {
         </div>
       </LeftContainer>
       <RightContainer>
-        {/* <Map
-          recommendList={recommendList}
-          setRecommendList={setRecommendList}
-          selected={selected}
-          setSelected={setSelected}
-          active={active}
-        /> */}
         <Map
           recommendList={recommendList}
           setRecommendList={setRecommendList}
           selected={selected}
           setSelected={setSelected}
           active={active}
+          scheduleData={scheduleData}
+          updateScheduleData={updateScheduleData}
         />
         <ChatRoom openChat={openChat}>
           <ChatRoomTitle>

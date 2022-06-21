@@ -45,8 +45,8 @@ export default function SearchNewNew({
   };
 
   const origin1 = new google.maps.LatLng(55.930385, -3.118425); // 可以是經緯度
-  const origin2 = 'Greenwich, England'; // 也可以是地點名稱
-  const destinationA = 'Stockholm, Sweden';
+  const origin2 = '信義區松壽路11號5樓'; // 也可以是地點名稱
+  const destinationA = '台灣台北市萬華區長沙街二段';
   const destinationB = new google.maps.LatLng(50.087692, 14.421150);
 
   const service = new google.maps.DistanceMatrixService();
@@ -96,22 +96,6 @@ export default function SearchNewNew({
   //         console.log('錯誤:', err);
   //       });
   //   }, []);
-
-  const directionsService = new google.maps.DirectionsService();
-  const request = {
-    origin: 'Greenwich, England',
-    destination: 'Stockholm, Sweden',
-    travelMode: 'WALKING',
-  };
-  directionsService.route(request, (response) => {
-    if (status === 'OK') {
-      const directionsDisplay = new google.maps.DirectionsRenderer({
-        map,
-        directions: response,
-      });
-      console.log('哈哈');
-    }
-  });
 
   const handleSelect = (selected_place) => () => {
     // selected_place是user選到的那個地方！選好後上面就會顯示那個字，不會再autocomplete一次
