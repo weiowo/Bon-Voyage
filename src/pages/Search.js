@@ -32,7 +32,7 @@ export default function SearchNewNew({
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-      types: ['(cities)'],
+    //   types: ['(cities)'],
       fields: ['formatted_address', 'geometry', 'name'], // 要放在哪？
       /* Define search scope here */
     },
@@ -43,44 +43,6 @@ export default function SearchNewNew({
     // Update the keyword of the input element
     setValue(e.target.value);
   };
-
-  const origin1 = new google.maps.LatLng(55.930385, -3.118425); // 可以是經緯度
-  const origin2 = '信義區松壽路11號5樓'; // 也可以是地點名稱
-  const destinationA = '台灣台北市萬華區長沙街二段';
-  const destinationB = new google.maps.LatLng(50.087692, 14.421150);
-
-  const service = new google.maps.DistanceMatrixService();
-  service.getDistanceMatrix({
-    origins: [origin1, origin2],
-    destinations: [destinationA, destinationB],
-    travelMode: 'DRIVING',
-    // transitOptions: TransitOptions,
-    // drivingOptions: DrivingOptions,
-    // unitSystem: UnitSystem,
-    // avoidHighways: Boolean,
-    // avoidTolls: Boolean,
-  }, callback);
-
-  function callback(response, status2) {
-    if (status2 === 'OK') {
-      const origins = response.originAddresses;
-      const destinations = response.destinationAddresses;
-
-      for (let i = 0; i < origins.length; i++) {
-        const results = response.rows[i].elements;
-        for (let j = 0; j < results.length; j++) {
-          const element = results[j];
-          const distance = element.distance.text;
-          const duration = element.duration.text;
-          const from = origins[i];
-          const to = destinations[j];
-          console.log(distance, duration, from, to);
-          console.log(results);
-          console.log(response);
-        }
-      }
-    }
-  }// callback
 
   //   useEffect(() => {
   //     fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJuaGhlow9aTQRfHNZ8O0BGxw&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o')
@@ -172,7 +134,6 @@ export default function SearchNewNew({
         disabled={!ready}
         placeholder="Where are you going?"
       />
-      <input className="" />
       {/* 要把serachInput的value傳到map那邊去計算route跟duration */}
       {/* We can use the "status" to decide whether we should display the dropdown or not */}
       {status === 'OK' && <ul>{renderSuggestions()}</ul>}

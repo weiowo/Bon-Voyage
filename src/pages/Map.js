@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-plusplus */
 /* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
@@ -5,7 +7,7 @@
 /* eslint-disable no-new */
 /* global google */
 import React, {
-  useRef, useCallback, useState,
+  useRef, useCallback, useState, useEffect,
 } from 'react';
 import {
   GoogleMap, useLoadScript, Autocomplete, DirectionsRenderer, Marker,
@@ -129,13 +131,17 @@ function Map({
   //   }
   // });
 
-  function getRoute() {
+  // 同時拿distance跟route
+
+  // 拿陣列最後一個東西跟前面
+
+  function getDistanceAndRoute(originTest, destinationTest, imageTest, colorTest) {
     const request = {
-      origin: '信義區松壽路11號5樓',
-      destination: '台灣台北市萬華區長沙街二段',
+      origin: originTest,
+      destination: destinationTest,
       travelMode: 'DRIVING',
     };
-    const image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'; // 放上不一樣的地標
+    const image = imageTest; // 放上不一樣的地標
 
     const directionsService = new google.maps.DirectionsService();
     const directionsDisplay = new google.maps.DirectionsRenderer();
@@ -146,53 +152,108 @@ function Map({
     };
     // 客製化line的顏色
     const customizedRoute = {
-      strokeColor: 'red',
+      strokeColor: colorTest,
     };
 
     const map = mapRef.current;
     directionsDisplay.setMap(map);
     directionsService.route(request, (result, status) => {
       if (status === 'OK') {
+        console.log(result.routes[0].legs[0].distance.text);
+        console.log(result.routes[0].legs[0].duration.text);
         directionsDisplay.setDirections(result);
         directionsDisplay.setOptions({ markerOptions: customizedMarker, polylineOptions: customizedRoute });
       }
     });
   }
 
-  getRoute();
+  useEffect(() => {
+    if (!scheduleData) { return; }
+    const markerIcons = ['https://img.icons8.com/office/16/000000/bear.png', 'https://img.icons8.com/fluency/48/000000/like.png', 'https://img.icons8.com/color/48/000000/deciduous-tree.png'];
+    const lineColors = ['brown', 'red', 'green'];
+
+    scheduleData.trip_days.forEach((dayItem, dayIndex) => {
+      for (let i = 0; i < scheduleData.trip_days[dayIndex].places.length - 1; i += 1) {
+        getDistanceAndRoute(dayItem.places[i].place_address, dayItem.places[i + 1].place_address, markerIcons[dayIndex % 3], lineColors[dayIndex % 3]);
+      }
+    });
+  }, [scheduleData]);
+
+  // getDistanceAndRoute();
 
   if (!isLoaded) return <div>test...</div>;
 
   console.log('選到的在這Map！', selected);
 
-  async function calculateRoute() {
-    if (originRef.current.value === '' || destinationRef.current.value === '') {
-      return;
-    }
-    // eslint-disable-next-line no-undef
-    const directionsService = new google.maps.DirectionsService();
-    const results = await directionsService.route({
-      origin: originRef.current.value,
-      destination: destinationRef.current.value,
-      // eslint-disable-next-line no-undef
-      travelMode: google.maps.TravelMode.DRIVING,
-    });
-    // console.log(originRef.current.value);
-    // console.log(results);
-    // console.log(results.routes[0].legs[0].end_location.lat());
-    // console.log(results.routes[0].legs[0].end_location.lng());
-    setDirectionsResponse(results);
-    setDistance(results.routes[0].legs[0].distance.text);
-    setDuration(results.routes[0].legs[0].duration.text);
-  }
+  // 一次拿兩組路線圖
 
-  function clearRoute() {
-    setDirectionsResponse(null);
-    setDistance('');
-    setDuration('');
-    originRef.current.value = '';
-    destinationRef.current.value = '';
-  }
+  // const origin1 = new google.maps.LatLng(55.930385, -3.118425); // 可以是經緯度
+  // const origin2 = '信義區松壽路11號5樓'; // 也可以是地點名稱
+  // const destinationA = 'Stockholm, Sweden';
+  // const destinationB = '台灣台北市萬華區長沙街二段';
+
+  // service = new google.maps.DistanceMatrixService();
+  // service.getDistanceMatrix({
+  //   origins: [origin1, origin2],
+  //   destinations: [destinationA, destinationB],
+  //   travelMode: 'DRIVING',
+  //   // transitOptions: TransitOptions,
+  //   // drivingOptions: DrivingOptions,
+  //   // unitSystem: UnitSystem,
+  //   // avoidHighways: Boolean,
+  //   // avoidTolls: Boolean,
+  // }, callback2);
+
+  // function callback2(response, status2) {
+  //   if (status2 === 'OK') {
+  //     const origins = response.originAddresses;
+  //     const destinations = response.destinationAddresses;
+
+  //     for (let i = 0; i < origins.length; i++) {
+  //       const results = response.rows[i].elements;
+  //       for (let j = 0; j < results.length; j++) {
+  //         const element = results[j];
+  //         const distance2 = element.distance.text;
+  //         const duration2 = element.duration.text;
+  //         const from = origins[i];
+  //         const to = destinations[j];
+  //         console.log(distance2, duration, from, to);
+  //         console.log(results);
+  //         console.log(response);
+  //         console.log(duration2);
+  //       }
+  //     }
+  //   }
+  // }// callback
+
+  // async function calculateRoute() {
+  //   if (originRef.current.value === '' || destinationRef.current.value === '') {
+  //     return;
+  //   }
+  //   // eslint-disable-next-line no-undef
+  //   const directionsService = new google.maps.DirectionsService();
+  //   const results = await directionsService.route({
+  //     origin: originRef.current.value,
+  //     destination: destinationRef.current.value,
+  //     // eslint-disable-next-line no-undef
+  //     travelMode: google.maps.TravelMode.DRIVING,
+  //   });
+  //   // console.log(originRef.current.value);
+  //   // console.log(results);
+  //   // console.log(results.routes[0].legs[0].end_location.lat());
+  //   // console.log(results.routes[0].legs[0].end_location.lng());
+  //   setDirectionsResponse(results);
+  //   setDistance(results.routes[0].legs[0].distance.text);
+  //   setDuration(results.routes[0].legs[0].duration.text);
+  // }
+
+  // function clearRoute() {
+  //   setDirectionsResponse(null);
+  //   setDistance('');
+  //   setDuration('');
+  //   originRef.current.value = '';
+  //   destinationRef.current.value = '';
+  // }
 
   return (
     <div>
@@ -205,8 +266,8 @@ function Map({
       {/* <Autocomplete>
         <input type="text" placeholder="第三個景點" ref={destinationRef} />
       </Autocomplete> */}
-      <button type="button" onClick={() => calculateRoute()}>計算路線1</button>
-      <button type="button" onClick={() => clearRoute()}>清除路線</button>
+      {/* <button type="button" onClick={() => calculateRoute()}>計算路線1</button>
+      <button type="button" onClick={() => clearRoute()}>清除路線</button> */}
       <div>{distance}</div>
       <div>{duration}</div>
       <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
