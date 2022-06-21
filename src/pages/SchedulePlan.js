@@ -18,12 +18,16 @@ import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
 import PinkCloseIcon from './images/close-2.png';
 import db from '../utils/firebase-init';
-// import testScheduleData from './testSchedule';
 import Map from './Map';
-// import AddAndSearch
-//   from '../components/AddAndSearch';
-// import Search from './Search';
-// import chatRoomMessagesData from './chat-room-data';
+
+// 最新版！！（2022/06/20）
+// chooseDate完成後就創立一個新的行程id，並放到url上面
+// embark date and enddate都直接從db拿，用這個來產生空的天數
+// 也同時先創聊天室id
+
+// schedule中不要有members這個array
+// 創建行程時(按下ok時)，就把這個行程的id放到這個user的owned_schedules_id這個array中
+// 然後之後要看某個schedul中有哪些members時，用array contains這個schedule_id來找尋！
 
 const ScheduleWrapper = styled.div`
     display:flex;
@@ -54,6 +58,7 @@ border: 1px solid black;
 display:flex;
 flex-direction:column;
 align-items:center;
+padding-bottom:15px;
 `;
 
 const PlaceContainer = styled.div`
@@ -63,7 +68,8 @@ justify-content:center;
 align-items:center;
 width:40vw;
 height:auto;
-border:red solid 1px;
+border: brown solid 1px;
+border-radius:20px;
 `;
 
 const InputBox = styled.div`
@@ -79,7 +85,7 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 width:50vw;
-gap:30px;
+gap:15px;
 padding-left:100px;
 padding-right:100px;
 
@@ -250,7 +256,10 @@ align-items:center;
 height:80vh;
 width:50vw;
 baclground-color:yellow;
-border:2px solid red;
+border:2px solid black;
+border-radius:30px;
+padding-top:20px;
+margin-left:30px;
 gap:10px;
 `;
 
@@ -274,29 +283,6 @@ width:100px;
 //   console.log(UserList);
 //   return UserList;
 // }
-
-// 嘗試放schedule資料到firestore中
-// 先創建資料再set上去，就可以拿到流水號
-// 把流水號設定成這筆schedule的id
-
-// 放行程進去db
-// async function setSchedule() {
-//   const createData = doc(collection(db, 'chat_rooms'));
-//   await setDoc(createData, ({ ...chatRoomMessagesData, chat_room_id: createData.id }));
-// }
-// setSchedule();
-
-// 放messages進去db
-
-// async function setMessages() {
-//   const createData = doc(collection(db, 'chat_rooms'));
-//   await setDoc(createData, ({
-//     ...chatRoomMessagesData,
-//     chat_room_id: createData.id,
-//     schedule_id: 123,
-//   }));
-// }
-// setMessages();
 
 // 拿日期相減的天數
 
@@ -341,16 +327,36 @@ function Schedule() {
 
   // 如果是建立新行程，則從url拿出發日期與結束日期
   const { search } = useLocation();
-  const embarkDateFromUrl = new URLSearchParams(search).get('from');
-  const endDateFromUrl = new URLSearchParams(search).get('to');
-  const titleFromUrl = new URLSearchParams(search).get('title');
+  // const embarkDateFromUrl = new URLSearchParams(search).get('from');
+  // const endDateFromUrl = new URLSearchParams(search).get('to');
+  // const titleFromUrl = new URLSearchParams(search).get('title');
 
   // 拿日期相減的天數
 
-  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-  const firstDate = new Date(embarkDateFromUrl);
-  const secondDate = new Date(endDateFromUrl);
-  const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
+  // const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  // const firstDate = new Date(embarkDateFromUrl);
+  // const secondDate = new Date(endDateFromUrl);
+  // const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
+
+  // 從database拿出來後就把string轉為milliseconds
+  // 按下「新增天數」的時候要把endDate的日期往後加上一天的milliseconds
+  // render時要去抓trip_days array的最後一個item的milliseconds，再轉為Datet做呈現
+
+  // const dateTest = Date.parse(embarkDateFromUrl);
+  // console.log(dateTest);
+  // let dateTestFromDb;
+  // scheduleData.embark_date ? dateTestFromDb = Date.parse(scheduleData.embark_date) : dateTestFromDb = '2';
+  // console.log('我在這兒！', dateTestFromDb);
+
+  // const dateTest1 = Date.parse('2019-01-01');
+  // console.log(dateTest1);
+  // console.log(dateTest + 86400000);
+  // const fromTimeStamp3 = new Date(dateTest + 86400000).toISOString(); // 加上一天的方式
+  // console.log(fromTimeStamp3);
+  // const fromTimeStamp = new Date(dateTest).toISOString();
+  // console.log(fromTimeStamp);
+  // const test = fromTimeStamp.split('T')[0];
+  // console.log(test);
 
   // 如果是選擇舊行程，則從資料庫拿出發與結束日期
   const existScheduleId = new URLSearchParams(search).get('id');
@@ -364,8 +370,9 @@ function Schedule() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log('Document data:', docSnap.data());
-
         updateScheduleData(docSnap.data());
+        const dateTestFromDb = Date.parse(docSnap.data().embark_date);
+        console.log('哇哈哈哈哈！', dateTestFromDb);
         updateChatBox((draft) => {
           draft.chat_room_id = docSnap.data().chat_room_id;
         });
@@ -411,14 +418,11 @@ function Schedule() {
       setSearchParams(params);
     }
   }
-  // 聊天室：如果按下聊天室按鈕時，發現無法從url上拿到行程id
-  // 就先創一個聊天室，推newChatRoom去chatBox這個immer，schedule_id先設立為123-->改了！創好行程後才能有聊天室！原本都不能按！
-  // 在按下完成行程的時候，建立這個行程(會獲得id)，並同時把chat-room中的行程id設定為這個id
 
   // 把state的訊息放進去object，然後推進整個messages array
   const newMessage = {
-    user_id: 123,
-    user_name: '葳葳',
+    user_id: 123, // 放localstorage的東西
+    user_name: '葳葳', // 放localstorage的東西
     message: inputMessage,
     sent_time: new Date(),
   };
@@ -530,6 +534,10 @@ function Schedule() {
   function addDayInSchedule() {
     updateScheduleData((draft) => {
       draft.trip_days.push(newDay);
+      const originalEndDateToMilliSecond = Date.parse(draft.end_date);
+      const MilliSecondsToDate = new Date(originalEndDateToMilliSecond + 86400000).toISOString(); // 加上一天的方式
+      const addedDateEndDate = MilliSecondsToDate.split('T')[0];
+      draft.end_date = addedDateEndDate;
     });
   }
 
@@ -573,7 +581,14 @@ function Schedule() {
   // 拿一週的哪一天
 
   const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-  const dFromUrl = new Date(embarkDateFromUrl);
+  // let dFromDb= new Date(scheduleData.embark_date);
+  // // const weekDayFromUrl = dFromDb.getDay();
+  // const weekDayFromDB = dFromDb.getDay();
+  // console.log(weekDayFromDB);
+
+  // new Date(scheduleData.embark_date).getDay();
+
+  // 拿一週哪一天用這種方式：{weekday[(initIndex + index) % 7]}
 
   // const date = scheduleData.embark_date.toDate();
   // console.log(date);
@@ -596,27 +611,27 @@ function Schedule() {
   //   console.log(date, atTime);
   // }, [scheduleData.embark_date.seconds, scheduleData.embark_date.nanoseconds]);
 
-  const weekDayFromUrl = dFromUrl.getDay();
-  // const weekDayFromDB = scheduleData ? dFromDb.getDay() : '';
-
-  // 拿一週哪一天用這種方式：{weekday[(initIndex + index) % 7]}
-
   // eslint-disable-next-line no-unused-vars
-  const newSchedule = {
-    title: titleFromUrl,
-    schedule_id: 1,
-    embark_date: embarkDateFromUrl,
-    end_date: endDateFromUrl,
-    trip_days: [],
-  };
+  // const newSchedule = {
+  //   title: titleFromUrl,
+  //   schedule_id: 1,
+  //   embark_date: embarkDateFromUrl,
+  //   end_date: endDateFromUrl,
+  //   trip_days: [],
+  // };
 
-  if (!scheduleData) {
-    Array(diffDays + 1).fill('').forEach(() => {
-      newSchedule.trip_days.push(newDay);
-    });
+  // 創建行程的時候：
+  // 先從url上抓日期～並用它們的day差異去做foreach並推入trip_days的array中
+  // push三個空的day進去trip_days
+  // 改日期要改到url上面？
 
-    updateScheduleData(newSchedule);
-  }
+  // if (!scheduleData) {
+  //   Array(diffDays + 1).fill('').forEach(() => {
+  //     newSchedule.trip_days.push(newDay);
+  //   });
+
+  //   updateScheduleData(newSchedule);
+  // }
 
   // 手動更改行程內容！
   function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
@@ -694,26 +709,30 @@ function Schedule() {
         <DateContainer>
           <p>
             出發時間：
-            {scheduleData && existScheduleId ? scheduleData.embark_date : embarkDateFromUrl}
+            {scheduleData ? scheduleData.embark_date : '沒有data'}
           </p>
           <p>
             結束時間：
-            {scheduleData && existScheduleId ? scheduleData.end_date : endDateFromUrl }
+            {scheduleData ? scheduleData.end_date : '沒有data' }
           </p>
           <CompleteButton onClick={() => setCompletedScheduleToDb()} type="button">完成行程</CompleteButton>
         </DateContainer>
 
         <div className="schedule-boxes">
           {/* <Search /> 要怎麼讓search跑到這邊？function怎麼傳？ */}
-          <button type="button" onClick={() => addDayInSchedule()}>新增天數</button>
+          <button type="button" style={{ marginBottom: '20px' }} onClick={() => addDayInSchedule()}>新增天數</button>
           {scheduleData ? scheduleData.trip_days.map((dayItem, dayIndex) => (
             <DayContainer>
               <p>
                 第
                 {dayIndex + 1}
-                天/
-                {weekday[(embarkDateFromUrl ? weekDayFromUrl + dayIndex
-                  : dayIndex) % 7] }
+                天
+                /
+                日期
+                {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
+                {/* 加幾天就加幾個「一天的millisecond」 */}
+                /
+                {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
               </p>
               <div>
                 {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
@@ -725,6 +744,7 @@ function Schedule() {
                         個景點：
                       </p>
                       <input
+                        style={{ width: '20vw' }}
                         value={placeItem.place_title}
                         onChange={(e) => {
                           updatePlaceTitle(e.target.value, dayIndex, placeIndex);
@@ -734,6 +754,7 @@ function Schedule() {
                     <InputBox>
                       <p>停留時間：</p>
                       <input
+                        style={{ width: '20vw' }}
                         value={placeItem.stay_time}
                         onChange={(e) => {
                           updateStayTime(e.target.value, dayIndex, placeIndex);
@@ -743,6 +764,7 @@ function Schedule() {
                     <InputBox>
                       <p>地址：</p>
                       <input
+                        style={{ width: '20vw' }}
                         value={placeItem.place_address}
                         onChange={(e) => {
                           updatePlaceAddress(e.target.value, dayIndex, placeIndex);
@@ -755,7 +777,7 @@ function Schedule() {
                     <div>還沒有地點ㄛ，請新增景點</div>
                   )}
               </div>
-              <button type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
+              <button style={{ marginTop: '20px' }} type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
             </DayContainer>
           ))
           // 這裡是新創建行程的地方
@@ -763,6 +785,13 @@ function Schedule() {
         </div>
       </LeftContainer>
       <RightContainer>
+        {/* <Map
+          recommendList={recommendList}
+          setRecommendList={setRecommendList}
+          selected={selected}
+          setSelected={setSelected}
+          active={active}
+        /> */}
         <Map
           recommendList={recommendList}
           setRecommendList={setRecommendList}

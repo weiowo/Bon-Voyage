@@ -6,6 +6,7 @@ import Schedule from './pages/SchedulePlan';
 import CTA from './pages/Home';
 import ChooseDate from './pages/ChooseDate';
 import MySchedules from './pages/MySchedules';
+import MapNewNew from './pages/MapNew2';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/choose-date" element={<ChooseDate />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/my-schedules" element={<MySchedules />} />
+          <Route path="/map-new" element={<MapNewNew />} />
         </Routes>
       </BrowserRouter>
 
