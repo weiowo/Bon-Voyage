@@ -300,7 +300,7 @@ function Schedule() {
     messages: [],
   };
   const [scheduleData, updateScheduleData] = useImmer();
-  // eslint-disable-next-line no-use-before-define
+  console.log(scheduleData);
   const [chatBox, updateChatBox] = useImmer(newChatRoom);
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
@@ -384,7 +384,6 @@ function Schedule() {
       }
     }
     async function getChatRoom() {
-      console.log('getChatRoom, getChatRoom, getChatRoom');
       const chatRoomMessageIdRef = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
       const test = await getDocs(chatRoomMessageIdRef);
       test.forEach((doc) => {
@@ -398,6 +397,27 @@ function Schedule() {
     getCertainSchedule();
     getChatRoom();
   }, [updateScheduleData, existScheduleId, updateChatBox]);
+
+  // 刪除某一天
+  // 把不是按到那個index的留下來
+  function deleteCertainDay(targetDeleteDayIndex) {
+    console.log('刪除這一天囉！', targetDeleteDayIndex);
+    updateScheduleData((draft) => {
+      draft.trip_days = draft.trip_days.filter(
+        (item, index) => index !== targetDeleteDayIndex,
+      );
+    });
+  }
+
+  // 刪除某一天
+  function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
+    console.log('刪除這個行程囉！', targetDeleteDayIndex, targetDeletePlaceIndex);
+    updateScheduleData(((draft) => {
+      draft.trip_days[targetDeleteDayIndex].places = draft.trip_days[targetDeleteDayIndex].places.filter(
+        (item, index) => index !== targetDeletePlaceIndex,
+      );
+    }));
+  }
 
   // 如果沒有id，表示是新行程，創建資料後再次把行set進去
   // 如果有id，則是編輯既有的行程，編輯後update進去db，並創建一個新的聊天室
@@ -466,6 +486,8 @@ function Schedule() {
     });
   }
 
+  // 有訊息更新時就要及時拿出來！
+
   useEffect(() => {
     if (existScheduleId) {
       const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
@@ -477,6 +499,28 @@ function Schedule() {
       });
     }
   }, [existScheduleId, updateChatBox]);
+
+  // 有人編輯時要及時呈現
+
+  useEffect(() => {
+    if (existScheduleId) {
+      alert('有人更新了行程唷！'); // 會跑兩次
+      const theScheduleBeingEdited = doc(db, 'schedules', existScheduleId);
+      onSnapshot(theScheduleBeingEdited, (querySnapshot) => {
+        console.log(querySnapshot);
+        updateScheduleData(querySnapshot.data());
+      });
+    }
+  }, [existScheduleId, updateScheduleData]);
+
+  // useEffect(()=>{
+  //   const ref = collection(db, "topics");
+  //   onSnapshot(ref, (querySnapshot) => {
+  //     querySnapshot.forEach((doc)=>{
+  //       // console.log(doc.id, doc.data());
+  //     })
+  //   })
+  // }, []);
 
   // Atomically remove a region from the "regions" array field.
   // await updateDoc(washingtonRef, {
@@ -735,15 +779,16 @@ function Schedule() {
                 {/* 加幾天就加幾個「一天的millisecond」 */}
                 /
                 {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
+                <button onClick={() => deleteCertainDay(dayIndex)} type="button">刪除此天</button>
               </p>
               <div>
                 {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
                   <>
                     <div>
-                      {(placeIndex !== 0 && distance?.[dayIndex]?.[placeIndex - 1]) || ''}
+                      {(placeIndex !== 0 ? `行車距離： ${distance?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
                     </div>
                     <div>
-                      {(placeIndex !== 0 && duration?.[dayIndex]?.[placeIndex - 1]) || ''}
+                      {(placeIndex !== 0 ? `行車時間： ${duration?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
                     </div>
                     <PlaceContainer>
                       <InputBox>
@@ -780,6 +825,7 @@ function Schedule() {
                           }}
                         />
                       </InputBox>
+                      <button onClick={() => deleteCertainPlace(dayIndex, placeIndex)} type="button">刪除此行程</button>
                     </PlaceContainer>
 
                   </>
@@ -796,7 +842,7 @@ function Schedule() {
         </div>
       </LeftContainer>
       <RightContainer>
-        <Map
+        {/* <Map
           recommendList={recommendList}
           setRecommendList={setRecommendList}
           selected={selected}
@@ -808,7 +854,7 @@ function Schedule() {
           setDistance={setDistance}
           duration={duration}
           setDuration={setDuration}
-        />
+        /> */}
         <ChatRoom openChat={openChat}>
           <ChatRoomTitle>
             聊天室

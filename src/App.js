@@ -3,10 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import Schedule from './pages/SchedulePlan';
-import CTA from './pages/Home';
+import Home from './pages/Home';
 import ChooseDate from './pages/ChooseDate';
 import MySchedules from './pages/MySchedules';
-import MapNewNew from './pages/MapNew2';
+import Map from './pages/Map';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -24,11 +24,11 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<CTA />} />
+          <Route path="/" element={<Home />} />
           <Route path="/choose-date" element={<ChooseDate />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/my-schedules" element={<MySchedules />} />
-          <Route path="/map-new" element={<MapNewNew />} />
+          <Route path="/map-new" element={<Map />} />
         </Routes>
       </BrowserRouter>
 

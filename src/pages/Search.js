@@ -21,7 +21,7 @@ width: 30vw;
 height: 30px;
 `;
 
-export default function SearchNewNew({
+export default function Search({
   panTo, setSelected, selected, active,
 }) {
   const {

@@ -13,6 +13,12 @@ import {
 } from '@react-google-maps/api';
 // import PropTypes from 'prop-types';
 import Search from './Search';
+import PinkStar from './images/smile_star_pink.png';
+import OrangeStar from './images/smile_star_orange.png';
+import YellowStar from './images/smile_star_yellow.png';
+import GreenStar from './images/smile_star_green.png';
+import BlueStar from './images/smile_star_blue.png';
+import PurpleStar from './images/smile_star_purple.png';
 
 let service;
 
@@ -57,15 +63,15 @@ function Map({
   const panTo = useCallback(({ lat, lng }) => {
     mapRef.current.panTo({ lat, lng });
     mapRef.current.setZoom(12);
-    const map = mapRef.current;
+    // const map = mapRef.current;
     // 放搜尋到的景點那個地標
-    const image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'; // 放上不一樣的地標
-    new google.maps.Marker({
-      position: { lat, lng },
-      map,
-      icon: image,
-      draggable: true,
-    });
+    // const image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'; // 放上不一樣的地標
+    // new google.maps.Marker({
+    //   position: { lat, lng },
+    //   map,
+    //   icon: image,
+    //   draggable: true,
+    // });
 
     const request = {
       location: { lat, lng }, // 根據autocomplete點按下去的地方的經緯度設定為地點中心
@@ -87,13 +93,13 @@ function Map({
           // 這邊可以直接拿到url
           // const placePhotoUrl = results[i].photos[0].getUrl({ maxWidth: 640 });
           // console.log(placePhotoUrl);
-          const place = results[i];
+          // const place = results[i];
           // console.log(place);
           // 把推薦景點給marker（預設樣式）
-          new google.maps.Marker({
-            position: place.geometry.location,
-            map,
-          });
+          // new google.maps.Marker({
+          //   position: place.geometry.location,
+          //   map,
+          // });
         }
         // new google.maps.Marker({
         //   position: selected,
@@ -187,8 +193,8 @@ function Map({
       // 客製化line的顏色
       const customizedRoute = {
         strokeColor: colorTest,
-        strokeWeight: 10,
-        strokeOpacity: 0.7,
+        strokeWeight: 8,
+        strokeOpacity: 0.9,
       };
 
       const map = mapRef.current;
@@ -227,8 +233,8 @@ function Map({
       });
     }
 
-    const markerIcons = ['https://img.icons8.com/office/16/000000/bear.png', 'https://img.icons8.com/fluency/48/000000/like.png', 'https://img.icons8.com/color/48/000000/deciduous-tree.png'];
-    const lineColors = ['brown', 'red', 'green'];
+    const markerIcons = [PinkStar, OrangeStar, YellowStar, GreenStar, BlueStar, PurpleStar];
+    const lineColors = ['#FF82B8', '#FFB750', '#F4E64C', '#76DC66', '#83D6FD', '#E483F3'];
 
     // { 0: [], 1: [] }
 
@@ -237,8 +243,8 @@ function Map({
         getDistanceAndRoute(
           dayItem.places[i].place_address,
           dayItem.places[i + 1].place_address,
-          markerIcons[dayIndex % 3],
-          lineColors[dayIndex % 3],
+          markerIcons[dayIndex % 7],
+          lineColors[dayIndex % 7],
           dayIndex,
           i,
         );
