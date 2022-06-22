@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-plusplus */
 /* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
@@ -7,10 +6,10 @@
 /* eslint-disable no-new */
 /* global google */
 import React, {
-  useRef, useCallback, useState, useEffect,
+  useRef, useCallback, useEffect,
 } from 'react';
 import {
-  GoogleMap, useLoadScript, Autocomplete, DirectionsRenderer, Marker,
+  GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
 // import PropTypes from 'prop-types';
 import Search from './Search';
@@ -33,22 +32,20 @@ const center = {
   lng: 121.597366,
 };
 
-// eslint-disable-next-line react/prop-types
 function Map({
   recommendList, setRecommendList,
-  active, setSelected, selected, scheduleData,
+  active, setSelected, selected, scheduleData, setDuration, setDistance,
 }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ['places'],
   });
   const mapRef = useRef();
-  const originRef = useRef();
-  const destinationRef = useRef();
-  const [directionsResponse, setDirectionsResponse] = useState(null);
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
-  console.log(directionsResponse);
+  // const originRef = useRef();
+  // const destinationRef = useRef();
+  // const [directionsResponse, setDirectionsResponse] = useState(null);
+  // const [distance, setDistance] = useState('');
+  // const [duration, setDuration] = useState('');
   console.log(scheduleData);
 
   const onMapLoad = useCallback((map) => {
@@ -135,49 +132,119 @@ function Map({
 
   // 拿陣列最後一個東西跟前面
 
-  function getDistanceAndRoute(originTest, destinationTest, imageTest, colorTest) {
-    const request = {
-      origin: originTest,
-      destination: destinationTest,
-      travelMode: 'DRIVING',
-    };
-    const image = imageTest; // 放上不一樣的地標
+  // function getDistanceAndRoute(originTest, destinationTest, imageTest, colorTest) {
+  //   const request = {
+  //     origin: originTest,
+  //     destination: destinationTest,
+  //     travelMode: 'DRIVING',
+  //   };
+  //   const image = imageTest; // 放上不一樣的地標
 
-    const directionsService = new google.maps.DirectionsService();
-    const directionsDisplay = new google.maps.DirectionsRenderer();
+  //   const directionsService = new google.maps.DirectionsService();
+  //   const directionsDisplay = new google.maps.DirectionsRenderer();
 
-    // 客製化marker的樣子
-    const customizedMarker = {
-      icon: image,
-    };
-    // 客製化line的顏色
-    const customizedRoute = {
-      strokeColor: colorTest,
-    };
+  //   // 客製化marker的樣子
+  //   const customizedMarker = {
+  //     icon: image,
+  //   };
+  //   // 客製化line的顏色
+  //   const customizedRoute = {
+  //     strokeColor: colorTest,
+  //   };
 
-    const map = mapRef.current;
-    directionsDisplay.setMap(map);
-    directionsService.route(request, (result, status) => {
-      if (status === 'OK') {
-        console.log(result.routes[0].legs[0].distance.text);
-        console.log(result.routes[0].legs[0].duration.text);
-        directionsDisplay.setDirections(result);
-        directionsDisplay.setOptions({ markerOptions: customizedMarker, polylineOptions: customizedRoute });
-      }
-    });
-  }
+  //   const map = mapRef.current;
+  //   directionsDisplay.setMap(map);
+  //   directionsService.route(request, (result, status) => {
+  //     if (status === 'OK') {
+  //       console.log(result.routes[0].legs[0].distance.text);
+  //       console.log(result.routes[0].legs[0].duration.text);
+  //       setDistance(result.routes[0].legs[0].distance.text);
+  //       setDuration(result.routes[0].legs[0].duration.text);
+  //       directionsDisplay.setDirections(result);
+  //       directionsDisplay.setOptions({ markerOptions: customizedMarker, polylineOptions: customizedRoute });
+  //     }
+  //   });
+  // }
 
   useEffect(() => {
     if (!scheduleData) { return; }
+
+    function getDistanceAndRoute(originTest, destinationTest, imageTest, colorTest, dayIndex, distanceIndex) {
+      const request = {
+        origin: originTest,
+        destination: destinationTest,
+        travelMode: 'DRIVING',
+      };
+      const image = imageTest; // 放上不一樣的地標
+
+      const directionsService = new google.maps.DirectionsService();
+      const directionsDisplay = new google.maps.DirectionsRenderer();
+
+      // 客製化marker的樣子
+      const customizedMarker = {
+        icon: image,
+      };
+      // 客製化line的顏色
+      const customizedRoute = {
+        strokeColor: colorTest,
+        strokeWeight: 10,
+        strokeOpacity: 0.7,
+      };
+
+      const map = mapRef.current;
+      directionsDisplay.setMap(map);
+      directionsService.route(request, (result, status) => {
+        if (status === 'OK') {
+          console.log(result.routes[0].legs[0].distance.text);
+          console.log(result.routes[0].legs[0].duration.text);
+          console.log('xxxxxxxxx', dayIndex, distanceIndex);
+          setDistance((draft) => {
+            if (Array.isArray(draft[dayIndex])) {
+              draft[dayIndex][distanceIndex] = result.routes[0].legs[0].distance.text;
+            } else {
+              // {}
+              // { 0: [] }
+              draft[dayIndex] = [];
+              draft[dayIndex][distanceIndex] = result.routes[0].legs[0].distance.text;
+            }
+          });
+          setDuration((draft) => {
+            if (Array.isArray(draft[dayIndex])) {
+              draft[dayIndex][distanceIndex] = result.routes[0].legs[0].duration.text;
+            } else {
+              // {}
+              // { 0: [] }
+              draft[dayIndex] = [];
+              draft[dayIndex][distanceIndex] = result.routes[0].legs[0].duration.text;
+            }
+          });
+          console.log('yyyyyyyyy', dayIndex, distanceIndex);
+          // setDistance(result.routes[0].legs[0].distance.text);
+          // setDuration(result.routes[0].legs[0].duration.text);
+          directionsDisplay.setDirections(result);
+          directionsDisplay.setOptions({ markerOptions: customizedMarker, polylineOptions: customizedRoute });
+        }
+      });
+    }
+
     const markerIcons = ['https://img.icons8.com/office/16/000000/bear.png', 'https://img.icons8.com/fluency/48/000000/like.png', 'https://img.icons8.com/color/48/000000/deciduous-tree.png'];
     const lineColors = ['brown', 'red', 'green'];
 
+    // { 0: [], 1: [] }
+
     scheduleData.trip_days.forEach((dayItem, dayIndex) => {
       for (let i = 0; i < scheduleData.trip_days[dayIndex].places.length - 1; i += 1) {
-        getDistanceAndRoute(dayItem.places[i].place_address, dayItem.places[i + 1].place_address, markerIcons[dayIndex % 3], lineColors[dayIndex % 3]);
+        getDistanceAndRoute(
+          dayItem.places[i].place_address,
+          dayItem.places[i + 1].place_address,
+          markerIcons[dayIndex % 3],
+          lineColors[dayIndex % 3],
+          dayIndex,
+          i,
+        );
       }
     });
-  }, [scheduleData]);
+  }, [scheduleData, setDistance, setDuration]);
 
   // getDistanceAndRoute();
 
@@ -257,19 +324,19 @@ function Map({
 
   return (
     <div>
-      <Autocomplete>
+      {/* <Autocomplete>
         <input type="text" placeholder="出發點" ref={originRef} />
       </Autocomplete>
       <Autocomplete>
         <input type="text" placeholder="第二個景點" ref={destinationRef} />
-      </Autocomplete>
+      </Autocomplete> */}
       {/* <Autocomplete>
         <input type="text" placeholder="第三個景點" ref={destinationRef} />
       </Autocomplete> */}
       {/* <button type="button" onClick={() => calculateRoute()}>計算路線1</button>
       <button type="button" onClick={() => clearRoute()}>清除路線</button> */}
-      <div>{distance}</div>
-      <div>{duration}</div>
+      {/* <div>{distance}</div> */}
+      {/* <div>{duration}</div> */}
       <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
       <GoogleMap
         id="map"
@@ -279,10 +346,10 @@ function Map({
         options={options}
         onLoad={onMapLoad}
       >
-        {directionsResponse && (
+        {/* {directionsResponse && (
         <DirectionsRenderer directions={directionsResponse} />
         )}
-        <Marker position={center} />
+        <Marker position={center} /> */}
       </GoogleMap>
     </div>
   );

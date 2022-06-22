@@ -309,6 +309,8 @@ function Schedule() {
   const [clickedDayIndex, setClickedDayIndex] = useState('');
   const [openChat, setOpenChat] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [distance, setDistance] = useImmer({});
+  const [duration, setDuration] = useImmer({});
   console.log(searchParams);
 
   // async function CreateNewChatRoom() {
@@ -736,42 +738,51 @@ function Schedule() {
               </p>
               <div>
                 {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
-                  <PlaceContainer>
-                    <InputBox>
-                      <p>
-                        第
-                        {placeIndex + 1}
-                        個景點：
-                      </p>
-                      <input
-                        style={{ width: '20vw' }}
-                        value={placeItem.place_title}
-                        onChange={(e) => {
-                          updatePlaceTitle(e.target.value, dayIndex, placeIndex);
-                        }}
-                      />
-                    </InputBox>
-                    <InputBox>
-                      <p>停留時間：</p>
-                      <input
-                        style={{ width: '20vw' }}
-                        value={placeItem.stay_time}
-                        onChange={(e) => {
-                          updateStayTime(e.target.value, dayIndex, placeIndex);
-                        }}
-                      />
-                    </InputBox>
-                    <InputBox>
-                      <p>地址：</p>
-                      <input
-                        style={{ width: '20vw' }}
-                        value={placeItem.place_address}
-                        onChange={(e) => {
-                          updatePlaceAddress(e.target.value, dayIndex, placeIndex);
-                        }}
-                      />
-                    </InputBox>
-                  </PlaceContainer>
+                  <>
+                    <div>
+                      {(placeIndex !== 0 && distance?.[dayIndex]?.[placeIndex - 1]) || ''}
+                    </div>
+                    <div>
+                      {(placeIndex !== 0 && duration?.[dayIndex]?.[placeIndex - 1]) || ''}
+                    </div>
+                    <PlaceContainer>
+                      <InputBox>
+                        <p>
+                          第
+                          {placeIndex + 1}
+                          個景點：
+                        </p>
+                        <input
+                          style={{ width: '20vw' }}
+                          value={placeItem.place_title}
+                          onChange={(e) => {
+                            updatePlaceTitle(e.target.value, dayIndex, placeIndex);
+                          }}
+                        />
+                      </InputBox>
+                      <InputBox>
+                        <p>停留時間：</p>
+                        <input
+                          style={{ width: '20vw' }}
+                          value={placeItem.stay_time}
+                          onChange={(e) => {
+                            updateStayTime(e.target.value, dayIndex, placeIndex);
+                          }}
+                        />
+                      </InputBox>
+                      <InputBox>
+                        <p>地址：</p>
+                        <input
+                          style={{ width: '20vw' }}
+                          value={placeItem.place_address}
+                          onChange={(e) => {
+                            updatePlaceAddress(e.target.value, dayIndex, placeIndex);
+                          }}
+                        />
+                      </InputBox>
+                    </PlaceContainer>
+
+                  </>
                 ))
                   : (
                     <div>還沒有地點ㄛ，請新增景點</div>
@@ -793,6 +804,10 @@ function Schedule() {
           active={active}
           scheduleData={scheduleData}
           updateScheduleData={updateScheduleData}
+          distance={distance}
+          setDistance={setDistance}
+          duration={duration}
+          setDuration={setDuration}
         />
         <ChatRoom openChat={openChat}>
           <ChatRoomTitle>
