@@ -1,8 +1,4 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-new */
-/* eslint-disable no-undef */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
@@ -32,8 +28,10 @@ export default function Search({
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-    //   types: ['(cities)'],
-      fields: ['formatted_address', 'geometry', 'name'], // 要放在哪？
+      types: ['(cities)'],
+      // componentRestrictions: { country: 'fr' }, // 限制國家
+      // 感覺是搜尋過的會紀錄！清除快取與cookie！！
+      // fields: ['formatted_address', 'geometry', 'name'], // 要放在哪？
       /* Define search scope here */
     },
     debounce: 300,

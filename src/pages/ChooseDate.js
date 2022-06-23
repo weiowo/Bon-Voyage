@@ -13,6 +13,7 @@ function ChooseDate() {
   // const [newScheduleId, setNewScheduleId] = useState('test');
   const [newScheduleTitle, setNewScheduleTitle] = useState('');
   const navigate = useNavigate();
+
   // const [searchParams, setSearchParams] = useSearchParams();
   // console.log(searchParams);
 

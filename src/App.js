@@ -7,6 +7,8 @@ import Home from './pages/Home';
 import ChooseDate from './pages/ChooseDate';
 import MySchedules from './pages/MySchedules';
 import Map from './pages/Map';
+import SearchHome from './pages/SearchHome';
+import City from './pages/City';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -29,6 +31,8 @@ function App() {
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/my-schedules" element={<MySchedules />} />
           <Route path="/map-new" element={<Map />} />
+          <Route path="/home-search" element={<SearchHome />} />
+          <Route path="/city" element={<City />} />
         </Routes>
       </BrowserRouter>
 

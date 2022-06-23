@@ -504,7 +504,6 @@ function Schedule() {
 
   useEffect(() => {
     if (existScheduleId) {
-      alert('有人更新了行程唷！'); // 會跑兩次
       const theScheduleBeingEdited = doc(db, 'schedules', existScheduleId);
       onSnapshot(theScheduleBeingEdited, (querySnapshot) => {
         console.log(querySnapshot);
