@@ -17,8 +17,163 @@ import usePlacesAutocomplete, {
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components/macro';
+import HomeBanner from './images/index_banner.png';
 
-// let service;
+const HomeTopAreaWrapper = styled.div`
+width:100vw;
+height:auto;
+display:flex;
+flex-direction:column;
+align-items:center;
+`;
+
+const Header = styled.header`
+position:absolute;
+display:flex;
+justify-content:space-between;
+width:100vw;
+height:30px;
+z-index:3;
+`;
+
+const Logo = styled.div`
+width:150px;
+height:30px;
+color:white;
+font-weight:700;
+font-size:25px;
+margin-left:20px;
+margin-top:20px;
+`;
+
+const NavBar = styled.div`
+display:flex;
+align-items:center;
+gap:15px;
+width:500px;
+height:30px;
+color:white;
+font-weight:600;
+margin-top:25px;
+margin-right:20px;
+`;
+
+const ProfilePageNav = styled.div`
+width:auto;
+padding:8px 10px;
+border-radius:10px;
+border:1px solid white;
+cursor:pointer;
+`;
+
+const HomeBannerPhoto = styled.img`
+width:100vw;
+height:auto;
+position:relative;
+`;
+
+const SearchBarBackground = styled.div`
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+width:73vw;
+height:90px;
+border-radius:15px;
+position:absolute;
+top:560px;
+background-color:rgba(255, 255, 255, 0.4);
+`;
+
+const SearchBarLittleWrapper = styled.div`
+border-radius:10px;
+display:flex;
+align-items:center;
+width:70vw;
+justify-content:space-between;
+height:50px;
+background-color:white;
+padding-left:20px;
+padding-right:20px;
+position:absolute;
+`;
+
+const SearchInput = styled.input`
+display:flex;
+flex-direction:column;
+width:70vw;
+height:30px;
+border:none;
+height:50px;
+cursor:pointer;
+font-size:17px;
+box-sizing:border-box;
+padding-left:10px;
+`;
+
+const StyleNavLink = styled(Link)`
+cursor:pointer;
+text-decoration:none;
+color:white;
+`;
+
+const Ulist = styled.ul`
+display:flex;
+flex-direction:column;
+align-items:center;
+width:70vw;
+height:auto;
+z-index:10;
+position:absolute;
+top:60px;
+background-color:white;
+padding-left:0px;
+border:1px grey solid;
+margin-top:15px;
+margin-bottom:0px;
+border-radius:15px;
+box-shadow
+// border-bottom-left-radius:20px;
+// border-bottom-right-radius:20px;
+
+`;
+
+const List = styled.li`
+width:69vw;
+font-weight:500;
+margin-top:2px;
+margin-bottom:2px;
+height:30px;
+border-radius:10px;
+display:flex;
+justify-content:center;
+align-items:center;
+postition:absolute;
+cursor:pointer;
+&:hover {
+  color:white;
+  background-color:#67B7D1;
+}`;
+
+// const SearchInputAndResults
+
+const OptionForm = styled.form`
+width:70px;
+display:flex;
+border:none;
+`;
+
+const OptionSelect = styled.select`
+width:70px;
+border:none;
+font-weight:500;
+font-size:17px;
+margin-left:0px;
+`;
+
+// google相關
+
 const libraries = ['places'];
 
 const mapContainerStyle = {
@@ -85,52 +240,60 @@ function SearchAtHomePage({ option, setOption }) {
     } = suggestion;
 
     return (
-      <li key={place_id} onClick={handleSelect(suggestion)}>
-        <strong>{main_text}</strong>
-        {' '}
-        <small>{secondary_text}</small>
-      </li>
+      <List style={{ listStyle: 'none' }} key={place_id} onClick={handleSelect(suggestion)}>
+        <div>
+          {main_text}
+          {secondary_text}
+        </div>
+      </List>
     );
   });
 
   return (
-    <div>
-      <form htmlFor="temp-id" className="search-options-form">
-        <label className="search-options-title">搜尋種類</label>
-        <select
-          className="search-options"
-          value={option}
-          onChange={(event) => {
-            setOption(event.target.value);
-          }}
-        >
-          <option id="temp-id" className="search-option-all" value="all">
-            全部
-          </option>
-          <option id="temp-id" className="search-option-lodging" value="lodging">
-            飯店
-          </option>
-          <option id="temp-id" className="search-option-restaurant" value="restaurant">
-            餐廳
-          </option>
-          <option id="temp-id" className="search-option-landmark" value="tourist_attraction">
-            景點
-          </option>
-        </select>
-      </form>
-      <input
-        value={value}
-        onChange={handleInput}
-        disabled={!ready}
-        placeholder="Where are you going?"
-      />
+    <SearchBarBackground>
+      <SearchBarLittleWrapper>
+        <OptionForm htmlFor="temp-id" className="search-options-form">
+          <label htmlFor="temp-id" className="search-options-title" />
+          <OptionSelect
+            id="temp-id"
+            className="search-options"
+            value={option}
+            onChange={(event) => {
+              setOption(event.target.value);
+            }}
+          >
+            <option id="temp-id" className="search-option-all" value="all">
+              全部
+            </option>
+            <option id="temp-id" className="search-option-lodging" value="lodging">
+              飯店
+            </option>
+            <option id="temp-id" className="search-option-restaurant" value="restaurant">
+              餐廳
+            </option>
+            <option id="temp-id" className="search-option-landmark" value="tourist_attraction">
+              景點
+            </option>
+          </OptionSelect>
+        </OptionForm>
+        <div style={{
+          marginLeft: '10px', height: '50px', width: '1px', backgroundColor: '#D3D3D3',
+        }}
+        />
+        <SearchInput
+          value={value}
+          onChange={handleInput}
+          disabled={!ready}
+          placeholder="請輸入想查詢的城市名稱OWO....."
+        />
+      </SearchBarLittleWrapper>
       {/* We can use the "status" to decide whether we should display the dropdown or not */}
-      {status === 'OK' && <ul>{renderSuggestions()}</ul>}
-    </div>
+      {status === 'OK' && <Ulist>{renderSuggestions()}</Ulist>}
+    </SearchBarBackground>
   );
 }
 
-function MapAtHomePage() {
+function HomePageTopArea() {
   // const [query, setQuery] = useState('');
   const [option, setOption] = useState('all'); // 預設想放'全部'
   // const [nearbyData, setNearbyData] = useState({});
@@ -176,31 +339,26 @@ function MapAtHomePage() {
   if (!isLoaded) return <div>沒有成功...</div>;
 
   return (
-    <div className="search-options-wrapper">
-      {/* <form htmlFor="temp-id" className="search-options-form">
-        <label className="search-options-title">搜尋種類</label>
-        <select
-          className="search-options"
-          value={option}
-          onChange={(event) => {
-            setOption(event.target.value);
-          }}
-        >
-          <option id="temp-id" className="search-option-all" value="all">
-            全部
-          </option>
-          <option id="temp-id" className="search-option-lodging" value="lodging">
-            飯店
-          </option>
-          <option id="temp-id" className="search-option-restaurant" value="restaurant">
-            餐廳
-          </option>
-          <option id="temp-id" className="search-option-landmark" value="tourist_attraction">
-            景點
-          </option>
-        </select>
-      </form> */}
-      <SearchAtHomePage option={option} setOption={setOption} />
+    <>
+      <HomeTopAreaWrapper>
+        <Header>
+          <Logo>Bon Voyage</Logo>
+          <NavBar>
+            <div style={{ cursor: 'pointer' }}>VR專區</div>
+            <div style={{ cursor: 'pointer' }}>熱門景點</div>
+            <div style={{ cursor: 'pointer' }}>國內旅遊</div>
+            <div style={{ cursor: 'pointer' }}>國外旅遊</div>
+            <div style={{ cursor: 'pointer' }}>
+              <StyleNavLink to="/my-schedules">
+                我的行程
+              </StyleNavLink>
+            </div>
+            <ProfilePageNav>個人頁面</ProfilePageNav>
+          </NavBar>
+        </Header>
+        <HomeBannerPhoto src={HomeBanner} />
+        <SearchAtHomePage option={option} setOption={setOption} />
+      </HomeTopAreaWrapper>
       <GoogleMap
         id="map"
         mapContainerStyle={mapContainerStyle}
@@ -209,21 +367,13 @@ function MapAtHomePage() {
         options={options}
         onLoad={onMapLoad}
       />
-    </div>
+    </>
   );
 }
 
 function Home() {
   return (
-    <>
-      <MapAtHomePage />
-      <button type="button">
-        <Link to="/my-schedules">
-          我的行程
-        </Link>
-      </button>
-
-    </>
+    <HomePageTopArea />
   );
 }
 

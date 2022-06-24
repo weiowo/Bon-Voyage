@@ -116,7 +116,6 @@ bottom: 0px;
 right:50px;
 background-color:white;
 display:${(props) => (props.openChat ? 'flex' : 'none')};
-
 `;
 
 const ChatIcon = styled.img`
