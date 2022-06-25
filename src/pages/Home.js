@@ -35,7 +35,7 @@ align-items:center;
 
 const HomeBannerPhoto = styled.img`
 width:100vw;
-height:100vh;
+height:auto;
 position:relative;
 `;
 
@@ -48,7 +48,7 @@ width:73vw;
 height:90px;
 border-radius:15px;
 position:absolute;
-top:630px;
+top:530px;
 background-color:rgba(255, 255, 255, 0.4);
 `;
 

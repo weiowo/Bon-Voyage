@@ -8,8 +8,10 @@ import {
   doc, getDoc, updateDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
+import produce from 'immer';
 import db from '../utils/firebase-init';
 import CitySrc from './images/city.png';
+
 // import PlaceModal from '../components/PlaceModal';
 
 // import { useNavigate } from 'react-router-dom';
@@ -454,6 +456,27 @@ function City() {
 
   // 選好行程跟天數時，會把行程的名稱跟地址加到immer中，並送到database中
 
+  //   function ComfirmedAdded() {
+  //     console.log('已經加入囉！');
+  //     const newPlace = {
+  //       place_title: modalDetail.name,
+  //       place_address: modalDetail.formatted_address,
+  //       stay_time: '',
+  //     };
+  //     //   行程整理到immer中
+  //     setCityPageScheduleData((draft) => {
+  //       console.log('哈哈', cityPageScheduleData);
+  //       draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
+  //     });
+  //     //   行程整理好後推上firestore
+  //     async function passAddedDataToFirestore() {
+  //       console.log('修改好行程囉！');
+  //       const scheduleRef = doc(db, 'schedules', clickedScheduleId);
+  //       console.log(cityPageScheduleData[clickedScheduleIndex]);
+  //       await updateDoc(scheduleRef, cityPageScheduleData[clickedScheduleIndex]);
+  //     }
+  //     passAddedDataToFirestore();
+  //   }
   function ComfirmedAdded() {
     console.log('已經加入囉！');
     const newPlace = {
@@ -461,16 +484,19 @@ function City() {
       place_address: modalDetail.formatted_address,
       stay_time: '',
     };
-    //   行程整理到immer中
-    setCityPageScheduleData((draft) => {
+    // 用 immer 產生出新的行程資料
+    const newScheduleData = produce(cityPageScheduleData, (draft) => {
       console.log('哈哈', draft);
       draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
     });
-    //   行程整理好後推上firestore
+    console.log('newScheduleData', newScheduleData);
+    // 更新 state
+    setCityPageScheduleData(newScheduleData);
+    // 更新 firestore
     async function passAddedDataToFirestore() {
       console.log('修改好行程囉！');
       const scheduleRef = doc(db, 'schedules', clickedScheduleId);
-      await updateDoc(scheduleRef, { ...cityPageScheduleData[clickedScheduleIndex] });
+      await updateDoc(scheduleRef, { ...newScheduleData[clickedScheduleIndex] });
     }
     passAddedDataToFirestore();
   }
@@ -544,11 +570,11 @@ function City() {
                       {index + 1}
                       天
                     </div>
-                    <button onClick={() => { setClickedScheduleIndex(false); setDayIndex(index); }} type="button">選擇</button>
+                    <button onClick={() => { setDayIndex(index); }} type="button">選擇</button>
                   </div>
                 </div>
               )) : ''}
-            <button type="button" onClick={() => ComfirmedAdded()}>完成選擇</button>
+            <button type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</button>
           </div>
           <CloseModalButton
             type="button"
@@ -560,7 +586,6 @@ function City() {
       </ModalBackground>
 
       <Banner src={CitySrc} />
-      <button onClick={() => setChooseScheduleModalIsActive(true)} type="button">測試按鈕</button>
       <CityTitle>
         哈囉，
         {cityFromUrl}
