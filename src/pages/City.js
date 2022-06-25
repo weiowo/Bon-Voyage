@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import styled from 'styled-components/macro';
 import CitySrc from './images/city.png';
+// import PlaceModal from '../components/PlaceModal';
 
 // import { useNavigate } from 'react-router-dom';
 // import {
@@ -13,6 +14,82 @@ import CitySrc from './images/city.png';
 //   setDoc,
 // } from 'firebase/firestore';
 // import db from '../utils/firebase-init';
+
+const ModalBackground = styled.div`
+width:100vw;
+height:100vh;
+position:fixed;
+top:0;
+bottom:0;
+left:0;
+right:0;
+background-color:rgba(0, 0, 0, 0.7);
+display:flex;
+justify-content:center;
+align-items:center;
+display:${(props) => (props.active ? 'flex' : 'none')};
+z-index:100;
+`;
+
+const ModalBox = styled.div`
+display:flex;
+width:50vw;
+height:30vw;
+background-color:white;
+z-index:10;
+border-radius:20px;
+z-index:200;
+position: relative;
+align-items:center;
+`;
+
+const ModalImgArea = styled.div`
+width:25vw;
+height:22vw;
+display:flex;
+flex-wrap:wrap;
+align-items:center;
+gap:10px;
+`;
+
+const ModalImg = styled.img`
+width:10vw;
+height:10vw;
+border-radius:10px;
+`;
+
+const ModalLeftArea = styled.div`
+width:25vw;
+height:28vw;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:10px;
+`;
+
+const AddToScheduleButton = styled.button`
+width:10vw;
+height:30px;
+border-radius:5px;
+background-color:grey;
+color:white;
+cursor:pointer;
+`;
+
+const CloseModalButton = styled.button`
+height:25px;
+width:25px;
+position:absolute;
+right:20px;
+top:20px;
+text-align:center;
+border:none;
+border-radius:50%;
+background-color:black;
+color:white;
+cursor:pointer;
+`;
 
 const Banner = styled.img`
 width:100vw;
@@ -207,8 +284,10 @@ const center = {
 function City() {
   const { search } = useLocation();
   const [nearbyData, setNearbyData] = useState({});
+  const [modalIsActive, setModalIsActive] = useState(false);
+  const [modalDetail, setModalDetail] = useState({});
+  console.log('我在useState中', modalDetail);
   //   const [attractionSliderIndex, setAttractionSliderIndex] = useState();
-
   //   const [ loading, setLoading] = useState(true);
   //   const [error, setError] = useState();
   console.log(nearbyData);
@@ -219,6 +298,13 @@ function City() {
   console.log(lat);
   console.log(lng);
   console.log(cityFromUrl);
+
+  // 關於modal部分
+
+  function handleModalClose() {
+    console.log('closed!');
+    setModalIsActive(false);
+  }
   // console.log(nearbyData.lodging[0].photos[0].getUrl());
 
   // 關於slick slider部分
@@ -300,10 +386,52 @@ function City() {
   }, [searchNearby, isLoaded]);
   console.log({ lat, lng });
 
+  function ClickAndShowPlaceDetail(clicked) {
+    console.log(clicked);
+    console.log('opened!');
+    setModalIsActive(true);
+    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clicked}&language=zh-TW&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o`)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      }).then((jsonData) => {
+        console.log('我在useEffect中', jsonData.result);
+        setModalDetail(jsonData.result);
+        // window.localStorage.setItem('PlcesSearched', jsonData);
+      }).catch((err) => {
+        console.log('錯誤:', err);
+      });
+  }
+
+  //   function AddPlaceToScheduleFromOtherPage(){
+
+  //   }
+
   if (!isLoaded) return <div>沒有成功...(fromCity頁面)</div>;
 
   return (
     <>
+      <ModalBackground active={modalIsActive}>
+        <ModalBox>
+          <ModalLeftArea>
+            <div style={{ fontSize: '30px', fontWeight: '600' }}>{modalDetail.name}</div>
+            <div>{modalDetail.formatted_address}</div>
+            <AddToScheduleButton>加入行程</AddToScheduleButton>
+          </ModalLeftArea>
+          <ModalImgArea>
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[1].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[2].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[3].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[4].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+          </ModalImgArea>
+          <CloseModalButton
+            type="button"
+            onClick={() => { handleModalClose(); }}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
       <Banner src={CitySrc} />
       <CityTitle>
         哈囉，
@@ -324,22 +452,36 @@ function City() {
         </AttractionAreaTitle>
         <AttractionWrapper>
           {nearbyData.tourist_attraction ? nearbyData.tourist_attraction.map((item, index) => (
-            <AttractionBox id={item.place_id}>
-              <AttractionPhotoContainer>
+            <AttractionBox
+              id={item.place_id}
+              onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+            >
+              <AttractionPhotoContainer
+                id={item.place_id}
+              >
                 <AttractionPhoto
+                  id={item.place_id}
                   alt="att"
                   src={item.photos?.[0]?.getUrl?.() ?? '哈哈'}
                 />
               </AttractionPhotoContainer>
-              <AttractionTitle>
+              <AttractionTitle
+                id={item.place_id}
+              >
                 {item.name}
               </AttractionTitle>
-              <AttractionDescription>
+              <AttractionDescription
+                id={item.place_id}
+              >
                 哈哈這是第
                 {index + 1}
                 個景點唷
               </AttractionDescription>
-              <AttractionSeeMoreButton>瞭解更多</AttractionSeeMoreButton>
+              <AttractionSeeMoreButton
+                id={item.place_id}
+              >
+                瞭解更多
+              </AttractionSeeMoreButton>
             </AttractionBox>
           )) : ''}
         </AttractionWrapper>
@@ -362,7 +504,13 @@ function City() {
                   {index + 1}
                   個景點唷
                 </RestaurantDescription>
-                <RestaurantSeeMoreButton>瞭解更多</RestaurantSeeMoreButton>
+                <RestaurantSeeMoreButton
+                  id={item.place_id}
+                  onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+                >
+                  瞭解更多
+
+                </RestaurantSeeMoreButton>
               </RestaurantBoxRightContent>
             </RestaurantBox>
           )) : ''}
@@ -387,7 +535,12 @@ function City() {
                 {index + 1}
                 個景點唷
               </AttractionDescription>
-              <AttractionSeeMoreButton>瞭解更多</AttractionSeeMoreButton>
+              <AttractionSeeMoreButton
+                id={item.place_id}
+                onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+              >
+                瞭解更多
+              </AttractionSeeMoreButton>
             </AttractionBox>
           )) : ''}
         </AttractionWrapper>

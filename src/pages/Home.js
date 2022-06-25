@@ -5,7 +5,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import {
 //   GoogleMap, useLoadScript,
 // } from '@react-google-maps/api';
@@ -15,10 +15,15 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete';
 // import onClickOutside from 'react-onclickoutside';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback, useRef, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import HomeBanner from './images/index_banner.png';
+import HeaderComponent
+  from '../components/Header';
+import PlaceModal from '../components/PlaceModal';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -28,48 +33,9 @@ flex-direction:column;
 align-items:center;
 `;
 
-const Header = styled.header`
-position:absolute;
-display:flex;
-justify-content:space-between;
-width:100vw;
-height:30px;
-z-index:3;
-`;
-
-const Logo = styled.div`
-width:150px;
-height:30px;
-color:white;
-font-weight:700;
-font-size:25px;
-margin-left:20px;
-margin-top:20px;
-`;
-
-const NavBar = styled.div`
-display:flex;
-align-items:center;
-gap:15px;
-width:500px;
-height:30px;
-color:white;
-font-weight:600;
-margin-top:25px;
-margin-right:20px;
-`;
-
-const ProfilePageNav = styled.div`
-width:auto;
-padding:8px 10px;
-border-radius:10px;
-border:1px solid white;
-cursor:pointer;
-`;
-
 const HomeBannerPhoto = styled.img`
 width:100vw;
-height:auto;
+height:100vh;
 position:relative;
 `;
 
@@ -82,7 +48,7 @@ width:73vw;
 height:90px;
 border-radius:15px;
 position:absolute;
-top:560px;
+top:630px;
 background-color:rgba(255, 255, 255, 0.4);
 `;
 
@@ -110,12 +76,7 @@ cursor:pointer;
 font-size:17px;
 box-sizing:border-box;
 padding-left:10px;
-`;
-
-const StyleNavLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:white;
+outline: none;
 `;
 
 const Ulist = styled.ul`
@@ -170,6 +131,7 @@ border:none;
 font-weight:500;
 font-size:17px;
 margin-left:0px;
+outline: none;
 `;
 
 // google相關
@@ -341,21 +303,7 @@ function HomePageTopArea() {
   return (
     <>
       <HomeTopAreaWrapper>
-        <Header>
-          <Logo>Bon Voyage</Logo>
-          <NavBar>
-            <div style={{ cursor: 'pointer' }}>VR專區</div>
-            <div style={{ cursor: 'pointer' }}>熱門景點</div>
-            <div style={{ cursor: 'pointer' }}>國內旅遊</div>
-            <div style={{ cursor: 'pointer' }}>國外旅遊</div>
-            <div style={{ cursor: 'pointer' }}>
-              <StyleNavLink to="/my-schedules">
-                我的行程
-              </StyleNavLink>
-            </div>
-            <ProfilePageNav>個人頁面</ProfilePageNav>
-          </NavBar>
-        </Header>
+        <HeaderComponent />
         <HomeBannerPhoto src={HomeBanner} />
         <SearchAtHomePage option={option} setOption={setOption} />
       </HomeTopAreaWrapper>
@@ -373,7 +321,11 @@ function HomePageTopArea() {
 
 function Home() {
   return (
-    <HomePageTopArea />
+    <>
+      <HomePageTopArea />
+      <PlaceModal />
+    </>
+
   );
 }
 
@@ -411,11 +363,3 @@ SearchAtHomePage.propTypes = {
 //       console.log('錯誤:', err);
 //     });
 // }, []);
-
-//   fetch('https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJPxnPnrCrQjQRmEwUNrIViu0&language=zh-TW&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o', {
-//     method: 'GET', // *GET, POST, PUT, DELETE, etc.
-//     mode: 'no-cors', // no-cors, cors, *same-origin
-//   })
-//   .then(response => response.json()) // 輸出成 json
-// }
-// )

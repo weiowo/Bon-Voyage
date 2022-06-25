@@ -9,7 +9,7 @@ import MySchedules from './pages/MySchedules';
 import Map from './pages/Map';
 import SearchHome from './pages/SearchHome';
 import City from './pages/City';
-import Header from './components/Header';
+import PlaceModal from './components/PlaceModal';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -34,7 +34,7 @@ function App() {
           <Route path="/map-new" element={<Map />} />
           <Route path="/home-search" element={<SearchHome />} />
           <Route path="/city" element={<City />} />
-          <Route path="/header" element={<Header />} />
+          <Route path="/place-modal" element={<PlaceModal />} />
         </Routes>
       </BrowserRouter>
 
