@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   // getDocs,
   collection, doc,
-  setDoc,
+  setDoc, arrayUnion, updateDoc,
 } from 'firebase/firestore';
 import db from '../utils/firebase-init';
 
@@ -56,6 +56,8 @@ function ChooseDate() {
     messages: [],
   };
 
+  // user創建行程的時候就要把這個行程推進他的owned_schedules_list array中
+
   async function setNewScheduleToDb() {
     console.log('您創了一筆新行程唷！');
     const createNewScheduleData = doc(collection(db, 'schedules'));
@@ -74,6 +76,11 @@ function ChooseDate() {
       // eslint-disable-next-line max-len
       ({ ...newChatRoom, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }),
     );
+    const userOwnedScheduleArray = doc(db, 'users', '4upu03jk1cAjA0ZbAAJH');
+    // Atomically add a new region to the "regions" array field.
+    await updateDoc(userOwnedScheduleArray, {
+      owned_schedule_ids: arrayUnion(createNewScheduleData.id),
+    });
   }
   // console.log(newScheduleId);
 

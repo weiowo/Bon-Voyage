@@ -4,6 +4,11 @@ import React, {
 import { useLocation } from 'react-router-dom';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import styled from 'styled-components/macro';
+import {
+  doc, getDoc, updateDoc,
+} from 'firebase/firestore';
+import { useImmer } from 'use-immer';
+import db from '../utils/firebase-init';
 import CitySrc from './images/city.png';
 // import PlaceModal from '../components/PlaceModal';
 
@@ -284,12 +289,24 @@ const center = {
 function City() {
   const { search } = useLocation();
   const [nearbyData, setNearbyData] = useState({});
+  const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]); // 是這個人所有的行程哦！不是單一筆行程!
+  const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
+  console.log('行程Index喔', clickedScheduleIndex);
+  const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
+  console.log('行程ID喔', clickedScheduleId);
+  const [dayIndex, setDayIndex] = useState();
+  console.log('我要加在這一天！', dayIndex);
   const [modalIsActive, setModalIsActive] = useState(false);
+  const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
+  const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
   const [modalDetail, setModalDetail] = useState({});
-  console.log('我在useState中', modalDetail);
+  console.log('我在useState中modalDetail', modalDetail);
+
+  console.log('我在useState中cityPageScheduleData', cityPageScheduleData);
   //   const [attractionSliderIndex, setAttractionSliderIndex] = useState();
   //   const [ loading, setLoading] = useState(true);
   //   const [error, setError] = useState();
+
   console.log(nearbyData);
   const lat = Number(new URLSearchParams(search).get('lat'));
   const lng = Number(new URLSearchParams(search).get('lng'));
@@ -386,11 +403,11 @@ function City() {
   }, [searchNearby, isLoaded]);
   console.log({ lat, lng });
 
-  function ClickAndShowPlaceDetail(clicked) {
-    console.log(clicked);
+  function ClickAndShowPlaceDetail(clickedPlaceId) {
+    console.log(clickedPlaceId);
     console.log('opened!');
     setModalIsActive(true);
-    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clicked}&language=zh-TW&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o`)
+    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o`)
       .then((response) => {
         console.log(response);
         return response.json();
@@ -403,11 +420,62 @@ function City() {
       });
   }
 
-  //   function AddPlaceToScheduleFromOtherPage(){
+  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
+  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
+  // 按下哪一個行程後，用那個index去抓那天的細節
 
-  //   }
+  useEffect(() => {
+    async function getUserArrayList() {
+      const docRef = doc(db, 'users', '4upu03jk1cAjA0ZbAAJH');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log('Document data:', docSnap.data().owned_schedule_ids);
+      } else {
+        console.log('No such document!');
+      }
+      function getSchedulesFromList() {
+        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+          const docs = doc(db, 'schedules', item);
+          const Snap = await getDoc(docs);
+          if (Snap.exists()) {
+            console.log('這位使用者的行程', index, Snap.data());
+            setCityPageScheduleData((draft) => {
+              draft.push(Snap.data());
+            });
+          } else {
+            console.log('沒有這個行程！');
+          }
+        });
+      }
+      getSchedulesFromList();
+    }
+    getUserArrayList();
+  }, [setCityPageScheduleData]);
 
-  if (!isLoaded) return <div>沒有成功...(fromCity頁面)</div>;
+  // 選好行程跟天數時，會把行程的名稱跟地址加到immer中，並送到database中
+
+  function ComfirmedAdded() {
+    console.log('已經加入囉！');
+    const newPlace = {
+      place_title: modalDetail.name,
+      place_address: modalDetail.formatted_address,
+      stay_time: '',
+    };
+    //   行程整理到immer中
+    setCityPageScheduleData((draft) => {
+      console.log('哈哈', draft);
+      draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
+    });
+    //   行程整理好後推上firestore
+    async function passAddedDataToFirestore() {
+      console.log('修改好行程囉！');
+      const scheduleRef = doc(db, 'schedules', clickedScheduleId);
+      await updateDoc(scheduleRef, { ...cityPageScheduleData[clickedScheduleIndex] });
+    }
+    passAddedDataToFirestore();
+  }
+
+  if (!isLoaded) return <div>City頁Loading出了點問題OWO!可以先到首頁看更多景點唷^__^!</div>;
 
   return (
     <>
@@ -416,7 +484,11 @@ function City() {
           <ModalLeftArea>
             <div style={{ fontSize: '30px', fontWeight: '600' }}>{modalDetail.name}</div>
             <div>{modalDetail.formatted_address}</div>
-            <AddToScheduleButton>加入行程</AddToScheduleButton>
+            <AddToScheduleButton
+              onClick={() => { setModalIsActive(false); setChooseScheduleModalIsActive(true); }}
+            >
+              加入行程
+            </AddToScheduleButton>
           </ModalLeftArea>
           <ModalImgArea>
             <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[1].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
@@ -432,7 +504,63 @@ function City() {
           </CloseModalButton>
         </ModalBox>
       </ModalBackground>
+
+      <ModalBackground active={chooseScheduleModalIsActive}>
+        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
+          <div>
+            <div>您的現有行程</div>
+            {cityPageScheduleData ? cityPageScheduleData.map((item, index) => (
+              <div>
+                <div style={{ display: 'flex' }} id={item.schedule_id}>
+                  <div>
+                    {index + 1}
+                    :
+                    {item.title}
+                  </div>
+                  <button onClick={() => { setClickedScheduleId(item.schedule_id); setClickedScheduleIndex(index); setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false); }} type="button">選擇</button>
+                </div>
+              </div>
+            )) : ''}
+          </div>
+          <CloseModalButton
+            type="button"
+            onClick={() => setChooseScheduleModalIsActive(false)}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
+
+      <ModalBackground active={chooseDayModalIsActive}>
+        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
+          <div>
+            <div>請選擇天數</div>
+            {cityPageScheduleData
+              ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                <div>
+                  <div style={{ display: 'flex' }}>
+                    <div>
+                      第
+                      {index + 1}
+                      天
+                    </div>
+                    <button onClick={() => { setClickedScheduleIndex(false); setDayIndex(index); }} type="button">選擇</button>
+                  </div>
+                </div>
+              )) : ''}
+            <button type="button" onClick={() => ComfirmedAdded()}>完成選擇</button>
+          </div>
+          <CloseModalButton
+            type="button"
+            onClick={() => setChooseDayModalIsActive(false)}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
+
       <Banner src={CitySrc} />
+      <button onClick={() => setChooseScheduleModalIsActive(true)} type="button">測試按鈕</button>
       <CityTitle>
         哈囉，
         {cityFromUrl}

@@ -1,10 +1,9 @@
 // 選擇舊有行程或者創建新的行程
 import styled from 'styled-components/macro';
 import React, { useEffect, useState } from 'react';
-import {
-  getDocs, collection, getDoc, doc,
-} from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
 
 const PageWrapper = styled.div`
@@ -13,7 +12,7 @@ height:100vh;
 display:flex;
 `;
 
-const ChoicesWrapper = styled.div`
+const ChoicesWrapper = styled.div` 
 width:50vw;
 display:flex;
 flex-direction:column;
@@ -44,19 +43,50 @@ height:auto;
 `;
 
 function MySchedules() {
-  const [schedules, setSchedules] = useState([]);
+  const [schedules, setSchedules] = useImmer([]);
   const [selectedSchedule, setSelectedSchedule] = useState();
-  // 拿到所有的schedule資料並詢問要編輯哪一個行程，或者要創建新的行程
-  async function getSchedule() {
-    const querySnapshot = await getDocs(collection(db, 'schedules'));
-    const scheduleList = querySnapshot.docs.map((item) => item.data());
-    setSchedules(scheduleList);
-  }
+
+  // 先拿到某個使用者的資料
+  // 再根據行程array，去做foreach拿到所有schedule資料
 
   useEffect(() => {
-    getSchedule();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    async function getUserArrayList() {
+      const docRef = doc(db, 'users', '4upu03jk1cAjA0ZbAAJH');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log('Document data:', docSnap.data().owned_schedule_ids);
+      } else {
+        console.log('No such document!');
+      }
+      function getSchedulesFromList() {
+        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+          const docs = doc(db, 'schedules', item);
+          const Snap = await getDoc(docs);
+          if (Snap.exists()) {
+            console.log('這位使用者的行程', index, Snap.data());
+            setSchedules((draft) => {
+              draft.push(Snap.data());
+            });
+          } else {
+            console.log('沒有這個行程！');
+          }
+        });
+      }
+      getSchedulesFromList();
+    }
+    getUserArrayList();
+  }, [setSchedules]);
+
+  // 拿到所有的schedule資料並詢問要編輯哪一個行程，或者要創建新的行程
+  // async function getSchedule() {
+  //   const querySnapshot = await getDocs(collection(db, 'schedules'));
+  //   const scheduleList = querySnapshot.docs.map((item) => item.data());
+  //   setSchedules(scheduleList);
+  // }
+
+  // useEffect(() => {
+  //   getUserArrayList();
+  // }, []);
 
   // 拿到點按下去的那筆行程
   async function getSelectedSchedule(id) {

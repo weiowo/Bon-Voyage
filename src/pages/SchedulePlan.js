@@ -566,7 +566,7 @@ function Schedule() {
 
   function addPlaceInDay(dayIndex) {
     updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places.push(newPlace);
+      draft?.trip_days[dayIndex]?.places.push(newPlace);
     });
   }
 
@@ -746,6 +746,9 @@ function Schedule() {
             回到我的行程
           </Link>
         </button>
+        <input
+          placeholder="邀請朋友"
+        />
         <p>
           行程title：
           {scheduleData ? scheduleData.title : ''}
