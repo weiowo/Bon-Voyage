@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable max-len */
 /* eslint-disable array-callback-return */
@@ -13,12 +14,14 @@ import {
   onSnapshot,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
-import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
 import PinkCloseIcon from './images/close-2.png';
 import db from '../utils/firebase-init';
-import Map from './Map';
+// import Map from './Map';
+import GreyHeaderComponent from '../components/GreyHeader';
+import BlueTrashCanSrc from './images/trash_blue.png';
 
 // 最新版！！（2022/06/20）
 // chooseDate完成後就創立一個新的行程id，並放到url上面
@@ -34,6 +37,7 @@ const ScheduleWrapper = styled.div`
     width:100%;
     height:100%;
     gap:30px;
+    padding-top:70px;
     `;
 
 const LeftContainer = styled.div`
@@ -63,13 +67,21 @@ padding-bottom:15px;
 
 const PlaceContainer = styled.div`
 display:flex;
-flex-direction:column;
-justify-content:center;
+justify-content:space-around;
 align-items:center;
 width:40vw;
-height:auto;
-border: brown solid 1px;
+height:120px;
+padding-left:20px;
+padding-right:20px;
 border-radius:20px;
+background-color:#e7f5fe;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+`;
+
+const PlaceContainerInputArea = styled.div`
+width:auto;
+height:auto;
 `;
 
 const InputBox = styled.div`
@@ -273,6 +285,12 @@ width:40vw;
 const AddToPlaceButton = styled.button`
 height:30px;
 width:100px;
+`;
+
+const DeleteIcon = styled.img`
+width:24px;
+height:24px;
+cursor:pointer;
 `;
 
 // 拿user資料並放入list
@@ -707,143 +725,147 @@ function Schedule() {
   }
 
   return (
-    <ScheduleWrapper className="test">
-      {/* <AddAndSearch recommendList={recommendList} setRecommendList={setRecommendList} /> */}
-      <AddAndSearchBox active={active}>
-        <CloseSearchIcon
-          src={PinkCloseIcon}
-          onClick={() => setActive(false)}
-        />
-        <ResultsArea>
-          <SearchedPlace>
-            <div>
-              您搜尋地點：
-              {selected.structured_formatting ? selected.structured_formatting.main_text : ''}
-            </div>
-            <AddToPlaceButton
-              onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); setActive(false); }}
-            >
-              加入行程
-            </AddToPlaceButton>
-          </SearchedPlace>
-          <RecommendPlaces>
-            周邊推薦景點：
-            {recommendList.map((place, index) => (
-              <RecommendPlace>
-                <div>{index + 1 }</div>
-                <div style={{ width: '35vw' }}>
-                  {place.name}
-                </div>
-                <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place.name, clickedDayIndex); updatePlaceAddressBySearch(place.vicinity, clickedDayIndex); setActive(false); }} type="button">加入行程</AddToPlaceButton>
-              </RecommendPlace>
-            ))}
-          </RecommendPlaces>
-        </ResultsArea>
-      </AddAndSearchBox>
-      <LeftContainer active={active}>
-        <button type="button">
-          <Link to="/my-schedules">
-            回到我的行程
-          </Link>
-        </button>
-        <input
-          placeholder="邀請朋友"
-        />
-        <p>
-          行程title：
-          {scheduleData ? scheduleData.title : ''}
-        </p>
-        <DateContainer>
-          <p>
-            出發時間：
-            {scheduleData ? scheduleData.embark_date : '沒有data'}
-          </p>
-          <p>
-            結束時間：
-            {scheduleData ? scheduleData.end_date : '沒有data' }
-          </p>
-          <CompleteButton onClick={() => setCompletedScheduleToDb()} type="button">完成行程</CompleteButton>
-        </DateContainer>
-
-        <div className="schedule-boxes">
-          {/* <Search /> 要怎麼讓search跑到這邊？function怎麼傳？ */}
-          <button type="button" style={{ marginBottom: '20px' }} onClick={() => addDayInSchedule()}>新增天數</button>
-          {scheduleData ? scheduleData.trip_days.map((dayItem, dayIndex) => (
-            <DayContainer>
-              <p>
-                第
-                {dayIndex + 1}
-                天
-                /
-                日期
-                {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
-                {/* 加幾天就加幾個「一天的millisecond」 */}
-                /
-                {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
-                <button onClick={() => deleteCertainDay(dayIndex)} type="button">刪除此天</button>
-              </p>
+    <>
+      <GreyHeaderComponent />
+      <ScheduleWrapper className="test">
+        {/* <AddAndSearch recommendList={recommendList} setRecommendList={setRecommendList} /> */}
+        <AddAndSearchBox active={active}>
+          <CloseSearchIcon
+            src={PinkCloseIcon}
+            onClick={() => setActive(false)}
+          />
+          <ResultsArea>
+            <SearchedPlace>
               <div>
-                {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
-                  <>
-                    <div>
-                      {(placeIndex !== 0 ? `行車距離： ${distance?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
-                    </div>
-                    <div>
-                      {(placeIndex !== 0 ? `行車時間： ${duration?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
-                    </div>
-                    <PlaceContainer>
-                      <InputBox>
-                        <p>
-                          第
-                          {placeIndex + 1}
-                          個景點：
-                        </p>
-                        <input
-                          style={{ width: '20vw' }}
-                          value={placeItem.place_title}
-                          onChange={(e) => {
-                            updatePlaceTitle(e.target.value, dayIndex, placeIndex);
-                          }}
-                        />
-                      </InputBox>
-                      <InputBox>
-                        <p>停留時間：</p>
-                        <input
-                          style={{ width: '20vw' }}
-                          value={placeItem.stay_time}
-                          onChange={(e) => {
-                            updateStayTime(e.target.value, dayIndex, placeIndex);
-                          }}
-                        />
-                      </InputBox>
-                      <InputBox>
-                        <p>地址：</p>
-                        <input
-                          style={{ width: '20vw' }}
-                          value={placeItem.place_address}
-                          onChange={(e) => {
-                            updatePlaceAddress(e.target.value, dayIndex, placeIndex);
-                          }}
-                        />
-                      </InputBox>
-                      <button onClick={() => deleteCertainPlace(dayIndex, placeIndex)} type="button">刪除此行程</button>
-                    </PlaceContainer>
-
-                  </>
-                ))
-                  : (
-                    <div>還沒有地點ㄛ，請新增景點</div>
-                  )}
+                您搜尋地點：
+                {selected.structured_formatting ? selected.structured_formatting.main_text : ''}
               </div>
-              <button style={{ marginTop: '20px' }} type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
-            </DayContainer>
-          ))
-          // 這裡是新創建行程的地方
-            : ''}
-        </div>
-      </LeftContainer>
-      <RightContainer>
-        {/* <Map
+              <AddToPlaceButton
+                onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); setActive(false); }}
+              >
+                加入行程
+              </AddToPlaceButton>
+            </SearchedPlace>
+            <RecommendPlaces>
+              周邊推薦景點：
+              {recommendList.map((place, index) => (
+                <RecommendPlace>
+                  <div>{index + 1 }</div>
+                  <div style={{ width: '35vw' }}>
+                    {place.name}
+                  </div>
+                  <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place.name, clickedDayIndex); updatePlaceAddressBySearch(place.vicinity, clickedDayIndex); setActive(false); }} type="button">加入行程</AddToPlaceButton>
+                </RecommendPlace>
+              ))}
+            </RecommendPlaces>
+          </ResultsArea>
+        </AddAndSearchBox>
+        <LeftContainer active={active}>
+          {/* <button type="button">
+            <Link to="/my-schedules">
+              回到我的行程
+            </Link>
+          </button> */}
+          <input
+            placeholder="邀請朋友"
+          />
+          <p>
+            行程title：
+            {scheduleData ? scheduleData.title : ''}
+          </p>
+          <DateContainer>
+            <p>
+              出發時間：
+              {scheduleData ? scheduleData.embark_date : '沒有data'}
+            </p>
+            <p>
+              結束時間：
+              {scheduleData ? scheduleData.end_date : '沒有data' }
+            </p>
+            <CompleteButton onClick={() => setCompletedScheduleToDb()} type="button">完成行程</CompleteButton>
+          </DateContainer>
+
+          <div className="schedule-boxes">
+            {/* <Search /> 要怎麼讓search跑到這邊？function怎麼傳？ */}
+            <button type="button" style={{ marginBottom: '20px' }} onClick={() => addDayInSchedule()}>新增天數</button>
+            {scheduleData ? scheduleData.trip_days.map((dayItem, dayIndex) => (
+              <DayContainer>
+                <p>
+                  第
+                  {dayIndex + 1}
+                  天
+                  /
+                  日期
+                  {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
+                  {/* 加幾天就加幾個「一天的millisecond」 */}
+                  /
+                  {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
+                  <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
+                </p>
+                <div>
+                  {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
+                    <>
+                      <div>
+                        {(placeIndex !== 0 ? `行車距離： ${distance?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
+                      </div>
+                      <div>
+                        {(placeIndex !== 0 ? `行車時間： ${duration?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
+                      </div>
+                      <PlaceContainer>
+                        <PlaceContainerInputArea>
+                          <InputBox>
+                            <p>
+                              第
+                              {placeIndex + 1}
+                              個景點：
+                            </p>
+                            <input
+                              style={{ width: '20vw', outline: 'none' }}
+                              value={placeItem.place_title}
+                              onChange={(e) => {
+                                updatePlaceTitle(e.target.value, dayIndex, placeIndex);
+                              }}
+                            />
+                          </InputBox>
+                          <InputBox>
+                            <p>停留時間：</p>
+                            <input
+                              style={{ width: '20vw', outline: 'none' }}
+                              value={placeItem.stay_time}
+                              onChange={(e) => {
+                                updateStayTime(e.target.value, dayIndex, placeIndex);
+                              }}
+                            />
+                          </InputBox>
+                          <InputBox>
+                            <p>地址：</p>
+                            <input
+                              style={{ width: '20vw', outline: 'none' }}
+                              value={placeItem.place_address}
+                              onChange={(e) => {
+                                updatePlaceAddress(e.target.value, dayIndex, placeIndex);
+                              }}
+                            />
+                          </InputBox>
+                        </PlaceContainerInputArea>
+                        <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
+                      </PlaceContainer>
+
+                    </>
+                  ))
+                    : (
+                      <div>還沒有地點ㄛ，請新增景點</div>
+                    )}
+                </div>
+                <button style={{ marginTop: '20px' }} type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
+              </DayContainer>
+            ))
+            // 這裡是新創建行程的地方
+              : ''}
+          </div>
+        </LeftContainer>
+        <RightContainer>
+          {/* <Map
           recommendList={recommendList}
           setRecommendList={setRecommendList}
           selected={selected}
@@ -856,38 +878,39 @@ function Schedule() {
           duration={duration}
           setDuration={setDuration}
         /> */}
-        <ChatRoom openChat={openChat}>
-          <ChatRoomTitle>
-            聊天室
-            <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
-          </ChatRoomTitle>
-          <MessagesDisplayArea>
-            {chatBox ? chatBox.messages.map((item) => (
-              <MessageBox>
-                <UserPhoto />
-                <Name>
-                  {item.user_name}
-                  ：
-                </Name>
-                <Message>{item.message}</Message>
-              </MessageBox>
-            )) : ''}
-          </MessagesDisplayArea>
-          <EnterArea>
-            <MessageInput
-              value={inputMessage}
-              onChange={(e) => {
-                setInputMessage(e.target.value);
-              }}
-            />
-            <EnterMessageButton onClick={() => { setInputMessage(''); addNewMessageToFirestoreFirst(); }}>
-              send
-            </EnterMessageButton>
-          </EnterArea>
-        </ChatRoom>
-        <ChatIcon src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
-      </RightContainer>
-    </ScheduleWrapper>
+          <ChatRoom openChat={openChat}>
+            <ChatRoomTitle>
+              聊天室
+              <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
+            </ChatRoomTitle>
+            <MessagesDisplayArea>
+              {chatBox ? chatBox.messages.map((item) => (
+                <MessageBox>
+                  <UserPhoto />
+                  <Name>
+                    {item.user_name}
+                    ：
+                  </Name>
+                  <Message>{item.message}</Message>
+                </MessageBox>
+              )) : ''}
+            </MessagesDisplayArea>
+            <EnterArea>
+              <MessageInput
+                value={inputMessage}
+                onChange={(e) => {
+                  setInputMessage(e.target.value);
+                }}
+              />
+              <EnterMessageButton onClick={() => { setInputMessage(''); addNewMessageToFirestoreFirst(); }}>
+                send
+              </EnterMessageButton>
+            </EnterArea>
+          </ChatRoom>
+          <ChatIcon src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
+        </RightContainer>
+      </ScheduleWrapper>
+    </>
   );
 }
 

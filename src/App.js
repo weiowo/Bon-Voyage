@@ -10,6 +10,7 @@ import Map from './pages/Map';
 import SearchHome from './pages/SearchHome';
 import City from './pages/City';
 import PlaceModal from './components/PlaceModal';
+import CardsCarousel from './pages/CardCarousel';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/home-search" element={<SearchHome />} />
           <Route path="/city" element={<City />} />
           <Route path="/place-modal" element={<PlaceModal />} />
+          <Route path="/carousel" element={<CardsCarousel />} />
         </Routes>
       </BrowserRouter>
 

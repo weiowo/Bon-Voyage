@@ -11,7 +11,7 @@ import { useImmer } from 'use-immer';
 import produce from 'immer';
 import db from '../utils/firebase-init';
 import CitySrc from './images/city.png';
-
+import BlackHeaderComponent from '../components/BlackHeader';
 // import PlaceModal from '../components/PlaceModal';
 
 // import { useNavigate } from 'react-router-dom';
@@ -505,6 +505,7 @@ function City() {
 
   return (
     <>
+      <BlackHeaderComponent />
       <ModalBackground active={modalIsActive}>
         <ModalBox>
           <ModalLeftArea>

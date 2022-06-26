@@ -16,14 +16,14 @@ import usePlacesAutocomplete, {
 // import onClickOutside from 'react-onclickoutside';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import React, {
-  useCallback, useRef, useState,
+  useCallback, useEffect, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import HomeBanner from './images/index_banner.png';
 import HeaderComponent
   from '../components/Header';
-import PlaceModal from '../components/PlaceModal';
+import CardsCarousel from './CardCarousel';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -255,11 +255,20 @@ function SearchAtHomePage({ option, setOption }) {
   );
 }
 
-function HomePageTopArea() {
+function HomePageWithGoogleMap() {
   // const [query, setQuery] = useState('');
+  const [currentLatLng, setCurrentLatLng] = useState({});
+  console.log(currentLatLng);
   const [option, setOption] = useState('all'); // 預設想放'全部'
   // const [nearbyData, setNearbyData] = useState({});
   // console.log(nearbyData);
+  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
+  console.log('我在cardCarouselpage', currentNearbyAttraction);
+
+  const attractions = window.localStorage.getItem('周遭景點暫存區STRING');
+  console.log(JSON.parse(attractions));
+  const topSixAttraction = JSON.parse(attractions).splice(5, 9);
+  console.log(topSixAttraction);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -270,33 +279,61 @@ function HomePageTopArea() {
     mapRef.current = map;
   }, []);
 
-  // const searchNearby = useCallback(({ lat, lng }) => {
-  //   console.log('searchNearby');
-  //   // option all, landmark
-  //   const request = {
-  //     location: { lat, lng },
-  //     radius: '2000',
-  //     type: [option],
-  //   };
+  // 拿使用者現有位置
 
-  //   // 如果只選到一種，type就會只放那種
-  //   // 如果選「全部」，那就會query三次，獲取20*3筆結果！
+  function getCurrentLatLng() {
+    if ('geolocation' in navigator) {
+      console.log('geolocation is available');
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords.latitude, position.coords.longitude);
+        setCurrentLatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
+      });
+    } else {
+      console.log('geolocation is not available');
+    }
+  }
+  useEffect(() => {
+    getCurrentLatLng();
+  }, []);
 
-  //   function callback(results, status) {
-  //     console.log(request, 'home');
-  //     console.log('callback', results, status, google.maps.places.PlacesServiceStatus.OK);
-  //     if (status === google.maps.places.PlacesServiceStatus.OK) {
-  //       console.log('okkkkkkkkk');
-  //       // { hotel: [], landmark: [] }
-  //       const data = { [option]: results };
-  //       setNearbyData(data);
-  //     }
-  //   }
+  // 拿到使用者的經緯度後，從這邊去查周邊的tourist attraction
 
-  //   const service = new google.maps.places.PlacesService(mapRef.current);
-  //   console.log(service);
-  //   service.nearbySearch(request, callback);
-  // }, [option]);
+  const searchNearby = useCallback(() => {
+    console.log('searchNearby');
+    // option all, landmark
+    const request = {
+      location: currentLatLng,
+      radius: '2000',
+      type: ['tourist_attraction', 'restaurant'],
+    };
+
+    // 如果只選到一種，type就會只放那種
+    // 如果選「全部」，那就會query三次，獲取20*3筆結果！
+
+    function callback(results, status) {
+      console.log(request, 'home');
+      console.log('callback', results, status, google.maps.places.PlacesServiceStatus.OK);
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        console.log('okkkkkkkkk', results);
+        window.localStorage.setItem('周遭景點暫存區', results);
+        window.localStorage.setItem('周遭景點暫存區STRING', JSON.stringify(results));
+        setCurrentNearbyAttraction(results);
+      }
+    }
+
+    const service = new google.maps.places.PlacesService(mapRef.current);
+    console.log(service);
+    service.nearbySearch(request, callback);
+  }, [currentLatLng]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    // if (!nearbyData) return;
+    // searchNearby();
+    setTimeout(() => {
+      searchNearby();
+    }, 2000);
+  }, [searchNearby, isLoaded]);
 
   if (!isLoaded) return <div>沒有成功...</div>;
 
@@ -305,7 +342,7 @@ function HomePageTopArea() {
       <HomeTopAreaWrapper>
         <HeaderComponent />
         <HomeBannerPhoto src={HomeBanner} />
-        <SearchAtHomePage option={option} setOption={setOption} />
+        {/* <SearchAtHomePage option={option} setOption={setOption} /> */}
       </HomeTopAreaWrapper>
       <GoogleMap
         id="map"
@@ -315,16 +352,14 @@ function HomePageTopArea() {
         options={options}
         onLoad={onMapLoad}
       />
+      {/* <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} /> */}
     </>
   );
 }
 
 function Home() {
   return (
-    <>
-      <HomePageTopArea />
-      <PlaceModal />
-    </>
+    <HomePageWithGoogleMap />
 
   );
 }
