@@ -5,15 +5,30 @@ import { getDoc, doc } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
+import GreyHeaderComponent from '../components/GreyHeader';
 
 const PageWrapper = styled.div`
 width:100vw;
-height:100vh;
+height:calc(100vh-60px);
 display:flex;
+padding-top:60px;
+`;
+
+const ProfileSideBar = styled.div`
+width:15vw;
+height:calc(100vh-40px);
+`;
+
+const Line = styled.div`
+display:flex;
+width:1.8px;
+height:85vh;
+background-color:#D3D3D3;
+align-items:center;
 `;
 
 const ChoicesWrapper = styled.div` 
-width:50vw;
+width:45vw;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -25,7 +40,7 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 width:40vw;
-height:auto;
+height:calc(100vh-60px);
 gap:20px;
 border:1px black solid;
 padding-left:10px;
@@ -37,7 +52,6 @@ height:30px;
 `;
 
 const SelectedScheduleWrapper = styled.div`
-border:solid blue 1px;
 width:40vw;
 height:auto;
 `;
@@ -106,49 +120,59 @@ function MySchedules() {
 
   // 用按下去那個行程的id去拿整筆資料
   return (
-    <PageWrapper>
-      <ChoicesWrapper>
-        <p>我的行程</p>
-        <button type="button">
-          <Link to="/choose-date">
-            建立新的行程
-          </Link>
-        </button>
-        {schedules ? schedules.map((item, index) => (
-          <ExistedSchedule>
-            <p id={item.schedule_id}>
-              第
-              {index + 1}
-              個行程：
-              {item.title}
-            </p>
-            <Button onClick={() => getSelectedSchedule(item.schedule_id)} id={item.schedule_id} type="button">
-              選擇此行程
-            </Button>
-          </ExistedSchedule>
-        )) : ''}
-      </ChoicesWrapper>
-      <SelectedScheduleWrapper>
-        <p>您選的行程概覽</p>
-        {selectedSchedule ? (
-          <>
-            <p>
-              行程ID:
-              {selectedSchedule.schedule_id}
-            </p>
-            <p>
-              行程名稱：
-              {selectedSchedule.title}
-            </p>
-            <button type="button">
-              <Link to={`/schedule?id=${selectedSchedule.schedule_id}`}>
-                查看詳細資訊
-              </Link>
-            </button>
-          </>
-        ) : ''}
-      </SelectedScheduleWrapper>
-    </PageWrapper>
+    <>
+      <GreyHeaderComponent style={{ position: 'fixed', top: '0px;' }} />
+      <PageWrapper>
+        <ProfileSideBar>
+          <div>哈哈</div>
+          <div>妳好</div>
+          <div>呵呵</div>
+        </ProfileSideBar>
+        <Line />
+        <ChoicesWrapper>
+          <p>我的行程</p>
+          <button type="button">
+            <Link to="/choose-date">
+              建立新的行程
+            </Link>
+          </button>
+          {schedules ? schedules.map((item, index) => (
+            <ExistedSchedule>
+              <p id={item.schedule_id}>
+                第
+                {index + 1}
+                個行程：
+                {item.title}
+              </p>
+              <Button onClick={() => getSelectedSchedule(item.schedule_id)} id={item.schedule_id} type="button">
+                選擇此行程
+              </Button>
+            </ExistedSchedule>
+          )) : ''}
+        </ChoicesWrapper>
+        <Line />
+        <SelectedScheduleWrapper>
+          <p>您選的行程概覽</p>
+          {selectedSchedule ? (
+            <>
+              <p>
+                行程ID:
+                {selectedSchedule.schedule_id}
+              </p>
+              <p>
+                行程名稱：
+                {selectedSchedule.title}
+              </p>
+              <button type="button">
+                <Link to={`/schedule?id=${selectedSchedule.schedule_id}`}>
+                  查看詳細資訊
+                </Link>
+              </button>
+            </>
+          ) : ''}
+        </SelectedScheduleWrapper>
+      </PageWrapper>
+    </>
   );
 }
 

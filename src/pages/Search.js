@@ -28,7 +28,7 @@ export default function Search({
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-      types: ['(cities)'],
+      // types: ['(cities)'],
       // componentRestrictions: { country: 'fr' }, // 限制國家
       // 感覺是搜尋過的會紀錄！清除快取與cookie！！
       // fields: ['formatted_address', 'geometry', 'name'], // 要放在哪？
@@ -121,8 +121,8 @@ export default function Search({
   return (
     <div style={{
       position: 'absolute',
-      left: '11vw',
-      top: '40px',
+      left: '8vw',
+      top: '130px',
     }}
     >
       <SearchInput

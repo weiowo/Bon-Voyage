@@ -8,7 +8,7 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 width:100vw;
-height:70px;
+height:60px;
 background-color:#a9a9a9;
 `;
 
@@ -48,7 +48,9 @@ color:white;
 function GreyHeaderComponent() {
   return (
     <Header>
-      <Logo>Bon Voyage</Logo>
+      <StyleNavLink to="/">
+        <Logo>Bon Voyage</Logo>
+      </StyleNavLink>
       <NavBar>
         <div style={{ cursor: 'pointer' }}>VR專區</div>
         <div style={{ cursor: 'pointer' }}>熱門景點</div>
