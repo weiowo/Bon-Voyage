@@ -37,9 +37,10 @@ import GoBackSrc from './images/arrow-left.png';
 const ScheduleWrapper = styled.div`
     display:flex;
     width:100%;
-    height:90vh;
+    height:100vh;
     gap:30px;
-    padding-top:70px;
+    padding-top:60px;
+    overflow:scroll;
     `;
 
 const LeftContainer = styled.div`
@@ -48,20 +49,23 @@ display:flex;
 flex-direction:column;
 align-items:center;
 width:45vw;
-height:90vh;
+overflow:scroll;
+height:calc(100vh-60px);
 display:${(props) => (props.active ? 'none' : 'flex')};
 // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const RightContainer = styled.div`
 width:55vw;
-height:90vh;
+height:calc(100vh-60px);
 `;
 
 const DayContainerBoxes = styled.div`
 display:flex;
 flex-direction:column;
 gap:20px;
+height: 75vh;
+overflow:scroll;
 `;
 
 const AddDayButton = styled.button`
@@ -320,12 +324,12 @@ margin-top:20px;
 `;
 
 const RecommendPlaces = styled.div`
-overflow:scroll;
 display:flex;
 flex-direction:column;
 align-items:center;
 height:70vh;
 width:45vw;
+overflow:scroll;
 background-color:#e7f5fe;
 border:2px solid black;
 border-radius:30px;
@@ -937,12 +941,13 @@ function Schedule() {
                           <InputBox>
                             <p style={{ fontSize: '14px' }}>停留時間：</p>
                             <input
-                              style={{ width: '20vw', outline: 'none' }}
+                              style={{ width: '15vw', outline: 'none' }}
                               value={placeItem.stay_time}
                               onChange={(e) => {
                                 updateStayTime(e.target.value, dayIndex, placeIndex);
                               }}
                             />
+                            <div style={{ fontSize: '12px' }}>分鐘</div>
                           </InputBox>
                           <InputBox>
                             <p style={{ fontSize: '14px' }}>地址：</p>

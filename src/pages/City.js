@@ -605,7 +605,7 @@ function City() {
           {nearbyData.tourist_attraction ? `${cityFromUrl}必去景點推薦` : ''}
         </AttractionAreaTitle>
         <AttractionWrapper>
-          {nearbyData.tourist_attraction ? nearbyData.tourist_attraction.map((item, index) => (
+          {nearbyData.tourist_attraction ? nearbyData.tourist_attraction.map((item) => (
             <AttractionBox
               id={item.place_id}
               onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
@@ -626,11 +626,7 @@ function City() {
               </AttractionTitle>
               <AttractionDescription
                 id={item.place_id}
-              >
-                哈哈這是第
-                {index + 1}
-                個景點唷
-              </AttractionDescription>
+              />
               <AttractionSeeMoreButton
                 id={item.place_id}
               >
@@ -643,7 +639,7 @@ function City() {
           {nearbyData.restaurant ? `${cityFromUrl}必吃餐廳推薦` : ''}
         </RestaurantAreaTitle>
         <RestaurantWrapper>
-          {nearbyData.restaurant ? nearbyData.restaurant.map((item, index) => (
+          {nearbyData.restaurant ? nearbyData.restaurant.map((item) => (
             <RestaurantBox id={item.place_id}>
               <RestaurantPhoto
                 alt="att"
@@ -653,11 +649,7 @@ function City() {
                 <RestaurantTitle>
                   {item.name}
                 </RestaurantTitle>
-                <RestaurantDescription>
-                  哈哈這是第
-                  {index + 1}
-                  個景點唷
-                </RestaurantDescription>
+                <RestaurantDescription />
                 <RestaurantSeeMoreButton
                   id={item.place_id}
                   onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
@@ -673,7 +665,7 @@ function City() {
           {nearbyData.lodging ? `${cityFromUrl} 熱門飯店推薦` : ''}
         </AttractionAreaTitle>
         <AttractionWrapper>
-          {nearbyData.lodging ? nearbyData.lodging.map((item, index) => (
+          {nearbyData.lodging ? nearbyData.lodging.map((item) => (
             <AttractionBox id={item.place_id}>
               <AttractionPhotoContainer>
                 <AttractionPhoto
@@ -684,11 +676,7 @@ function City() {
               <AttractionTitle>
                 {item.name}
               </AttractionTitle>
-              <AttractionDescription>
-                哈哈這是第
-                {index + 1}
-                個景點唷
-              </AttractionDescription>
+              <AttractionDescription />
               <AttractionSeeMoreButton
                 id={item.place_id}
                 onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}

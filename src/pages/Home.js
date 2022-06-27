@@ -265,11 +265,6 @@ function HomePageWithGoogleMap() {
   const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
   console.log('我在cardCarouselpage', currentNearbyAttraction);
 
-  const attractions = window.localStorage.getItem('周遭景點暫存區STRING');
-  console.log(JSON.parse(attractions));
-  const topSixAttraction = JSON.parse(attractions).splice(5, 9);
-  console.log(topSixAttraction);
-
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -300,6 +295,7 @@ function HomePageWithGoogleMap() {
 
   const searchNearby = useCallback(() => {
     console.log('searchNearby');
+    const a = new Date();
     // option all, landmark
     const request = {
       location: currentLatLng,
@@ -315,10 +311,10 @@ function HomePageWithGoogleMap() {
       console.log('callback', results, status, google.maps.places.PlacesServiceStatus.OK);
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         console.log('okkkkkkkkk', results);
-        window.localStorage.setItem('周遭景點暫存區', results);
-        window.localStorage.setItem('周遭景點暫存區STRING', JSON.stringify(results));
         setCurrentNearbyAttraction(results);
       }
+      const b = new Date();
+      console.log('searchNearby', b - a);
     }
 
     const service = new google.maps.places.PlacesService(mapRef.current);
@@ -329,10 +325,10 @@ function HomePageWithGoogleMap() {
   useEffect(() => {
     if (!isLoaded) return;
     // if (!nearbyData) return;
-    // searchNearby();
-    setTimeout(() => {
-      searchNearby();
-    }, 2000);
+    searchNearby();
+    // setTimeout(() => {
+    //   searchNearby();
+    // }, 1000);
   }, [searchNearby, isLoaded]);
 
   if (!isLoaded) return <div>沒有成功...</div>;
@@ -342,7 +338,7 @@ function HomePageWithGoogleMap() {
       <HomeTopAreaWrapper>
         <HeaderComponent />
         <HomeBannerPhoto src={HomeBanner} />
-        {/* <SearchAtHomePage option={option} setOption={setOption} /> */}
+        <SearchAtHomePage option={option} setOption={setOption} />
       </HomeTopAreaWrapper>
       <GoogleMap
         id="map"
@@ -352,7 +348,7 @@ function HomePageWithGoogleMap() {
         options={options}
         onLoad={onMapLoad}
       />
-      {/* <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} /> */}
+      <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} />
     </>
   );
 }

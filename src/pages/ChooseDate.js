@@ -42,10 +42,11 @@ function ChooseDate() {
   };
 
   useEffect(() => {
+    if (!diffDays) { return; }
     const newDay = {
       places: [],
     };
-    Array(3).fill('').forEach(() => {
+    Array(diffDays)?.fill('').forEach(() => {
       newSchedule.trip_days.push(newDay);
     });
   }, [diffDays, newSchedule.trip_days]);
