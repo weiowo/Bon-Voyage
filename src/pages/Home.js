@@ -24,6 +24,8 @@ import HomeBanner from './images/index_banner.png';
 import HeaderComponent
   from '../components/Header';
 import CardsCarousel from './CardCarousel';
+import Category from './Category';
+import CityAreaInHomePage from '../components/CityInHome';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -349,6 +351,8 @@ function HomePageWithGoogleMap() {
         onLoad={onMapLoad}
       />
       <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} />
+      <Category />
+      <CityAreaInHomePage />
     </>
   );
 }

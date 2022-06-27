@@ -12,6 +12,7 @@ import City from './pages/City';
 import PlaceModal from './components/PlaceModal';
 import CardsCarousel from './pages/CardCarousel';
 import Category from './pages/Category';
+import CityAreaInHomePage from './components/CityInHome';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/place-modal" element={<PlaceModal />} />
           <Route path="/category" element={<Category />} />
           <Route path="/carousel" element={<CardsCarousel />} />
+          <Route path="/city-home" element={<CityAreaInHomePage />} />
         </Routes>
       </BrowserRouter>
 
