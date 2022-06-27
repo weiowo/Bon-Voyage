@@ -25,8 +25,8 @@ let service;
 // const libraries = ['places'];
 
 const mapContainerStyle = {
-  height: '100vh',
-  width: '50vw',
+  height: 'calc( 100vh - 60px)',
+  width: '53.8vw',
   position: 'absolute',
 };
 const options = {
