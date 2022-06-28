@@ -23,8 +23,8 @@ import styled from 'styled-components/macro';
 import HomeBanner from './images/index_banner.png';
 import HeaderComponent
   from '../components/Header';
-import CardsCarousel from './CardCarousel';
-import Category from './Category';
+// import CardsCarousel from './CardCarousel';
+import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 
 const HomeTopAreaWrapper = styled.div`
@@ -293,7 +293,8 @@ function HomePageWithGoogleMap() {
     getCurrentLatLng();
   }, []);
 
-  // 拿到使用者的經緯度後，從這邊去查周邊的tourist attraction
+  // 拿到使用者的經緯度後，從這邊去查周邊的tourist attraction跟restaurant
+  // 如果無法使用經緯度的話，就設經緯度為台北市
 
   const searchNearby = useCallback(() => {
     console.log('searchNearby');
@@ -340,18 +341,18 @@ function HomePageWithGoogleMap() {
       <HomeTopAreaWrapper>
         <HeaderComponent />
         <HomeBannerPhoto src={HomeBanner} />
-        <SearchAtHomePage option={option} setOption={setOption} />
+        {/* <SearchAtHomePage option={option} setOption={setOption} /> */}
       </HomeTopAreaWrapper>
-      <GoogleMap
+      {/* <GoogleMap
         id="map"
         mapContainerStyle={mapContainerStyle}
         zoom={8}
         center={center}
         options={options}
         onLoad={onMapLoad}
-      />
-      <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} />
-      <Category />
+      /> */}
+      {/* <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} /> */}
+      <CategoryAreaInHome currentLatLng={currentLatLng} />
       <CityAreaInHomePage />
     </>
   );
