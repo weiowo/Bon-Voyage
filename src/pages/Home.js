@@ -6,6 +6,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 // import {
 //   GoogleMap, useLoadScript,
 // } from '@react-google-maps/api';
@@ -18,14 +19,13 @@ import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import HomeBanner from './images/index_banner.png';
 import HeaderComponent
   from '../components/Header';
 // import CardsCarousel from './CardCarousel';
 import CategoryAreaInHome from './CategoryInHome';
-import CityAreaInHomePage from '../components/CityInHome';
+// import CityAreaInHomePage from '../components/CityInHome';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -257,11 +257,10 @@ function SearchAtHomePage({ option, setOption }) {
   );
 }
 
-function HomePageWithGoogleMap() {
+function Home({ currentLatLng }) {
   // const [query, setQuery] = useState('');
-  const [currentLatLng, setCurrentLatLng] = useState({});
-  console.log(currentLatLng);
   const [option, setOption] = useState('all'); // 預設想放'全部'
+  console.log(option, setOption);
   // const [nearbyData, setNearbyData] = useState({});
   // console.log(nearbyData);
   const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
@@ -274,23 +273,6 @@ function HomePageWithGoogleMap() {
   const mapRef = useRef();
   const onMapLoad = useCallback((map) => {
     mapRef.current = map;
-  }, []);
-
-  // 拿使用者現有位置
-
-  function getCurrentLatLng() {
-    if ('geolocation' in navigator) {
-      console.log('geolocation is available');
-      navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position.coords.latitude, position.coords.longitude);
-        setCurrentLatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
-      });
-    } else {
-      console.log('geolocation is not available');
-    }
-  }
-  useEffect(() => {
-    getCurrentLatLng();
   }, []);
 
   // 拿到使用者的經緯度後，從這邊去查周邊的tourist attraction跟restaurant
@@ -343,25 +325,18 @@ function HomePageWithGoogleMap() {
         <HomeBannerPhoto src={HomeBanner} />
         {/* <SearchAtHomePage option={option} setOption={setOption} /> */}
       </HomeTopAreaWrapper>
-      {/* <GoogleMap
+      <GoogleMap
         id="map"
         mapContainerStyle={mapContainerStyle}
         zoom={8}
         center={center}
         options={options}
         onLoad={onMapLoad}
-      /> */}
+      />
       {/* <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} /> */}
       <CategoryAreaInHome currentLatLng={currentLatLng} />
-      <CityAreaInHomePage />
+      {/* <CityAreaInHomePage /> */}
     </>
-  );
-}
-
-function Home() {
-  return (
-    <HomePageWithGoogleMap />
-
   );
 }
 
@@ -370,6 +345,10 @@ export default Home;
 SearchAtHomePage.propTypes = {
   option: PropTypes.string.isRequired,
   setOption: PropTypes.func.isRequired,
+};
+
+Home.propTypes = {
+  currentLatLng: PropTypes.func.isRequired,
 };
 
 // SearchAtHomePage.propTypes = {
