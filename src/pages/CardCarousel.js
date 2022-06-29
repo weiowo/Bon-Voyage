@@ -122,7 +122,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
 }
 
 CardsCarousel.propTypes = {
-  currentNearbyAttraction: PropTypes.arrayOf.isRequired,
+  currentNearbyAttraction: PropTypes.func.isRequired,
 };
 
 export default CardsCarousel;

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import UserContext from './UserContextComponent';
 
 const Header = styled.header`
 position:absolute;
@@ -48,6 +49,8 @@ color:black;
 `;
 
 function BlackHeaderComponent() {
+  const user = useContext(UserContext);
+  console.log('我在blackheaderComponents唷', user);
   return (
     <Header>
       <StyleNavLink to="/">

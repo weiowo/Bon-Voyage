@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   // getDocs,
@@ -6,10 +6,13 @@ import {
   setDoc, arrayUnion, updateDoc,
 } from 'firebase/firestore';
 import db from '../utils/firebase-init';
+import UserContext from '../components/UserContextComponent';
 
 function ChooseDate() {
   const [embarkDate, setEmbarkDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const user = useContext(UserContext);
+  console.log('我在MySchedulesComponents唷', user);
   // const [newScheduleId, setNewScheduleId] = useState('test');
   const [newScheduleTitle, setNewScheduleTitle] = useState('');
   const navigate = useNavigate();
@@ -55,6 +58,7 @@ function ChooseDate() {
     chat_room_id: '',
     schedule_id: '',
     messages: [],
+    creator_user_id: user.uid,
   };
 
   // user創建行程的時候就要把這個行程推進他的owned_schedules_list array中
@@ -70,20 +74,18 @@ function ChooseDate() {
     );
     // setNewScheduleId(createNewScheduleData.id);
     navigate({ pathname: '/schedule', search: `?id=${createNewScheduleData.id}` });
-    // console.log(newScheduleId);
     const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
     await setDoc(
       createNewChatRoomData,
       // eslint-disable-next-line max-len
       ({ ...newChatRoom, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }),
     );
-    const userOwnedScheduleArray = doc(db, 'users', '4upu03jk1cAjA0ZbAAJH');
+    const userOwnedScheduleArray = doc(db, 'users', user.uid);
     // Atomically add a new region to the "regions" array field.
     await updateDoc(userOwnedScheduleArray, {
       owned_schedule_ids: arrayUnion(createNewScheduleData.id),
     });
   }
-  // console.log(newScheduleId);
 
   return (
     <>

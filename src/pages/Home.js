@@ -7,9 +7,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-// import {
-//   GoogleMap, useLoadScript,
-// } from '@react-google-maps/api';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -23,9 +20,9 @@ import styled from 'styled-components/macro';
 import HomeBanner from './images/index_banner.png';
 import HeaderComponent
   from '../components/Header';
-// import CardsCarousel from './CardCarousel';
+import CardsCarousel from './CardCarousel';
 import CategoryAreaInHome from './CategoryInHome';
-// import CityAreaInHomePage from '../components/CityInHome';
+import CityAreaInHomePage from '../components/CityInHome';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -257,7 +254,9 @@ function SearchAtHomePage({ option, setOption }) {
   );
 }
 
-function Home({ currentLatLng }) {
+// 這邊是從app.js去拿的經緯度
+
+function Home({ currentLatLng, user }) {
   // const [query, setQuery] = useState('');
   const [option, setOption] = useState('all'); // 預設想放'全部'
   console.log(option, setOption);
@@ -321,9 +320,9 @@ function Home({ currentLatLng }) {
   return (
     <>
       <HomeTopAreaWrapper>
-        <HeaderComponent />
+        <HeaderComponent user={user} />
         <HomeBannerPhoto src={HomeBanner} />
-        {/* <SearchAtHomePage option={option} setOption={setOption} /> */}
+        <SearchAtHomePage option={option} setOption={setOption} />
       </HomeTopAreaWrapper>
       <GoogleMap
         id="map"
@@ -333,9 +332,9 @@ function Home({ currentLatLng }) {
         options={options}
         onLoad={onMapLoad}
       />
-      {/* <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} /> */}
+      <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} />
       <CategoryAreaInHome currentLatLng={currentLatLng} />
-      {/* <CityAreaInHomePage /> */}
+      <CityAreaInHomePage />
     </>
   );
 }
@@ -349,6 +348,7 @@ SearchAtHomePage.propTypes = {
 
 Home.propTypes = {
   currentLatLng: PropTypes.func.isRequired,
+  user: PropTypes.func.isRequired,
 };
 
 // SearchAtHomePage.propTypes = {

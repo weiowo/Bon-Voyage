@@ -5,7 +5,7 @@ import React,
 } from 'react';
 import styled from 'styled-components/macro';
 import {
-  doc, getDoc, updateDoc,
+  doc, updateDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
@@ -261,33 +261,33 @@ function Category({ currentLatLng }) {
   // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
   // 按下哪一個行程後，用那個index去抓那天的細節
 
-  useEffect(() => {
-    async function getUserArrayList() {
-      const docRef = doc(db, 'users', '4upu03jk1cAjA0ZbAAJH');
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data().owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
-      function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
-          const docs = doc(db, 'schedules', item);
-          const Snap = await getDoc(docs);
-          if (Snap.exists()) {
-            console.log('這位使用者的行程', index, Snap.data());
-            setCategoryPageScheduleData((draft) => {
-              draft.push(Snap.data());
-            });
-          } else {
-            console.log('沒有這個行程！');
-          }
-        });
-      }
-      getSchedulesFromList();
-    }
-    getUserArrayList();
-  }, [setCategoryPageScheduleData]);
+  // useEffect(() => {
+  //   async function getUserArrayList() {
+  //     const docRef = doc(db, 'users', '4upu03jk1cAjA0ZbAAJH');
+  //     const docSnap = await getDoc(docRef);
+  //     if (docSnap.exists()) {
+  //       console.log('Document data:', docSnap.data().owned_schedule_ids);
+  //     } else {
+  //       console.log('No such document!');
+  //     }
+  //     function getSchedulesFromList() {
+  //       docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+  //         const docs = doc(db, 'schedules', item);
+  //         const Snap = await getDoc(docs);
+  //         if (Snap.exists()) {
+  //           console.log('這位使用者的行程', index, Snap.data());
+  //           setCategoryPageScheduleData((draft) => {
+  //             draft.push(Snap.data());
+  //           });
+  //         } else {
+  //           console.log('沒有這個行程！');
+  //         }
+  //       });
+  //     }
+  //     getSchedulesFromList();
+  //   }
+  //   getUserArrayList();
+  // }, [setCategoryPageScheduleData]);
 
   // 確認加入
 
@@ -366,10 +366,10 @@ function Category({ currentLatLng }) {
 
     if (categoryFromUrl === 'camping') {
       requests = [{
-        location: currentLatLng,
+        location: { lat: 24.5711502, lng: 120.8154358 },
         radius: '50000',
         type: 'campground',
-        // 很少
+        // 很少，先放苗栗的
       }];
     } else if (categoryFromUrl === 'arts') {
       requests = [{
@@ -494,10 +494,10 @@ function Category({ currentLatLng }) {
             </AddToScheduleButton>
           </ModalLeftArea>
           <ModalImgArea>
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[1].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[2].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[3].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail.photos[4].photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
+            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o` : 'none'} />
           </ModalImgArea>
           <CloseModalButton
             type="button"

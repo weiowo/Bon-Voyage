@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+// import PropTypes from 'prop-types';
+import UserContext from './UserContextComponent';
 
 const Header = styled.header`
 position:absolute;
@@ -48,6 +50,8 @@ color:white;
 `;
 
 function HeaderComponent() {
+  const user = useContext(UserContext);
+  console.log('我在headerComponents唷', user);
   return (
     <Header>
       <StyleNavLink to="/">
@@ -70,3 +74,7 @@ function HeaderComponent() {
 }
 
 export default HeaderComponent;
+
+// HeaderComponent.propTypes = {
+//   user: PropTypes.func.isRequired,
+// };

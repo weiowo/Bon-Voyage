@@ -1,14 +1,18 @@
+/* eslint-disable no-shadow */
 // 選擇舊有行程或者創建新的行程
 import styled from 'styled-components/macro';
-import React, { useEffect, useState } from 'react';
-import { getDoc, doc } from 'firebase/firestore';
+import React, { useEffect, useState, useContext } from 'react';
+import {
+  getDoc, doc, query, where, collection, getDocs,
+} from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/GreyHeader';
 import UserPhotoSrc from './images/seal.png';
 import ExistedPhotoSrc from './images/paris_square.png';
-import BckSrc from './images/paris.png';
+import BckSrc2 from './images/camping.jpg';
+import UserContext from '../components/UserContextComponent';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -135,7 +139,9 @@ width:50vw;
 height:auto;
 display:flex;
 flex-direction:column;
-align-items:center;
+align-items:left;
+margin-left:50px;
+gap:15px;
 `;
 
 const SelectedSchedulePhoto = styled.div`
@@ -144,15 +150,15 @@ padding-bottom:10px;
 opacity:1;
 flex-direction:column;
 justify-content:flex-end;
-width:280px;
-height:130px;
+width:35vw;
+height:15vw;
 color:white;
 font-weight:600;
 position:relative;
 text-align:left;
 overflow:scroll;
-border-radius:10px;
-background-image: url(${BckSrc});
+border-radius:20px;
+background-image: url(${BckSrc2});
 background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
@@ -176,8 +182,12 @@ border:none;
 `;
 
 function MySchedules() {
+  const user = useContext(UserContext);
+  console.log('我在MySchedulesComponents唷', user);
   const [schedules, setSchedules] = useImmer([]);
   const [selectedSchedule, setSelectedSchedule] = useState();
+  const [selectedScheduleMembers, setSelectedScheduleMembers] = useState([]);
+  console.log(selectedScheduleMembers);
   // const [isSelected, setIsSelected] = useState(false);
 
   // 先拿到某個使用者的資料
@@ -185,7 +195,7 @@ function MySchedules() {
 
   useEffect(() => {
     async function getUserArrayList() {
-      const docRef = doc(db, 'users', '4upu03jk1cAjA0ZbAAJH');
+      const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         console.log('Document data:', docSnap.data().owned_schedule_ids);
@@ -209,8 +219,28 @@ function MySchedules() {
       getSchedulesFromList();
     }
     getUserArrayList();
-  }, [setSchedules]);
+  }, [setSchedules, user.uid]);
 
+  // 拿點到的這則行程的id去搜尋哪個user schedule array list有包含這個schedule id
+
+  useEffect(() => {
+    if (!selectedSchedule) { return; }
+    async function getArray() {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('owned_schedule_ids', 'array-contains', selectedSchedule?.schedule_id));
+      const userData = await getDocs(q);
+      const members = [];
+      userData.forEach((doc) => {
+        console.log('這些人有參加這行程唷', doc.data());
+        members.push(doc.data());
+      });
+      console.log(members);
+      setSelectedScheduleMembers(members);
+    }
+    getArray();
+  }, [selectedSchedule?.schedule_id, selectedSchedule]);
+
+  // 點到換色
   // function selectAndChangeColor(targetIndex) {
   //   if (targetIndex === index) {
   //     setIsSelected(true);
@@ -223,10 +253,6 @@ function MySchedules() {
   //   const scheduleList = querySnapshot.docs.map((item) => item.data());
   //   setSchedules(scheduleList);
   // }
-
-  // useEffect(() => {
-  //   getUserArrayList();
-  // }, []);
 
   // 拿到點按下去的那筆行程
   async function getSelectedSchedule(id) {
@@ -242,7 +268,7 @@ function MySchedules() {
     }
   }
 
-  console.log('該行程從state拿囉', selectedSchedule);
+  console.log('從state拿到使用者點的那個行程囉！', selectedSchedule);
 
   // 用按下去那個行程的id去拿整筆資料
   return (
@@ -295,8 +321,16 @@ function MySchedules() {
                     查看詳細資訊
                   </StyledLink>
                 </CreateNewScheduleButton>
+                <CreateNewScheduleButton style={{ width: '90px' }} type="button">撰寫旅程回憶</CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
-              <SelectedSchedulePhoto />
+              <SelectedSchedulePhoto>{selectedSchedule.title}</SelectedSchedulePhoto>
+              <div>
+                {selectedScheduleMembers?.map((item) => (
+                  <div>
+                    {item.email[0].toUpperCase()}
+                  </div>
+                ))}
+              </div>
               <p>
                 行程ID:
                 {selectedSchedule.schedule_id}
