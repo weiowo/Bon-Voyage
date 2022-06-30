@@ -21,6 +21,7 @@ import SignIn from './components/SignIn';
 import { app } from './utils/firebase-init';
 import UserContext from './components/UserContextComponent';
 import DateTest from './pages/displayDate';
+import EditPage from './pages/Edit';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -95,6 +96,7 @@ function App() {
             <Route path="/category" element={<Category currentLatLng={currentLatLng} />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/date" element={<DateTest />} />
+            <Route path="/edit" element={<EditPage />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
