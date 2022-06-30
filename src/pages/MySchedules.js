@@ -1,6 +1,8 @@
 /* eslint-disable no-shadow */
 // 選擇舊有行程或者創建新的行程
 import styled from 'styled-components/macro';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
 import {
   getDoc, doc, query, where, collection, getDocs,
@@ -13,6 +15,12 @@ import UserPhotoSrc from './images/seal.png';
 import ExistedPhotoSrc from './images/paris_square.png';
 import BckSrc2 from './images/camping.jpg';
 import UserContext from '../components/UserContextComponent';
+import ASrc from './images/a.png';
+import BSrc from './images/b.png';
+import CSrc from './images/c.png';
+import DSrc from './images/d.png';
+import ESrc from './images/e.png';
+import FSrc from './images/f.png';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -68,7 +76,7 @@ margin-top:20px;
 `;
 
 const ChoicesWrapper = styled.div` 
-width:30vw;
+width:33vw;
 height:90vh;
 display:flex;
 flex-direction:column;
@@ -135,7 +143,7 @@ height:30px;
 `;
 
 const SelectedScheduleWrapper = styled.div`
-width:50vw;
+width:40vw;
 height:auto;
 display:flex;
 flex-direction:column;
@@ -151,18 +159,39 @@ opacity:1;
 flex-direction:column;
 justify-content:flex-end;
 width:35vw;
-height:15vw;
-color:white;
-font-weight:600;
+height:13vw;
 position:relative;
-text-align:left;
-overflow:scroll;
 border-radius:20px;
 background-image: url(${BckSrc2});
 background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
+position:relative;
+`;
+
+const SelectedScheduleTitle = styled.div`
+color:white;
+font-weight:800;
+font-size:30px;
+position:absolute;
+bottom:20px;
+`;
+
+const ScheduleMemberContainer = styled.div`
+display:flex;
+width:35vw;
+height:auto;
+gap:15px;
+`;
+
+const ScheduleMemberPhoto = styled.img`
+margin-top:10px;
+width:50px;
+height:50px;
+border-radius:50%;
+border:1px solid grey;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const UserNameLogoBox = styled.div`
@@ -268,8 +297,8 @@ function MySchedules() {
     }
   }
 
-  console.log('從state拿到使用者點的那個行程囉！', selectedSchedule);
-
+  console.log('從state拿到使用者點的那個行程囉！', selectedSchedule, new Date(selectedSchedule?.embark_date));
+  const photoArray = [ASrc, BSrc, CSrc, DSrc, ESrc, FSrc];
   // 用按下去那個行程的id去拿整筆資料
   return (
     <>
@@ -323,22 +352,30 @@ function MySchedules() {
                 </CreateNewScheduleButton>
                 <CreateNewScheduleButton style={{ width: '90px' }} type="button">撰寫旅程回憶</CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
-              <SelectedSchedulePhoto>{selectedSchedule.title}</SelectedSchedulePhoto>
-              <div>
-                {selectedScheduleMembers?.map((item) => (
-                  <div>
-                    {item.email[0].toUpperCase()}
-                  </div>
+              <SelectedSchedulePhoto>
+                <SelectedScheduleTitle>
+                  {selectedSchedule.title}
+                </SelectedScheduleTitle>
+              </SelectedSchedulePhoto>
+              <ScheduleMemberContainer>
+                {selectedScheduleMembers?.map((item, index) => (
+                  <>
+                    {/* <div>
+                      {item.email[0].toUpperCase()}
+                    </div> */}
+                    <ScheduleMemberPhoto alt="member" src={photoArray[index % 6]} />
+                  </>
                 ))}
-              </div>
-              <p>
-                行程ID:
-                {selectedSchedule.schedule_id}
-              </p>
-              <p>
-                行程名稱：
-                {selectedSchedule.title}
-              </p>
+              </ScheduleMemberContainer>
+              <DatePicker
+                style={{ height: '100px' }}
+                selected=""
+                startDate={new Date(selectedSchedule?.embark_date)}
+                endDate={new Date(selectedSchedule?.end_date)}
+                disabled
+                Range
+                inline
+              />
             </>
           ) : ''}
         </SelectedScheduleWrapper>

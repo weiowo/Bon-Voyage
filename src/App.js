@@ -20,6 +20,7 @@ import Category from './pages/Category';
 import SignIn from './components/SignIn';
 import { app } from './utils/firebase-init';
 import UserContext from './components/UserContextComponent';
+import DateTest from './pages/displayDate';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -93,6 +94,7 @@ function App() {
             <Route path="/city-home" element={<CityAreaInHomePage />} />
             <Route path="/category" element={<Category currentLatLng={currentLatLng} />} />
             <Route path="/signin" element={<SignIn />} />
+            <Route path="/date" element={<DateTest />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
