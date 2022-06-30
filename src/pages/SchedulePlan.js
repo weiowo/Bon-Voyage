@@ -431,6 +431,8 @@ function Schedule() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
+  const [searchFriendValue, setSearchFriendValue] = useState('');
+  const [searchedFriendId, setSearchedFriendId] = useState('');
   console.log(searchParams);
 
   // async function CreateNewChatRoom() {
@@ -563,8 +565,8 @@ function Schedule() {
 
   // 把state的訊息放進去object，然後推進整個messages array
   const newMessage = {
-    user_id: 123, // 放localstorage的東西
-    user_name: '葳葳', // 放localstorage的東西
+    user_id: 123, // 放user.id
+    user_name: '葳葳', // 放user.email第一個字
     message: inputMessage,
     sent_time: new Date(),
   };
@@ -827,6 +829,32 @@ function Schedule() {
     });
   }
 
+  // 搜尋朋友是否有在這網站
+
+  async function submitSearch() {
+    setSearchFriendValue('');
+    const userEmailQuery = query(collection(db, 'users'), where('email', '==', searchFriendValue));
+    const querySnapShot = await getDocs(userEmailQuery);
+    if (querySnapShot.size === 0) {
+      console.log('查無此人！');
+    } else {
+      querySnapShot.forEach((doc) => {
+        console.log('有這個人唷！', doc.id, '=>', doc.data());
+        setSearchedFriendId(doc.id);
+      });
+    }
+  }
+
+  // 確認把朋友加到這個行程中
+
+  async function addFriendToTheSchedule() {
+    const searchedFriendScheduleArray = doc(db, 'users', searchedFriendId);
+    // Atomically add a new region to the "regions" array field.
+    await updateDoc(searchedFriendScheduleArray, {
+      owned_schedule_ids: arrayUnion(scheduleData.schedule_id),
+    });
+  }
+
   return (
     <>
       <GreyHeaderComponent />
@@ -871,12 +899,20 @@ function Schedule() {
               回到我的行程
             </Link>
           </button> */}
-          <input
-            style={{
-              position: 'absolute', top: '70px', right: '30px', zIndex: '100',
-            }}
-            placeholder="邀請朋友"
-          />
+          <div style={{ display: 'flex', position: 'absolute', zIndex: '100' }}>
+            <input
+              value={searchFriendValue}
+              type="text"
+              inputMode="text"
+              onChange={(e) => setSearchFriendValue(e.target.value)}
+              style={{
+                position: 'absolute', top: '70px', right: '30px', zIndex: '100',
+              }}
+              placeholder="搜尋朋友email並邀請"
+            />
+            <button onClick={() => submitSearch()} type="button">確認搜尋</button>
+            <button onClick={() => addFriendToTheSchedule()} type="button">確認加入</button>
+          </div>
           <ScheduleTitleAndCompleteButtonArea>
             <Link to="/my-schedules">
               <GoBackIcon src={GoBackSrc} />
@@ -908,7 +944,6 @@ function Schedule() {
                   天
                   /
                   {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
-                  {/* 加幾天就加幾個「一天的millisecond」 */}
                   /
                   {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
                   <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} src={GreyTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
@@ -962,7 +997,6 @@ function Schedule() {
                         </PlaceContainerInputArea>
                         <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainPlace(dayIndex, placeIndex)} />
                       </PlaceContainer>
-
                     </>
                   ))
                     : (
