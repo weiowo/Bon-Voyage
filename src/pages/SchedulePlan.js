@@ -404,14 +404,6 @@ height:32px;
 //   return UserList;
 // }
 
-// 拿日期相減的天數
-
-// const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-// const firstDate = new Date(startDate);
-// const secondDate = new Date(finishDate);
-// const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
-// console.log(diffDays);
-
 // eslint-disable-next-line no-unused-vars
 function Schedule() {
   const newChatRoom = {
@@ -449,8 +441,6 @@ function Schedule() {
   //   console.log(ScheduleList);
   // }
 
-  // 如果是建立新行程，則從url拿出發日期與結束日期
-  const { search } = useLocation();
   // const embarkDateFromUrl = new URLSearchParams(search).get('from');
   // const endDateFromUrl = new URLSearchParams(search).get('to');
   // const titleFromUrl = new URLSearchParams(search).get('title');
@@ -483,6 +473,8 @@ function Schedule() {
   // console.log(test);
 
   // 如果是選擇舊行程，則從資料庫拿出發與結束日期
+  // 如果是建立新行程，則從url拿出發日期與結束日期
+  const { search } = useLocation();
   const existScheduleId = new URLSearchParams(search).get('id');
   // console.log(existScheduleId);
 

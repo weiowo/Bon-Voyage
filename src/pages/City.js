@@ -616,7 +616,7 @@ function City() {
                 <AttractionPhoto
                   id={item.place_id}
                   alt="att"
-                  src={item.photos?.[0]?.getUrl?.() ?? '哈哈'}
+                  src={item.photos?.[0]?.getUrl?.() ?? 'src'}
                 />
               </AttractionPhotoContainer>
               <AttractionTitle

@@ -83,6 +83,7 @@ function ChooseDate() {
   // 新增天數
 
   const newSchedule = {
+    schedule_creator_user_id: user.uid,
     title: newScheduleTitle,
     schedule_id: 1,
     embark_date: startDate?.toISOString().split('T')[0],
@@ -95,7 +96,7 @@ function ChooseDate() {
     const newDay = {
       places: [],
     };
-    Array(diffDays)?.fill('').forEach(() => {
+    Array(diffDays + 1)?.fill('').forEach(() => {
       newSchedule.trip_days.push(newDay);
     });
   }, [diffDays, newSchedule.trip_days]);

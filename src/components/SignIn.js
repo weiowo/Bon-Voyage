@@ -25,14 +25,6 @@ function SignIn() {
     loved_article_ids: [],
   };
 
-  //   async function setNewUserToDb(){
-  //       console.log('您創了一個新帳號唷！');
-  //       const createNewUserData = doc(collection(db, 'users'));
-  //       await setDoc(
-  //           createNewUserData, ({...newUser, user_id: user.uid})
-  //       );
-  //   }
-
   // sign up 之後就要create一個user到users collection
 
   // 這裡存完後不用set到user的state，直接送到firestore、然後在app.js那邊會抓取是否有登入的狀況

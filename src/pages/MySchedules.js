@@ -5,9 +5,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
 import {
-  getDoc, doc, query, where, collection, getDocs,
+  getDoc, doc, query, where, collection, getDocs, arrayUnion, setDoc, updateDoc,
 } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/GreyHeader';
@@ -217,6 +217,7 @@ function MySchedules() {
   const [selectedSchedule, setSelectedSchedule] = useState();
   const [selectedScheduleMembers, setSelectedScheduleMembers] = useState([]);
   console.log(selectedScheduleMembers);
+  const navigate = useNavigate();
   // const [isSelected, setIsSelected] = useState(false);
 
   // 先拿到某個使用者的資料
@@ -297,9 +298,51 @@ function MySchedules() {
     }
   }
 
-  console.log('從state拿到使用者點的那個行程囉！', selectedSchedule, new Date(selectedSchedule?.embark_date));
+  console.log('從state拿到使用者點的那個行程囉!', selectedSchedule, new Date(selectedSchedule?.embark_date));
   const photoArray = [ASrc, BSrc, CSrc, DSrc, ESrc, FSrc];
-  // 用按下去那個行程的id去拿整筆資料
+
+  // 06/30更新
+  // user按下「撰寫旅程回憶」的時候就要從database拿此筆行程資訊，做成新的article
+  // 並創造到articles database那邊，然後把這個id推到他的「owned_article_array」
+  // 到編輯頁面的時候再從articles去抓這篇下來做編輯（加入status為draft或published的key）
+
+  const newArticle = {
+    status: 'draft',
+    cover_img: '',
+    summary: '',
+    article_creator_user_id: user.uid,
+    schedule_id: selectedSchedule?.schedule_id,
+    article_id: '',
+    article_title: selectedSchedule?.title,
+    trip_days: selectedSchedule?.trip_days.map((item) => (
+      {
+        places: item?.places?.map((placeItem) => (
+          {
+            place_title: placeItem?.place_title,
+            place_description: '',
+            place_imgs: [],
+          }
+        )),
+      }
+    )),
+  };
+
+  console.log(newArticle || '');
+
+  async function setNewArticleToDb() {
+    console.log('您創了一筆新的遊記唷！');
+    const createArticleData = doc(collection(db, 'articles'));
+    await setDoc(
+      createArticleData,
+      ({ ...newArticle, article_id: createArticleData.id }),
+    );
+    navigate({ pathname: '/edit', search: `?art_id=${createArticleData.id}&sch_id=${selectedSchedule?.schedule_id}` });
+    const userOwnedArticlesArray = doc(db, 'users', user.uid);
+    await updateDoc(userOwnedArticlesArray, {
+      owned_article_ids: arrayUnion(createArticleData.id),
+    });
+  }
+
   return (
     <>
       <GreyHeaderComponent style={{ position: 'fixed', top: '0px;' }} />
@@ -350,7 +393,9 @@ function MySchedules() {
                     查看詳細資訊
                   </StyledLink>
                 </CreateNewScheduleButton>
-                <CreateNewScheduleButton style={{ width: '90px' }} type="button">撰寫旅程回憶</CreateNewScheduleButton>
+                <CreateNewScheduleButton onClick={() => setNewArticleToDb()} style={{ width: '90px' }} type="button">
+                  撰寫旅程回憶
+                </CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
               <SelectedSchedulePhoto>
                 <SelectedScheduleTitle>
