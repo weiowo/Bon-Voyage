@@ -175,13 +175,13 @@ function Map({
   useEffect(() => {
     if (!scheduleData) { return; }
 
-    function getDistanceAndRoute(originTest, destinationTest, imageTest, colorTest, dayIndex, distanceIndex) {
+    function getDistanceAndRoute(originPlace, destinationPlace, imageSetting, colorSetting, dayIndex, distanceIndex) {
       const request = {
-        origin: originTest,
-        destination: destinationTest,
+        origin: originPlace,
+        destination: destinationPlace,
         travelMode: 'DRIVING',
       };
-      const image = imageTest; // 放上不一樣的地標
+      const image = imageSetting; // 放上不一樣的地標
 
       const directionsService = new google.maps.DirectionsService();
       const directionsDisplay = new google.maps.DirectionsRenderer();
@@ -192,7 +192,7 @@ function Map({
       };
       // 客製化line的顏色
       const customizedRoute = {
-        strokeColor: colorTest,
+        strokeColor: colorSetting,
         strokeWeight: 8,
         strokeOpacity: 0.9,
       };

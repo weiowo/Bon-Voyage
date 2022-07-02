@@ -191,6 +191,11 @@ right: -2px;
 top: 8px;
 `;
 
+const CategoryBanner = styled.img`
+width:100vw;
+height:auto;
+`;
+
 const libraries = ['places'];
 
 const mapContainerStyle = {
@@ -336,11 +341,6 @@ function Category({ currentLatLng }) {
   } else if (categoryFromUrl === 'religion') {
     BannerSrc = ReligionSrc;
   }
-
-  const CategoryBanner = styled.img`
-    width:100vw;
-    height:auto;
-    `;
 
   const [categoryNearbyData, setCategoryNearbyData] = useState([]);
   console.log(categoryNearbyData);

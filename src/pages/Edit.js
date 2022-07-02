@@ -1,12 +1,13 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 import
 {
   doc, getDoc,
   updateDoc,
 } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useImmer } from 'use-immer';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import {
   ref, uploadBytes,
@@ -16,6 +17,7 @@ import db, { storage } from '../utils/firebase-init';
 import HeaderComponent from '../components/Header';
 // import ShareBanner1 from './images/share_banner1.png';
 import ShareBanner2 from './images/share_banner2.png';
+import CoverDefaultPhoto from './images/cover_photo_default.png';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -51,28 +53,59 @@ display:flex;
 justify-content:center;
 `;
 
-const ArticleCoverPhoto = styled.div`
+const ArticleCoverPhoto = styled.input`
+display:none;
+// width:50vw;
+// height:300px;
+// border-radius:3px;
+// outline:none;
+// border:none;
+// background-color:grey;
+// background-image: url(${ShareBanner2});
+// background-size:cover;
+// background-repeat: no-repeat;
+// background-color: rgb(0, 0, 0, 0.2);
+// background-blend-mode: multiply;
+// background-position:center;
+// flex-shrink: 0;
+`;
+
+const ArticleCoverPhotoWrapper = styled.label`
 width:50vw;
-height:300px;
+height:350px;
+margin-left:5px;
+margin-top:2px;
 border-radius:3px;
-border:solid 1px red;
-background-color:yellow;
-background-image: url(${ShareBanner2});
+outline:none;
+border:1px solid black;
+border:none;
+background-image: url(${CoverDefaultPhoto});
 background-size:cover;
 background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 background-position:center;
 flex-shrink: 0;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+cursor:pointer;
+
 `;
 
 const Description = styled.textarea`
-width:50vw;
+padding-left:10px;
+padding-top:10px;
+width:calc(50vw - 3px);
+margin-left:3px;
+margin-bottom:10px;
 height:100px;
-font-size:14px;
+font-size:16px;
 margin-top:20px;
 outline:none;
 flex-shrink: 0;
+border-radius:5px;
+border: none;
+background-color: transparent;
+resize: none;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
 
 const ArticleTitleButtonArea = styled.div`
@@ -89,12 +122,13 @@ font-weight:600;
 text-align:left;
 margin-top:20px;
 margin-bottom:20px;
+outline:none;
+border:none;
 `;
 
 const EditingPart = styled.div`
 width:55vw;
 height:600px;
-border:1px solid blue;
 display:flex;
 flex-direction:column;
 align-items:flex-start;
@@ -112,24 +146,29 @@ align-items:flex-start;
 const ScheduleSummaryPart = styled.div`
 width:20vw;
 height:auto;
-border:1px solid red;
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:15px;
+margin-left:20px;
+padding-left:10px;
 `;
 
 const ScheduleSummaryDayAndPlacePart = styled.div`
 display:flex;
 width:20vw;
 height:auto;
-gap:5px;
+gap:10px;
 align-items:flex-start;
+paddin-left:15px;
 `;
 
 const ScheduleSummaryDayPart = styled.div`
 width:5vw;
 height:auto;
-border:1px solid orange;
+border-radius:2px;
+background-color:#729DC8;
+color:white;
+font-weight:550;
 gap:10px;
 `;
 
@@ -137,26 +176,27 @@ const ScheduleSummaryPlacePart = styled.div`
 width:15vw;
 height:auto;
 display:flex;
-border:1px solid purple;
 flex-direction:column;
-gap:3px;
+gap:8px;
 `;
 
 const SummaryPlaceTitle = styled.div`
 font-weight:500;
 font-size:15px;
 text-align:left;
-margin-left:10px;
 `;
 
 const DayTitle = styled.div`
 display:flex;
 align-items:center;
-justify-content:left;
-width:80px;
+justify-content:center;
+width:70px;
 height:30px;
-background-color:orange;
-padding-left:10px;
+background-color:#296D98;
+border-radius:3px;
+letter-spacing:2px;
+font-weight:550;
+color:white;
 `;
 
 const PlaceTitle = styled.div`
@@ -165,13 +205,62 @@ align-items:center;
 justify-content:left;
 width:150px;
 height:30px;
-background-color:beige;
 padding-left:10px;
+margin-bottom:10px;
+font-weight:600;
+font-size:18px;
+letter-spacing:2px;
 `;
 
-const PlaceUploadImgArea = styled.input`
-width:50vw;
+// const PlaceUploadImgArea = styled.input`
+// width:180px;
+// height:30px;
+// `;
+
+const PlaceImg = styled.img`
+width:100px;
 height:100px;
+position:relative;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+`;
+
+// const ConfirmedUploadButton = styled.div`
+// display:flex;
+// align-items:center;
+// justify-content:center;
+// width:80px;
+// height:30px;
+// background-color:#729DC8;
+// border-radius:3px;
+// color:white;
+// font-size:14px;
+// font-weight:500;
+// cursor:pointer;
+// `;
+
+const ImgDisplayArea = styled.div`
+display:flex;
+width:55vw;
+height:auto;
+gap:10px;
+margin-left:10px;
+position:relative;
+`;
+
+const DeletePlaceImgButton = styled.button`
+position:absolute;
+top:5px;
+right:5px;
+z-index:10;
+border-radius:50%;
+cursor:pointer;
+background-color:red;
+border:1px solid red;
+color:white;
+font-weight:550;
+height:20px;
+width:20px;
+border:none;
 `;
 
 const ButtonArea = styled.div`
@@ -179,12 +268,13 @@ width:20vw;
 height:auto;
 display:flex;
 align-items:center;
-justify-content:center;
+justify-content:left;
 gap:20px;
+margin-left:15px;
 `;
 
 const SaveButton = styled.button`
-width:80px;
+width:70px;
 height:40px;
 background-color:#296D98;
 color:white;
@@ -196,7 +286,7 @@ font-weight:600;
 `;
 
 const PublishedButton = styled.button`
-width:80px;
+width:70px;
 height:40px;
 background-color:#296D98;
 color:white;
@@ -209,7 +299,9 @@ font-weight:600;
 
 function EditPage() {
   const [article, updateArticle] = useImmer();
-  const [image, setImage] = useState(null); // 就是影片中的imgupload
+  const navigate = useNavigate();
+
+  // const [image, setImage] = useState(null); // 就是影片中的imgupload
   console.log(article);
   // const [imageList, setImageList] = useState([]);
   // console.log(article);
@@ -230,13 +322,27 @@ function EditPage() {
   // }
 
   // 按下上傳圖片！
-  async function uploadImg(dayIndex, placeIndex) {
-    if (image === null) return;
-    const imgRef = ref(storage, `images/${image.name}`);
-    const snap = await uploadBytes(imgRef, image);
-    const url = await getDownloadURL(ref(storage, `images/${image.name}`));
+  async function uploadImg(dayIndex, placeIndex, placeImgaeData) {
+    console.log('uploadImguploadImg');
+    if (placeImgaeData === null) return;
+    const imgRef = ref(storage, `images/${placeImgaeData.name}`);
+    const snap = await uploadBytes(imgRef, placeImgaeData);
+    const url = await getDownloadURL(ref(storage, `images/${placeImgaeData.name}`));
     updateArticle((draft) => {
       draft.trip_days[dayIndex].places[placeIndex].place_imgs.push(url);
+    });
+    console.log(snap);
+    console.log(url);
+  }
+
+  // 按下上傳cover圖片！ //變成要下一次才能更新QWQ
+  async function uploadCoverImg(imageData) {
+    if (imageData === null) return;
+    const imgRef = ref(storage, `images/${imageData.name}`);
+    const snap = await uploadBytes(imgRef, imageData);
+    const url = await getDownloadURL(ref(storage, `images/${imageData.name}`));
+    updateArticle((draft) => {
+      draft.cover_img = url;
     });
     console.log(snap);
     console.log(url);
@@ -264,6 +370,7 @@ function EditPage() {
   // 拿指定一個article_id的單一筆schedule資料
   const { search } = useLocation();
   const currentArticleId = new URLSearchParams(search).get('art_id');
+  const currentScheduleId = new URLSearchParams(search).get('sch_id');
 
   useEffect(() => {
     if (!currentArticleId) return;
@@ -333,9 +440,10 @@ function EditPage() {
   function deletePlaceImg(dayIndex, placeIndex, photoIndex) {
     console.log('delete~');
     updateArticle((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].place_imgs.filter(
-        (deletePhotoItem, deletePhotoIndex) => deletePhotoIndex !== photoIndex,
-      );
+      draft.trip_days[dayIndex].places[placeIndex].place_imgs = draft.trip_days[dayIndex]
+        .places[placeIndex].place_imgs.filter(
+          (deletePhotoItem, deletePhotoIndex) => deletePhotoIndex !== photoIndex,
+        );
     });
   }
 
@@ -355,9 +463,8 @@ function EditPage() {
     if (!currentArticleId) { return; }
     if (currentArticleId) {
       const articleRef = doc(db, 'articles', currentArticleId);
-      await updateDoc(articleRef, {
-        status: 'published',
-      });
+      await updateDoc(articleRef, { ...article, status: 'published' });
+      navigate({ pathname: '/article', search: `?art_id=${currentArticleId}&sch_id=${currentScheduleId}` });
     }
   }
 
@@ -379,8 +486,30 @@ function EditPage() {
           </ArticleTitleButtonArea>
           <ArticleEditPart>
             <EditingPart>
-              <ArticleCoverPhoto />
+              <ArticleCoverPhotoWrapper
+                htmlFor="photo"
+              >
+                <ArticleCoverPhoto
+                  type="file"
+                  id="photo"
+                  onChange={(e) => {
+                    // setImage(e.target.files[0]);
+                    uploadCoverImg(e.target.files[0]);
+                  }}
+                />
+                {article?.cover_img ? (
+                  <img
+                    alt="cover"
+                    src={article?.cover_img}
+                    style={{ width: '50vw', height: '350px' }}
+                  />
+                )
+                  : ''}
+                {/* <button type="button" onClick={() => updateArticleCoverPhoto()}>上傳</button> */}
+
+              </ArticleCoverPhotoWrapper>
               <Description
+                placeholder="寫點關於這次行程的整體描述吧～"
                 cols="40"
                 rows="5"
                 onChange={(e) => { updateArticleSummary(e.target.value); }}
@@ -395,55 +524,71 @@ function EditPage() {
                   <div>
                     {dayItem?.places.map((placeItem, placeIndex) => (
                       <PlaceArea>
-                        <PlaceTitle>
-                          第
-                          {placeIndex + 1}
-                          個景點:
-                          {placeItem.place_title}
-                        </PlaceTitle>
-                        <PlaceUploadImgArea
-                          type="file"
-                          onChange={(e) => {
-                            setImage(e.target.files[0]);
-                          }}
-                        />
-                        <button type="button" onClick={() => uploadImg(dayIndex, placeIndex)}>確認上傳</button>
-                        {/* 照片區 */}
-                        {article?.trip_days?.[dayIndex]
-                          ?.places?.[placeIndex]?.place_imgs?.map((item, photoIndex) => (
-                            <div style={{
-                              display: 'flex', width: 100, height: 100, position: 'relative',
+                        <div style={{ display: 'flex' }}>
+                          <PlaceTitle>
+                            {placeItem.place_title}
+                          </PlaceTitle>
+                          <label
+                            htmlFor={`photo-${dayIndex}-${placeIndex}`}
+                            style={{
+                              width: '80px',
+                              height: '30px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              backgroundColor: '#729DC8',
+                              borderRadius: '3px',
+                              cursor: 'pointer',
+                              marginRight: '10px',
+                              fontSize: 14,
+                              color: 'white',
+                              fontWeight: 600,
                             }}
-                            >
-                              <img style={{ width: 100, height: 100, position: 'relative' }} src={item} alt="place-img" />
-                              <button
-                                type="button"
-                                onClick={() => deletePlaceImg(dayIndex, placeIndex, photoIndex)}
-                                style={{
-                                  position: 'absolute', top: '10px', right: '10px', zIndex: '10',
-                                }}
-                              >
-                                X
-                              </button>
-                            </div>
-                          ))}
-                        {/* {article?.trip_days?.[dayIndex]?.places?.[placeIndex]?.place_imgs[0]
-                          ? <img alt="test" src={article?.trip_days?.[dayIndex]?.places?
-                            .[placeIndex]?.place_imgs[0]} />
-                          : (
-                            <PlaceUploadImgArea
+                          >
+                            <input
                               type="file"
+                              id={`photo-${dayIndex}-${placeIndex}`}
+                              style={{ display: 'none' }}
                               onChange={(e) => {
-                                setImage(e.target.files[0]);
+                                console.log('onChangeonChangeonChange');
+                                uploadImg(dayIndex, placeIndex, e.target.files[0]);
                               }}
+                              // onChange={(e) => {
+                              //   setImage(e.target.files[0]);
+                              // }}
                             />
-                          )} */}
+                            上傳照片
+                          </label>
+                          {/* <ConfirmedUploadButton
+                          type="button" onChange={(e) =>
+                          uploadImg(dayIndex, placeIndex,
+                           e.target.files[0])}>確認上傳</ConfirmedUploadButton> */}
+                        </div>
+                        <ImgDisplayArea style={{
+                          display: 'flex', width: '55vw', height: 'auto',
+                        }}
+                        >
+                          {article?.trip_days?.[dayIndex]
+                            ?.places?.[placeIndex]?.place_imgs?.map((item, photoIndex) => (
+                              <div style={{ position: 'relative' }}>
+                                <PlaceImg style={{ width: 100, height: 100, position: 'relative' }} src={item} alt="place-img" />
+                                <DeletePlaceImgButton
+                                  placeholder="寫點關於景點的描述吧～"
+                                  type="button"
+                                  onClick={() => deletePlaceImg(dayIndex, placeIndex, photoIndex)}
+                                >
+                                  X
+                                </DeletePlaceImgButton>
+                              </div>
+                            ))}
+                        </ImgDisplayArea>
                         <Description
                           cols="40"
                           rows="5"
                           value={placeItem.place_description}
-                          // eslint-disable-next-line max-len
-                          onChange={(e) => { updatePlaceDescription(e.target.value, dayIndex, placeIndex); }}
+                          onChange={(e) => {
+                            updatePlaceDescription(e.target.value, dayIndex, placeIndex);
+                          }}
                         />
                       </PlaceArea>
                     ))}
@@ -460,14 +605,12 @@ function EditPage() {
                     天
                   </ScheduleSummaryDayPart>
                   <div style={{
-                    height: '20px', width: '1px', backgroundColor: 'black', marginTop: '2px',
+                    height: '20px', width: '2px', backgroundColor: 'black', marginTop: '2px',
                   }}
                   />
                   <ScheduleSummaryPlacePart>
-                    {dayItem?.places ? dayItem?.places.map((placeItem, placeIndex) => (
+                    {dayItem?.places ? dayItem?.places.map((placeItem) => (
                       <SummaryPlaceTitle>
-                        {placeIndex + 1}
-                        :
                         {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
                       </SummaryPlaceTitle>
                     )) : ''}
