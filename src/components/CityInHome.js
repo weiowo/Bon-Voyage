@@ -18,7 +18,7 @@ import MexicoSrc from '../pages/images/mexico.png';
 const CityAtHomeWrapper = styled.div`
 margin-top:60px;
 width:100vw;
-height:450px;
+height:520px;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -38,7 +38,7 @@ margin-bottom:60px;
 
 const CityAtHomeBelowPart = styled.div`
 width:100vw;
-height:400px;
+height:auto;
 display:flex;
 justify-content:center;
 gap:15px;

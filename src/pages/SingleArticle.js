@@ -310,8 +310,4 @@ function ShowArticle() {
   );
 }
 
-  <HashLink smooth to="/article#section-three">
-    Section Three
-  </HashLink>;
-
 export default ShowArticle;

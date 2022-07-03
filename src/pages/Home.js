@@ -23,6 +23,7 @@ import HeaderComponent
 import CardsCarousel from './CardCarousel';
 import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
+import ArticlesInHome from '../components/ArticlesInHome';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -335,6 +336,7 @@ function Home({ currentLatLng, user }) {
       <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} />
       <CategoryAreaInHome currentLatLng={currentLatLng} />
       <CityAreaInHomePage />
+      <ArticlesInHome />
     </>
   );
 }

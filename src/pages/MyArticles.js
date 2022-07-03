@@ -71,7 +71,7 @@ background-color:grey;
 width:75vw;
 `;
 
-const MyArticle = styled.div`
+export const MyArticle = styled.div`
 cursor:pointer;
 width:190px;
 height:250px;
@@ -80,14 +80,14 @@ border-radius:10px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
-const CoverPhotoInMyArticle = styled.img`
+export const CoverPhotoInMyArticle = styled.img`
 width:100%;
 height:50%;
 border-top-right-radius:10px;
 border-top-left-radius:10px;
 `;
 
-const MyArticleBelowArea = styled.div`
+export const MyArticleBelowArea = styled.div`
 width:80%;
 height:auto;
 display:flex;
@@ -98,7 +98,7 @@ margin-top:10px;
 margin-right:15px;
 `;
 
-const MyArticleTitle = styled.div`
+export const MyArticleTitle = styled.div`
 width:100%;
 height:30px;
 font-weight:550;
@@ -106,7 +106,7 @@ font-size:16px;
 text-align:left;
 `;
 
-const MyArticleSummary = styled.div`
+export const MyArticleSummary = styled.div`
 width:100%;
 height:30px;
 font-size:13px;
@@ -115,7 +115,7 @@ font-weight:500;
 color:grey;
 `;
 
-const StyledLink = styled(Link)`
+export const StyledLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
 color:black;
@@ -207,8 +207,7 @@ function MyArticles() {
           </MyArticlesContainer>
           <MyArticlesContainer isClicked={saveIsClicked}>
             {myDraftArticles ? myDraftArticles?.map((item) => (
-              <StyledLink to={`/article?art_id=${item?.article_id}&SCH_id=${item?.schedule_id}`}>
-
+              <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                 <MyArticle>
                   <CoverPhotoInMyArticle src={item?.cover_img} />
                   <MyArticleBelowArea>
