@@ -55,19 +55,6 @@ justify-content:center;
 
 const ArticleCoverPhoto = styled.input`
 display:none;
-// width:50vw;
-// height:300px;
-// border-radius:3px;
-// outline:none;
-// border:none;
-// background-color:grey;
-// background-image: url(${ShareBanner2});
-// background-size:cover;
-// background-repeat: no-repeat;
-// background-color: rgb(0, 0, 0, 0.2);
-// background-blend-mode: multiply;
-// background-position:center;
-// flex-shrink: 0;
 `;
 
 const ArticleCoverPhotoWrapper = styled.label`
@@ -87,7 +74,6 @@ background-position:center;
 flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 cursor:pointer;
-
 `;
 
 const Description = styled.textarea`
@@ -335,7 +321,7 @@ function EditPage() {
     console.log(url);
   }
 
-  // 按下上傳cover圖片！ //變成要下一次才能更新QWQ
+  // 上傳cover圖片！
   async function uploadCoverImg(imageData) {
     if (imageData === null) return;
     const imgRef = ref(storage, `images/${imageData.name}`);

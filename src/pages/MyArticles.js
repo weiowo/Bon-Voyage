@@ -23,7 +23,7 @@ margin-left:50px;
 margin-top:30px;
 `;
 
-const MyArticlesTitle = styled.div`
+export const MyPageTitle = styled.div`
 width:100%;
 height:auto;
 font-size:28px;
@@ -65,7 +65,7 @@ display:${(props) => (props.isClicked ? 'flex' : 'none')};
 
 `;
 
-const UpperLine = styled.div`
+export const UpperLine = styled.div`
 height:1px;
 background-color:grey;
 width:75vw;
@@ -176,7 +176,7 @@ function MyArticles() {
         <ProfileSideBarElement />
         <Line />
         <MyArticlesArea>
-          <MyArticlesTitle>我的文章</MyArticlesTitle>
+          <MyPageTitle>我的文章</MyPageTitle>
           <Tabs>
             <Tab
               isClicked={publishIsClicked}

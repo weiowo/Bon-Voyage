@@ -24,6 +24,7 @@ import GreyHeaderComponent from '../components/GreyHeader';
 import BlueTrashCanSrc from './images/trash_blue.png';
 import GreyTrashCanSrc from './images/trash_grey.png';
 import GoBackSrc from './images/arrow-left.png';
+import SignIn from '../components/SignIn';
 
 // 最新版！！（2022/06/20）
 // chooseDate完成後就創立一個新的行程id，並放到url上面

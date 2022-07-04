@@ -5,7 +5,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
 import {
-  getDoc, doc, query, where, collection, getDocs, arrayUnion, setDoc, updateDoc,
+  getDoc, doc, query, where, collection, getDocs,
+  arrayUnion, setDoc, updateDoc,
+  // onSnapshot,
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
@@ -30,6 +32,7 @@ import SquareCover5 from './images/schedule_cover_square5.jpg';
 import SquareCover6 from './images/schedule_cover_square6.jpg';
 import RecCover3 from './images/schedule_cover_rec3.jpg';
 import ProfileSideBarElement from '../components/ProfileSideBar';
+import SignIn from '../components/SignIn';
 
 export const PageWrapper = styled.div`
 width:100vw;
@@ -37,43 +40,6 @@ height:calc(100vh-60px);
 display:flex;
 padding-top:60px;
 `;
-
-// const ProfileSideBar = styled.div`
-// width:20vw;
-// height:calc(100vh-40px);
-// display:flex;
-// flex-direction:column;
-// align-items:center;
-// margin-top:60px;
-// `;
-
-// const SideNavBar = styled.div`
-// margin-top:60px;
-// height:auto;
-// width:auto;
-// display:flex;
-// flex-direction:column;
-// gap:30px;
-// `;
-
-// const UserPhoto = styled.img`
-// width:30px;
-// height:30px;
-// border-radius:50%;
-// margin-left:23px;
-// `;
-
-// const UserName = styled.div`
-// font-size:15px;
-// font-weight:600;
-// margin-left:15px;
-// `;
-
-// const NavBarChoice = styled.div`
-// font-weight:600;
-// font-size:15px;
-// color:grey;
-// `;
 
 export const Line = styled.div`
 display:flex;
@@ -85,7 +51,7 @@ margin-top:20px;
 `;
 
 const ChoicesWrapper = styled.div` 
-width:33vw;
+width:35vw;
 height:90vh;
 display:flex;
 flex-direction:column;
@@ -167,7 +133,7 @@ cursor:pointer;
 `;
 
 const SelectedScheduleWrapper = styled.div`
-width:40vw;
+width:45vw;
 height:auto;
 display:flex;
 flex-direction:column;
@@ -314,8 +280,12 @@ function MySchedules() {
   const [schedules, setSchedules] = useImmer([]);
   const [selectedSchedule, setSelectedSchedule] = useState();
   const [selectedScheduleMembers, setSelectedScheduleMembers] = useState([]);
+  // const [selectedMembers, setSelectedMembers] = useImmer([]);
   const [searchFriendValue, setSearchFriendValue] = useState();
   const [searchedFriendId, setSearchedFriendId] = useState();
+  // const [searchedFriendName, setSearchedFriendName] = useState();
+  // const [searchedFriendEmail, setSearchedFriendEmail] = useState();
+  // const [searchedFriendPhotoUrl, setSearchedFriendPhotoUrl] = useState();
   console.log(selectedScheduleMembers);
   const [showMemberWord, setShowMemberWord] = useState(false);
   const [showMemberPhoto, setShowMemberPhoto] = useState(false);
@@ -481,11 +451,15 @@ function MySchedules() {
       querySnapShot.forEach((doc) => {
         console.log('有這個人唷！', doc.id, '=>', doc.data());
         setSearchedFriendId(doc.id);
+        // setSearchedFriendName(doc.data().name);
+        // setSearchedFriendEmail(doc.data().email);
+        // setSearchedFriendPhotoUrl(doc.data().photo_url);
       });
     }
   }
 
   // 確認把朋友加到這個行程中
+  // 增加朋友到selectedSchedule中'members'的這個key，同時把這個行程推到他的owned_schedule_array
 
   async function addFriendToTheSchedule() {
     const searchedFriendScheduleArray = doc(db, 'users', searchedFriendId);
@@ -493,164 +467,196 @@ function MySchedules() {
     await updateDoc(searchedFriendScheduleArray, {
       owned_schedule_ids: arrayUnion(selectedSchedule?.schedule_id),
     });
+    const selectedScheduleMemberList = doc(db, 'schedules', selectedSchedule?.schedule_id);
+    await updateDoc(selectedScheduleMemberList, {
+      members: arrayUnion(
+        searchedFriendId,
+      ),
+    });
   }
 
-  // const selectedSchedulePhotoArray =
-  // [RecCover1, RecCover2, RecCover3, RecCover4, RecCover5, RecCover6];
+  // 同時querysnapshot，拿schedule中members的id array去找人
+
+  // useEffect(() => {
+  //   if (selectedSchedule?.schedule_id) {
+  //     const memberAdded = doc(db, 'schedules', selectedSchedule?.schedule_id);
+  //     onSnapshot(memberAdded, (querySnapshot) => {
+  //       console.log('我在拿更新的朋友名單', querySnapshot.data());
+  //       console.log(querySnapshot.data().members);
+  // querySnapshot.data().members.forEach(async (item, index) => {
+  //   const docs = doc(db, 'users', item);
+  //   const snap = await getDoc(docs);
+  //   if (snap.exists()) {
+  //     console.log('這些使用者的詳細資料', index, snap.data());
+  //     setSelectedMembers((draft) => {
+  //       draft.push(snap.data());
+  //     });
+  //   } else {
+  //     console.log('找不到這個使用者');
+  //   }
+  // });
+  //     });
+  //   }
+  // }, [selectedSchedule?.schedule_id, setSelectedMembers]);
+
+  // // 新增朋友即時更新
+
   const schedulePhotoArray = [SquareCover1,
     SquareCover2, SquareCover3, SquareCover4, SquareCover5, SquareCover6];
 
   return (
-    <>
-      <GreyHeaderComponent style={{ position: 'fixed', top: '0px;' }} />
-      <PageWrapper>
-        <ProfileSideBarElement />
-        <Line />
-        <ChoicesWrapper>
-          <MySchedulesTitleAndCreateNewScheduleArea>
-            <MyScheduleTitle>我的行程</MyScheduleTitle>
-            <CreateNewScheduleButton type="button">
-              <StyledLink to="/choose-date">
-                + 新的行程
-              </StyledLink>
-            </CreateNewScheduleButton>
-          </MySchedulesTitleAndCreateNewScheduleArea>
-          {schedules ? schedules.map((item, index) => (
-            <ExistedSchedule
-              // isSelected={isSelected}
-              // onClick={() => { setTargetIndex(index); changeColor(index); }}
-            >
-              <PhotoInExistedSchedule src={schedulePhotoArray[index]} />
-              <ExistedScheuleTitle id={item.schedule_id}>
-                {item.title}
-              </ExistedScheuleTitle>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <Button onClick={() => getSelectedSchedule(item.schedule_id)} id={item.schedule_id} type="button">
-                  選擇
-                </Button>
-                <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
-                  刪除
-                </Button>
-              </div>
-            </ExistedSchedule>
-          )) : ''}
-        </ChoicesWrapper>
-        <Line />
-        <SelectedScheduleWrapper>
-          {selectedSchedule ? (
-            <>
-              <MySchedulesTitleAndCreateNewScheduleArea style={{ width: '40vw' }}>
-                <MyScheduleTitle>您選的行程概覽</MyScheduleTitle>
-                <CreateNewScheduleButton style={{ width: '90px' }} type="button">
-                  <StyledLink to={`/schedule?id=${selectedSchedule.schedule_id}`}>
-                    查看詳細資訊
+    <div>
+      {user.uid ? (
+        <>
+          <GreyHeaderComponent style={{ position: 'fixed', top: '0px;' }} />
+          <PageWrapper>
+            <ProfileSideBarElement />
+            <Line />
+            <ChoicesWrapper>
+              <MySchedulesTitleAndCreateNewScheduleArea>
+                <MyScheduleTitle>我的行程</MyScheduleTitle>
+                <CreateNewScheduleButton type="button">
+                  <StyledLink to="/choose-date">
+                    + 新的行程
                   </StyledLink>
                 </CreateNewScheduleButton>
-                <CreateNewScheduleButton onClick={() => setNewArticleToDb()} style={{ width: '90px' }} type="button">
-                  撰寫旅程回憶
-                </CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
-              <SelectedSchedulePhoto>
-                <SelectedScheduleTitle>
-                  {selectedSchedule.title}
-                </SelectedScheduleTitle>
-              </SelectedSchedulePhoto>
-              <ScheduleMemberContainer>
-                {selectedScheduleMembers?.map((item, index) => (
-                  <>
-                    <ScheduleMemberWord hovered={showMemberWord} onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }} onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }} style={{ backgroundColor: `${colorArray[index % 7]}` }}>
-                      {item.email[0].toUpperCase()}
-                    </ScheduleMemberWord>
-                    <ScheduleMemberPhoto hovered={showMemberPhoto} onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }} onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }} alt="member" src={photoArray[index % 10]} />
-                  </>
-                ))}
-              </ScheduleMemberContainer>
-              <div style={{ display: 'flex', gap: '20px' }}>
-                <DatePicker
-                  style={{ height: '100px' }}
-                  selected=""
-                  startDate={new Date(selectedSchedule?.embark_date)}
-                  endDate={new Date(selectedSchedule?.end_date)}
-                  calendarContainer={CalendarStyle}
-                  disabled
-                  Range
-                  inline
-                />
-                <InviteFriendBox>
-                  <InviteFriendTitle>加朋友進此行程？</InviteFriendTitle>
-                  <InviteFriendBelowArea active={searchInputIsActive}>
-                    <InviteFriendInput
-                      value={searchFriendValue}
-                      type="text"
-                      inputMode="text"
-                      onChange={(e) => setSearchFriendValue(e.target.value)}
-                      placeholder="請輸入email....."
-                        />
-                    <ConfirmSearchButton
-                      onClick={() => {
-                        submitSearch();
-                        setSearchInputIsActive(false);
-                        setSearchResultIsActive(true);
-                      }}
-                      type="button">
-                      確認搜尋
-                    </ConfirmSearchButton>
-                  </InviteFriendBelowArea>
-                  {searchedFriendId ? (
-                    <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
-                      <div>
-                        找到此用戶囉！
-                        <br />
-                        要加入他嗎？
-                      </div>
-                      <div>
+              {schedules ? schedules.map((item, index) => (
+                <ExistedSchedule
+              >
+                  <PhotoInExistedSchedule src={schedulePhotoArray[index]} />
+                  <ExistedScheuleTitle id={item.schedule_id}>
+                    {item.title}
+                  </ExistedScheuleTitle>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    <Button onClick={() => getSelectedSchedule(item.schedule_id)} id={item.schedule_id} type="button">
+                      選擇
+                    </Button>
+                    <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
+                      刪除
+                    </Button>
+                  </div>
+                </ExistedSchedule>
+              )) : ''}
+            </ChoicesWrapper>
+            <Line />
+            <SelectedScheduleWrapper>
+              {selectedSchedule ? (
+                <>
+                  <MySchedulesTitleAndCreateNewScheduleArea style={{ width: '45vw' }}>
+                    <MyScheduleTitle>您選的行程概覽</MyScheduleTitle>
+                    <CreateNewScheduleButton style={{ width: '90px' }} type="button">
+                      <StyledLink to={`/schedule?id=${selectedSchedule.schedule_id}`}>
+                        查看詳細資訊
+                      </StyledLink>
+                    </CreateNewScheduleButton>
+                    <CreateNewScheduleButton onClick={() => setNewArticleToDb()} style={{ width: '90px' }} type="button">
+                      撰寫旅程回憶
+                    </CreateNewScheduleButton>
+                  </MySchedulesTitleAndCreateNewScheduleArea>
+                  <SelectedSchedulePhoto>
+                    <SelectedScheduleTitle>
+                      {selectedSchedule.title}
+                    </SelectedScheduleTitle>
+                  </SelectedSchedulePhoto>
+                  <ScheduleMemberContainer>
+                    {selectedScheduleMembers?.map((item, index) => (
+                      <>
+                        <ScheduleMemberWord hovered={showMemberWord} onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }} onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }} style={{ backgroundColor: `${colorArray[index % 7]}` }}>
+                          {item.email[0].toUpperCase()}
+                          {/* {item?.displayName?.[0]} */}
+                        </ScheduleMemberWord>
+                        <ScheduleMemberPhoto hovered={showMemberPhoto} onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }} onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }} alt="member" src={photoArray[index % 10]} />
+                      </>
+                    ))}
+                  </ScheduleMemberContainer>
+                  <div style={{ display: 'flex', gap: '20px' }}>
+                    <DatePicker
+                      style={{ height: '100px' }}
+                      selected=""
+                      startDate={new Date(selectedSchedule?.embark_date)}
+                      endDate={new Date(selectedSchedule?.end_date)}
+                      calendarContainer={CalendarStyle}
+                      disabled
+                      Range
+                      inline />
+                    <InviteFriendBox>
+                      <InviteFriendTitle>加朋友進此行程？</InviteFriendTitle>
+                      <InviteFriendBelowArea active={searchInputIsActive}>
+                        <InviteFriendInput
+                          value={searchFriendValue}
+                          type="text"
+                          inputMode="text"
+                          onChange={(e) => setSearchFriendValue(e.target.value)}
+                          placeholder="請輸入email....." />
                         <ConfirmSearchButton
                           onClick={() => {
-                            addFriendToTheSchedule();
-                            setSearchInputIsActive(true);
-                            setSearchResultIsActive(false);
-                            setSearchedFriendId(null);
+                            submitSearch();
+                            setSearchInputIsActive(false);
+                            setSearchResultIsActive(true);
                           }}
                           type="button">
-                          確認加入
+                          確認搜尋
                         </ConfirmSearchButton>
-                        <ConfirmSearchButton
-                          style={{ marginTop: '10px' }}
-                          onClick={() => {
-                            setSearchInputIsActive(true);
-                            setSearchResultIsActive(false);
-                            setSearchedFriendId(null);
-                          }}
-                          type="button">
-                          回上一頁
-                        </ConfirmSearchButton>
-                      </div>
-                    </InviteFriendBelowArea>
-                  ) : (
-                    <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
-                      <div>
-                        沒有此用戶～
-                        <br />
-                        試試看別的email吧！
-                      </div>
-                      <ConfirmSearchButton
-                        onClick={() => {
-                          setSearchInputIsActive(true);
-                          setSearchResultIsActive(false);
-                          setSearchedFriendId(null);
-                        }}
-                        type="button">
-                        回上一頁
-                      </ConfirmSearchButton>
-                    </InviteFriendBelowArea>
-                  )}
-                </InviteFriendBox>
-              </div>
-            </>
-          ) : ''}
-        </SelectedScheduleWrapper>
-      </PageWrapper>
-    </>
+                      </InviteFriendBelowArea>
+                      {searchedFriendId ? (
+                        <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
+                          <div>
+                            找到此用戶囉！
+                            <br />
+                            要加入他嗎？
+                          </div>
+                          <div>
+                            <ConfirmSearchButton
+                              onClick={() => {
+                                addFriendToTheSchedule();
+                                setSearchInputIsActive(true);
+                                setSearchResultIsActive(false);
+                                setSearchedFriendId(null);
+                              }}
+                              type="button">
+                              確認加入
+                            </ConfirmSearchButton>
+                            <ConfirmSearchButton
+                              style={{ marginTop: '10px' }}
+                              onClick={() => {
+                                setSearchInputIsActive(true);
+                                setSearchResultIsActive(false);
+                                setSearchedFriendId(null);
+                              }}
+                              type="button">
+                              回上一頁
+                            </ConfirmSearchButton>
+                          </div>
+                        </InviteFriendBelowArea>
+                      ) : (
+                        <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
+                          <div>
+                            沒有此用戶～
+                            <br />
+                            試試看別的email吧！
+                          </div>
+                          <ConfirmSearchButton
+                            onClick={() => {
+                              setSearchInputIsActive(true);
+                              setSearchResultIsActive(false);
+                              setSearchedFriendId(null);
+                            }}
+                            type="button">
+                            回上一頁
+                          </ConfirmSearchButton>
+                        </InviteFriendBelowArea>
+                      )}
+                    </InviteFriendBox>
+                  </div>
+                </>
+              ) : ''}
+            </SelectedScheduleWrapper>
+          </PageWrapper>
+
+        </>
+      ) : <SignIn />}
+    </div>
   );
 }
 

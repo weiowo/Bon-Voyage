@@ -89,6 +89,9 @@ function ChooseDate() {
     embark_date: startDate?.toISOString().split('T')[0],
     end_date: finishDate?.toISOString().split('T')[0],
     trip_days: [],
+    members: [
+      user.uid,
+    ],
   };
 
   useEffect(() => {

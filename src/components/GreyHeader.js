@@ -64,7 +64,9 @@ function GreyHeaderComponent() {
             我的行程
           </StyleNavLink>
         </div>
-        <ProfilePageNav>個人頁面</ProfilePageNav>
+        <StyleNavLink to="/profile">
+          <ProfilePageNav>個人頁面</ProfilePageNav>
+        </StyleNavLink>
       </NavBar>
     </Header>
   );
