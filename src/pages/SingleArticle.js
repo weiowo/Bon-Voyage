@@ -178,7 +178,7 @@ const PlaceTitle = styled.div`
 display:flex;
 align-items:center;
 justify-content:left;
-width:150px;
+width:auto;
 height:30px;
 padding-left:10px;
 margin-bottom:10px;
@@ -206,11 +206,6 @@ flex-wrap:wrap;
 
 function ShowArticle() {
   const [shownArticle, updateShownArticle] = useImmer();
-
-  // const scrollToRef = (ref) => ref.current.scrollIntoView({ behavior: 'smooth' });
-
-  // const [image, setImage] = useState(null); // 就是影片中的imgupload
-  console.log(shownArticle);
 
   // 拿指定一個article_id的article資料
   const { search } = useLocation();

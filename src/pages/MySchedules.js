@@ -7,7 +7,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import {
   getDoc, doc, query, where, collection, getDocs,
   arrayUnion, setDoc, updateDoc,
-  // onSnapshot,
+  onSnapshot,
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
@@ -51,7 +51,7 @@ margin-top:20px;
 `;
 
 const ChoicesWrapper = styled.div` 
-width:35vw;
+width:33vw;
 height:90vh;
 display:flex;
 flex-direction:column;
@@ -133,7 +133,7 @@ cursor:pointer;
 `;
 
 const SelectedScheduleWrapper = styled.div`
-width:45vw;
+width:42vw;
 height:auto;
 display:flex;
 flex-direction:column;
@@ -141,11 +141,6 @@ align-items:left;
 margin-left:50px;
 gap:15px;
 `;
-
-// const CalendarStyle = styled.div`
-// height:200px;
-// width:200px;
-// `;
 
 const SelectedSchedulePhoto = styled.div`
 padding-left:15px;
@@ -162,7 +157,6 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
-position:relative;
 `;
 
 const SelectedScheduleTitle = styled.div`
@@ -276,27 +270,20 @@ cursor:pointer;
 
 function MySchedules() {
   const user = useContext(UserContext);
-  console.log('我在MySchedulesComponents唷', user);
   const [schedules, setSchedules] = useImmer([]);
   const [selectedSchedule, setSelectedSchedule] = useState();
-  const [selectedScheduleMembers, setSelectedScheduleMembers] = useState([]);
-  // const [selectedMembers, setSelectedMembers] = useImmer([]);
+  // const [selectedScheduleMembers, setSelectedScheduleMembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useImmer([]);
   const [searchFriendValue, setSearchFriendValue] = useState();
   const [searchedFriendId, setSearchedFriendId] = useState();
-  // const [searchedFriendName, setSearchedFriendName] = useState();
-  // const [searchedFriendEmail, setSearchedFriendEmail] = useState();
-  // const [searchedFriendPhotoUrl, setSearchedFriendPhotoUrl] = useState();
-  console.log(selectedScheduleMembers);
   const [showMemberWord, setShowMemberWord] = useState(false);
   const [showMemberPhoto, setShowMemberPhoto] = useState(false);
   const [searchInputIsActive, setSearchInputIsActive] = useState(true);
   const [searchResultIsActive, setSearchResultIsActive] = useState(false);
   console.log(searchInputIsActive);
   console.log(searchResultIsActive);
-  // const [searchIsActive, setSearchIsActive] = useState(false);
   const navigate = useNavigate();
-  // const [isSelected, setIsSelected] = useState(false);
-  // const [targetIndex, setTargetIndex] = useState(null);
+  const [targetIndex, setTargetIndex] = useState(null);
 
   // function changeColor(index) {
   //   if (index === targetIndex) {
@@ -357,7 +344,7 @@ function MySchedules() {
         members.push(doc.data());
       });
       console.log(members);
-      setSelectedScheduleMembers(members);
+      // setSelectedScheduleMembers(members);
     }
     getArray();
   }, [selectedSchedule?.schedule_id, selectedSchedule]);
@@ -382,16 +369,11 @@ function MySchedules() {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log('Document data:', docSnap.data()); // docSnap.data()是需要取用的那筆資料
       setSelectedSchedule(docSnap.data()); // 放進state中
     } else {
-    // doc.data() will be undefined in this case
       console.log('沒有這個行程！');
     }
   }
-
-  console.log('從state拿到使用者點的那個行程囉!', selectedSchedule, new Date(selectedSchedule?.embark_date));
-
   const colorArray = ['#618CAC', '#A9B7AA', '#7A848D', '#976666', '#A0C1D2'];
 
   const photoArray = [Member1, Member2,
@@ -423,8 +405,6 @@ function MySchedules() {
     )),
   };
 
-  console.log(newArticle || '');
-
   async function setNewArticleToDb() {
     console.log('您創了一筆新的遊記唷！');
     const createArticleData = doc(collection(db, 'articles'));
@@ -451,9 +431,6 @@ function MySchedules() {
       querySnapShot.forEach((doc) => {
         console.log('有這個人唷！', doc.id, '=>', doc.data());
         setSearchedFriendId(doc.id);
-        // setSearchedFriendName(doc.data().name);
-        // setSearchedFriendEmail(doc.data().email);
-        // setSearchedFriendPhotoUrl(doc.data().photo_url);
       });
     }
   }
@@ -477,27 +454,28 @@ function MySchedules() {
 
   // 同時querysnapshot，拿schedule中members的id array去找人
 
-  // useEffect(() => {
-  //   if (selectedSchedule?.schedule_id) {
-  //     const memberAdded = doc(db, 'schedules', selectedSchedule?.schedule_id);
-  //     onSnapshot(memberAdded, (querySnapshot) => {
-  //       console.log('我在拿更新的朋友名單', querySnapshot.data());
-  //       console.log(querySnapshot.data().members);
-  // querySnapshot.data().members.forEach(async (item, index) => {
-  //   const docs = doc(db, 'users', item);
-  //   const snap = await getDoc(docs);
-  //   if (snap.exists()) {
-  //     console.log('這些使用者的詳細資料', index, snap.data());
-  //     setSelectedMembers((draft) => {
-  //       draft.push(snap.data());
-  //     });
-  //   } else {
-  //     console.log('找不到這個使用者');
-  //   }
-  // });
-  //     });
-  //   }
-  // }, [selectedSchedule?.schedule_id, setSelectedMembers]);
+  useEffect(() => {
+    if (selectedSchedule?.schedule_id) {
+      const memberAdded = doc(db, 'schedules', selectedSchedule?.schedule_id);
+      const unsubscribe = onSnapshot(memberAdded, async (querySnapshot) => {
+        // eslint-disable-next-line max-len
+        const memberData = await Promise.all(querySnapshot.data().members.map(async (item) => {
+          const docs = doc(db, 'users', item);
+          const snap = await getDoc(docs);
+          if (snap.exists()) {
+            return snap.data();
+          }
+          return null;
+        }));
+        setSelectedMembers(memberData);
+      });
+      return () => {
+        unsubscribe();
+        setSelectedMembers([]);
+      };
+    }
+    return () => {};
+  }, [selectedSchedule?.schedule_id, setSelectedMembers]);
 
   // // 新增朋友即時更新
 
@@ -522,14 +500,14 @@ function MySchedules() {
                 </CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
               {schedules ? schedules.map((item, index) => (
-                <ExistedSchedule
+                <ExistedSchedule isSelected={index === targetIndex}
               >
                   <PhotoInExistedSchedule src={schedulePhotoArray[index]} />
                   <ExistedScheuleTitle id={item.schedule_id}>
                     {item.title}
                   </ExistedScheuleTitle>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    <Button onClick={() => getSelectedSchedule(item.schedule_id)} id={item.schedule_id} type="button">
+                    <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
                       選擇
                     </Button>
                     <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
@@ -560,7 +538,7 @@ function MySchedules() {
                     </SelectedScheduleTitle>
                   </SelectedSchedulePhoto>
                   <ScheduleMemberContainer>
-                    {selectedScheduleMembers?.map((item, index) => (
+                    {selectedMembers?.map((item, index) => (
                       <>
                         <ScheduleMemberWord hovered={showMemberWord} onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }} onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }} style={{ backgroundColor: `${colorArray[index % 7]}` }}>
                           {item.email[0].toUpperCase()}

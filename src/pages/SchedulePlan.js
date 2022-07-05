@@ -4,7 +4,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   // getDocs,
   collection, doc, getDoc, getDocs,
@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import UserContext from '../components/UserContextComponent';
 import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
 import PinkCloseIcon from './images/close-2.png';
@@ -24,7 +25,6 @@ import GreyHeaderComponent from '../components/GreyHeader';
 import BlueTrashCanSrc from './images/trash_blue.png';
 import GreyTrashCanSrc from './images/trash_grey.png';
 import GoBackSrc from './images/arrow-left.png';
-import SignIn from '../components/SignIn';
 
 // 最新版！！（2022/06/20）
 // chooseDate完成後就創立一個新的行程id，並放到url上面
@@ -424,6 +424,7 @@ function Schedule() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
+  const user = useContext(UserContext);
   console.log(searchParams);
 
   // async function CreateNewChatRoom() {
@@ -556,8 +557,8 @@ function Schedule() {
 
   // 把state的訊息放進去object，然後推進整個messages array
   const newMessage = {
-    user_id: 123, // 放user.id
-    user_name: '葳葳', // 放user.email第一個字
+    user_id: user.uid, // 放user.id
+    user_name: user.displayName,
     message: inputMessage,
     sent_time: new Date(),
   };
@@ -625,51 +626,6 @@ function Schedule() {
     }
   }, [existScheduleId, updateScheduleData]);
 
-  // useEffect(()=>{
-  //   const ref = collection(db, "topics");
-  //   onSnapshot(ref, (querySnapshot) => {
-  //     querySnapshot.forEach((doc)=>{
-  //       // console.log(doc.id, doc.data());
-  //     })
-  //   })
-  // }, []);
-
-  // Atomically remove a region from the "regions" array field.
-  // await updateDoc(washingtonRef, {
-  //     regions: arrayRemove("east_coast")
-  // });
-
-  // async function CreateNewChatRoom() {
-  //   if (!existScheduleId) {
-  //     console.log('沒有聊天室，創一個新的在瀏覽器！');
-  //     updateChatBox(newChatRoom);
-  //   }
-  // }
-
-  // setSchedule();
-
-  // 如果已經有聊天室，則拿指定一個schedule_id的聊天室資料，如果沒有，則創建一個！
-
-  // useEffect(() => {
-  //   async function getChatRoom() {
-  //     const q = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-  //     const querySnapshot = await getDocs(q);
-  //     querySnapshot.forEach((doc) => {
-  //       // doc.data() is never undefined for query doc snapshots
-  //       console.log(doc.id, ' => ', doc.data());
-  //       updateChatBox(doc.data());
-  //       console.log(chatBox);
-  //     });
-  //   }
-  //   if (existScheduleId) {
-  //     getChatRoom();
-  //   }
-  //   // else {
-  //   //   CreateNewChatRoom();
-  //   // }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [updateChatBox]);
-
   const newPlace = {
     place_title: '',
     place_address: '',
@@ -689,6 +645,7 @@ function Schedule() {
   const newDay = {
     places: [],
   };
+
   function addDayInSchedule() {
     updateScheduleData((draft) => {
       draft.trip_days.push(newDay);
@@ -962,7 +919,7 @@ function Schedule() {
           </DayContainerBoxes>
         </LeftContainer>
         <RightContainer>
-          {/* <Map
+          <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
             selected={selected}
@@ -974,7 +931,7 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-          /> */}
+          />
           <ChatRoom openChat={openChat}>
             <ChatRoomTitle>
               聊天室

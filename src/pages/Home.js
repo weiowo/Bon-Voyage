@@ -27,17 +27,26 @@ import ArticlesInHome from '../components/ArticlesInHome';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
-height:auto;
+height:50vw;
 display:flex;
 flex-direction:column;
+background-image: url(${HomeBanner});
 align-items:center;
+position:relative;
+background-size:cover;
+background-repeat: no-repeat;
+// background-color: rgb(0, 0, 0, 0.2);
+background-blend-mode: multiply;
+@media screen and (max-width:800px){
+  height:60vw;
+}
 `;
 
-const HomeBannerPhoto = styled.img`
-width:100vw;
-height:auto;
-position:relative;
-`;
+// const HomeBannerPhoto = styled.img`
+// width:100vw;
+// height:auto;
+// position:relative;
+// `;
 
 const SearchBarBackground = styled.div`
 display:flex;
@@ -48,9 +57,11 @@ width:73vw;
 height:90px;
 border-radius:15px;
 position:absolute;
-top:530px;
+bottom:30px;
 background-color:rgba(255, 255, 255, 0.4);
-`;
+@media screen and (max-width:800px){
+  height:80px;
+}`;
 
 const SearchBarLittleWrapper = styled.div`
 border-radius:10px;
@@ -184,14 +195,12 @@ function SearchAtHomePage({ option, setOption }) {
     getGeocode({ address: selected_place_at_homePage.description })
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
-        console.log('拿到經緯度囉');
         console.log({ lat, lng });
-        console.log(selected_place_at_homePage.structured_formatting.main_text);
         navigate({ pathname: '/city', search: `?lat=${lat}&lng=${lng}&city=${selected_place_at_homePage.structured_formatting.main_text}&option=${option}` });
         searchNearby({ lat, lng });
       })
       .catch((error) => {
-        console.log('😱 Error: ', error);
+        console.log('Error: ', error);
       });
   };
 
@@ -260,12 +269,7 @@ function SearchAtHomePage({ option, setOption }) {
 function Home({ currentLatLng, user }) {
   // const [query, setQuery] = useState('');
   const [option, setOption] = useState('all'); // 預設想放'全部'
-  console.log(option, setOption);
-  // const [nearbyData, setNearbyData] = useState({});
-  // console.log(nearbyData);
   const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
-  console.log('我在cardCarouselpage', currentNearbyAttraction);
-
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -279,9 +283,8 @@ function Home({ currentLatLng, user }) {
   // 如果無法使用經緯度的話，就設經緯度為台北市
 
   const searchNearby = useCallback(() => {
-    console.log('searchNearby');
+    console.log('我執行了此funcion!');
     const a = new Date();
-    // option all, landmark
     const request = {
       location: currentLatLng,
       radius: '2000',
@@ -292,10 +295,7 @@ function Home({ currentLatLng, user }) {
     // 如果選「全部」，那就會query三次，獲取20*3筆結果！
 
     function callback(results, status) {
-      console.log(request, 'home');
-      console.log('callback', results, status, google.maps.places.PlacesServiceStatus.OK);
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        console.log('okkkkkkkkk', results);
         setCurrentNearbyAttraction(results);
       }
       const b = new Date();
@@ -303,14 +303,15 @@ function Home({ currentLatLng, user }) {
     }
 
     const service = new google.maps.places.PlacesService(mapRef.current);
-    console.log(service);
     service.nearbySearch(request, callback);
+    console.log('我執行了此funcion!');
   }, [currentLatLng]);
 
   useEffect(() => {
     if (!isLoaded) return;
     // if (!nearbyData) return;
     searchNearby();
+    console.log('我執行了此funcion!');
     // setTimeout(() => {
     //   searchNearby();
     // }, 1000);
@@ -322,7 +323,7 @@ function Home({ currentLatLng, user }) {
     <>
       <HomeTopAreaWrapper>
         <HeaderComponent user={user} />
-        <HomeBannerPhoto src={HomeBanner} />
+        {/* <HomeBannerPhoto src={HomeBanner} /> */}
         <SearchAtHomePage option={option} setOption={setOption} />
       </HomeTopAreaWrapper>
       <GoogleMap

@@ -189,10 +189,11 @@ const PlaceTitle = styled.div`
 display:flex;
 align-items:center;
 justify-content:left;
-width:150px;
+width:auto;
 height:30px;
 padding-left:10px;
-margin-bottom:10px;
+margin-bottom:0px;
+margin-right:20px;
 font-weight:600;
 font-size:18px;
 letter-spacing:2px;
@@ -466,7 +467,9 @@ function EditPage() {
               onChange={(e) => { updateArticleTitle(e.target.value); }}
             />
             <ButtonArea>
-              <SaveButton onClick={() => SaveArticle()}>儲存</SaveButton>
+              <a href="/my-articles">
+                <SaveButton onClick={() => SaveArticle()}>儲存</SaveButton>
+              </a>
               <PublishedButton onClick={() => PublishArticle()}>發布</PublishedButton>
             </ButtonArea>
           </ArticleTitleButtonArea>
@@ -510,7 +513,7 @@ function EditPage() {
                   <div>
                     {dayItem?.places.map((placeItem, placeIndex) => (
                       <PlaceArea>
-                        <div style={{ display: 'flex' }}>
+                        <div style={{ display: 'flex', textAlign: 'left' }}>
                           <PlaceTitle>
                             {placeItem.place_title}
                           </PlaceTitle>
@@ -559,7 +562,6 @@ function EditPage() {
                               <div style={{ position: 'relative' }}>
                                 <PlaceImg style={{ width: 100, height: 100, position: 'relative' }} src={item} alt="place-img" />
                                 <DeletePlaceImgButton
-                                  placeholder="寫點關於景點的描述吧～"
                                   type="button"
                                   onClick={() => deletePlaceImg(dayIndex, placeIndex, photoIndex)}
                                 >
@@ -569,6 +571,7 @@ function EditPage() {
                             ))}
                         </ImgDisplayArea>
                         <Description
+                          placeholder="寫點關於景點的描述吧～"
                           cols="40"
                           rows="5"
                           value={placeItem.place_description}

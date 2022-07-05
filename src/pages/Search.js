@@ -74,7 +74,6 @@ export default function Search({
     console.log(selected);
     clearSuggestions();
 
-    // Get latitude and longitude via utility functions
     getGeocode({ address: selected_place.description })
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {

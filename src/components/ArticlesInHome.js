@@ -34,7 +34,9 @@ font-weight:600;
 color:#1F456E;
 margin-bottom:30px;
 margin-top:30px;
-`;
+@media screen and (max-width:800px){
+  font-size:30px;
+}`;
 
 export const ArticlesBoxesContainer = styled.div`
 margin-top:30px;
@@ -46,6 +48,10 @@ height:auto;
 display:flex;
 gap:30px;
 flex-wrap:wrap;
+&:after {
+  content: "";
+  width:380px;
+}
 `;
 
 // const MyArticle = styled.div`

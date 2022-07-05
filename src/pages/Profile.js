@@ -40,6 +40,7 @@ const MyProfilePhoto = styled.img`
 width:180px;
 height:180px;
 border-radius:3px;
+object-fit: cover;
 outline:none;
 border:1px solid black;
 border:none;

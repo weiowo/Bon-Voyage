@@ -72,6 +72,7 @@ function ProfileSideBarElement() {
       });
     }
   }, [user.uid]);
+
   return (
     <ProfileSideBar>
       <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">

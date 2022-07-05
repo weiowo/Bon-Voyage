@@ -34,7 +34,9 @@ font-size:24px;
 font-weight:600;
 color:#1F456E;
 margin-bottom:60px;
-`;
+@media screen and (max-width:800px){
+  font-size:30px;
+}`;
 
 const CityAtHomeBelowPart = styled.div`
 width:100vw;
