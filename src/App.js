@@ -25,7 +25,9 @@ import ShowArticle from './pages/SingleArticle';
 import MyArticles from './pages/MyArticles';
 import AllArticlePage from './pages/AllArticles';
 import Profile from './pages/Profile';
-import VR from './pages/VrPage';
+import Drag from './pages/Hahaha';
+import Correct from './pages/VrPage';
+import Test from './pages/Test';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -104,7 +106,9 @@ function App() {
             <Route path="/my-articles" element={<MyArticles />} />
             <Route path="/all-articles" element={<AllArticlePage />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/vr-page" element={<VR />} />
+            <Route path="/vr-page" element={<Correct />} />
+            <Route path="/drag" element={<Drag />} />
+            <Route path="/test" element={<Test />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

@@ -1,6 +1,6 @@
 import
 {
-  getDocs, collection, where, query, onSnapshot,
+  collection, where, query, onSnapshot,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
@@ -36,42 +36,16 @@ function AllArticlePage() {
   const [allArticles, setAllArticles] = useState([]);
   console.log(allArticles);
 
-  // 拿到所有articles資料並放到頁面
-
-  useEffect(() => {
-    async function getAllArticles() {
-      const querySnapshot = await getDocs(collection(db, 'articles'));
-      const articleList = querySnapshot.docs.map((item) => item.data());
-      console.log(articleList);
-      setAllArticles(articleList);
-    }
-    getAllArticles();
-  }, []);
-
-  useEffect(() => {
-    async function getPublisedArticles() {
-      const publishedArticlesArray = [];
-      const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
-      const publushedArticles = await getDocs(pulishedArticlesRef);
-      publushedArticles.forEach((doc) => {
-        publishedArticlesArray.push(doc.data());
-      });
-      setAllArticles(publishedArticlesArray);
-    }
-    getPublisedArticles();
-  }, []);
-
   // 有文章更新時就要及時拿出來！
-  // unsubscribe是讓它結束監聽
+  // unsubscribe讓它結束監聽
 
   useEffect(() => {
-    const publishedArticlesArray = [];
     const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
     const unsubscribe = onSnapshot(pulishedArticlesRef, (querySnapshot) => {
+      const publishedArticlesArray = [];
       querySnapshot.forEach((doc) => {
         publishedArticlesArray.push(doc.data());
       });
-      console.log(publishedArticlesArray);
       setAllArticles(publishedArticlesArray);
     });
     return unsubscribe;

@@ -14,8 +14,6 @@ import {
 
 let service;
 
-// const libraries = ['places'];
-
 const mapContainerStyle = {
   maringTop: '50px',
   height: '80vh',

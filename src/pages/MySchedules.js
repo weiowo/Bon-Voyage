@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
@@ -72,7 +73,40 @@ justify-content:left;
 margin-bottom:15px;
 `;
 
+const SchedulePreview = styled.div`
+display:flex;
+width:40vw;
+height:auto;
+align-items:flex-end;
+gap:20px;
+margin-top:30px;
+justify-content:left;
+margin-bottom:15px;
+`;
+
+const CalendarInviteWrapper = styled.div`
+display:flex;
+flex-direction:row;
+@media screen and (max-width:900px){
+flex-direction:column;
+}
+`;
+
+// const PreviewButtonArea = styled.div`
+// display:flex;
+// gap:10px;
+// @media screen and (max-width:900px){
+//   display:flex;
+//   gap:10px;
+// }`;
+
 const MyScheduleTitle = styled.div`
+font-weight:700;
+font-size:25px;
+height:30px;
+`;
+
+const SchedulePreviewTitle = styled.div`
 font-weight:700;
 font-size:25px;
 height:30px;
@@ -87,12 +121,53 @@ border-radius:3px;
 border:none;
 font-size:12px;
 font-weight:500;
+@media screen and (max-width:900px){
+  width:80px;
+  height:20px;
+}
+`;
+
+const ViewDetailButton = styled.button`
+width:70px;
+height:20px;
+background-color:#1c2e4a;
+color:white;
+border-radius:3px;
+border:none;
+font-size:12px;
+font-weight:500;
+@media screen and (max-width:900px){
+  width:70px;
+  height:20px;
+}
+`;
+
+const SmallScreenExistedScheduleRightPart = styled.div`
+display:none;
+@media screen and (max-width:900px){
+  display:flex;
+  flex-direction:column;
+  margin-right:10px;
+}
+`;
+
+const LargeScreenExistedScheduleRightPart = styled.div`
+display:flex;
+flex-direction:row;
+width:70%;
+@media screen and (max-width:900px){
+  display:none;
+}
 `;
 
 const PhotoInExistedSchedule = styled.img`
 width:100px;
 height:100px;
 border-radius:20px;
+@media screen and (max-width:900px){
+  width:80px;
+  height:80px;
+}
 `;
 
 const ExistedSchedule = styled.div`
@@ -111,15 +186,32 @@ border-radius:16px;
 // background-color:#e7f5fe;
 background-color:${(props) => (props.isSelected ? '#E6D1F2' : '#e7f5fe')};
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:900px){
+  width:29vw;
+  gap:10px;
+  justify-content:left;
+}
 `;
 
 const ExistedScheuleTitle = styled.div`
-width:180px;
-height:auto;
+width:95%;
+height:20%;
 text-align:left;
 font-weight:550;
-
+@media screen and (max-width:900px){
+  width:100%;
+  margin-bottom:10px;
+}
 `;
+
+const ButtonArea = styled.div`
+display:flex;
+flex-direction:column;
+gap:15px;
+@media screen and (max-width:900px){
+  flex-direction:row;
+  width:100%;
+}`;
 
 const Button = styled.button`
 height:25px;
@@ -140,6 +232,9 @@ flex-direction:column;
 align-items:left;
 margin-left:50px;
 gap:15px;
+@media screen and (max-width:900px){
+  margin-left:20px;
+}
 `;
 
 const SelectedSchedulePhoto = styled.div`
@@ -268,6 +363,16 @@ justify-content:center;
 cursor:pointer;
 `;
 
+// const DateDisplay = styled.div
+
+const initialDnDState = {
+  draggedFrom: null,
+  draggedTo: null,
+  isDragging: false,
+  originalOrder: [],
+  updatedOrder: [],
+};
+
 function MySchedules() {
   const user = useContext(UserContext);
   const [schedules, setSchedules] = useImmer([]);
@@ -280,16 +385,79 @@ function MySchedules() {
   const [showMemberPhoto, setShowMemberPhoto] = useState(false);
   const [searchInputIsActive, setSearchInputIsActive] = useState(true);
   const [searchResultIsActive, setSearchResultIsActive] = useState(false);
-  console.log(searchInputIsActive);
-  console.log(searchResultIsActive);
   const navigate = useNavigate();
   const [targetIndex, setTargetIndex] = useState(null);
+  console.log(schedules);
+  // const [list, setList] = useState(schedules);
+  // console.log(list);
+  const [dragAndDrop, setDragAndDrop] = useState(initialDnDState);
 
-  // function changeColor(index) {
-  //   if (index === targetIndex) {
-  //     setIsSelected(true);
-  //   }
-  // }
+  const onDragStart = (event) => {
+    const initialPosition = Number(event.currentTarget.dataset.position);
+
+    setDragAndDrop({
+      ...dragAndDrop,
+      draggedFrom: initialPosition,
+      isDragging: true,
+      originalOrder: schedules,
+    });
+    // Note: this is only for Firefox.
+    // Without it, the DnD won't work.
+    // But we are not using it.
+    event.dataTransfer.setData('text/html', '');
+  };
+  const onDragOver = (event) => {
+    // in order for the onDrop
+    // event to fire, we have
+    // to cancel out this one
+    event.preventDefault();
+    let newList = dragAndDrop.originalOrder;
+    // index of the item being dragged
+    const { draggedFrom } = dragAndDrop;
+    // index of the droppable area being hovered
+    const draggedTo = Number(event.currentTarget.dataset.position);
+    const itemDragged = newList[draggedFrom];
+    const remainingItems = newList.filter((item, index) => index !== draggedFrom);
+    newList = [
+      ...remainingItems.slice(0, draggedTo),
+      itemDragged,
+      ...remainingItems.slice(draggedTo),
+    ];
+    if (draggedTo !== dragAndDrop.draggedTo) {
+      setDragAndDrop({
+        ...dragAndDrop,
+        updatedOrder: newList,
+        draggedTo,
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log('Dragged From: ', dragAndDrop && dragAndDrop.draggedFrom);
+    console.log('Dropping Into: ', dragAndDrop && dragAndDrop.draggedTo);
+  }, [dragAndDrop]);
+
+  useEffect(() => {
+    console.log('List updated!');
+  }, [schedules]);
+
+  const onDrop = () => {
+    setSchedules(dragAndDrop.updatedOrder);
+
+    setDragAndDrop({
+      ...dragAndDrop,
+      draggedFrom: null,
+      draggedTo: null,
+      isDragging: false,
+    });
+  };
+
+  const onDragLeave = () => {
+    setDragAndDrop({
+      ...dragAndDrop,
+      draggedTo: null,
+    });
+  };
 
   // 先拿到某個使用者的資料
   // 再根據行程array，去做foreach拿到所有schedule資料
@@ -500,20 +668,46 @@ function MySchedules() {
                 </CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
               {schedules ? schedules.map((item, index) => (
-                <ExistedSchedule isSelected={index === targetIndex}
+                <ExistedSchedule
+                  key={index}
+                  data-position={index}
+                  draggable
+                  onDragStart={onDragStart}
+                  onDragOver={onDragOver}
+                  onDrop={onDrop}
+                  onDragLeave={onDragLeave}
+                  className={dragAndDrop && dragAndDrop.draggedTo === Number(index) ? 'dropArea' : ''}
+                  isSelected={index === targetIndex}
               >
                   <PhotoInExistedSchedule src={schedulePhotoArray[index]} />
-                  <ExistedScheuleTitle id={item.schedule_id}>
-                    {item.title}
-                  </ExistedScheuleTitle>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
-                      選擇
-                    </Button>
-                    <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
-                      刪除
-                    </Button>
-                  </div>
+
+                  <LargeScreenExistedScheduleRightPart>
+                    <ExistedScheuleTitle id={item.schedule_id}>
+                      {item.title}
+                    </ExistedScheuleTitle>
+                    <ButtonArea>
+                      <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
+                        選擇
+                      </Button>
+                      <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
+                        刪除
+                      </Button>
+                    </ButtonArea>
+                  </LargeScreenExistedScheduleRightPart>
+
+                  <SmallScreenExistedScheduleRightPart>
+                    <ExistedScheuleTitle id={item.schedule_id}>
+                      {item.title}
+                    </ExistedScheuleTitle>
+                    <ButtonArea>
+                      <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
+                        選擇
+                      </Button>
+                      <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
+                        刪除
+                      </Button>
+                    </ButtonArea>
+                  </SmallScreenExistedScheduleRightPart>
                 </ExistedSchedule>
               )) : ''}
             </ChoicesWrapper>
@@ -521,17 +715,17 @@ function MySchedules() {
             <SelectedScheduleWrapper>
               {selectedSchedule ? (
                 <>
-                  <MySchedulesTitleAndCreateNewScheduleArea style={{ width: '45vw' }}>
-                    <MyScheduleTitle>您選的行程概覽</MyScheduleTitle>
-                    <CreateNewScheduleButton style={{ width: '90px' }} type="button">
+                  <SchedulePreview>
+                    <SchedulePreviewTitle>行程概覽</SchedulePreviewTitle>
+                    <ViewDetailButton type="button">
                       <StyledLink to={`/schedule?id=${selectedSchedule.schedule_id}`}>
-                        查看詳細資訊
+                        詳細資訊
                       </StyledLink>
-                    </CreateNewScheduleButton>
-                    <CreateNewScheduleButton onClick={() => setNewArticleToDb()} style={{ width: '90px' }} type="button">
-                      撰寫旅程回憶
-                    </CreateNewScheduleButton>
-                  </MySchedulesTitleAndCreateNewScheduleArea>
+                    </ViewDetailButton>
+                    <ViewDetailButton onClick={() => setNewArticleToDb()} type="button">
+                      撰寫遊記
+                    </ViewDetailButton>
+                  </SchedulePreview>
                   <SelectedSchedulePhoto>
                     <SelectedScheduleTitle>
                       {selectedSchedule.title}
@@ -548,7 +742,7 @@ function MySchedules() {
                       </>
                     ))}
                   </ScheduleMemberContainer>
-                  <div style={{ display: 'flex', gap: '20px' }}>
+                  <CalendarInviteWrapper>
                     <DatePicker
                       style={{ height: '100px' }}
                       selected=""
@@ -626,7 +820,7 @@ function MySchedules() {
                         </InviteFriendBelowArea>
                       )}
                     </InviteFriendBox>
-                  </div>
+                  </CalendarInviteWrapper>
                 </>
               ) : ''}
             </SelectedScheduleWrapper>

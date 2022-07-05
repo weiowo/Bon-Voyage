@@ -50,59 +50,9 @@ gap:30px;
 flex-wrap:wrap;
 &:after {
   content: "";
-  width:380px;
+  width:410px;
 }
 `;
-
-// const MyArticle = styled.div`
-// cursor:pointer;
-// width:190px;
-// height:250px;
-// border-radius:10px;
-// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-// `;
-
-// const CoverPhotoInMyArticle = styled.img`
-// width:100%;
-// height:50%;
-// border-top-right-radius:10px;
-// border-top-left-radius:10px;
-// `;
-
-// const MyArticleBelowArea = styled.div`
-// width:80%;
-// height:auto;
-// display:flex;
-// flex-direction:column;
-// align-items:center;
-// margin-left:15px;
-// margin-top:10px;
-// margin-right:15px;
-// `;
-
-// const MyArticleTitle = styled.div`
-// width:100%;
-// height:30px;
-// font-weight:550;
-// font-size:16px;
-// text-align:left;
-// `;
-
-// const MyArticleSummary = styled.div`
-// width:100%;
-// height:30px;
-// font-size:13px;
-// text-align:left;
-// font-weight:500;
-// color:grey;
-// `;
-
-// const StyledLink = styled(Link)`
-// cursor:pointer;
-// text-decoration:none;
-// color:black;
-// border:none;
-// `;
 
 const CheckMoreButton = styled.button`
 width:100px;

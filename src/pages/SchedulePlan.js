@@ -1,3 +1,5 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable max-len */
@@ -30,10 +32,6 @@ import GoBackSrc from './images/arrow-left.png';
 // chooseDate完成後就創立一個新的行程id，並放到url上面
 // embark date and enddate都直接從db拿，用這個來產生空的天數
 // 也同時先創聊天室id
-
-// schedule中不要有members這個array
-// 創建行程時(按下ok時)，就把這個行程的id放到這個user的owned_schedules_id這個array中
-// 然後之後要看某個schedul中有哪些members時，用array contains這個schedule_id來找尋！
 
 const ScheduleWrapper = styled.div`
     display:flex;
@@ -187,7 +185,7 @@ align-items:center;
 width:22vw;
 height:300px;
 border-radius:5px;
-border:blue 2px solid;
+border:black 1px solid;
 position: fixed;
 bottom: 0px;
 right:50px;
@@ -287,7 +285,7 @@ const MessageInput = styled.input`
 width:20vw;
 height:20px;
 border-radius:2px;
-border: green 1px solid;
+border: black 1px solid;
 `;
 
 const EnterMessageButton = styled.button`
@@ -406,6 +404,14 @@ height:32px;
 // }
 
 // eslint-disable-next-line no-unused-vars
+const initialDnDState = {
+  draggedFrom: null,
+  draggedTo: null,
+  isDragging: false,
+  originalOrder: [],
+  updatedOrder: [],
+};
+
 function Schedule() {
   const newChatRoom = {
     chat_room_id: '',
@@ -413,7 +419,7 @@ function Schedule() {
     messages: [],
   };
   const [scheduleData, updateScheduleData] = useImmer();
-  console.log(scheduleData);
+  console.log('媽我在這', scheduleData);
   const [chatBox, updateChatBox] = useImmer(newChatRoom);
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
@@ -425,58 +431,84 @@ function Schedule() {
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
   const user = useContext(UserContext);
-  console.log(searchParams);
+  // const [list, setList] = useState(scheduleData?.trip_days);
+  const [dragAndDrop, setDragAndDrop] = useState(initialDnDState);
+  // const [dragId, setDragId] = useState();
 
-  // async function CreateNewChatRoom() {
-  //   if (!existScheduleId) {
-  //     console.log('沒有聊天室，創一個新的在瀏覽器！');
-  //     updateChatBox(newChatRoom);
-  //   }
-  // }
-
-  // 拿到所有的schedule資料並放入list
-  // async function getSchedule() {
-  //   const querySnapshot = await getDocs(collection(db, 'schedules'));
-  //   const ScheduleList = querySnapshot.docs.map((item) => item.data());
-  //   console.log(ScheduleList);
-  // }
-
-  // const embarkDateFromUrl = new URLSearchParams(search).get('from');
-  // const endDateFromUrl = new URLSearchParams(search).get('to');
-  // const titleFromUrl = new URLSearchParams(search).get('title');
-
-  // 拿日期相減的天數
-
-  // const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-  // const firstDate = new Date(embarkDateFromUrl);
-  // const secondDate = new Date(endDateFromUrl);
-  // const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
-
-  // 從database拿出來後就把string轉為milliseconds
-  // 按下「新增天數」的時候要把endDate的日期往後加上一天的milliseconds
-  // render時要去抓trip_days array的最後一個item的milliseconds，再轉為Datet做呈現
-
-  // const dateTest = Date.parse(embarkDateFromUrl);
-  // console.log(dateTest);
-  // let dateTestFromDb;
-  // scheduleData.embark_date ? dateTestFromDb = Date.parse(scheduleData.embark_date) : dateTestFromDb = '2';
-  // console.log('我在這兒！', dateTestFromDb);
-
-  // const dateTest1 = Date.parse('2019-01-01');
-  // console.log(dateTest1);
-  // console.log(dateTest + 86400000);
-  // const fromTimeStamp3 = new Date(dateTest + 86400000).toISOString(); // 加上一天的方式
-  // console.log(fromTimeStamp3);
-  // const fromTimeStamp = new Date(dateTest).toISOString();
-  // console.log(fromTimeStamp);
-  // const test = fromTimeStamp.split('T')[0];
-  // console.log(test);
-
-  // 如果是選擇舊行程，則從資料庫拿出發與結束日期
-  // 如果是建立新行程，則從url拿出發日期與結束日期
   const { search } = useLocation();
   const existScheduleId = new URLSearchParams(search).get('id');
-  // console.log(existScheduleId);
+
+  const onDragStart = (event) => {
+    const initialPosition = Number(event.currentTarget.dataset.position);
+
+    setDragAndDrop({
+      ...dragAndDrop,
+      draggedFrom: initialPosition,
+      isDragging: true,
+      originalOrder: scheduleData?.trip_days,
+    });
+    event.dataTransfer.setData('text/html', '');
+  };
+  const onDragOver = (event) => {
+    // in order for the onDrop
+    // event to fire, we have
+    // to cancel out this one
+    event.preventDefault();
+
+    let newList = dragAndDrop.originalOrder;
+
+    // index of the item being dragged
+    const { draggedFrom } = dragAndDrop;
+
+    // index of the droppable area being hovered
+    const draggedTo = Number(event.currentTarget.dataset.position);
+
+    const itemDragged = newList[draggedFrom];
+    const remainingItems = newList.filter((item, index) => index !== draggedFrom);
+
+    newList = [
+      ...remainingItems.slice(0, draggedTo),
+      itemDragged,
+      ...remainingItems.slice(draggedTo),
+    ];
+
+    if (draggedTo !== dragAndDrop.draggedTo) {
+      setDragAndDrop({
+        ...dragAndDrop,
+        updatedOrder: newList,
+        draggedTo,
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log('Dragged From: ', dragAndDrop && dragAndDrop.draggedFrom);
+    console.log('Dropping Into: ', dragAndDrop && dragAndDrop.draggedTo);
+  }, [dragAndDrop]);
+
+  useEffect(() => {
+    console.log('List updated!');
+  }, [scheduleData?.trip_days]);
+
+  const onDrop = () => {
+    updateScheduleData((draft) => {
+      draft.trip_days = dragAndDrop.updatedOrder;
+    });
+
+    setDragAndDrop({
+      ...dragAndDrop,
+      draggedFrom: null,
+      draggedTo: null,
+      isDragging: false,
+    });
+  };
+
+  const onDragLeave = () => {
+    setDragAndDrop({
+      ...dragAndDrop,
+      draggedTo: null,
+    });
+  };
 
   // 拿指定一個id的單一筆schedule資料
   useEffect(() => {
@@ -485,15 +517,12 @@ function Schedule() {
       const docRef = doc(db, 'schedules', existScheduleId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data());
         updateScheduleData(docSnap.data());
         const dateTestFromDb = Date.parse(docSnap.data().embark_date);
-        console.log('哇哈哈哈哈！', dateTestFromDb);
         updateChatBox((draft) => {
           draft.chat_room_id = docSnap.data().chat_room_id;
         });
       } else {
-      // doc.data() will be undefined in this case
         console.log('No such document!');
       }
     }
@@ -501,13 +530,11 @@ function Schedule() {
       const chatRoomMessageIdRef = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
       const test = await getDocs(chatRoomMessageIdRef);
       test.forEach((doc) => {
-        console.log('owowow', doc.data());
         updateChatBox((draft) => {
           draft.chat_room_id = doc.data().chat_room_id;
         });
       });
     }
-    // getSchedule();
     getCertainSchedule();
     getChatRoom();
   }, [updateScheduleData, existScheduleId, updateChatBox]);
@@ -562,35 +589,6 @@ function Schedule() {
     message: inputMessage,
     sent_time: new Date(),
   };
-
-  // function updataMessage() {
-  //   updateChatBox((draft) => {
-  //     draft.messages.push(newMessage);
-  //   });
-  // }
-
-  // 如果已經有聊天室就拉下來
-  // 有人輸入完一句話，送出時會推進chatRoom的messages array，造成chatBox改變，這時就要推上db-->改了！直接更新到db！再拉下來！
-  // 送出訊息的時候直接更新到db，再用OnsnapShop，有更新的話就update進immer
-  // 如果草創行程的時候就不能聊天，創好行程有id後才能有聊天室，然後導回我的行程頁面
-  // onclick送上去
-
-  // async function setMessageIntoDb() {
-  //   const messageRef = doc(db, 'chat_rooms', chatBox.chat_room_id);
-  //   await updateDoc(messageRef, chatBox);
-  // }
-  // if (existScheduleId) {
-  //   setMessageIntoDb();
-  // }
-
-  // useEffect(() => {
-  //   const ref = collection(db, 'chat_rooms');
-  //   onSnapshot(ref, (querySnapshot) => {
-  //     querySnapshot.forEach((doc) => {
-  //       // console.log(doc.id, doc.data());
-  //     });
-  //   });
-  // }, []);
 
   async function addNewMessageToFirestoreFirst() {
     const chatRoomMessageArray = doc(db, 'chat_rooms', chatBox.chat_room_id);
@@ -656,97 +654,11 @@ function Schedule() {
     });
   }
 
-  // function addPlace(index) {
-  //   console.log('哈哈');
-  //   scheduleData.trip_days[index].places.push(newPlace);
-  // }
-  //   const newTripDetails = scheduleData.trip_days.map((detail, i) => {
-  //     if (index === i) {
-  //       const newDetail = { ...detail, places: [...detail.places, newPlace] };
-  //       return newDetail;
-  //     }
-  //     return detail;
-  //   });
-  //   const newData = [{
-  //     ...scheduleData,
-  //     trip_days: newTripDetails,
-  //   }];
-  //   console.log(newData);
-  //   setScheduleData(newData);
-  // }
-
-  // function updateTitle(title) {
-  //   updateScheduleData((draft) => {
-  //     draft.title = title;
-  //   });
-  // }
-
-  // 如果有人更新訊息，要及時更新到畫面
-  // useEffect(() => {
-  //   const ref = collection(db, 'chat_rooms');
-  //   onSnapshot(ref, (querySnapshot) => {
-  //     querySnapshot.forEach((doc) => {
-  //       // console.log(doc.id, doc.data());
-  //     });
-  //   });
-  // }, []);
-
   console.log(chatBox);
 
   // 拿一週的哪一天
 
   const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-  // let dFromDb= new Date(scheduleData.embark_date);
-  // // const weekDayFromUrl = dFromDb.getDay();
-  // const weekDayFromDB = dFromDb.getDay();
-  // console.log(weekDayFromDB);
-
-  // new Date(scheduleData.embark_date).getDay();
-
-  // 拿一週哪一天用這種方式：{weekday[(initIndex + index) % 7]}
-
-  // const date = scheduleData.embark_date.toDate();
-  // console.log(date);
-
-  // let fireStoreTimestamp;
-  // let javascriptDate;
-  // scheduleData && existScheduleId ? fireStoreTimestamp = scheduleData.embark_date : '';
-  // scheduleData && existScheduleId ? javascriptDate = fireStoreTimestamp.toDate() : '';
-  // console.log(javascriptDate);
-  // scheduleData ? console.log('出發囉', scheduleData.embark_date) : console.log('還沒拿到行程');
-  // 先把從database拿出來的millisecond轉為可看的日淇
-  // let day = weekday[d.getDay()];
-
-  // useEffect(() => {
-  //   const fireBaseTime = new Date(
-  //     scheduleData.embark_date.seconds * 1000 + scheduleData.embark_date.nanoseconds / 1000000,
-  //   );
-  //   const date = fireBaseTime.toDateString();
-  //   const atTime = fireBaseTime.toLocaleTimeString();
-  //   console.log(date, atTime);
-  // }, [scheduleData.embark_date.seconds, scheduleData.embark_date.nanoseconds]);
-
-  // eslint-disable-next-line no-unused-vars
-  // const newSchedule = {
-  //   title: titleFromUrl,
-  //   schedule_id: 1,
-  //   embark_date: embarkDateFromUrl,
-  //   end_date: endDateFromUrl,
-  //   trip_days: [],
-  // };
-
-  // 創建行程的時候：
-  // 先從url上抓日期～並用它們的day差異去做foreach並推入trip_days的array中
-  // push三個空的day進去trip_days
-  // 改日期要改到url上面？
-
-  // if (!scheduleData) {
-  //   Array(diffDays + 1).fill('').forEach(() => {
-  //     newSchedule.trip_days.push(newDay);
-  //   });
-
-  //   updateScheduleData(newSchedule);
-  // }
 
   // 手動更改行程內容！
   function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
@@ -841,79 +753,87 @@ function Schedule() {
             </p>
             <AddDayButton type="button" onClick={() => addDayInSchedule()}>＋</AddDayButton>
           </DateContainer>
-
           <DayContainerBoxes className="schedule-boxes">
-            {/* <Search /> 要怎麼讓search跑到這邊？function怎麼傳？ */}
-            {scheduleData ? scheduleData.trip_days.map((dayItem, dayIndex) => (
-              <DayContainer>
-                <DayContainerTitle>
-                  第
-                  {dayIndex + 1}
-                  天
-                  /
-                  {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
-                  /
-                  {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
-                  <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} src={GreyTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
-                </DayContainerTitle>
-                <div>
-                  {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
-                    <>
-                      <div style={{ marginTop: '5px', fontSize: '14px' }}>
-                        {(placeIndex !== 0 ? `行車距離： ${distance?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
-                      </div>
-                      <div style={{ marginBottom: '5px', fontSize: '14px' }}>
-                        {(placeIndex !== 0 ? `行車時間： ${duration?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
-                      </div>
-                      <PlaceContainer>
-                        <PlaceContainerInputArea>
-                          <InputBox>
-                            <p style={{ fontSize: '14px' }}>
-                              第
-                              {placeIndex + 1}
-                              個景點：
-                            </p>
-                            <input
-                              style={{ width: '20vw', outline: 'none' }}
-                              value={placeItem.place_title}
-                              onChange={(e) => {
-                                updatePlaceTitle(e.target.value, dayIndex, placeIndex);
-                              }}
-                            />
-                          </InputBox>
-                          <InputBox>
-                            <p style={{ fontSize: '14px' }}>停留時間：</p>
-                            <input
-                              style={{ width: '15vw', outline: 'none' }}
-                              value={placeItem.stay_time}
-                              onChange={(e) => {
-                                updateStayTime(e.target.value, dayIndex, placeIndex);
-                              }}
-                            />
-                            <div style={{ fontSize: '12px' }}>分鐘</div>
-                          </InputBox>
-                          <InputBox>
-                            <p style={{ fontSize: '14px' }}>地址：</p>
-                            <input
-                              style={{ width: '20vw', outline: 'none' }}
-                              value={placeItem.place_address}
-                              onChange={(e) => {
-                                updatePlaceAddress(e.target.value, dayIndex, placeIndex);
-                              }}
-                            />
-                          </InputBox>
-                        </PlaceContainerInputArea>
-                        <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainPlace(dayIndex, placeIndex)} />
-                      </PlaceContainer>
-                    </>
-                  ))
-                    : (
-                      <div>還沒有地點ㄛ，請新增景點</div>
-                    )}
-                </div>
-                <button style={{ marginTop: '20px' }} type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
-              </DayContainer>
-            ))
+            {scheduleData ? scheduleData.trip_days
+              .map((dayItem, dayIndex) => (
+                <DayContainer
+                  key={dayIndex}
+                  data-position={dayIndex}
+                  draggable
+                  onDragStart={onDragStart}
+                  onDragOver={onDragOver}
+                  onDrop={onDrop}
+                  onDragLeave={onDragLeave}
+                  className={dragAndDrop && dragAndDrop.draggedTo === Number(dayIndex) ? 'dropArea' : ''}
+                >
+                  <DayContainerTitle>
+                    第
+                    {dayIndex + 1}
+                    天
+                    /
+                    {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
+                    /
+                    {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
+                    <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} src={GreyTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
+                  </DayContainerTitle>
+                  <div>
+                    {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
+                      <>
+                        <div style={{ marginTop: '5px', fontSize: '14px' }}>
+                          {(placeIndex !== 0 ? `行車距離： ${distance?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
+                        </div>
+                        <div style={{ marginBottom: '5px', fontSize: '14px' }}>
+                          {(placeIndex !== 0 ? `行車時間： ${duration?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
+                        </div>
+                        <PlaceContainer>
+                          <PlaceContainerInputArea>
+                            <InputBox>
+                              <p style={{ fontSize: '14px' }}>
+                                第
+                                {placeIndex + 1}
+                                個景點：
+                              </p>
+                              <input
+                                style={{ width: '20vw', outline: 'none' }}
+                                value={placeItem.place_title}
+                                onChange={(e) => {
+                                  updatePlaceTitle(e.target.value, dayIndex, placeIndex);
+                                }}
+                              />
+                            </InputBox>
+                            <InputBox>
+                              <p style={{ fontSize: '14px' }}>停留時間：</p>
+                              <input
+                                style={{ width: '15vw', outline: 'none' }}
+                                value={placeItem.stay_time}
+                                onChange={(e) => {
+                                  updateStayTime(e.target.value, dayIndex, placeIndex);
+                                }}
+                              />
+                              <div style={{ fontSize: '12px' }}>分鐘</div>
+                            </InputBox>
+                            <InputBox>
+                              <p style={{ fontSize: '14px' }}>地址：</p>
+                              <input
+                                style={{ width: '20vw', outline: 'none' }}
+                                value={placeItem.place_address}
+                                onChange={(e) => {
+                                  updatePlaceAddress(e.target.value, dayIndex, placeIndex);
+                                }}
+                              />
+                            </InputBox>
+                          </PlaceContainerInputArea>
+                          <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainPlace(dayIndex, placeIndex)} />
+                        </PlaceContainer>
+                      </>
+                    ))
+                      : (
+                        <div>還沒有地點ㄛ，請新增景點</div>
+                      )}
+                  </div>
+                  <button style={{ marginTop: '20px' }} type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
+                </DayContainer>
+              ))
             // 這裡是新創建行程的地方
               : ''}
           </DayContainerBoxes>

@@ -9,7 +9,6 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from 'use-places-autocomplete';
 import styled from 'styled-components';
-// 會自動建議你要搜尋什麼
 
 const SearchInput = styled.input`
 display:${(props) => (props.clicked ? 'flex' : 'none')};

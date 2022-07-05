@@ -17,7 +17,8 @@ import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 import styled from 'styled-components/macro';
-import HomeBanner from './images/index_banner.png';
+// import HomeBanner from './images/index_banner.png';
+// import Test from 'https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9';
 import HeaderComponent
   from '../components/Header';
 import CardsCarousel from './CardCarousel';
@@ -30,7 +31,7 @@ width:100vw;
 height:50vw;
 display:flex;
 flex-direction:column;
-background-image: url(${HomeBanner});
+background-image: url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9);
 align-items:center;
 position:relative;
 background-size:cover;
@@ -288,7 +289,7 @@ function Home({ currentLatLng, user }) {
     const request = {
       location: currentLatLng,
       radius: '2000',
-      type: ['tourist_attraction', 'restaurant'],
+      type: ['tourist_attraction'],
     };
 
     // 如果只選到一種，type就會只放那種

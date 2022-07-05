@@ -3,32 +3,35 @@
 import React, { useState } from 'react';
 import tripDays from './data';
 
-function Correct() {
+function Drag() {
   const [dragId, setDragId] = useState();
   const [boxes, setBoxes] = useState(tripDays);
   console.log(boxes);
-  const handleDrag = (ev) => {
-    setDragId(ev.currentTarget.id);
+
+  const handleDrag = (e) => {
+    setDragId(e.currentTarget.id);
   };
-  const handleDrop = (ev) => {
-    const dragBox = boxes.find((box) => box.id === dragId);
-    const dropBox = boxes.find((box) => box.id === ev.currentTarget.id);
+
+  const handleDrop = (e) => {
+    const dragBox = boxes.find((box, index) => index === dragId);
+    const dropBox = boxes.find((box, index) => index === e.currentTarget.id);
+    console.log(dragId);
+    console.log(e.currentTarget.id);
 
     const dragBoxOrder = dragBox.order;
     const dropBoxOrder = dropBox.order;
 
-    const newBoxState = boxes.map((box) => {
-      if (box.id === dragId) {
+    const newBoxState = boxes.map((box, index) => {
+      if (index === dragId) {
         box.order = dropBoxOrder;
       }
-      if (box.id === ev.currentTarget.id) {
+      if (index === e.currentTarget.id) {
         box.order = dragBoxOrder;
       }
       return box;
     });
     setBoxes(newBoxState);
   };
-
   return (
     <div className="App">
       {boxes
@@ -36,8 +39,7 @@ function Correct() {
         .map((box, index) => (
           <div
             draggable
-            index={index}
-            id={box.id}
+            id={index}
             onDragOver={(e) => e.preventDefault()}
             onDragStart={handleDrag}
             onDrop={handleDrop}
@@ -51,11 +53,11 @@ function Correct() {
               height: '100px',
             }}
           >
-            {box.id}
+            {index}
           </div>
         ))}
     </div>
   );
 }
 
-export default Correct;
+export default Drag;
