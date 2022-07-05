@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -60,34 +61,33 @@ border-radius:5px;
 `;
 
 function ChooseDate() {
-  const [startDate, setStartDate] = useState(null);
-  console.log(startDate);
-  const [finishDate, setFinishEndDate] = useState(null);
-  // const [embarkDate, setEmbarkDate] = useState('');
-  // console.log(embarkDate);
-  // const [endDate, setEndDate] = useState('');
-  // console.log(endDate);
+  const [startDate, setStartDate] = useState(new Date());
+  const [finishDate, setFinishEndDate] = useState(new Date());
+  console.log((new Date(finishDate?.getTime() + 86400000)).toISOString().split('T')[0]);
   const user = useContext(UserContext);
-  console.log('我在MySchedulesComponents唷', user);
   const [newScheduleTitle, setNewScheduleTitle] = useState('');
   const navigate = useNavigate();
 
   // 拿日期相減的天數
 
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-  // const firstDate = new Date(embarkDate);
-  // const secondDate = new Date(endDate);
+
   const diffDays = Math.round(Math.abs((startDate - finishDate) / oneDay)); // 加一天
-  console.log(diffDays);
 
   // 新增天數
 
   const newSchedule = {
+    schedule_creator_user_id: user.uid,
     title: newScheduleTitle,
     schedule_id: 1,
-    embark_date: startDate?.toISOString().split('T')[0],
-    end_date: finishDate?.toISOString().split('T')[0],
+    // embark_date: (new Date(startDate?.getTime() + 86400000)).toISOString().split('T')[0],
+    // end_date: (new Date(finishDate?.getTime() + 86400000)).toISOString().split('T')[0],
+    embark_date: startDate.toISOString().split('T')[0],
+    end_date: finishDate.toISOString().split('T')[0],
     trip_days: [],
+    members: [
+      user.uid,
+    ],
   };
 
   useEffect(() => {
@@ -95,7 +95,7 @@ function ChooseDate() {
     const newDay = {
       places: [],
     };
-    Array(diffDays)?.fill('').forEach(() => {
+    Array(diffDays + 1)?.fill('').forEach(() => {
       newSchedule.trip_days.push(newDay);
     });
   }, [diffDays, newSchedule.trip_days]);
@@ -112,13 +112,10 @@ function ChooseDate() {
   async function setNewScheduleToDb() {
     console.log('您創了一筆新行程唷！');
     const createNewScheduleData = doc(collection(db, 'schedules'));
-    // setNewScheduleId(createNewScheduleData.id);
     await setDoc(
       createNewScheduleData,
       ({ ...newSchedule, schedule_id: createNewScheduleData.id }),
-      // setNewScheduleId(createNewScheduleData.id),
     );
-    // setNewScheduleId(createNewScheduleData.id);
     navigate({ pathname: '/schedule', search: `?id=${createNewScheduleData.id}` });
     const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
     await setDoc(
@@ -127,7 +124,6 @@ function ChooseDate() {
       ({ ...newChatRoom, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }),
     );
     const userOwnedScheduleArray = doc(db, 'users', user.uid);
-    // Atomically add a new region to the "regions" array field.
     await updateDoc(userOwnedScheduleArray, {
       owned_schedule_ids: arrayUnion(createNewScheduleData.id),
     });
@@ -144,7 +140,6 @@ function ChooseDate() {
           type="text"
           value={newScheduleTitle}
           onChange={(e) => {
-            console.log(e.target.value);
             setNewScheduleTitle(e.target.value);
           }}
         />

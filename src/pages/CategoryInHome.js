@@ -16,13 +16,18 @@ import ReligionSrc from './images/religion.png';
 import NightClubSrc from './images/nightlife.png';
 
 const CategoryWrapper = styled.div`
+align-self:center;
 margin-top:20px;
 width:100vw;
 height:350px;
 display:flex;
 flex-direction:column;
 align-items:center;
-`;
+@media screen and (max-width:800px){
+  width:100vw;
+  margin-top:30px;
+  height:auto;
+}`;
 
 const CategoryWrapperTitle = styled.div`
 width:100vw;
@@ -33,7 +38,9 @@ align-items:center;
 font-size:24px;
 font-weight:600;
 color:#1F456E;
-`;
+@media screen and (max-width:800px){
+  font-size:30px;
+}`;
 
 const CategoryBoxesContainer = styled.div`
 margin-left:80px;
@@ -45,7 +52,11 @@ width:80vw;
 height:300px;
 display:flex;
 flex-wrap:wrap;
-`;
+@media screen and (max-width:800px){
+  width:90vw;
+  margin-top:30px;
+  height:auto;
+}`;
 
 const CategoryBox = styled.div`
 width:250px;
@@ -58,6 +69,7 @@ gap:20px;
 const CategoryIcon = styled.img`
 width:70px;
 height:70px;
+cursor:pointer;
 `;
 
 const CategoryRightArea = styled.div`
@@ -67,6 +79,7 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
+cursor:pointer;
 `;
 
 const CategoryBoxTitle = styled.div`

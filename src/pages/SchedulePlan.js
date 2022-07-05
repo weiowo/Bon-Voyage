@@ -4,7 +4,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   // getDocs,
   collection, doc, getDoc, getDocs,
@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import UserContext from '../components/UserContextComponent';
 import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
 import PinkCloseIcon from './images/close-2.png';
@@ -404,14 +405,6 @@ height:32px;
 //   return UserList;
 // }
 
-// 拿日期相減的天數
-
-// const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-// const firstDate = new Date(startDate);
-// const secondDate = new Date(finishDate);
-// const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay)); // 加一天
-// console.log(diffDays);
-
 // eslint-disable-next-line no-unused-vars
 function Schedule() {
   const newChatRoom = {
@@ -431,8 +424,7 @@ function Schedule() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
-  const [searchFriendValue, setSearchFriendValue] = useState('');
-  const [searchedFriendId, setSearchedFriendId] = useState('');
+  const user = useContext(UserContext);
   console.log(searchParams);
 
   // async function CreateNewChatRoom() {
@@ -449,8 +441,6 @@ function Schedule() {
   //   console.log(ScheduleList);
   // }
 
-  // 如果是建立新行程，則從url拿出發日期與結束日期
-  const { search } = useLocation();
   // const embarkDateFromUrl = new URLSearchParams(search).get('from');
   // const endDateFromUrl = new URLSearchParams(search).get('to');
   // const titleFromUrl = new URLSearchParams(search).get('title');
@@ -483,6 +473,8 @@ function Schedule() {
   // console.log(test);
 
   // 如果是選擇舊行程，則從資料庫拿出發與結束日期
+  // 如果是建立新行程，則從url拿出發日期與結束日期
+  const { search } = useLocation();
   const existScheduleId = new URLSearchParams(search).get('id');
   // console.log(existScheduleId);
 
@@ -533,7 +525,7 @@ function Schedule() {
 
   // 刪除某一天
   function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
-    console.log('刪除這個行程囉！', targetDeleteDayIndex, targetDeletePlaceIndex);
+    console.log('刪除這個景點囉！', targetDeleteDayIndex, targetDeletePlaceIndex);
     updateScheduleData(((draft) => {
       draft.trip_days[targetDeleteDayIndex].places = draft.trip_days[targetDeleteDayIndex].places.filter(
         (item, index) => index !== targetDeletePlaceIndex,
@@ -565,8 +557,8 @@ function Schedule() {
 
   // 把state的訊息放進去object，然後推進整個messages array
   const newMessage = {
-    user_id: 123, // 放user.id
-    user_name: '葳葳', // 放user.email第一個字
+    user_id: user.uid, // 放user.id
+    user_name: user.displayName,
     message: inputMessage,
     sent_time: new Date(),
   };
@@ -634,51 +626,6 @@ function Schedule() {
     }
   }, [existScheduleId, updateScheduleData]);
 
-  // useEffect(()=>{
-  //   const ref = collection(db, "topics");
-  //   onSnapshot(ref, (querySnapshot) => {
-  //     querySnapshot.forEach((doc)=>{
-  //       // console.log(doc.id, doc.data());
-  //     })
-  //   })
-  // }, []);
-
-  // Atomically remove a region from the "regions" array field.
-  // await updateDoc(washingtonRef, {
-  //     regions: arrayRemove("east_coast")
-  // });
-
-  // async function CreateNewChatRoom() {
-  //   if (!existScheduleId) {
-  //     console.log('沒有聊天室，創一個新的在瀏覽器！');
-  //     updateChatBox(newChatRoom);
-  //   }
-  // }
-
-  // setSchedule();
-
-  // 如果已經有聊天室，則拿指定一個schedule_id的聊天室資料，如果沒有，則創建一個！
-
-  // useEffect(() => {
-  //   async function getChatRoom() {
-  //     const q = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-  //     const querySnapshot = await getDocs(q);
-  //     querySnapshot.forEach((doc) => {
-  //       // doc.data() is never undefined for query doc snapshots
-  //       console.log(doc.id, ' => ', doc.data());
-  //       updateChatBox(doc.data());
-  //       console.log(chatBox);
-  //     });
-  //   }
-  //   if (existScheduleId) {
-  //     getChatRoom();
-  //   }
-  //   // else {
-  //   //   CreateNewChatRoom();
-  //   // }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [updateChatBox]);
-
   const newPlace = {
     place_title: '',
     place_address: '',
@@ -698,6 +645,7 @@ function Schedule() {
   const newDay = {
     places: [],
   };
+
   function addDayInSchedule() {
     updateScheduleData((draft) => {
       draft.trip_days.push(newDay);
@@ -829,32 +777,6 @@ function Schedule() {
     });
   }
 
-  // 搜尋朋友是否有在這網站
-
-  async function submitSearch() {
-    setSearchFriendValue('');
-    const userEmailQuery = query(collection(db, 'users'), where('email', '==', searchFriendValue));
-    const querySnapShot = await getDocs(userEmailQuery);
-    if (querySnapShot.size === 0) {
-      console.log('查無此人！');
-    } else {
-      querySnapShot.forEach((doc) => {
-        console.log('有這個人唷！', doc.id, '=>', doc.data());
-        setSearchedFriendId(doc.id);
-      });
-    }
-  }
-
-  // 確認把朋友加到這個行程中
-
-  async function addFriendToTheSchedule() {
-    const searchedFriendScheduleArray = doc(db, 'users', searchedFriendId);
-    // Atomically add a new region to the "regions" array field.
-    await updateDoc(searchedFriendScheduleArray, {
-      owned_schedule_ids: arrayUnion(scheduleData.schedule_id),
-    });
-  }
-
   return (
     <>
       <GreyHeaderComponent />
@@ -899,20 +821,6 @@ function Schedule() {
               回到我的行程
             </Link>
           </button> */}
-          <div style={{ display: 'flex', position: 'absolute', zIndex: '100' }}>
-            <input
-              value={searchFriendValue}
-              type="text"
-              inputMode="text"
-              onChange={(e) => setSearchFriendValue(e.target.value)}
-              style={{
-                position: 'absolute', top: '70px', right: '30px', zIndex: '100',
-              }}
-              placeholder="搜尋朋友email並邀請"
-            />
-            <button onClick={() => submitSearch()} type="button">確認搜尋</button>
-            <button onClick={() => addFriendToTheSchedule()} type="button">確認加入</button>
-          </div>
           <ScheduleTitleAndCompleteButtonArea>
             <Link to="/my-schedules">
               <GoBackIcon src={GoBackSrc} />
@@ -1011,7 +919,7 @@ function Schedule() {
           </DayContainerBoxes>
         </LeftContainer>
         <RightContainer>
-          {/* <Map
+          <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
             selected={selected}
@@ -1023,7 +931,7 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-          /> */}
+          />
           <ChatRoom openChat={openChat}>
             <ChatRoomTitle>
               聊天室
