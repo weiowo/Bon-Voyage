@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
@@ -27,6 +28,7 @@ import GreyHeaderComponent from '../components/GreyHeader';
 import BlueTrashCanSrc from './images/trash_blue.png';
 import GreyTrashCanSrc from './images/trash_grey.png';
 import GoBackSrc from './images/arrow-left.png';
+// import DragndDrop from './images/arrow-left.png';
 
 // 最新版！！（2022/06/20）
 // chooseDate完成後就創立一個新的行程id，並放到url上面
@@ -84,15 +86,15 @@ cursor:pointer;
 `;
 
 const DayContainer = styled.div`
-width:40vw;
+width:38vw;
 height:auto;
-border: 1px solid black;
 border-radius:10px;
 display:flex;
 flex-direction:column;
 align-items:center;
 padding-bottom:15px;
 background-color:white;
+border:1px black solid;
 `;
 
 const DayContainerTitle = styled.div`
@@ -101,14 +103,15 @@ align-items:center;
 font-size:15px;
 justify-content:center;
 border-radius:10px;
-width:270px;
+width:80px;
 height:40px;
 color:white;
+cursor:pointer;
 font-weight:600;
-background-color:#63B5DC;
 margin-bottom:10px;
 margin-top:10px;
 letter-spacing:1.5px;
+background-color:${(props) => (props.active ? 'purple' : '#63B5DC')};
 `;
 
 const PlaceContainer = styled.div`
@@ -412,6 +415,14 @@ const initialDnDState = {
   updatedOrder: [],
 };
 
+const placeInitialDnDState = {
+  placeDraggedFrom: null,
+  placeDraggedTo: null,
+  placeIsDragging: false,
+  placeOriginalOrder: [],
+  placeUpdatedOrder: [],
+};
+
 function Schedule() {
   const newChatRoom = {
     chat_room_id: '',
@@ -431,16 +442,16 @@ function Schedule() {
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
   const user = useContext(UserContext);
-  // const [list, setList] = useState(scheduleData?.trip_days);
   const [dragAndDrop, setDragAndDrop] = useState(initialDnDState);
-  // const [dragId, setDragId] = useState();
-
+  const [placeDragAndDrop, setPlaceDragAndDrop] = useState(placeInitialDnDState);
+  const [choosedDayIndex, setChoosedDayIndex] = useState(0);
   const { search } = useLocation();
   const existScheduleId = new URLSearchParams(search).get('id');
 
+  // 天數的dragAndDrop
+
   const onDragStart = (event) => {
     const initialPosition = Number(event.currentTarget.dataset.position);
-
     setDragAndDrop({
       ...dragAndDrop,
       draggedFrom: initialPosition,
@@ -454,18 +465,13 @@ function Schedule() {
     // event to fire, we have
     // to cancel out this one
     event.preventDefault();
-
     let newList = dragAndDrop.originalOrder;
-
     // index of the item being dragged
     const { draggedFrom } = dragAndDrop;
-
     // index of the droppable area being hovered
     const draggedTo = Number(event.currentTarget.dataset.position);
-
     const itemDragged = newList[draggedFrom];
     const remainingItems = newList.filter((item, index) => index !== draggedFrom);
-
     newList = [
       ...remainingItems.slice(0, draggedTo),
       itemDragged,
@@ -480,21 +486,18 @@ function Schedule() {
       });
     }
   };
-
-  useEffect(() => {
-    console.log('Dragged From: ', dragAndDrop && dragAndDrop.draggedFrom);
-    console.log('Dropping Into: ', dragAndDrop && dragAndDrop.draggedTo);
-  }, [dragAndDrop]);
-
-  useEffect(() => {
-    console.log('List updated!');
-  }, [scheduleData?.trip_days]);
+  // useEffect(() => {
+  //   console.log('Dragged From: ', dragAndDrop && dragAndDrop.draggedFrom);
+  //   console.log('Dropping Into: ', dragAndDrop && dragAndDrop.draggedTo);
+  // }, [dragAndDrop]);
+  // useEffect(() => {
+  //   console.log('List updated!');
+  // }, [scheduleData?.trip_days]);
 
   const onDrop = () => {
     updateScheduleData((draft) => {
       draft.trip_days = dragAndDrop.updatedOrder;
     });
-
     setDragAndDrop({
       ...dragAndDrop,
       draggedFrom: null,
@@ -502,11 +505,68 @@ function Schedule() {
       isDragging: false,
     });
   };
-
   const onDragLeave = () => {
     setDragAndDrop({
       ...dragAndDrop,
       draggedTo: null,
+    });
+  };
+  // // PLACE的dragAndDrop
+
+  const onPlaceDragStart = (event) => {
+    const initialPosition = Number(event.currentTarget.dataset.position);
+    setPlaceDragAndDrop({
+      ...placeDragAndDrop,
+      placeDraggedFrom: initialPosition,
+      placeIsDragging: true,
+      placeOriginalOrder: scheduleData?.trip_days[choosedDayIndex].places,
+    });
+    event.dataTransfer.setData('text/html', '');
+  };
+  const onPlaceDragOver = (event) => {
+    event.preventDefault();
+    let placeNewList = placeDragAndDrop.placeOriginalOrder;
+    const { placeDraggedFrom } = placeDragAndDrop;
+    const placeDraggedTo = Number(event.currentTarget.dataset.position);
+    const placeItemDragged = placeNewList[placeDraggedFrom];
+    const placeRemainingItems = placeNewList.filter((item, index) => index !== placeDraggedFrom);
+    placeNewList = [
+      ...placeRemainingItems.slice(0, placeDraggedTo),
+      placeItemDragged,
+      ...placeRemainingItems.slice(placeDraggedTo),
+    ];
+
+    if (placeDraggedTo !== placeDragAndDrop.placeDraggedTo) {
+      setPlaceDragAndDrop({
+        ...placeDragAndDrop,
+        placeUpdatedOrder: placeNewList,
+        placeDraggedTo,
+      });
+    }
+  };
+  useEffect(() => {
+    console.log('place!Dragged From: ', placeDragAndDrop && placeDragAndDrop.placeDraggedFrom);
+    console.log('place!Dropping Into: ', placeDragAndDrop && placeDragAndDrop.placeDraggedTo);
+  }, [placeDragAndDrop]);
+  useEffect(() => {
+  }, [scheduleData?.trip_days?.[choosedDayIndex]?.places]);
+
+  const onPlaceDrop = () => {
+    updateScheduleData((draft) => {
+      draft.trip_days[choosedDayIndex].places = placeDragAndDrop.placeUpdatedOrder;
+    });
+    setPlaceDragAndDrop({
+      ...placeDragAndDrop,
+      placeDraggedFrom: null,
+      placeDraggedTo: null,
+      placeIsDragging: false,
+    });
+  };
+
+  const onPlaceDragLeave = () => {
+    setPlaceDragAndDrop({
+      ...placeDragAndDrop,
+      placeDraggedTo: null,
     });
   };
 
@@ -692,7 +752,7 @@ function Schedule() {
   return (
     <>
       <GreyHeaderComponent />
-      <ScheduleWrapper className="test">
+      <ScheduleWrapper>
         {/* <AddAndSearch recommendList={recommendList} setRecommendList={setRecommendList} /> */}
         <AddAndSearchBox active={active}>
           <CloseSearchIcon
@@ -728,11 +788,6 @@ function Schedule() {
           </ResultsArea>
         </AddAndSearchBox>
         <LeftContainer active={active}>
-          {/* <button type="button">
-            <Link to="/my-schedules">
-              回到我的行程
-            </Link>
-          </button> */}
           <ScheduleTitleAndCompleteButtonArea>
             <Link to="/my-schedules">
               <GoBackIcon src={GoBackSrc} />
@@ -753,10 +808,12 @@ function Schedule() {
             </p>
             <AddDayButton type="button" onClick={() => addDayInSchedule()}>＋</AddDayButton>
           </DateContainer>
-          <DayContainerBoxes className="schedule-boxes">
+          <DayContainerBoxes style={{ flexDirection: 'row' }}>
             {scheduleData ? scheduleData.trip_days
               .map((dayItem, dayIndex) => (
-                <DayContainer
+                <DayContainerTitle
+                  active={dayIndex === choosedDayIndex}
+                  onClick={() => { setChoosedDayIndex(dayIndex); }}
                   key={dayIndex}
                   data-position={dayIndex}
                   draggable
@@ -766,80 +823,78 @@ function Schedule() {
                   onDragLeave={onDragLeave}
                   className={dragAndDrop && dragAndDrop.draggedTo === Number(dayIndex) ? 'dropArea' : ''}
                 >
-                  <DayContainerTitle>
-                    第
-                    {dayIndex + 1}
-                    天
-                    /
-                    {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
-                    /
-                    {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
-                    <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} src={GreyTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
-                  </DayContainerTitle>
-                  <div>
-                    {dayItem.places ? dayItem.places.map((placeItem, placeIndex) => (
-                      <>
-                        <div style={{ marginTop: '5px', fontSize: '14px' }}>
-                          {(placeIndex !== 0 ? `行車距離： ${distance?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
-                        </div>
-                        <div style={{ marginBottom: '5px', fontSize: '14px' }}>
-                          {(placeIndex !== 0 ? `行車時間： ${duration?.[dayIndex]?.[placeIndex - 1] ?? ''}` : '')}
-                        </div>
-                        <PlaceContainer>
-                          <PlaceContainerInputArea>
-                            <InputBox>
-                              <p style={{ fontSize: '14px' }}>
-                                第
-                                {placeIndex + 1}
-                                個景點：
-                              </p>
-                              <input
-                                style={{ width: '20vw', outline: 'none' }}
-                                value={placeItem.place_title}
-                                onChange={(e) => {
-                                  updatePlaceTitle(e.target.value, dayIndex, placeIndex);
-                                }}
-                              />
-                            </InputBox>
-                            <InputBox>
-                              <p style={{ fontSize: '14px' }}>停留時間：</p>
-                              <input
-                                style={{ width: '15vw', outline: 'none' }}
-                                value={placeItem.stay_time}
-                                onChange={(e) => {
-                                  updateStayTime(e.target.value, dayIndex, placeIndex);
-                                }}
-                              />
-                              <div style={{ fontSize: '12px' }}>分鐘</div>
-                            </InputBox>
-                            <InputBox>
-                              <p style={{ fontSize: '14px' }}>地址：</p>
-                              <input
-                                style={{ width: '20vw', outline: 'none' }}
-                                value={placeItem.place_address}
-                                onChange={(e) => {
-                                  updatePlaceAddress(e.target.value, dayIndex, placeIndex);
-                                }}
-                              />
-                            </InputBox>
-                          </PlaceContainerInputArea>
-                          <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainPlace(dayIndex, placeIndex)} />
-                        </PlaceContainer>
-                      </>
-                    ))
-                      : (
-                        <div>還沒有地點ㄛ，請新增景點</div>
-                      )}
-                  </div>
-                  <button style={{ marginTop: '20px' }} type="button" onClick={() => { setActive(true); addPlaceInDay(dayIndex); setClickedDayIndex(dayIndex); }}>新增行程</button>
-                </DayContainer>
+                  {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0]}
+                  <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} src={GreyTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
+                </DayContainerTitle>
               ))
-            // 這裡是新創建行程的地方
               : ''}
           </DayContainerBoxes>
+          {scheduleData ? scheduleData?.trip_days[choosedDayIndex]?.places
+            .map((placeItem, placeIndex) => (
+              <>
+                <div style={{ marginTop: '5px', fontSize: '14px' }}>
+                  {(placeIndex !== 0 ? `行車距離： ${distance?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}` : '')}
+                </div>
+                <div style={{ marginBottom: '5px', fontSize: '14px' }}>
+                  {(placeIndex !== 0 ? `行車時間： ${duration?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}` : '')}
+                </div>
+                <PlaceContainer
+                  key={placeIndex}
+                  data-position={placeIndex}
+                  draggable
+                  onDragStart={onPlaceDragStart}
+                  onDragOver={onPlaceDragOver}
+                  onDrop={onPlaceDrop}
+                  onDragLeave={onPlaceDragLeave}
+                >
+                  <PlaceContainerInputArea>
+                    <InputBox>
+                      <p style={{ fontSize: '14px' }}>
+                        第
+                        {placeIndex + 1}
+                        個景點：
+                      </p>
+                      <input
+                        style={{ width: '20vw', outline: 'none' }}
+                        value={placeItem.place_title}
+                        onChange={(e) => {
+                          updatePlaceTitle(e.target.value, choosedDayIndex, placeIndex);
+                        }}
+                      />
+                    </InputBox>
+                    <InputBox>
+                      <p style={{ fontSize: '14px' }}>停留時間：</p>
+                      <input
+                        style={{ width: '15vw', outline: 'none' }}
+                        value={placeItem.stay_time}
+                        onChange={(e) => {
+                          updateStayTime(e.target.value, choosedDayIndex, placeIndex);
+                        }}
+                      />
+                      <div style={{ fontSize: '12px' }}>分鐘</div>
+                    </InputBox>
+                    <InputBox>
+                      <p style={{ fontSize: '14px' }}>地址：</p>
+                      <input
+                        style={{ width: '20vw', outline: 'none' }}
+                        value={placeItem.place_address}
+                        onChange={(e) => {
+                          updatePlaceAddress(e.target.value, choosedDayIndex, placeIndex);
+                        }}
+                      />
+                    </InputBox>
+                  </PlaceContainerInputArea>
+                  <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainPlace(choosedDayIndex, placeIndex)} />
+                </PlaceContainer>
+              </>
+            ))
+            : ''}
+          <DayContainerBoxes />
+          <button style={{ marginTop: '20px' }} type="button" onClick={() => { setActive(true); addPlaceInDay(choosedDayIndex); setClickedDayIndex(choosedDayIndex); }}>新增行程</button>
+
         </LeftContainer>
         <RightContainer>
-          <Map
+          {/* <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
             selected={selected}
@@ -851,7 +906,7 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-          />
+          /> */}
           <ChatRoom openChat={openChat}>
             <ChatRoomTitle>
               聊天室
