@@ -26,7 +26,7 @@ let service;
 
 const mapContainerStyle = {
   height: 'calc( 100vh - 60px)',
-  width: '53.8vw',
+  width: '55vw',
   position: 'absolute',
 };
 const options = {
@@ -76,7 +76,7 @@ function Map({
     const request = {
       location: { lat, lng }, // 根據autocomplete點按下去的地方的經緯度設定為地點中心
       radius: '500',
-      type: ['restaurant'], // 依據這個中心點往外擴張找餐廳
+      type: ['tourist_attraction'], // 依據這個中心點往外擴張找餐廳
     };
 
     service = new google.maps.places.PlacesService(mapRef.current);
@@ -201,15 +201,10 @@ function Map({
       directionsDisplay.setMap(map);
       directionsService.route(request, (result, status) => {
         if (status === 'OK') {
-          console.log(result.routes[0].legs[0].distance.text);
-          console.log(result.routes[0].legs[0].duration.text);
-          console.log('xxxxxxxxx', dayIndex, distanceIndex);
           setDistance((draft) => {
             if (Array.isArray(draft[dayIndex])) {
               draft[dayIndex][distanceIndex] = result.routes[0].legs[0].distance.text;
             } else {
-              // {}
-              // { 0: [] }
               draft[dayIndex] = [];
               draft[dayIndex][distanceIndex] = result.routes[0].legs[0].distance.text;
             }
@@ -218,13 +213,10 @@ function Map({
             if (Array.isArray(draft[dayIndex])) {
               draft[dayIndex][distanceIndex] = result.routes[0].legs[0].duration.text;
             } else {
-              // {}
-              // { 0: [] }
               draft[dayIndex] = [];
               draft[dayIndex][distanceIndex] = result.routes[0].legs[0].duration.text;
             }
           });
-          console.log('yyyyyyyyy', dayIndex, distanceIndex);
           // setDistance(result.routes[0].legs[0].distance.text);
           // setDuration(result.routes[0].legs[0].duration.text);
           directionsDisplay.setDirections(result);
@@ -235,8 +227,6 @@ function Map({
 
     const markerIcons = [PinkStar, OrangeStar, YellowStar, GreenStar, BlueStar, PurpleStar];
     const lineColors = ['#FF82B8', '#FFB750', '#F4E64C', '#76DC66', '#83D6FD', '#E483F3'];
-
-    // { 0: [], 1: [] }
 
     scheduleData.trip_days.forEach((dayItem, dayIndex) => {
       for (let i = 0; i < scheduleData.trip_days[dayIndex].places.length - 1; i += 1) {

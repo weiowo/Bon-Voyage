@@ -11,15 +11,21 @@ import ProfileSideBarElement from '../components/ProfileSideBar';
 import { PageWrapper, Line } from './MySchedules';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
+import Cover1 from './images/schedule_cover_rec1.jpg';
+import Cover2 from './images/schedule_cover_rec5.jpg';
+import Cover3 from './images/schedule_cover_rec3.jpg';
+import Cover4 from './images/camping.jpg';
+import Cover5 from './images/schedule_cover_rec2.jpg';
+import Cover6 from './images/schedule_cover_rec4.jpg';
 
-// http://localhost:3000/edit?art_id=V0D5EqZOfIcSyn8Z86lA&sch_id=UvSmovFCokMIXaxH5GrF
+export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
 const MyArticlesArea = styled.div`
 width:80vw;
 height:85vh;
 display:flex;
 flex-direction:column;
-margin-left:50px;
+padding-left:50px;
 margin-top:30px;
 `;
 
@@ -85,6 +91,7 @@ width:100%;
 height:50%;
 border-top-right-radius:10px;
 border-top-left-radius:10px;
+object-fit: cover;
 `;
 
 export const MyArticleBelowArea = styled.div`
@@ -188,7 +195,7 @@ function MyArticles() {
               isClicked={saveIsClicked}
               onClick={() => { setPublishIsClciked(false); setSaveIsClciked(true); }}
             >
-              儲存
+              草稿
             </Tab>
           </Tabs>
           <UpperLine />
@@ -209,7 +216,11 @@ function MyArticles() {
             {myDraftArticles ? myDraftArticles?.map((item) => (
               <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                 <MyArticle>
-                  <CoverPhotoInMyArticle src={item?.cover_img} />
+                  <CoverPhotoInMyArticle
+                    src={item?.cover_img ? item?.cover_img
+                      : defaultArticleCoverPhoto[Math.floor(Math.random()
+                        * defaultArticleCoverPhoto.length)]}
+                  />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
                     <MyArticleSummary>{item?.summary}</MyArticleSummary>

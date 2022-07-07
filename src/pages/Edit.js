@@ -7,6 +7,7 @@ import
 } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { useImmer } from 'use-immer';
+import { HashLink } from 'react-router-hash-link';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import {
@@ -15,7 +16,6 @@ import {
 } from 'firebase/storage';
 import db, { storage } from '../utils/firebase-init';
 import HeaderComponent from '../components/Header';
-// import ShareBanner1 from './images/share_banner1.png';
 import ShareBanner2 from './images/share_banner2.png';
 import CoverDefaultPhoto from './images/cover_photo_default.png';
 
@@ -505,14 +505,14 @@ function EditPage() {
               />
               {article ? article?.trip_days?.map((dayItem, dayIndex) => (
                 <>
-                  <DayTitle>
+                  <DayTitle id={`day-${dayIndex + 1}`}>
                     第
                     {dayIndex + 1}
                     天
                   </DayTitle>
                   <div>
                     {dayItem?.places.map((placeItem, placeIndex) => (
-                      <PlaceArea>
+                      <PlaceArea id={`place-${dayIndex + 1}-${placeIndex + 1}`}>
                         <div style={{ display: 'flex', textAlign: 'left' }}>
                           <PlaceTitle>
                             {placeItem.place_title}
@@ -588,20 +588,24 @@ function EditPage() {
             <ScheduleSummaryPart>
               {article ? article?.trip_days?.map((dayItem, dayIndex) => (
                 <ScheduleSummaryDayAndPlacePart>
-                  <ScheduleSummaryDayPart>
-                    第
-                    {dayIndex + 1}
-                    天
-                  </ScheduleSummaryDayPart>
+                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/edit#day-${dayIndex + 1}`}>
+                    <ScheduleSummaryDayPart>
+                      第
+                      {dayIndex + 1}
+                      天
+                    </ScheduleSummaryDayPart>
+                  </HashLink>
                   <div style={{
                     height: '20px', width: '2px', backgroundColor: 'black', marginTop: '2px',
                   }}
                   />
                   <ScheduleSummaryPlacePart>
-                    {dayItem?.places ? dayItem?.places.map((placeItem) => (
-                      <SummaryPlaceTitle>
-                        {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
-                      </SummaryPlaceTitle>
+                    {dayItem?.places ? dayItem?.places.map((placeItem, placeIndex) => (
+                      <HashLink style={{ textDecoration: 'none', color: 'black' }} smooth to={`/edit#place-${dayIndex + 1}-${placeIndex + 1}`}>
+                        <SummaryPlaceTitle>
+                          {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
+                        </SummaryPlaceTitle>
+                      </HashLink>
                     )) : ''}
                   </ScheduleSummaryPlacePart>
                 </ScheduleSummaryDayAndPlacePart>

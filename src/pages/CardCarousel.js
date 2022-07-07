@@ -1,9 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  doc, getDoc, updateDoc,
+} from 'firebase/firestore';
+import { useImmer } from 'use-immer';
+import produce from 'immer';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
+import db from '../utils/firebase-init';
 import BckSrc from './images/paris.png';
 import ArrowToRightSrc from './images/arrow-right.png';
 import ArrowToLeftSrc from './images/arrow-left.png';
+import './animation.css';
+import {
+  ModalBackground, ModalBox, ModalImgArea, ModalImg, ModalLeftArea,
+  AddToScheduleButton, CloseModalButton, LeftButton,
+  ModalContentWrapper, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
+  ScheduleChoiceTitle, ChooseButton, defaultArray,
+
+} from './City';
+import UserContext from '../components/UserContextComponent';
 
 const NearByPlaceWrapper = styled.div`
 width:100vw;
@@ -116,6 +132,7 @@ text-align:left;
 overflow:scroll;
 border-radius:10px;
 background-image: url(${BckSrc});
+cursor:pointer;
 background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
@@ -152,7 +169,18 @@ display:none;
 }`;
 
 function CardsCarousel({ currentNearbyAttraction }) {
+  const user = useContext(UserContext);
+  console.log(user);
+  const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]); // 是這個人所有的行程哦！不是單一筆行程!
+  const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
+  const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
+  const [dayIndex, setDayIndex] = useState();
+  const [modalIsActive, setModalIsActive] = useState(false);
+  const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
+  const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
+  const [modalDetail, setModalDetail] = useState({});
   console.log('我在cardCarouselpage', currentNearbyAttraction);
+  const navigate = useNavigate();
   //   const attractions = JSON.parse(window.localStorage.getItem('周遭景點暫存區STRING'));
   const [currentIndex, setCurrnetIndex] = useState(5);
 
@@ -169,46 +197,262 @@ function CardsCarousel({ currentNearbyAttraction }) {
     }
   }
 
+  function ClickAndShowPlaceDetail(clickedPlaceId) {
+    setModalIsActive(true);
+    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
+      .then((response) => response.json()).then((jsonData) => {
+        console.log('我在useEffect中', jsonData.result);
+        setModalDetail(jsonData.result);
+      }).catch((err) => {
+        console.log('錯誤:', err);
+      });
+  }
+
+  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
+  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
+  // 按下哪一個行程後，用那個index去抓那天的細節
+
+  useEffect(() => {
+    async function getUserArrayList() {
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log('Document data:', docSnap.data().owned_schedule_ids);
+      } else {
+        console.log('No such document!');
+      }
+      function getSchedulesFromList() {
+        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+          const docs = doc(db, 'schedules', item);
+          const Snap = await getDoc(docs);
+          if (Snap.exists()) {
+            if (Snap.data().deleted === false) {
+              console.log('這位使用者的行程', index, Snap.data());
+              setCityPageScheduleData((draft) => {
+                draft.push(Snap.data());
+              });
+            }
+          } else {
+            console.log('沒有這個行程！');
+          }
+        });
+      }
+      getSchedulesFromList();
+    }
+    getUserArrayList();
+  }, [setCityPageScheduleData, user.uid]);
+
+  // 選好行程跟天數時，會把行程的名稱跟地址加到immer中，並送到database中
+
+  function ComfirmedAdded() {
+    console.log('已經加入囉！');
+    const newPlace = {
+      place_title: modalDetail.name,
+      place_address: modalDetail.formatted_address,
+      stay_time: 60,
+    };
+    // 用 immer 產生出新的行程資料
+    const newScheduleData = produce(cityPageScheduleData, (draft) => {
+      draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
+    });
+    setCityPageScheduleData(newScheduleData);
+    async function passAddedDataToFirestore() {
+      const scheduleRef = doc(db, 'schedules', clickedScheduleId);
+      await updateDoc(scheduleRef, { ...newScheduleData[clickedScheduleIndex] });
+    }
+    passAddedDataToFirestore();
+  }
+
+  // 關於modal部分
+
+  function handleModalClose() {
+    setModalIsActive(false);
+  }
+
+  function handleUserOrNot() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      setModalIsActive(false); setChooseScheduleModalIsActive(true);
+    }
+  }
+
   return (
-    <NearByPlaceWrapper>
-      <NearByPlaceLeftArea>
-        <NearbyPlaceTitle>周邊景點</NearbyPlaceTitle>
-        <NearByPlaceDescription>
-          天氣真好，該出門走走囉！
-          <br />
-          看看周邊有什麼景點呢？
-        </NearByPlaceDescription>
-        <NearByViewMoreButton>查看更多</NearByViewMoreButton>
-      </NearByPlaceLeftArea>
-      <Arrow src={ArrowToLeftSrc} onClick={() => prevPhotos()} />
-      <CardsWrapper>
-        {currentNearbyAttraction
-          ? currentNearbyAttraction.slice(currentIndex, currentIndex + 4).map((item, index) => (
-            <Cards id={currentIndex} className={index} style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? '哈哈'})` }}>
-              <div>
-                {item.name}
-              </div>
-            </Cards>
-          )) : 'Loading中~請稍等~'}
-        {/* 為何字沒有跑出？ */}
-      </CardsWrapper>
-      <SmallScreenCardsWrapper>
-        <SmallScreenArrow onClick={() => prevPhotos()} src={ArrowToLeftSrc} />
-        <SmallScreenCards>
+    <>
+      <ModalBackground active={modalIsActive}>
+        <ModalBox>
+          <ModalLeftArea>
+            <div style={{ fontSize: '30px', fontWeight: '600' }}>{modalDetail?.name}</div>
+            <div>{modalDetail?.formatted_address}</div>
+            <AddToScheduleButton
+              onClick={() => { handleUserOrNot(); }}
+            >
+              加入行程
+            </AddToScheduleButton>
+          </ModalLeftArea>
+          <ModalImgArea>
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+          </ModalImgArea>
+          <CloseModalButton
+            type="button"
+            onClick={() => { handleModalClose(); }}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
+      <ModalBackground active={chooseScheduleModalIsActive}>
+        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setModalIsActive(true);
+              setChooseScheduleModalIsActive(false);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {cityPageScheduleData ? cityPageScheduleData.map((item, index) => (
+                <ScheduleChoicesBox id={item.schedule_id}>
+                  <ScheduleChoiceTitle>
+                    {item.title}
+                  </ScheduleChoiceTitle>
+                  <ChooseButton
+                    onClick={() => {
+                      setClickedScheduleId(item.schedule_id);
+                      setClickedScheduleIndex(index);
+                      setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                    }}
+                    type="button"
+                  >
+                    選擇
+                  </ChooseButton>
+                </ScheduleChoicesBox>
+              )) : ''}
+            </ScheduleChoicesBoxWrapper>
+          </ModalContentWrapper>
+          <CloseModalButton
+            type="button"
+            onClick={() => setChooseScheduleModalIsActive(false)}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
+      <ModalBackground active={chooseDayModalIsActive}>
+        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setChooseDayModalIsActive(false);
+              setChooseScheduleModalIsActive(true);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {cityPageScheduleData
+                ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                  <ScheduleChoicesBox style={{ display: 'flex' }}>
+                    <ScheduleChoiceTitle>
+                      第
+                      {index + 1}
+                      天
+                    </ScheduleChoiceTitle>
+                    <ChooseButton
+                      clicked={dayIndex === index}
+                      onClick={() => {
+                        setDayIndex(index);
+                      }}
+                      type="button"
+                    >
+                      選擇
+                    </ChooseButton>
+                  </ScheduleChoicesBox>
+                )) : ''}
+            </ScheduleChoicesBoxWrapper>
+            <button type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</button>
+          </ModalContentWrapper>
+          <CloseModalButton
+            type="button"
+            onClick={() => setChooseDayModalIsActive(false)}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
+      <NearByPlaceWrapper>
+        <NearByPlaceLeftArea>
+          <NearbyPlaceTitle>周邊景點</NearbyPlaceTitle>
+          <NearByPlaceDescription>
+            天氣真好，該出門走走囉！
+            <br />
+            看看周邊有什麼景點呢？
+          </NearByPlaceDescription>
+          <NearByViewMoreButton>查看更多</NearByViewMoreButton>
+        </NearByPlaceLeftArea>
+        <Arrow src={ArrowToLeftSrc} onClick={() => prevPhotos()} />
+        <CardsWrapper>
           {currentNearbyAttraction
-            ? currentNearbyAttraction.slice(currentIndex, currentIndex + 3).map((item, index) => (
-              <Cards id={currentIndex} className={index} style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? '哈哈'})` }}>
+            ? currentNearbyAttraction.slice(currentIndex, currentIndex + 4).map((item, index) => (
+              <Cards
+                id={item.place_id}
+                onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+                className={index}
+                style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? '哈哈'})` }}
+              >
                 <div>
                   {item.name}
                 </div>
               </Cards>
-            )) : 'Loading中~請稍等~'}
+            )) : (
+              <div className="progress container">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+            )}
           {/* 為何字沒有跑出？ */}
-        </SmallScreenCards>
-        <SmallScreenArrow onClick={() => nextPhotos()} src={ArrowToRightSrc} />
-      </SmallScreenCardsWrapper>
-      <Arrow src={ArrowToRightSrc} onClick={() => nextPhotos()} />
-    </NearByPlaceWrapper>
+        </CardsWrapper>
+        <SmallScreenCardsWrapper>
+          <SmallScreenArrow onClick={() => prevPhotos()} src={ArrowToLeftSrc} />
+          <SmallScreenCards>
+            {currentNearbyAttraction
+              ? currentNearbyAttraction.slice(currentIndex, currentIndex + 3).map((item, index) => (
+                <Cards id={currentIndex} className={index} style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? '哈哈'})` }}>
+                  <div>
+                    {item.name}
+                  </div>
+                </Cards>
+              )) : (
+                <div className="progress container">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              )}
+            {/* 為何字沒有跑出？ */}
+          </SmallScreenCards>
+          <SmallScreenArrow onClick={() => nextPhotos()} src={ArrowToRightSrc} />
+        </SmallScreenCardsWrapper>
+        <Arrow src={ArrowToRightSrc} onClick={() => nextPhotos()} />
+      </NearByPlaceWrapper>
+    </>
   );
 }
 

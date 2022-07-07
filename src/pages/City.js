@@ -20,7 +20,7 @@ import Default3 from './images/default3.png';
 import Default4 from './images/default4.png';
 import Default5 from './images/default5.png';
 
-const ModalBackground = styled.div`
+export const ModalBackground = styled.div`
 width:100vw;
 height:100vh;
 position:fixed;
@@ -36,7 +36,7 @@ display:${(props) => (props.active ? 'flex' : 'none')};
 z-index:100;
 `;
 
-const ModalBox = styled.div`
+export const ModalBox = styled.div`
 display:flex;
 width:50vw;
 height:30vw;
@@ -48,7 +48,7 @@ position: relative;
 align-items:center;
 `;
 
-const ModalImgArea = styled.div`
+export const ModalImgArea = styled.div`
 width:25vw;
 height:22vw;
 display:flex;
@@ -57,13 +57,13 @@ align-items:center;
 gap:10px;
 `;
 
-const ModalImg = styled.img`
+export const ModalImg = styled.img`
 width:10vw;
 height:10vw;
 border-radius:10px;
 `;
 
-const ModalLeftArea = styled.div`
+export const ModalLeftArea = styled.div`
 width:25vw;
 height:28vw;
 display:flex;
@@ -73,7 +73,18 @@ justify-content:center;
 gap:10px;
 `;
 
-const AddToScheduleButton = styled.button`
+export const ModalPlaceTitle = styled.div`
+font-size:26px;
+font-weight:600;
+width:80%;
+`;
+
+export const ModalPlaceAddress = styled.div`
+width:80%;
+color:#696969;
+`;
+
+export const AddToScheduleButton = styled.button`
 width:10vw;
 height:30px;
 border-radius:5px;
@@ -84,7 +95,7 @@ color:white;
 cursor:pointer;
 `;
 
-const CloseModalButton = styled.button`
+export const CloseModalButton = styled.button`
 height:25px;
 width:25px;
 position:absolute;
@@ -98,7 +109,7 @@ color:white;
 cursor:pointer;
 `;
 
-const LeftButton = styled.button`
+export const LeftButton = styled.button`
 height:25px;
 width:25px;
 position:absolute;
@@ -182,6 +193,7 @@ border-radius:20px;
 display: block;
 width:200px;
 height:240px;
+object-fit: cover;
 transition: 0.5s all ease-in-out;
 &:hover {
     transform: scale(1.2);
@@ -253,6 +265,7 @@ border-radius:20px;
 width:105px;
 height:105px;
 margin-right:20px;
+object-fit: cover;
 `;
 
 const RestaurantBoxRightContent = styled.div`
@@ -291,7 +304,7 @@ margin-top:10px;
 cursor:pointer;
 `;
 
-const CurrentSchedulesTitle = styled.div`
+export const CurrentSchedulesTitle = styled.div`
 width:100%;
 height:30px;
 font-size:17px;
@@ -300,7 +313,7 @@ margin-top:20px;
 margin-bottom:10px;
 `;
 
-const ScheduleChoicesBoxWrapper = styled.div`
+export const ScheduleChoicesBoxWrapper = styled.div`
 display:flex;
 flex-flow:wrap;
 height:auto;
@@ -318,6 +331,16 @@ padding-left:2px;
 }
 `;
 
+export const Loading = styled.div`
+  margin: auto;
+  border: 10px solid #EAF0F6;
+  border-radius: 50%;
+  border-top: 10px solid #FF7A59;
+  width: 70px;
+  height: 70px;
+  animation: spinner 3s linear infinite;
+`;
+
 // const DayChoicesBoxWrapper = styled.div`
 // display:flex;
 // flex-wrap:wrap;
@@ -331,7 +354,7 @@ padding-left:2px;
 // padding-bottom:20px;
 // `;
 
-const ScheduleChoicesBox = styled.div`
+export const ScheduleChoicesBox = styled.div`
 display:flex;
 align-items:center;
 width:220px;
@@ -343,7 +366,7 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   background-color:#E6D1F2;
 }`;
 
-const ScheduleChoiceTitle = styled.div`
+export const ScheduleChoiceTitle = styled.div`
 width:170px;
 text-align:left;
 height:auto;
@@ -352,7 +375,7 @@ font-size:15px;
 margin-left:20px;
 `;
 
-const ChooseButton = styled.button`
+export const ChooseButton = styled.button`
 display:flex;
 align-items:center;
 justify-content:center;
@@ -372,7 +395,7 @@ color:${(props) => (props.clicked ? 'white' : 'black')};
 // }
 `;
 
-const ModalContentWrapper = styled.div`
+export const ModalContentWrapper = styled.div`
 width:95%;
 height:95%;
 overflow:scroll;
@@ -401,7 +424,7 @@ export const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 function City() {
   const { search } = useLocation();
   const user = useContext(UserContext);
-  const [nearbyData, setNearbyData] = useState({});
+  const [nearbyData, setNearbyData] = useState();
   const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]); // 是這個人所有的行程哦！不是單一筆行程!
   const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
   const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
@@ -409,7 +432,7 @@ function City() {
   const [modalIsActive, setModalIsActive] = useState(false);
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
   const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
-  const [modalDetail, setModalDetail] = useState({});
+  const [modalDetail, setModalDetail] = useState();
 
   const lat = Number(new URLSearchParams(search).get('lat'));
   const lng = Number(new URLSearchParams(search).get('lng'));
@@ -526,10 +549,12 @@ function City() {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
-            console.log('這位使用者的行程', index, Snap.data());
-            setCityPageScheduleData((draft) => {
-              draft.push(Snap.data());
-            });
+            if (Snap.data().deleted === false) {
+              console.log('這位使用者的行程', index, Snap.data());
+              setCityPageScheduleData((draft) => {
+                draft.push(Snap.data());
+              });
+            }
           } else {
             console.log('沒有這個行程！');
           }
@@ -545,9 +570,9 @@ function City() {
   function ComfirmedAdded() {
     console.log('已經加入囉！');
     const newPlace = {
-      place_title: modalDetail.name,
-      place_address: modalDetail.formatted_address,
-      stay_time: '',
+      place_title: modalDetail?.name,
+      place_address: modalDetail?.formatted_address,
+      stay_time: 60,
     };
     // 用 immer 產生出新的行程資料
     const newScheduleData = produce(cityPageScheduleData, (draft) => {
@@ -577,27 +602,37 @@ function City() {
       <BlackHeaderComponent />
       <ModalBackground active={modalIsActive}>
         <ModalBox>
-          <ModalLeftArea>
-            <div style={{ fontSize: '30px', fontWeight: '600' }}>{modalDetail.name}</div>
-            <div>{modalDetail.formatted_address}</div>
-            <AddToScheduleButton
-              onClick={() => { setModalIsActive(false); setChooseScheduleModalIsActive(true); }}
-            >
-              加入行程
-            </AddToScheduleButton>
-          </ModalLeftArea>
-          <ModalImgArea>
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
-          </ModalImgArea>
-          <CloseModalButton
-            type="button"
-            onClick={() => { handleModalClose(); }}
-          >
-            X
-          </CloseModalButton>
+          {modalDetail
+            ? (
+              <>
+                <ModalLeftArea>
+                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                  <AddToScheduleButton
+                    onClick={() => {
+                      setModalIsActive(false);
+                      setChooseScheduleModalIsActive(true);
+                    }}
+                  >
+                    加入行程
+                  </AddToScheduleButton>
+                </ModalLeftArea>
+                <ModalImgArea>
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+                </ModalImgArea>
+                <CloseModalButton
+                  type="button"
+                  onClick={() => { handleModalClose(); }}
+                >
+                  X
+                </CloseModalButton>
+
+              </>
+            )
+            : <Loading />}
         </ModalBox>
       </ModalBackground>
       <ModalBackground active={chooseScheduleModalIsActive}>
@@ -696,96 +731,111 @@ function City() {
         options={options}
         onLoad={onMapLoad}
       />
-      <ContentArea>
-        <AttractionAreaTitle>
-          {nearbyData.tourist_attraction ? `${cityFromUrl}必去景點推薦` : ''}
-        </AttractionAreaTitle>
-        <AttractionWrapper>
-          {nearbyData.tourist_attraction ? nearbyData.tourist_attraction.map((item, index) => (
-            <AttractionBox
-              id={item.place_id}
-              onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
-            >
-              <AttractionPhotoContainer
-                id={item.place_id}
-              >
-                <AttractionPhoto
-                  id={item.place_id}
-                  alt="attraction-photo"
-                  src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
-                    : defaultArray[index % 5]}
-                />
-              </AttractionPhotoContainer>
-              <AttractionTitle
-                id={item.place_id}
-              >
-                {item.name}
-              </AttractionTitle>
-              <AttractionDescription
-                id={item.place_id}
-              />
-              <AttractionSeeMoreButton
-                id={item.place_id}
-              >
-                瞭解更多
-              </AttractionSeeMoreButton>
-            </AttractionBox>
-          )) : ''}
-        </AttractionWrapper>
-        <RestaurantAreaTitle>
-          {nearbyData.restaurant ? `${cityFromUrl}必吃餐廳推薦` : ''}
-        </RestaurantAreaTitle>
-        <RestaurantWrapper>
-          {nearbyData.restaurant ? nearbyData.restaurant.map((item, index) => (
-            <RestaurantBox id={item.place_id}>
-              <RestaurantPhoto
-                alt="attraction-photo"
-                src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
-                  : defaultArray[index % 5]}
-              />
-              <RestaurantBoxRightContent>
-                <RestaurantTitle>
-                  {item.name}
-                </RestaurantTitle>
-                <RestaurantDescription />
-                <RestaurantSeeMoreButton
+      {nearbyData
+        ? (
+          <ContentArea>
+            <AttractionAreaTitle>
+              {nearbyData.tourist_attraction ? `${cityFromUrl}必去景點推薦` : ''}
+            </AttractionAreaTitle>
+            <AttractionWrapper>
+              {nearbyData.tourist_attraction ? nearbyData.tourist_attraction.map((item, index) => (
+                <AttractionBox
                   id={item.place_id}
                   onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
                 >
-                  瞭解更多
+                  <AttractionPhotoContainer
+                    id={item.place_id}
+                  >
+                    <AttractionPhoto
+                      id={item.place_id}
+                      alt="attraction-photo"
+                      src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
+                        : defaultArray[index % 5]}
+                    />
+                  </AttractionPhotoContainer>
+                  <AttractionTitle
+                    id={item.place_id}
+                  >
+                    {item.name}
+                  </AttractionTitle>
+                  <AttractionDescription
+                    id={item.place_id}
+                  />
+                  <AttractionSeeMoreButton
+                    id={item.place_id}
+                  >
+                    瞭解更多
+                  </AttractionSeeMoreButton>
+                </AttractionBox>
+              )) : ''}
+            </AttractionWrapper>
+            <RestaurantAreaTitle>
+              {nearbyData.restaurant ? `${cityFromUrl}必吃餐廳推薦` : ''}
+            </RestaurantAreaTitle>
+            <RestaurantWrapper>
+              {nearbyData.restaurant ? nearbyData.restaurant.map((item, index) => (
+                <RestaurantBox id={item.place_id}>
+                  <RestaurantPhoto
+                    alt="attraction-photo"
+                    src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
+                      : defaultArray[index % 5]}
+                  />
+                  <RestaurantBoxRightContent>
+                    <RestaurantTitle>
+                      {item.name}
+                    </RestaurantTitle>
+                    <RestaurantDescription />
+                    <RestaurantSeeMoreButton
+                      id={item.place_id}
+                      onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+                    >
+                      瞭解更多
 
-                </RestaurantSeeMoreButton>
-              </RestaurantBoxRightContent>
-            </RestaurantBox>
-          )) : ''}
-        </RestaurantWrapper>
-        <AttractionAreaTitle>
-          {nearbyData.lodging ? `${cityFromUrl} 熱門飯店推薦` : ''}
-        </AttractionAreaTitle>
-        <AttractionWrapper>
-          {nearbyData.lodging ? nearbyData.lodging.map((item, index) => (
-            <AttractionBox id={item.place_id}>
-              <AttractionPhotoContainer>
-                <AttractionPhoto
-                  alt="attraction-photo"
-                  src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
-                    : defaultArray[index % 5]}
-                />
-              </AttractionPhotoContainer>
-              <AttractionTitle>
-                {item.name}
-              </AttractionTitle>
-              <AttractionDescription />
-              <AttractionSeeMoreButton
-                id={item.place_id}
-                onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
-              >
-                瞭解更多
-              </AttractionSeeMoreButton>
-            </AttractionBox>
-          )) : ''}
-        </AttractionWrapper>
-      </ContentArea>
+                    </RestaurantSeeMoreButton>
+                  </RestaurantBoxRightContent>
+                </RestaurantBox>
+              )) : ''}
+            </RestaurantWrapper>
+            <AttractionAreaTitle>
+              {nearbyData.lodging ? `${cityFromUrl} 熱門飯店推薦` : ''}
+            </AttractionAreaTitle>
+            <AttractionWrapper>
+              {nearbyData.lodging ? nearbyData.lodging.map((item, index) => (
+                <AttractionBox id={item.place_id}>
+                  <AttractionPhotoContainer>
+                    <AttractionPhoto
+                      alt="attraction-photo"
+                      src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
+                        : defaultArray[index % 5]}
+                    />
+                  </AttractionPhotoContainer>
+                  <AttractionTitle>
+                    {item.name}
+                  </AttractionTitle>
+                  <AttractionDescription />
+                  <AttractionSeeMoreButton
+                    id={item.place_id}
+                    onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+                  >
+                    瞭解更多
+                  </AttractionSeeMoreButton>
+                </AttractionBox>
+              )) : ''}
+            </AttractionWrapper>
+          </ContentArea>
+        )
+        : (
+          <div style={{ height: '30px', position: 'fixed', bottom: 0 }} className="progress container">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        )}
     </>
   );
 }

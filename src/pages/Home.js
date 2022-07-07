@@ -25,6 +25,7 @@ import CardsCarousel from './CardCarousel';
 import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 import ArticlesInHome from '../components/ArticlesInHome';
+import './animation.css';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -166,7 +167,6 @@ const center = {
 function SearchAtHomePage({ option, setOption }) {
   const navigate = useNavigate();
 
-  // const [Latlng, setLatlng] = useState('');
   const {
     ready,
     value,
@@ -270,7 +270,8 @@ function SearchAtHomePage({ option, setOption }) {
 function Home({ currentLatLng, user }) {
   // const [query, setQuery] = useState('');
   const [option, setOption] = useState('all'); // 預設想放'全部'
-  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
+  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState();
+  const [LatLng, setLatLng] = useState({});
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -280,6 +281,23 @@ function Home({ currentLatLng, user }) {
     mapRef.current = map;
   }, []);
 
+  // 拿使用者現有位置
+
+  function getCurrentLatLng() {
+    if ('geolocation' in navigator) {
+      console.log('geolocation is available');
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords.latitude, position.coords.longitude);
+        setLatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
+      });
+    } else {
+      console.log('geolocation is not available');
+    }
+  }
+  useEffect(() => {
+    getCurrentLatLng();
+  }, []);
+
   // 拿到使用者的經緯度後，從這邊去查周邊的tourist attraction跟restaurant
   // 如果無法使用經緯度的話，就設經緯度為台北市
 
@@ -287,7 +305,7 @@ function Home({ currentLatLng, user }) {
     console.log('我執行了此funcion!');
     const a = new Date();
     const request = {
-      location: currentLatLng,
+      location: LatLng,
       radius: '2000',
       type: ['tourist_attraction'],
     };
@@ -306,7 +324,7 @@ function Home({ currentLatLng, user }) {
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.nearbySearch(request, callback);
     console.log('我執行了此funcion!');
-  }, [currentLatLng]);
+  }, [LatLng]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -318,7 +336,20 @@ function Home({ currentLatLng, user }) {
     // }, 1000);
   }, [searchNearby, isLoaded]);
 
-  if (!isLoaded) return <div>沒有成功...</div>;
+  if (!isLoaded) {
+    return (
+      <div className="progress container">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    );
+  }
 
   return (
     <>

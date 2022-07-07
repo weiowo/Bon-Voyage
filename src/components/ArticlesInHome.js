@@ -12,6 +12,14 @@ import {
   MyArticle, CoverPhotoInMyArticle,
   MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
 } from '../pages/MyArticles';
+import Cover1 from '../pages/images/schedule_cover_rec1.jpg';
+import Cover2 from '../pages/images/schedule_cover_rec5.jpg';
+import Cover3 from '../pages/images/schedule_cover_rec3.jpg';
+import Cover4 from '../pages/images/camping.jpg';
+import Cover5 from '../pages/images/schedule_cover_rec2.jpg';
+import Cover6 from '../pages/images/schedule_cover_rec4.jpg';
+
+export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
 const ArticlesAreaWrapper = styled.div`
 margin-top:20px;
@@ -56,13 +64,14 @@ flex-wrap:wrap;
 
 const CheckMoreButton = styled.button`
 width:100px;
-height:30px;
+height:40px;
 background-color:#0492c2;
 color:white;
 border:none;
-border-radius:10px;
+border-radius:8px;
 margin-top:20px;
 font-weight:550;
+cursor:pointer;
 `;
 
 function ArticlesInHome() {
@@ -91,7 +100,10 @@ function ArticlesInHome() {
         {articles ? articles.slice(0, 10).map((item) => (
           <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
             <MyArticle>
-              <CoverPhotoInMyArticle src={item?.cover_img} />
+              <CoverPhotoInMyArticle src={item?.cover_img ? item?.cover_img
+                : defaultArticleCoverPhoto[Math.floor(Math.random()
+                        * defaultArticleCoverPhoto.length)]}
+              />
               <MyArticleBelowArea>
                 <MyArticleTitle>{item?.article_title}</MyArticleTitle>
                 <MyArticleSummary>{item?.summary}</MyArticleSummary>

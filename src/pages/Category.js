@@ -5,7 +5,7 @@ import React,
 } from 'react';
 import styled from 'styled-components/macro';
 import {
-  doc, updateDoc,
+  doc, updateDoc, getDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
@@ -26,101 +26,102 @@ import TapSrc from './images/tap.png';
 import BlackHeaderComponent
   from '../components/BlackHeader';
 import UserContext from '../components/UserContextComponent';
-import { defaultArray } from './City';
+import {
+  defaultArray, ModalBackground, ModalBox, ModalImgArea, ModalImg,
+  ModalLeftArea, ModalPlaceTitle, ModalPlaceAddress, AddToScheduleButton, CloseModalButton,
+  LeftButton, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
+  ScheduleChoiceTitle, ChooseButton, ModalContentWrapper, Loading,
+} from './City';
 
 // modal
 
-const ModalTitle = styled.div`
-font-size:27px;
-font-weight:600;
-width:20vw;
-height:auto;
-`;
+// const ModalBackground = styled.div`
+// width:100vw;
+// height:100vh;
+// position:fixed;
+// top:0;
+// bottom:0;
+// left:0;
+// right:0;
+// background-color:rgba(0, 0, 0, 0.7);
+// display:flex;
+// justify-content:center;
+// align-items:center;
+// display:${(props) => (props.active ? 'flex' : 'none')};
+// z-index:100;
+// `;
 
-const ModalDescription = styled.div`
-font-size:12px;
-font-weight:500;
-width:23vw;
-height:auto;
-color:grey;
-`;
+// const ModalBox = styled.div`
+// display:flex;
+// width:50vw;
+// height:30vw;
+// background-color:white;
+// z-index:10;
+// border-radius:20px;
+// z-index:200;
+// position: relative;
+// align-items:center;
+// `;
 
-const ModalBackground = styled.div`
-width:100vw;
-height:100vh;
-position:fixed;
-top:0;
-bottom:0;
-left:0;
-right:0;
-background-color:rgba(0, 0, 0, 0.7);
-display:flex;
-justify-content:center;
-align-items:center;
-display:${(props) => (props.active ? 'flex' : 'none')};
-z-index:100;
-`;
+// const ModalImgArea = styled.div`
+// width:25vw;
+// height:22vw;
+// display:flex;
+// flex-wrap:wrap;
+// align-items:center;
+// gap:10px;
+// `;
 
-const ModalBox = styled.div`
-display:flex;
-width:50vw;
-height:30vw;
-background-color:white;
-z-index:10;
-border-radius:20px;
-z-index:200;
-position: relative;
-align-items:center;
-`;
+// const ModalImg = styled.img`
+// width:10vw;
+// height:10vw;
+// border-radius:10px;
+// `;
 
-const ModalImgArea = styled.div`
-width:25vw;
-height:22vw;
-display:flex;
-flex-wrap:wrap;
-align-items:center;
-gap:10px;
-`;
+// const ModalLeftArea = styled.div`
+// width:25vw;
+// height:28vw;
+// display:flex;
+// flex-direction:column;
+// align-items:center;
+// justify-content:center;
+// gap:10px;
+// `;
 
-const ModalImg = styled.img`
-width:10vw;
-height:10vw;
-border-radius:10px;
-`;
+// const ModalPlaceTitle = styled.div`
+// font-size:26px;
+// font-weight:600;
+// width:80%;
+// `;
 
-const ModalLeftArea = styled.div`
-width:25vw;
-height:28vw;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:10px;
-`;
+// const ModalPlaceAddress = styled.div`
+// width:80%;
+// color:#696969;
+// `;
 
-const AddToScheduleButton = styled.button`
-width:10vw;
-height:30px;
-border-radius:5px;
-background-color:grey;
-color:white;
-cursor:pointer;
-border:none;
-`;
+// const AddToScheduleButton = styled.button`
+// width:10vw;
+// height:30px;
+// border-radius:5px;
+// background-color:grey;
+// color:white;
+// cursor:pointer;
+// border:none;
+// `;
 
-const CloseModalButton = styled.button`
-height:25px;
-width:25px;
-position:absolute;
-right:20px;
-top:20px;
-text-align:center;
-border:none;
-border-radius:50%;
-background-color:black;
-color:white;
-cursor:pointer;
-`;
+// const CloseModalButton = styled.button`
+// height:25px;
+// width:25px;
+// position:absolute;
+// right:20px;
+// top:20px;
+// text-align:center;
+// border:none;
+// border-radius:50%;
+// background-color:black;
+// color:white;
+// cursor:pointer;
+// `;
 
 const PlaceBoxesWrapper = styled.div`
 width:100vw;
@@ -136,6 +137,7 @@ const PlaceBoxWrapper = styled.div`
 position:relative;
 width:220px;
 height:320px;
+cursor:pointer;
 `;
 
 const PlaceBox = styled.div`
@@ -282,10 +284,12 @@ function Category({ currentLatLng }) {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
-            console.log('這位使用者的行程', index, Snap.data());
-            setCategoryPageScheduleData((draft) => {
-              draft.push(Snap.data());
-            });
+            if (Snap.data().deleted === false) {
+              console.log('這位使用者的行程', index, Snap.data());
+              setCategoryPageScheduleData((draft) => {
+                draft.push(Snap.data());
+              });
+            }
           } else {
             console.log('沒有這個行程！');
           }
@@ -301,14 +305,14 @@ function Category({ currentLatLng }) {
   function ComfirmedAdded() {
     console.log('已經加入囉！');
     const newPlace = {
-      place_title: modalDetail.name,
-      place_address: modalDetail.formatted_address,
-      stay_time: '',
+      place_title: modalDetail?.name,
+      place_address: modalDetail?.formatted_address,
+      stay_time: 60,
     };
     // 用 immer 產生出新的行程資料
     const newScheduleData = produce(categoryPageScheduleData, (draft) => {
       console.log('哈哈', draft);
-      draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
+      draft[clickedScheduleIndex]?.trip_days[dayIndex].places.push(newPlace);
     });
     console.log('newScheduleData', newScheduleData);
     // 更新 state
@@ -480,53 +484,80 @@ function Category({ currentLatLng }) {
   }, [isLoaded, searchCategoryNearby]);
   //   console.log({ lat, lng });
 
-  if (!isLoaded) return <div>City頁Loading出了點問題OWO!可以先到首頁看更多景點唷^__^!</div>;
+  if (!isLoaded) {
+    return (
+      ''
+    );
+  }
 
   return (
     <>
       <ModalBackground active={modalIsActive}>
         <ModalBox>
-          <ModalLeftArea>
-            <ModalTitle>{modalDetail.name}</ModalTitle>
-            <ModalDescription>{modalDetail.formatted_address}</ModalDescription>
-            <AddToScheduleButton
-              onClick={() => { setModalIsActive(false); setChooseScheduleModalIsActive(true); }}
-            >
-              加入行程
-            </AddToScheduleButton>
-          </ModalLeftArea>
-          <ModalImgArea>
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
-          </ModalImgArea>
-          <CloseModalButton
-            type="button"
-            onClick={() => { handleModalClose(); }}
-          >
-            X
-          </CloseModalButton>
+          {modalDetail
+            ? (
+              <>
+                <ModalLeftArea>
+                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                  <AddToScheduleButton
+                    onClick={() => {
+                      setModalIsActive(false);
+                      setChooseScheduleModalIsActive(true);
+                    }}
+                  >
+                    加入行程
+                  </AddToScheduleButton>
+                </ModalLeftArea>
+                <ModalImgArea>
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+                </ModalImgArea>
+                <CloseModalButton
+                  type="button"
+                  onClick={() => { handleModalClose(); }}
+                >
+                  X
+                </CloseModalButton>
+
+              </>
+            )
+            : <Loading />}
         </ModalBox>
       </ModalBackground>
-
       <ModalBackground active={chooseScheduleModalIsActive}>
         <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <div>
-            <div>您的現有行程</div>
-            {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
-              <div>
-                <div style={{ display: 'flex' }} id={item.schedule_id}>
-                  <div>
-                    {index + 1}
-                    :
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setModalIsActive(true);
+              setChooseScheduleModalIsActive(false);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
+                <ScheduleChoicesBox id={item.schedule_id}>
+                  <ScheduleChoiceTitle>
                     {item.title}
-                  </div>
-                  <button onClick={() => { setClickedScheduleId(item.schedule_id); setClickedScheduleIndex(index); setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false); }} type="button">選擇</button>
-                </div>
-              </div>
-            )) : ''}
-          </div>
+                  </ScheduleChoiceTitle>
+                  <ChooseButton
+                    onClick={() => {
+                      setClickedScheduleId(item.schedule_id);
+                      setClickedScheduleIndex(index);
+                      setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                    }}
+                    type="button"
+                  >
+                    選擇
+                  </ChooseButton>
+                </ScheduleChoicesBox>
+              )) : ''}
+            </ScheduleChoicesBoxWrapper>
+          </ModalContentWrapper>
           <CloseModalButton
             type="button"
             onClick={() => setChooseScheduleModalIsActive(false)}
@@ -535,26 +566,40 @@ function Category({ currentLatLng }) {
           </CloseModalButton>
         </ModalBox>
       </ModalBackground>
-
       <ModalBackground active={chooseDayModalIsActive}>
         <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <div>
-            <div>請選擇天數</div>
-            {categoryPageScheduleData
-              ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
-                <div>
-                  <div style={{ display: 'flex' }}>
-                    <div>
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setChooseDayModalIsActive(false);
+              setChooseScheduleModalIsActive(true);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {categoryPageScheduleData
+                ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                  <ScheduleChoicesBox style={{ display: 'flex' }}>
+                    <ScheduleChoiceTitle>
                       第
                       {index + 1}
                       天
-                    </div>
-                    <button onClick={() => { setDayIndex(index); }} type="button">選擇</button>
-                  </div>
-                </div>
-              )) : ''}
+                    </ScheduleChoiceTitle>
+                    <ChooseButton
+                      clicked={dayIndex === index}
+                      onClick={() => {
+                        setDayIndex(index);
+                      }}
+                      type="button"
+                    >
+                      選擇
+                    </ChooseButton>
+                  </ScheduleChoicesBox>
+                )) : ''}
+            </ScheduleChoicesBoxWrapper>
             <button type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</button>
-          </div>
+          </ModalContentWrapper>
           <CloseModalButton
             type="button"
             onClick={() => setChooseDayModalIsActive(false)}
@@ -578,9 +623,9 @@ function Category({ currentLatLng }) {
                 alt="place_photo"
                 src={item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]}
               />
-              <PlaceBoxBelowPart id={item.place_id}>
-                <PlaceTitle id={item.place_id}>
-                  {item.name}
+              <PlaceBoxBelowPart id={item?.place_id}>
+                <PlaceTitle id={item?.place_id}>
+                  {item?.name}
                 </PlaceTitle>
                 <AddPlaceToScheduleButton>查看更多</AddPlaceToScheduleButton>
               </PlaceBoxBelowPart>

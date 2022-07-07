@@ -88,6 +88,7 @@ function ChooseDate() {
     members: [
       user.uid,
     ],
+    deleted: false,
   };
 
   useEffect(() => {

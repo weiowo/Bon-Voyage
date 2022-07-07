@@ -1,8 +1,10 @@
+/* eslint-disable consistent-return */
+/* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable no-shadow */
-import styled from 'styled-components/macro';
-import DatePicker from 'react-datepicker';
+import styled from 'styled-components';
+// import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
 import {
@@ -15,16 +17,6 @@ import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/GreyHeader';
 import UserContext from '../components/UserContextComponent';
-import Member1 from './images/member1.png';
-import Member2 from './images/member2.png';
-import Member3 from './images/member3.png';
-import Member4 from './images/member4.png';
-import Member5 from './images/member5.png';
-import Member6 from './images/member6.png';
-import Member7 from './images/member7.png';
-import Member8 from './images/member8.png';
-import Member9 from './images/member9.png';
-import Member10 from './images/member10.png';
 import SquareCover1 from './images/schedule_cover_square1.jpg';
 import SquareCover2 from './images/schedule_cover_square2.jpg';
 import SquareCover3 from './images/schedule_cover_square3.jpg';
@@ -34,6 +26,9 @@ import SquareCover6 from './images/schedule_cover_square6.jpg';
 import RecCover3 from './images/schedule_cover_rec3.jpg';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import SignIn from '../components/SignIn';
+import './animation.css';
+import Add from './images/invite.png';
+// import CloseSearchIcon from './images/close-1.png';
 
 export const PageWrapper = styled.div`
 width:100vw;
@@ -87,18 +82,11 @@ margin-bottom:15px;
 const CalendarInviteWrapper = styled.div`
 display:flex;
 flex-direction:row;
+gap:35px;
 @media screen and (max-width:900px){
 flex-direction:column;
 }
 `;
-
-// const PreviewButtonArea = styled.div`
-// display:flex;
-// gap:10px;
-// @media screen and (max-width:900px){
-//   display:flex;
-//   gap:10px;
-// }`;
 
 const MyScheduleTitle = styled.div`
 font-weight:700;
@@ -193,6 +181,48 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 `;
 
+const DeleteAsk = styled.div`
+width:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+font-size:20px;
+margin-top:30px;
+`;
+
+const DeleteButtonArea = styled.div`
+width:100%;
+display:flex;
+justify-content:center;
+allign-items:center;
+gap:20px;
+`;
+
+const ConfirmDeleteButton = styled.button`
+width:30%;
+height:30px;
+background-color:#e7f5fe;
+font-weight:550;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:16px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const NoDeleteButton = styled.button`
+width:30%;
+height:30px;
+background-color:#E6D1F2;
+font-weight:550;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
 const ExistedScheuleTitle = styled.div`
 width:95%;
 height:20%;
@@ -266,10 +296,11 @@ const ScheduleMemberContainer = styled.div`
 display:flex;
 align-items:center;
 width:35vw;
-height:auto;
+height:80px;
 gap:15px;
-margin-top:8px;
-margin-bottom:8px;
+// padding-top:8px;
+// padding-bottom:8px;
+overflow:scroll;
 `;
 
 const ScheduleMemberWord = styled.div`
@@ -295,6 +326,7 @@ text-align:center;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 display:${(props) => (props.hovered ? 'none' : 'block')};
 cursor:pointer;
+object-fit: cover;
 `;
 
 const StyledLink = styled(Link)`
@@ -304,31 +336,31 @@ color:yellow;
 border:none;
 `;
 
-const InviteFriendBox = styled.div`
-width:15vw;
-height:267px;
-border-radius:5px; 
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
+// const InviteFriendBox = styled.div`
+// width:15vw;
+// height:267px;
+// border-radius:5px;
+// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+// `;
 
-const InviteFriendTitle = styled.div`
-width:100%;
-height:60px;
-border-top-right-radius:5px;
-border-top-left-radius:5px;
-background-color: #618CAC;
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:600;
-`;
+// const InviteFriendTitle = styled.div`
+// width:100%;
+// height:60px;
+// border-top-right-radius:5px;
+// border-top-left-radius:5px;
+// background-color: #618CAC;
+// color:white;
+// display:flex;
+// align-items:center;
+// justify-content:center;
+// font-weight:600;
+// `;
 
-const CalendarStyle = styled.div`
-border:none;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+// const CalendarStyle = styled.div`
+// border:none;
+// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
-`;
+// `;
 
 const InviteFriendInput = styled.input`
 border:none;
@@ -363,6 +395,35 @@ justify-content:center;
 cursor:pointer;
 `;
 
+const DeleteModalTitle = styled.div`
+display: flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+position:absolute;
+color:white;
+text-shadow: black 0.1em 0.1em 0.2em;
+top:0;
+font-weight:500;
+width:100%;
+height:40px;
+border-top-right-radius:inherit;
+border-top-left-radius:inherit;
+// background-color:#296D98;
+background: rgb(167, 176, 215);
+background: linear-gradient(
+  312deg,
+  rgb(178, 228, 238) 0%,
+  rgb(161, 176, 246) 100%
+);
+`;
+
+const AddFriendButton = styled.img`
+width:55px;
+height:55px;
+cursor:pointer;
+`;
+
 // const DateDisplay = styled.div
 
 const initialDnDState = {
@@ -377,7 +438,6 @@ function MySchedules() {
   const user = useContext(UserContext);
   const [schedules, setSchedules] = useImmer([]);
   const [selectedSchedule, setSelectedSchedule] = useState();
-  // const [selectedScheduleMembers, setSelectedScheduleMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useImmer([]);
   const [searchFriendValue, setSearchFriendValue] = useState();
   const [searchedFriendId, setSearchedFriendId] = useState();
@@ -387,9 +447,6 @@ function MySchedules() {
   const [searchResultIsActive, setSearchResultIsActive] = useState(false);
   const navigate = useNavigate();
   const [targetIndex, setTargetIndex] = useState(null);
-  console.log(schedules);
-  // const [list, setList] = useState(schedules);
-  // console.log(list);
   const [dragAndDrop, setDragAndDrop] = useState(initialDnDState);
 
   const onDragStart = (event) => {
@@ -401,9 +458,6 @@ function MySchedules() {
       isDragging: true,
       originalOrder: schedules,
     });
-    // Note: this is only for Firefox.
-    // Without it, the DnD won't work.
-    // But we are not using it.
     event.dataTransfer.setData('text/html', '');
   };
   const onDragOver = (event) => {
@@ -461,37 +515,64 @@ function MySchedules() {
 
   // 先拿到某個使用者的資料
   // 再根據行程array，去做foreach拿到所有schedule資料
+  // 即時監聽此人的個人資料是否有改變
+  // 同時也要監聽這格資料的delete or not????
 
   useEffect(() => {
-    async function getUserArrayList() {
+    if (user.uid) {
+      console.log('haha');
       const docRef = doc(db, 'users', user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data().owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
-      function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+      const unsubscribe = onSnapshot(docRef, (querySnapShot) => {
+        console.log('query~', querySnapShot.data());
+        querySnapShot.data().owned_schedule_ids.forEach(async (item, index) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
-            console.log('這位使用者的行程', index, Snap.data());
-            setSchedules((draft) => {
-              draft.push(Snap.data());
-            });
+            if (Snap.data().deleted === false) {
+              console.log('這位使用者的行程', index, Snap.data());
+              setSchedules((draft) => {
+                draft.push(Snap.data());
+              });
+            }
           } else {
             console.log('沒有這個行程！');
           }
         });
-      }
-      getSchedulesFromList();
+      });
+      return unsubscribe;
     }
-    getUserArrayList();
-  }, [setSchedules, user.uid]);
+  }, [user.uid, setSchedules]);
+
+  // useEffect(() => {
+  //   async function getUserArrayList() {
+  //     const docRef = doc(db, 'users', user.uid);
+  //     const docSnap = await getDoc(docRef);
+  //     if (docSnap.exists()) {
+  //       console.log('Document data:', docSnap.data().owned_schedule_ids);
+  //     } else {
+  //       console.log('No such document!');
+  //     }
+  //     function getSchedulesFromList() {
+  //       docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+  //         const docs = doc(db, 'schedules', item);
+  //         const Snap = await getDoc(docs);
+  //         if (Snap.exists()) {
+  //           console.log('這位使用者的行程', index, Snap.data());
+  //           setSchedules((draft) => {
+  //             draft.push(Snap.data());
+  //           });
+  //         } else {
+  //           console.log('沒有這個行程！');
+  //         }
+  //       });
+  //     }
+  //     getSchedulesFromList();
+  //   }
+  //   getUserArrayList();
+  // }, [setSchedules, user.uid]);
 
   // 刪除行程
-  function DeleteScheduleOfTheUser(targetDeleteIndex) {
+  function deleteScheduleOfTheUser(targetDeleteIndex) {
     console.log('刪除這個行程囉！');
     setSchedules(schedules.filter(
       (item, index) => index !== targetDeleteIndex,
@@ -542,10 +623,20 @@ function MySchedules() {
       console.log('沒有這個行程！');
     }
   }
+
+  // 刪除某比行程
+
+  async function deleteCertainSchedule(id) {
+    const docRef = doc(db, 'schedules', id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
+    await updateDoc(docRef, ({ deleted: true }));
+  }
+
   const colorArray = ['#618CAC', '#A9B7AA', '#7A848D', '#976666', '#A0C1D2'];
 
-  const photoArray = [Member1, Member2,
-    Member3, Member4, Member5, Member6, Member7, Member8, Member9, Member10];
+  // const photoArray = [Member1, Member2,
+  //   Member3, Member4, Member5, Member6, Member7, Member8, Member9, Member10];
 
   // 06/30更新
   // user按下「撰寫旅程回憶」的時候就要從database拿此筆行程資訊，做成新的article
@@ -650,8 +741,41 @@ function MySchedules() {
   const schedulePhotoArray = [SquareCover1,
     SquareCover2, SquareCover3, SquareCover4, SquareCover5, SquareCover6];
 
+  // 彈出刪除視窗動畫
+  const modal = document.querySelector('.modal');
+  const modalBackground = document.querySelector('.modal-background');
+
+  function toggleModal() {
+    modal?.classList.remove('hide');
+    modal?.classList.add('show');
+    modalBackground?.classList.add('show');
+  }
+
+  function closeModal() {
+    modal?.classList.remove('show');
+    modal?.classList.add('hide');
+    modalBackground?.classList.remove('show');
+  }
+
+  // 彈出搜尋朋友視窗動畫
+  const searchFriendModal = document.querySelector('.search-friend-modal');
+  const searchFriendModalBackground = document.querySelector('.search-friend-modal-background');
+
+  function toggleFriendModal() {
+    searchFriendModal?.classList.remove('hide');
+    searchFriendModal?.classList.add('show');
+    searchFriendModalBackground?.classList.add('show');
+  }
+
+  function closeFriendModal() {
+    searchFriendModal?.classList.remove('show');
+    searchFriendModal?.classList.add('hide');
+    searchFriendModalBackground?.classList.remove('show');
+  }
+
   return (
     <div>
+      {' '}
       {user.uid ? (
         <>
           <GreyHeaderComponent style={{ position: 'fixed', top: '0px;' }} />
@@ -678,9 +802,18 @@ function MySchedules() {
                   onDragLeave={onDragLeave}
                   className={dragAndDrop && dragAndDrop.draggedTo === Number(index) ? 'dropArea' : ''}
                   isSelected={index === targetIndex}
-              >
-                  <PhotoInExistedSchedule src={schedulePhotoArray[index]} />
-
+                  >
+                  <div className="modal-background">
+                    <div className="modal">
+                      <DeleteModalTitle>Delete</DeleteModalTitle>
+                      <DeleteAsk>確認要刪除嗎？</DeleteAsk>
+                      <DeleteButtonArea>
+                        <NoDeleteButton onClick={() => closeModal()} type="button">取消</NoDeleteButton>
+                        <ConfirmDeleteButton onClick={() => { deleteScheduleOfTheUser(index); closeModal(); deleteCertainSchedule(item.schedule_id); }} type="button">確認</ConfirmDeleteButton>
+                      </DeleteButtonArea>
+                    </div>
+                  </div>
+                  <PhotoInExistedSchedule src={schedulePhotoArray[index % 5]} />
                   <LargeScreenExistedScheduleRightPart>
                     <ExistedScheuleTitle id={item.schedule_id}>
                       {item.title}
@@ -689,7 +822,7 @@ function MySchedules() {
                       <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
                         選擇
                       </Button>
-                      <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
+                      <Button className="button" onClick={() => { toggleModal(); }} id={item.schedule_id} type="button">
                         刪除
                       </Button>
                     </ButtonArea>
@@ -703,7 +836,7 @@ function MySchedules() {
                       <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
                         選擇
                       </Button>
-                      <Button onClick={() => DeleteScheduleOfTheUser(index)} id={item.schedule_id} type="button">
+                      <Button onClick={() => toggleModal()} id={item.schedule_id} type="button">
                         刪除
                       </Button>
                     </ButtonArea>
@@ -732,18 +865,27 @@ function MySchedules() {
                     </SelectedScheduleTitle>
                   </SelectedSchedulePhoto>
                   <ScheduleMemberContainer>
+                    <AddFriendButton onClick={() => toggleFriendModal()} src={Add} />
                     {selectedMembers?.map((item, index) => (
                       <>
-                        <ScheduleMemberWord hovered={showMemberWord} onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }} onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }} style={{ backgroundColor: `${colorArray[index % 7]}` }}>
+                        <ScheduleMemberWord
+                          hovered={showMemberWord}
+                          onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }}
+                          onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }}
+                          style={{ backgroundColor: `${colorArray[index % 7]}` }}>
                           {item.email[0].toUpperCase()}
-                          {/* {item?.displayName?.[0]} */}
                         </ScheduleMemberWord>
-                        <ScheduleMemberPhoto hovered={showMemberPhoto} onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }} onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }} alt="member" src={photoArray[index % 10]} />
+                        <ScheduleMemberPhoto
+                          hovered={showMemberPhoto}
+                          onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }}
+                          onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }}
+                          alt="member"
+                          src={item.photo_url} />
                       </>
                     ))}
                   </ScheduleMemberContainer>
                   <CalendarInviteWrapper>
-                    <DatePicker
+                    {/* <DatePicker
                       style={{ height: '100px' }}
                       selected=""
                       startDate={new Date(selectedSchedule?.embark_date)}
@@ -751,8 +893,79 @@ function MySchedules() {
                       calendarContainer={CalendarStyle}
                       disabled
                       Range
-                      inline />
-                    <InviteFriendBox>
+                      inline /> */}
+                    <div className="search-friend-modal-background">
+                      <div className="search-friend-modal">
+                        <DeleteModalTitle>揪親朋好友一起玩？</DeleteModalTitle>
+                        <InviteFriendBelowArea active={searchInputIsActive}>
+                          <InviteFriendInput
+                            value={searchFriendValue}
+                            type="text"
+                            inputMode="text"
+                            onChange={(e) => setSearchFriendValue(e.target.value)}
+                            placeholder="請輸入email....." />
+                          <ConfirmSearchButton
+                            onClick={() => {
+                              submitSearch();
+                              setSearchInputIsActive(false);
+                              setSearchResultIsActive(true);
+                            }}
+                            type="button">
+                            確認搜尋
+                          </ConfirmSearchButton>
+                        </InviteFriendBelowArea>
+                        {searchedFriendId ? (
+                          <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
+                            <div>
+                              找到此用戶囉！
+                              <br />
+                              要加入他嗎？
+                            </div>
+                            <div>
+                              <ConfirmSearchButton
+                                onClick={() => {
+                                  addFriendToTheSchedule();
+                                  setSearchInputIsActive(true);
+                                  setSearchResultIsActive(false);
+                                  setSearchedFriendId(null);
+                                }}
+                                type="button">
+                                確認加入
+                              </ConfirmSearchButton>
+                              <ConfirmSearchButton
+                                style={{ marginTop: '10px' }}
+                                onClick={() => {
+                                  setSearchInputIsActive(true);
+                                  setSearchResultIsActive(false);
+                                  setSearchedFriendId(null);
+                                }}
+                                type="button">
+                                回上一頁
+                              </ConfirmSearchButton>
+                            </div>
+                          </InviteFriendBelowArea>
+                        ) : (
+                          <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
+                            <div>
+                              沒有此用戶～
+                              <br />
+                              試試看別的email吧！
+                            </div>
+                            <ConfirmSearchButton
+                              onClick={() => {
+                                setSearchInputIsActive(true);
+                                setSearchResultIsActive(false);
+                                setSearchedFriendId(null);
+                              }}
+                              type="button">
+                              回上一頁
+                            </ConfirmSearchButton>
+                          </InviteFriendBelowArea>
+                        )}
+                        <button onClick={() => closeFriendModal()} type="button">取消</button>
+                      </div>
+                    </div>
+                    {/* <InviteFriendBox>
                       <InviteFriendTitle>加朋友進此行程？</InviteFriendTitle>
                       <InviteFriendBelowArea active={searchInputIsActive}>
                         <InviteFriendInput
@@ -819,7 +1032,7 @@ function MySchedules() {
                           </ConfirmSearchButton>
                         </InviteFriendBelowArea>
                       )}
-                    </InviteFriendBox>
+                    </InviteFriendBox> */}
                   </CalendarInviteWrapper>
                 </>
               ) : ''}

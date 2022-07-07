@@ -25,7 +25,7 @@ width:80vw;
 height:85vh;
 display:flex;
 flex-direction:column;
-margin-left:50px;
+padding-left:50px;
 `;
 
 const MyProfileWrapper = styled.div`
@@ -117,7 +117,6 @@ function Profile() {
   const [photoUrl, setPhotoUrl] = useState();
   const [userEmail, setUserEmail] = useState();
   const [userName, setUserName] = useState();
-  // const navigate = useNavigate();
 
   console.log(photoUrl);
   console.log('profile page', user);
@@ -126,9 +125,6 @@ function Profile() {
   function signOutFunction() {
     signOut(auth).then(() => {
       console.log('successfully sign out!');
-      // navigate({ pathname: '/' });
-
-      // Sign-out successful.
     }).catch((error) => {
       console.log(error);
     });

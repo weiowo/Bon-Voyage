@@ -12,6 +12,7 @@ import { HashLink } from 'react-router-hash-link';
 import HeaderComponent from '../components/Header';
 import ShareBanner2 from './images/share_banner2.png';
 import db from '../utils/firebase-init';
+import defaultCover from './images/schedule_cover_rec3.jpg';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -63,6 +64,7 @@ background-position:center;
 flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 cursor:pointer;
+object-fit: cover;
 `;
 
 const Description = styled.div`
@@ -192,6 +194,7 @@ width:100px;
 height:100px;
 position:relative;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+object-fit: cover;
 `;
 
 const ImgDisplayArea = styled.div`
@@ -237,7 +240,9 @@ function ShowArticle() {
           </ArticleTitleButtonArea>
           <ArticleEditPart>
             <EditingPart>
-              <ArticleCoverPhotoWrapper src={shownArticle?.cover_img} />
+              <ArticleCoverPhotoWrapper src={shownArticle?.cover_img
+                ? shownArticle?.cover_img : defaultCover}
+              />
               <Description>{shownArticle?.summary}</Description>
               {shownArticle ? shownArticle?.trip_days?.map((dayItem, dayIndex) => (
                 <>

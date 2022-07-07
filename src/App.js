@@ -25,7 +25,6 @@ import ShowArticle from './pages/SingleArticle';
 import MyArticles from './pages/MyArticles';
 import AllArticlePage from './pages/AllArticles';
 import Profile from './pages/Profile';
-import Drag from './pages/Hahaha';
 import Correct from './pages/VrPage';
 import Test from './pages/Test';
 
@@ -107,7 +106,6 @@ function App() {
             <Route path="/all-articles" element={<AllArticlePage />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/vr-page" element={<Correct />} />
-            <Route path="/drag" element={<Drag />} />
             <Route path="/test" element={<Test />} />
           </Routes>
         </BrowserRouter>

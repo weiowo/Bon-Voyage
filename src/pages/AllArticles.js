@@ -12,6 +12,14 @@ import {
   MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
 } from './MyArticles';
 import { ArticlesBoxesContainer } from '../components/ArticlesInHome';
+import Cover1 from './images/schedule_cover_rec1.jpg';
+import Cover2 from './images/schedule_cover_rec5.jpg';
+import Cover3 from './images/schedule_cover_rec3.jpg';
+import Cover4 from './images/camping.jpg';
+import Cover5 from './images/schedule_cover_rec2.jpg';
+import Cover6 from './images/schedule_cover_rec4.jpg';
+
+export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -61,7 +69,11 @@ function AllArticlePage() {
             {allArticles ? allArticles.map((item) => (
               <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                 <MyArticle>
-                  <CoverPhotoInMyArticle src={item?.cover_img} />
+                  <CoverPhotoInMyArticle src={item?.cover_img
+                    ? item?.cover_img
+                    : defaultArticleCoverPhoto[Math.floor(Math.random()
+                      * defaultArticleCoverPhoto.length)]}
+                  />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
                     <MyArticleSummary>{item?.summary}</MyArticleSummary>
