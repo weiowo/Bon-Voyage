@@ -61,6 +61,7 @@ export const ModalImg = styled.img`
 width:10vw;
 height:10vw;
 border-radius:10px;
+object-fit: cover;
 `;
 
 export const ModalLeftArea = styled.div`

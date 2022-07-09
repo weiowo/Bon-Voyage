@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 /* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-closing-bracket-location */
@@ -604,6 +603,7 @@ function MySchedules() {
       });
       return unsubscribe;
     }
+    return undefined;
   }, [user.uid, setSchedules]);
 
   // useEffect(() => {

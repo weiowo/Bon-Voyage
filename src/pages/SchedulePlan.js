@@ -1068,7 +1068,7 @@ function Schedule() {
           </AddNewScheduleButton>
         </LeftContainer>
         <RightContainer>
-          {/* <Map
+          <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
             selected={selected}
@@ -1080,7 +1080,7 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-          /> */}
+          />
           <ChatRoom openChat={openChat}>
             <ChatRoomTitle>
               聊天室

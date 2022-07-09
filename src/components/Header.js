@@ -61,7 +61,9 @@ function HeaderComponent() {
         <Logo>Bon Voyage</Logo>
       </StyleNavLink>
       <NavBar>
-        <div style={{ cursor: 'pointer' }}>VR專區</div>
+        <StyleNavLink to="/vr-page">
+          VR專區
+        </StyleNavLink>
         <div style={{ cursor: 'pointer' }}>熱門景點</div>
         <div style={{ cursor: 'pointer' }}>國內旅遊</div>
         <div style={{ cursor: 'pointer' }}>國外旅遊</div>

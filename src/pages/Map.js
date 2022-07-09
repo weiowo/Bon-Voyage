@@ -228,11 +228,11 @@ function Map({
     const markerIcons = [PinkStar, OrangeStar, YellowStar, GreenStar, BlueStar, PurpleStar];
     const lineColors = ['#FF82B8', '#FFB750', '#F4E64C', '#76DC66', '#83D6FD', '#E483F3'];
 
-    scheduleData.trip_days.forEach((dayItem, dayIndex) => {
+    scheduleData?.trip_days?.forEach((dayItem, dayIndex) => {
       for (let i = 0; i < scheduleData.trip_days[dayIndex].places.length - 1; i += 1) {
         getDistanceAndRoute(
-          dayItem.places[i].place_address,
-          dayItem.places[i + 1].place_address,
+          dayItem?.places[i].place_address,
+          dayItem?.places[i + 1].place_address,
           markerIcons[dayIndex % 7],
           lineColors[dayIndex % 7],
           dayIndex,
