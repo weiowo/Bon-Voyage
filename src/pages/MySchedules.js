@@ -3,7 +3,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable no-shadow */
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 // import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
@@ -28,7 +28,7 @@ import ProfileSideBarElement from '../components/ProfileSideBar';
 import SignIn from '../components/SignIn';
 import './animation.css';
 import Add from './images/invite.png';
-// import CloseSearchIcon from './images/close-1.png';
+import CloseSearchIcon from './images/close-1.png';
 
 export const PageWrapper = styled.div`
 width:100vw;
@@ -55,6 +55,7 @@ align-items:center;
 gap:20px;
 overflow:scroll;
 height:calc(100vh-80px);
+padding-bottom:5px;
 `;
 
 const MySchedulesTitleAndCreateNewScheduleArea = styled.div`
@@ -79,14 +80,14 @@ justify-content:left;
 margin-bottom:15px;
 `;
 
-const CalendarInviteWrapper = styled.div`
-display:flex;
-flex-direction:row;
-gap:35px;
-@media screen and (max-width:900px){
-flex-direction:column;
-}
-`;
+// const CalendarInviteWrapper = styled.div`
+// display:flex;
+// flex-direction:row;
+// gap:35px;
+// @media screen and (max-width:900px){
+// flex-direction:column;
+// }
+// `;
 
 const MyScheduleTitle = styled.div`
 font-weight:700;
@@ -124,6 +125,7 @@ border-radius:3px;
 border:none;
 font-size:12px;
 font-weight:500;
+cursor:pointer;
 @media screen and (max-width:900px){
   width:70px;
   height:20px;
@@ -191,12 +193,26 @@ font-size:20px;
 margin-top:30px;
 `;
 
+const FoundAsk = styled.div`
+width:100%;
+font-weight:600;
+font-size:18px;
+`;
+
 const DeleteButtonArea = styled.div`
 width:100%;
 display:flex;
 justify-content:center;
 allign-items:center;
 gap:20px;
+`;
+
+const CloseSearch = styled.img`
+position:absolute;
+right:20px;
+width:18px;
+height:18px;
+cursor:pointer;
 `;
 
 const ConfirmDeleteButton = styled.button`
@@ -246,7 +262,6 @@ gap:15px;
 const Button = styled.button`
 height:25px;
 width:50px;
-// background-color:#296D98;
 border:1px solid #296D98;
 color:#296D98;
 border-radius:15px;
@@ -295,7 +310,7 @@ bottom:20px;
 const ScheduleMemberContainer = styled.div`
 display:flex;
 align-items:center;
-width:35vw;
+width:35.7vw;
 height:80px;
 gap:15px;
 // padding-top:8px;
@@ -321,7 +336,7 @@ const ScheduleMemberPhoto = styled.img`
 width:50px;
 height:50px;
 border-radius:50%;
-border:1px solid grey;
+// border:1px solid grey;
 text-align:center;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 display:${(props) => (props.hovered ? 'none' : 'block')};
@@ -332,8 +347,44 @@ object-fit: cover;
 const StyledLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
-color:yellow;
+color:white;
 border:none;
+`;
+
+const CalendarBox = styled.div`
+width:35vw;
+height:120px;
+border-radius:15px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const CalendarBoxTitle = styled.div`
+display:flex;
+padding-left:20px;
+color:white;
+font-weight:600;
+font-size:18px;
+text-shadow:1px 1px 2px black;
+align-items:center;
+border-top-right-radius:inherit;
+border-top-left-radius:inherit;
+width:35vw;
+height:30%;
+background: linear-gradient(
+  312deg,
+  rgb(178, 228, 238) 0%,
+  rgb(161, 176, 246) 100%
+);
+`;
+
+const DateArea = styled.div`
+display:flex;
+height:70%;
+color:black;
+font-weight:600;
+font-size:25px;
+align-items:center;
+justify-content:center;
 `;
 
 // const InviteFriendBox = styled.div`
@@ -378,21 +429,28 @@ flex-direction:column;
 align-items:center;
 gap:30px;
 justify-content:center;
+width:100%;
+margin-top:20px;
 `;
 
 const ConfirmSearchButton = styled.button`
-width:80px;
-height:25px;
+width:30%;
+height:35px;
 border-radius:8px;
-background-color:#296D98;
 color:white;
-font-weight:500;
-font-size:13px;
+font-weight:550;
+font-size:16px;
 border:none;
 display:flex;
 align-items:center;
 justify-content:center;
 cursor:pointer;
+text-shadow:1px 1px 2px black;
+background: linear-gradient(
+  312deg,
+  rgb(178, 228, 238) 0%,
+  rgb(161, 176, 246) 100%
+);
 `;
 
 const DeleteModalTitle = styled.div`
@@ -402,14 +460,13 @@ justify-content:center;
 font-size:20px;
 position:absolute;
 color:white;
-text-shadow: black 0.1em 0.1em 0.2em;
+text-shadow:1px 1px 2px black;
 top:0;
 font-weight:500;
 width:100%;
 height:40px;
 border-top-right-radius:inherit;
 border-top-left-radius:inherit;
-// background-color:#296D98;
 background: rgb(167, 176, 215);
 background: linear-gradient(
   312deg,
@@ -417,6 +474,12 @@ background: linear-gradient(
   rgb(161, 176, 246) 100%
 );
 `;
+
+// const MemberAreaTitle = styled.div`
+// width:35vw;
+// font-size:25px;
+// font-weight:600;
+// `;
 
 const AddFriendButton = styled.img`
 width:55px;
@@ -597,20 +660,6 @@ function MySchedules() {
     }
     getArray();
   }, [selectedSchedule?.schedule_id, selectedSchedule]);
-
-  // 點到換色
-  // function selectAndChangeColor(targetIndex) {
-  //   if (targetIndex === index) {
-  //     setIsSelected(true);
-  //   }
-  // }
-
-  // 拿到所有的schedule資料並詢問要編輯哪一個行程，或者要創建新的行程
-  // async function getSchedule() {
-  //   const querySnapshot = await getDocs(collection(db, 'schedules'));
-  //   const scheduleList = querySnapshot.docs.map((item) => item.data());
-  //   setSchedules(scheduleList);
-  // }
 
   // 拿到點按下去的那筆行程
   async function getSelectedSchedule(id) {
@@ -805,7 +854,9 @@ function MySchedules() {
                   >
                   <div className="modal-background">
                     <div className="modal">
-                      <DeleteModalTitle>Delete</DeleteModalTitle>
+                      <DeleteModalTitle>
+                        Delete
+                      </DeleteModalTitle>
                       <DeleteAsk>確認要刪除嗎？</DeleteAsk>
                       <DeleteButtonArea>
                         <NoDeleteButton onClick={() => closeModal()} type="button">取消</NoDeleteButton>
@@ -859,11 +910,14 @@ function MySchedules() {
                       撰寫遊記
                     </ViewDetailButton>
                   </SchedulePreview>
-                  <SelectedSchedulePhoto>
-                    <SelectedScheduleTitle>
-                      {selectedSchedule.title}
-                    </SelectedScheduleTitle>
-                  </SelectedSchedulePhoto>
+                  <StyledLink to={`/schedule?id=${selectedSchedule.schedule_id}`}>
+                    <SelectedSchedulePhoto>
+                      <SelectedScheduleTitle>
+                        {selectedSchedule.title}
+                      </SelectedScheduleTitle>
+                    </SelectedSchedulePhoto>
+                  </StyledLink>
+                  {/* <MemberAreaTitle>Members</MemberAreaTitle> */}
                   <ScheduleMemberContainer>
                     <AddFriendButton onClick={() => toggleFriendModal()} src={Add} />
                     {selectedMembers?.map((item, index) => (
@@ -872,7 +926,7 @@ function MySchedules() {
                           hovered={showMemberWord}
                           onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }}
                           onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }}
-                          style={{ backgroundColor: `${colorArray[index % 7]}` }}>
+                          style={{ backgroundColor: `${colorArray[index % 5]}` }}>
                           {item.email[0].toUpperCase()}
                         </ScheduleMemberWord>
                         <ScheduleMemberPhoto
@@ -884,8 +938,17 @@ function MySchedules() {
                       </>
                     ))}
                   </ScheduleMemberContainer>
-                  <CalendarInviteWrapper>
-                    {/* <DatePicker
+                  <CalendarBox>
+                    <CalendarBoxTitle>旅程時間</CalendarBoxTitle>
+                    <DateArea>
+                      {selectedSchedule?.embark_date.split('-').join('/')}
+                      ～
+                      {selectedSchedule?.end_date.split('-').join('/')}
+                    </DateArea>
+                    {/* <DateArea>{selectedSchedule?.end_date}</div> */}
+                  </CalendarBox>
+                  {/* <CalendarInviteWrapper> */}
+                  {/* <DatePicker
                       style={{ height: '100px' }}
                       selected=""
                       startDate={new Date(selectedSchedule?.embark_date)}
@@ -894,63 +957,47 @@ function MySchedules() {
                       disabled
                       Range
                       inline /> */}
-                    <div className="search-friend-modal-background">
-                      <div className="search-friend-modal">
-                        <DeleteModalTitle>揪親朋好友一起玩？</DeleteModalTitle>
-                        <InviteFriendBelowArea active={searchInputIsActive}>
-                          <InviteFriendInput
-                            value={searchFriendValue}
-                            type="text"
-                            inputMode="text"
-                            onChange={(e) => setSearchFriendValue(e.target.value)}
-                            placeholder="請輸入email....." />
-                          <ConfirmSearchButton
-                            onClick={() => {
-                              submitSearch();
-                              setSearchInputIsActive(false);
-                              setSearchResultIsActive(true);
-                            }}
-                            type="button">
-                            確認搜尋
-                          </ConfirmSearchButton>
-                        </InviteFriendBelowArea>
-                        {searchedFriendId ? (
-                          <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
-                            <div>
-                              找到此用戶囉！
-                              <br />
-                              要加入他嗎？
-                            </div>
-                            <div>
-                              <ConfirmSearchButton
-                                onClick={() => {
-                                  addFriendToTheSchedule();
-                                  setSearchInputIsActive(true);
-                                  setSearchResultIsActive(false);
-                                  setSearchedFriendId(null);
-                                }}
-                                type="button">
-                                確認加入
-                              </ConfirmSearchButton>
-                              <ConfirmSearchButton
-                                style={{ marginTop: '10px' }}
-                                onClick={() => {
-                                  setSearchInputIsActive(true);
-                                  setSearchResultIsActive(false);
-                                  setSearchedFriendId(null);
-                                }}
-                                type="button">
-                                回上一頁
-                              </ConfirmSearchButton>
-                            </div>
-                          </InviteFriendBelowArea>
-                        ) : (
-                          <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
-                            <div>
-                              沒有此用戶～
-                              <br />
-                              試試看別的email吧！
-                            </div>
+                  <div className="search-friend-modal-background">
+                    <div className="search-friend-modal">
+                      <DeleteModalTitle>
+                        揪親朋好友一起玩？
+                        <CloseSearch src={CloseSearchIcon} onClick={() => closeFriendModal()} />
+                      </DeleteModalTitle>
+                      <InviteFriendBelowArea active={searchInputIsActive}>
+                        <InviteFriendInput
+                          value={searchFriendValue}
+                          type="text"
+                          inputMode="text"
+                          onChange={(e) => setSearchFriendValue(e.target.value)}
+                          placeholder="請輸入email....." />
+                        <ConfirmSearchButton
+                          onClick={() => {
+                            submitSearch();
+                            setSearchInputIsActive(false);
+                            setSearchResultIsActive(true);
+                          }}
+                          type="button">
+                          確認搜尋
+                        </ConfirmSearchButton>
+                      </InviteFriendBelowArea>
+                      {searchedFriendId ? (
+                        <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
+                          <FoundAsk>
+                            找到此用戶囉！
+                            <br />
+                            要加入他嗎？
+                          </FoundAsk>
+                          <DeleteButtonArea>
+                            <ConfirmSearchButton
+                              onClick={() => {
+                                addFriendToTheSchedule();
+                                setSearchInputIsActive(true);
+                                setSearchResultIsActive(false);
+                                setSearchedFriendId(null);
+                              }}
+                              type="button">
+                              確認加入
+                            </ConfirmSearchButton>
                             <ConfirmSearchButton
                               onClick={() => {
                                 setSearchInputIsActive(true);
@@ -960,12 +1007,29 @@ function MySchedules() {
                               type="button">
                               回上一頁
                             </ConfirmSearchButton>
-                          </InviteFriendBelowArea>
-                        )}
-                        <button onClick={() => closeFriendModal()} type="button">取消</button>
-                      </div>
+                          </DeleteButtonArea>
+                        </InviteFriendBelowArea>
+                      ) : (
+                        <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
+                          <div>
+                            沒有此用戶～
+                            <br />
+                            試試看別的email吧！
+                          </div>
+                          <ConfirmSearchButton
+                            onClick={() => {
+                              setSearchInputIsActive(true);
+                              setSearchResultIsActive(false);
+                              setSearchedFriendId(null);
+                            }}
+                            type="button">
+                            回上一頁
+                          </ConfirmSearchButton>
+                        </InviteFriendBelowArea>
+                      )}
                     </div>
-                    {/* <InviteFriendBox>
+                  </div>
+                  {/* <InviteFriendBox>
                       <InviteFriendTitle>加朋友進此行程？</InviteFriendTitle>
                       <InviteFriendBelowArea active={searchInputIsActive}>
                         <InviteFriendInput
@@ -1033,7 +1097,7 @@ function MySchedules() {
                         </InviteFriendBelowArea>
                       )}
                     </InviteFriendBox> */}
-                  </CalendarInviteWrapper>
+                  {/* </CalendarInviteWrapper> */}
                 </>
               ) : ''}
             </SelectedScheduleWrapper>

@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+// import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import UserContext from './UserContextComponent';
+// import UserContext from './UserContextComponent';
 
 const Header = styled.header`
 position:absolute;
@@ -47,8 +47,7 @@ color:white;
 `;
 
 function GreyHeaderComponent() {
-  const user = useContext(UserContext);
-  console.log('我在greyheaderComponents唷', user);
+  // const user = useContext(UserContext);
   return (
     <Header>
       <StyleNavLink to="/">

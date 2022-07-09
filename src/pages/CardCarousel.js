@@ -11,15 +11,21 @@ import db from '../utils/firebase-init';
 import BckSrc from './images/paris.png';
 import ArrowToRightSrc from './images/arrow-right.png';
 import ArrowToLeftSrc from './images/arrow-left.png';
+import Default1 from './images/default1.png';
+import Default2 from './images/default2.png';
+import Default3 from './images/default3.png';
+import Default4 from './images/default4.png';
+import Default5 from './images/default5.png';
 import './animation.css';
 import {
   ModalBackground, ModalBox, ModalImgArea, ModalImg, ModalLeftArea,
   AddToScheduleButton, CloseModalButton, LeftButton,
   ModalContentWrapper, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
-  ScheduleChoiceTitle, ChooseButton, defaultArray,
-
+  ScheduleChoiceTitle, ChooseButton, ModalPlaceTitle, ModalPlaceAddress,
 } from './City';
 import UserContext from '../components/UserContextComponent';
+
+const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
 const NearByPlaceWrapper = styled.div`
 width:100vw;
@@ -283,8 +289,8 @@ function CardsCarousel({ currentNearbyAttraction }) {
       <ModalBackground active={modalIsActive}>
         <ModalBox>
           <ModalLeftArea>
-            <div style={{ fontSize: '30px', fontWeight: '600' }}>{modalDetail?.name}</div>
-            <div>{modalDetail?.formatted_address}</div>
+            <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+            <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
             <AddToScheduleButton
               onClick={() => { handleUserOrNot(); }}
             >

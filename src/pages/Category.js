@@ -26,12 +26,19 @@ import TapSrc from './images/tap.png';
 import BlackHeaderComponent
   from '../components/BlackHeader';
 import UserContext from '../components/UserContextComponent';
+import Default1 from './images/default1.png';
+import Default2 from './images/default2.png';
+import Default3 from './images/default3.png';
+import Default4 from './images/default4.png';
+import Default5 from './images/default5.png';
 import {
-  defaultArray, ModalBackground, ModalBox, ModalImgArea, ModalImg,
+  ModalBackground, ModalBox, ModalImgArea, ModalImg,
   ModalLeftArea, ModalPlaceTitle, ModalPlaceAddress, AddToScheduleButton, CloseModalButton,
   LeftButton, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
   ScheduleChoiceTitle, ChooseButton, ModalContentWrapper, Loading,
 } from './City';
+
+const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
 // modal
 

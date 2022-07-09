@@ -15,7 +15,7 @@ import TravelBgSrc from './images/travel2.jpg';
 
 const ModelBox = styled.div`
 width:50vw;
-height:30vw;
+height:33vw;
 background-color:white;
 z-index:10;
 border-radius:20px;
@@ -26,12 +26,47 @@ justify-content:center;
 gap:20px;
 `;
 
+const TripTitleAndInputArea = styled.div`
+width:80%;
+height:50px;
+display:flex;
+align-items:center;
+justify-content:center;
+`;
+
 const DatePickerWrapper = styled.div`
-width:45vw;
+width:100%;
 height:auto;
 display:flex;
 gap:20px;
 justify-content:center;
+`;
+
+const TripTitleInput = styled.input`
+width: 70%;
+height:22px;
+font-weight:500;
+font-size:20px;
+border:none;
+background-color:transparent;
+border-bottom:1px solid black;
+outline:none;
+padding-left:10px;
+padding-left:5px;
+`;
+
+const EmbarkDateWrpper = styled.div`
+display:flex;
+flex-direction:column;
+width:35%;
+height:auto;
+gap:10px;
+`;
+
+const EmbarkEndDateTitle = styled.div`
+width:100%;
+font-weight:550;
+font-size:16px;
 `;
 
 const ModalBackgroud = styled.div`
@@ -58,6 +93,7 @@ font-size:14px;
 font-weight:600;
 border:none;
 border-radius:5px;
+cursor:pointer;
 `;
 
 function ChooseDate() {
@@ -133,37 +169,45 @@ function ChooseDate() {
   return (
     <ModalBackgroud>
       <ModelBox>
-        <div>
-          旅程名稱
-        </div>
-        <input
-          required
-          type="text"
-          value={newScheduleTitle}
-          onChange={(e) => {
-            setNewScheduleTitle(e.target.value);
-          }}
-        />
+        <TripTitleAndInputArea>
+          <TripTitleInput
+            required="required"
+            type="text"
+            placeholder="旅程名稱....."
+            value={newScheduleTitle}
+            onChange={(e) => {
+              setNewScheduleTitle(e.target.value);
+            }}
+          />
+        </TripTitleAndInputArea>
+
         <DatePickerWrapper>
-          <DatePicker
-            dateFormat="yyyy/MM/dd"
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            endDate={finishDate}
-            inline
-          />
-          <DatePicker
-            dateFormat="yyyy/MM/dd"
-            selected={finishDate}
-            onChange={(date) => setFinishEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={finishDate}
-            minDate={startDate}
-            inline
-          />
+          <EmbarkDateWrpper>
+            <EmbarkEndDateTitle>出發時間</EmbarkEndDateTitle>
+            <DatePicker
+              dateFormat="yyyy/MM/dd"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={finishDate}
+              inline
+            />
+          </EmbarkDateWrpper>
+          <EmbarkDateWrpper>
+            <EmbarkEndDateTitle>結束時間</EmbarkEndDateTitle>
+            <DatePicker
+              dateFormat="yyyy/MM/dd"
+              selected={finishDate}
+              onChange={(date) => setFinishEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={finishDate}
+              minDate={startDate}
+              inline
+            />
+          </EmbarkDateWrpper>
+
         </DatePickerWrapper>
         <ConfirmedButton type="button" onClick={() => setNewScheduleToDb()}>
           OK

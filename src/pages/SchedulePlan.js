@@ -179,14 +179,17 @@ font-weight:600;
 const CompleteButton = styled.button`
 width:50px;
 height:30px;
-background-color:white;
-color:#226788;
+// background-color:white;
+// color:#226788;
 border-radius:10px;
 border: solid #226788 2px;
 font-weight:600;
 cursor:pointer;
 justify-self:end;
 justify-self:right;
+background-color:${(props) => (props.isEditing ? '#226788' : 'white')};
+color:${(props) => (props.isEditing ? 'white' : '#226788')};
+animation:${(props) => (props.isEditing ? 'hithere 1.1s ease 3' : 'none')};
 `;
 
 const ChatRoom = styled.div`
@@ -217,6 +220,7 @@ width:50px;
 height:50px;
 cursor:pointer;
 display:${(props) => (props.openChat ? 'none' : 'block')};
+animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
 `;
 
 const CloseIcon = styled.img`
@@ -267,10 +271,11 @@ overflow-y:scroll;
 overflow-wrap: break-word;
 height:250px;
 width:100%;
-gap:5px;
+gap:15px;
 padding-left:1px;
 padding-right:3px;
 padding-top:10px;
+padding-bottom:15px;
 `;
 
 const MessageBox = styled.div`
@@ -284,10 +289,19 @@ align-self:flex-start;
 flex-shrink:0;
 `;
 
+const NameMessage = styled.div`
+width:100%;
+display:flex;
+flex-direction:column;
+`;
+
 const Name = styled.div`
-width:40px;;
-font-size:14px;
+width:100%;
+font-size:12px;
 font-weight:500;
+color:#616161;
+margin-left:5px;
+text-align:left;
 `;
 
 const Message = styled.div`
@@ -482,6 +496,24 @@ height: 60px;
 gap:10px;
 `;
 
+const UnreadMessage = styled.div`
+display:flex;
+align-items:center;
+justify-content:center;
+width:20px;
+height:20px;
+border-radius:50%;
+background-color:red;
+color:white;
+font-size:12px;
+font-weight:500;
+position:fixed;
+bottom:85px;
+right:120px;
+z-index:30;
+animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
+`;
+
 const CarClockIconArea = styled.div`
 display: flex;
 align-items: center;
@@ -516,14 +548,6 @@ width:22px;
 height:22px;
 `;
 
-// 拿user資料並放入list
-// async function getUser() {
-//   const querySnapshot = await getDocs(collection(db, 'users'));
-//   const UserList = querySnapshot.docs.map((item) => item.data());
-//   console.log(UserList);
-//   return UserList;
-// }
-
 const initialDnDState = {
   draggedFrom: null,
   draggedTo: null,
@@ -547,7 +571,6 @@ function Schedule() {
     messages: [],
   };
   const [scheduleData, updateScheduleData] = useImmer();
-  console.log('媽我在這', scheduleData);
   const [chatBox, updateChatBox] = useImmer(newChatRoom);
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
@@ -555,13 +578,17 @@ function Schedule() {
   const [selected, setSelected] = useState({}); // 搜尋後根據自動推薦選擇的地點
   const [clickedDayIndex, setClickedDayIndex] = useState('');
   const [openChat, setOpenChat] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(openChat);
+  const [unreadMessage, setUnreadMessage] = useState(0);
+  console.log(unreadMessage);
+  // const [searchParams, setSearchParams] = useSearchParams();
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
   const user = useContext(UserContext);
   const [dragAndDrop, setDragAndDrop] = useState(initialDnDState);
   const [placeDragAndDrop, setPlaceDragAndDrop] = useState(placeInitialDnDState);
   const [choosedDayIndex, setChoosedDayIndex] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
   const { search } = useLocation();
   const existScheduleId = new URLSearchParams(search).get('id');
 
@@ -603,13 +630,6 @@ function Schedule() {
       });
     }
   };
-  // useEffect(() => {
-  //   console.log('Dragged From: ', dragAndDrop && dragAndDrop.draggedFrom);
-  //   console.log('Dropping Into: ', dragAndDrop && dragAndDrop.draggedTo);
-  // }, [dragAndDrop]);
-  // useEffect(() => {
-  //   console.log('List updated!');
-  // }, [scheduleData?.trip_days]);
 
   const onDrop = () => {
     updateScheduleData((draft) => {
@@ -695,7 +715,7 @@ function Schedule() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         updateScheduleData(docSnap.data());
-        const dateTestFromDb = Date.parse(docSnap.data().embark_date);
+        // const dateTestFromDb = Date.parse(docSnap.data().embark_date);
         updateChatBox((draft) => {
           draft.chat_room_id = docSnap.data().chat_room_id;
         });
@@ -705,8 +725,8 @@ function Schedule() {
     }
     async function getChatRoom() {
       const chatRoomMessageIdRef = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-      const test = await getDocs(chatRoomMessageIdRef);
-      test.forEach((doc) => {
+      const chatroom = await getDocs(chatRoomMessageIdRef);
+      chatroom.forEach((doc) => {
         updateChatBox((draft) => {
           draft.chat_room_id = doc.data().chat_room_id;
         });
@@ -725,6 +745,7 @@ function Schedule() {
         (item, index) => index !== targetDeleteDayIndex,
       );
     });
+    setIsEditing(true);
   }
 
   // 刪除某一天
@@ -735,6 +756,7 @@ function Schedule() {
         (item, index) => index !== targetDeletePlaceIndex,
       );
     }));
+    setIsEditing(true);
   }
 
   // 如果沒有id，表示是新行程，創建資料後再次把行set進去
@@ -754,8 +776,8 @@ function Schedule() {
         draft.chat_room_id = createNewChatRoomData.id;
         draft.schedule_id = createNewScheduleData.id;
       });
-      const params = { id: createNewScheduleData.id };
-      setSearchParams(params);
+      // const params = { id: createNewScheduleData.id };
+      // setSearchParams(params);
     }
   }
 
@@ -766,6 +788,7 @@ function Schedule() {
     message: inputMessage,
     sent_time: new Date(),
     photo_url: user.photoURL,
+    unread: false,
   };
 
   async function addNewMessageToFirestoreFirst() {
@@ -777,17 +800,30 @@ function Schedule() {
   }
 
   // 有訊息更新時就要及時拿出來！
+  // 如果聊天室是關的，就要說有未讀訊息！
+  // useEffect在render畫面時就會先跑一次加1，所以取用未讀訊息state時要減一
 
   useEffect(() => {
     if (existScheduleId) {
       const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-      onSnapshot(chatRoomMessageArray, (querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          updateChatBox(doc.data());
-        });
+      return onSnapshot(chatRoomMessageArray, (querySnapshot) => {
+        if (openChat === false) {
+          console.log(openChat, '有訊息沒讀唷～！');
+          querySnapshot.forEach((doc) => {
+            updateChatBox(doc.data());
+            setUnreadMessage((prev) => prev + 1);
+          });
+        } else if (openChat === true) {
+          console.log(openChat, '聊天室有開，直接顯示訊息！');
+          querySnapshot.forEach((doc) => {
+            updateChatBox(doc.data());
+            setUnreadMessage(0);
+          });
+        }
       });
     }
-  }, [existScheduleId, updateChatBox]);
+    return undefined;
+  }, [existScheduleId, updateChatBox, openChat]);
 
   // 有人編輯時要及時呈現
 
@@ -795,7 +831,6 @@ function Schedule() {
     if (existScheduleId) {
       const theScheduleBeingEdited = doc(db, 'schedules', existScheduleId);
       onSnapshot(theScheduleBeingEdited, (querySnapshot) => {
-        console.log(querySnapshot);
         updateScheduleData(querySnapshot.data());
       });
     }
@@ -813,6 +848,7 @@ function Schedule() {
     updateScheduleData((draft) => {
       draft?.trip_days[dayIndex]?.places.push(newPlace);
     });
+    setIsEditing(true);
   }
 
   // 新增天數
@@ -829,9 +865,8 @@ function Schedule() {
       const addedDateEndDate = MilliSecondsToDate.split('T')[0];
       draft.end_date = addedDateEndDate;
     });
+    setIsEditing(true);
   }
-
-  console.log(chatBox);
 
   // 拿一週的哪一天
 
@@ -842,51 +877,41 @@ function Schedule() {
     updateScheduleData((draft) => {
       draft.trip_days[dayIndex].places[placeIndex].place_title = placeTitle;
     });
+    setIsEditing(true);
   }
   function updatePlaceAddress(placeAddress, dayIndex, placeIndex) {
     updateScheduleData((draft) => {
       draft.trip_days[dayIndex].places[placeIndex].place_address = placeAddress;
     });
+    setIsEditing(true);
   }
   function updateStayTime(stayTime, dayIndex, placeIndex) {
     updateScheduleData((draft) => {
       draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
     });
+    setIsEditing(true);
   }
   // 按下新增行程後，會出現空白的input field，同時導向搜尋區域，搜尋後按下加入行程，把搜尋到的結果放到最新的那個行程
   function updatePlaceTitleBySearch(placeTitle, clickedDayIndex) {
     updateScheduleData((draft) => {
       draft.trip_days[clickedDayIndex].places[draft.trip_days[clickedDayIndex].places.length - 1].place_title = placeTitle;
     });
+    setIsEditing(true);
   }
 
   function updatePlaceAddressBySearch(placeAddress, choosedDayIndex) {
     updateScheduleData((draft) => {
       draft.trip_days[choosedDayIndex].places[draft.trip_days[choosedDayIndex].places.length - 1].place_address = placeAddress;
     });
+    setIsEditing(true);
   }
 
-  function handleEnter(e) {
-    console.log('enter測試');
+  const handleEnter = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       setInputMessage(''); addNewMessageToFirestoreFirst();
     }
-  }
-
-  // const handleKeyPress = (event) => {
-  //   console.log(event.key);
-
-  //   if (event.key === 'Enter') {
-  //     console.log('✅ Enter key pressed');
-  //   }
-
-  //   // 👇️ access input value from state
-  //   // console.log(message);
-
-  //   // 👇️ access input value from event object
-  //   // console.log(event.target.value)
-  // };
+  };
 
   return (
     <>
@@ -935,14 +960,14 @@ function Schedule() {
               {scheduleData ? scheduleData.title : ''}
             </ScheduleTitle>
             <Link to="/my-schedules">
-              <CompleteButton onClick={() => setCompletedScheduleToDb()} type="button">完成</CompleteButton>
+              <CompleteButton isEditing={isEditing} onClick={() => setCompletedScheduleToDb()} type="button">儲存</CompleteButton>
             </Link>
           </ScheduleTitleAndCompleteButtonArea>
           <DateContainer>
             <p>
-              {scheduleData ? scheduleData.embark_date : '沒有data'}
+              {scheduleData ? scheduleData.embark_date : ''}
               ～
-              {scheduleData ? scheduleData.end_date : '沒有data' }
+              {scheduleData ? scheduleData.end_date : '' }
             </p>
             <AddDayButton type="button" onClick={() => addDayInSchedule()}>＋</AddDayButton>
           </DateContainer>
@@ -1007,7 +1032,7 @@ function Schedule() {
                     <InputBox style={{ width: '50px' }}>
                       <StyledInput
                         style={{ width: '30px' }}
-                        value={placeItem.stay_time}
+                        value={placeItem?.stay_time}
                         onChange={(e) => {
                           updateStayTime(e.target.value, choosedDayIndex, placeIndex);
                         }}
@@ -1016,7 +1041,7 @@ function Schedule() {
                     </InputBox>
                     <InputBox>
                       <StyledInput
-                        value={placeItem.place_title}
+                        value={placeItem?.place_title}
                         onChange={(e) => {
                           updatePlaceTitle(e.target.value, choosedDayIndex, placeIndex);
                         }}
@@ -1024,7 +1049,7 @@ function Schedule() {
                     </InputBox>
                     <InputBox>
                       <StyledInput
-                        value={placeItem.place_address}
+                        value={placeItem?.place_address}
                         onChange={(e) => {
                           updatePlaceAddress(e.target.value, choosedDayIndex, placeIndex);
                         }}
@@ -1041,10 +1066,9 @@ function Schedule() {
             新增行程
             <AddNewScheduleIcon alt="add-new-schedule" src={plusIcon} />
           </AddNewScheduleButton>
-
         </LeftContainer>
         <RightContainer>
-          <Map
+          {/* <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
             selected={selected}
@@ -1056,36 +1080,44 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-          />
+          /> */}
           <ChatRoom openChat={openChat}>
             <ChatRoomTitle>
               聊天室
               <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
             </ChatRoomTitle>
             <MessagesDisplayArea>
-              {chatBox ? chatBox.messages.map((item) => (
+              {chatBox ? chatBox?.messages.map((item) => (
                 <MessageBox>
                   <UserPhoto src={item.photo_url} />
-                  <Name>
-                    {item.user_name}
-                  </Name>
-                  <Message>{item.message}</Message>
+                  <NameMessage>
+                    <Name>
+                      {item?.user_name}
+                    </Name>
+                    <Message>{item?.message}</Message>
+                  </NameMessage>
                 </MessageBox>
               )) : ''}
             </MessagesDisplayArea>
             <EnterArea>
               <MessageInput
+                onKeyPress={handleEnter}
                 value={inputMessage}
                 onChange={(e) => {
                   setInputMessage(e.target.value);
                 }}
               />
-              <EnterMessageButton onKeyPress={() => handleEnter()} onClick={() => { setInputMessage(''); addNewMessageToFirestoreFirst(); }}>
+              <EnterMessageButton onClick={() => { setInputMessage(''); addNewMessageToFirestoreFirst(); }}>
                 send
               </EnterMessageButton>
             </EnterArea>
           </ChatRoom>
-          <ChatIcon src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
+          <div>
+            {unreadMessage > 1 && openChat === false
+              ? <UnreadMessage active={unreadMessage > 1 && openChat === false}>{unreadMessage - 1 }</UnreadMessage>
+              : ''}
+            <ChatIcon active={unreadMessage > 1 && openChat === false} src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
+          </div>
         </RightContainer>
       </ScheduleWrapper>
     </>

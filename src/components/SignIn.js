@@ -220,7 +220,7 @@ function SignIn() {
           <EmailPasswordInput required value={userName} type="text" placeholder="姓名或暱稱" onChange={(e) => setUserName(e.target.value)} />
           <EmailPasswordInput required value={email} type="email" placeholder="電子郵件" onChange={(e) => setEmail(e.target.value)} />
           <EmailPasswordInput required value={password} type="password" placeholder="密碼" onChange={(e) => setPassword(e.target.value)} />
-          <SignUpInOutButton onClick={() => { alert('註冊了！'); signUp(); setEmail(''); setPassword(''); setUserName(''); }} type="button">註冊</SignUpInOutButton>
+          <SignUpInOutButton onClick={() => { signUp(); setEmail(''); setPassword(''); setUserName(''); }} type="button">註冊</SignUpInOutButton>
           <GoToSignUpButton type="button" onClick={() => { setSignInModal(true); setSignUpModal(false); }}>返回登入</GoToSignUpButton>
         </SignUpArea>
       </ModalBox>

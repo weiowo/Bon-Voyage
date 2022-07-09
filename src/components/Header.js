@@ -9,8 +9,11 @@ position:absolute;
 display:flex;
 justify-content:space-between;
 width:100vw;
-height:30px;
+height:65px;
 z-index:3;
+// background-color:rgba(0, 0, 0, 0.2);
+// position:fixed;
+// top:0;
 `;
 
 const Logo = styled.div`

@@ -271,7 +271,7 @@ function Home({ currentLatLng, user }) {
   // const [query, setQuery] = useState('');
   const [option, setOption] = useState('all'); // 預設想放'全部'
   const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState();
-  const [LatLng, setLatLng] = useState({});
+  const [LatLng, setLatLng] = useState({ lat: 25.03746, lng: 121.564558 });
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -302,7 +302,7 @@ function Home({ currentLatLng, user }) {
   // 如果無法使用經緯度的話，就設經緯度為台北市
 
   const searchNearby = useCallback(() => {
-    console.log('我執行了此funcion!');
+    console.log('我執行了此function!', LatLng);
     const a = new Date();
     const request = {
       location: LatLng,
@@ -323,14 +323,13 @@ function Home({ currentLatLng, user }) {
 
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.nearbySearch(request, callback);
-    console.log('我執行了此funcion!');
   }, [LatLng]);
 
   useEffect(() => {
     if (!isLoaded) return;
     // if (!nearbyData) return;
     searchNearby();
-    console.log('我執行了此funcion!');
+    console.log('找找附近有什麼呢？!');
     // setTimeout(() => {
     //   searchNearby();
     // }, 1000);
@@ -382,7 +381,7 @@ SearchAtHomePage.propTypes = {
 };
 
 Home.propTypes = {
-  currentLatLng: PropTypes.func.isRequired,
+  currentLatLng: PropTypes.objectOf.isRequired,
   user: PropTypes.func.isRequired,
 };
 

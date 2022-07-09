@@ -35,6 +35,8 @@ const UserName = styled.div`
 font-size:15px;
 font-weight:600;
 margin-left:15px;
+height:auto;
+width:75px;
 `;
 
 const NavBarChoice = styled.div`
@@ -49,7 +51,10 @@ height:50px;
 border-radius:30px;
 border:1px solid grey;
 display:flex;
-align-items:center
+align-items:center;
+height:auto;
+padding-top:7px;
+padding-bottom:7px;
 `;
 
 export const LinkWithoutDefaultStyle = styled(Link)`

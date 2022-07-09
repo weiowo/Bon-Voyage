@@ -800,7 +800,7 @@ function City() {
               {nearbyData.lodging ? `${cityFromUrl} 熱門飯店推薦` : ''}
             </AttractionAreaTitle>
             <AttractionWrapper>
-              {nearbyData.lodging ? nearbyData.lodging.map((item, index) => (
+              {nearbyData.lodging ? nearbyData?.lodging.map((item, index) => (
                 <AttractionBox id={item.place_id}>
                   <AttractionPhotoContainer>
                     <AttractionPhoto
