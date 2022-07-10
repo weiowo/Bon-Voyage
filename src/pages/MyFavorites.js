@@ -1,11 +1,11 @@
 import styled from 'styled-components/macro';
 import React, { useEffect, useContext, useState } from 'react';
 import {
-  getDoc, doc,
-//   query, where, collection, getDocs, arrayUnion, setDoc, updateDoc,
+  getDoc, doc, updateDoc, arrayRemove,
 } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
+import produce from 'immer';
 import GreyHeaderComponent from '../components/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import { PageWrapper, Line } from './MySchedules';
@@ -17,8 +17,23 @@ import Cover3 from './images/schedule_cover_rec3.jpg';
 import Cover4 from './images/camping.jpg';
 import Cover5 from './images/schedule_cover_rec2.jpg';
 import Cover6 from './images/schedule_cover_rec4.jpg';
+import unfilledStar from './images/unfilled_star.jpg';
+import filledStar from './images/filled_star.jpg';
+import Default1 from './images/default1.png';
+import Default2 from './images/default2.png';
+import Default3 from './images/default3.png';
+import Default4 from './images/default4.png';
+import Default5 from './images/default5.png';
+import {
+  ModalBackground, ModalBox, ModalImgArea, ModalImg,
+  ModalLeftArea, ModalPlaceTitle, ModalPlaceAddress, AddToScheduleButton, CloseModalButton,
+  LeftButton, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
+  ScheduleChoiceTitle, ModalContentWrapper, Loading, ConfirmChooseDayButton,
+  ButtonStarArea, AddFavoriteIcon,
+} from './City';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
+const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
 const MyArticlesArea = styled.div`
 width:80vw;
@@ -133,12 +148,18 @@ function MyLovedArticles() {
   const user = useContext(UserContext);
   const [myLovedArticles, setMyLovedArticles] = useImmer([]);
   const [myLovedAttractions, setMyLovedAttractions] = useImmer([]);
-  console.log(myLovedArticles);
-  console.log(myLovedAttractions);
   const [publishIsClicked, setPublishIsClciked] = useState(true);
   const [saveIsClicked, setSaveIsClciked] = useState(false);
-  //   const navigate = useNavigate();
-  console.log(user);
+  const navigate = useNavigate();
+  const [liked, setLiked] = useState(false);
+  const [categoryPageScheduleData, setCategoryPageScheduleData] = useImmer([]); // 是這個人所有行程！不是單一!
+  const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
+  const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
+  const [dayIndex, setDayIndex] = useState();
+  const [modalIsActive, setModalIsActive] = useState(false);
+  const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
+  const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
+  const [modalDetail, setModalDetail] = useState({});
 
   // 先拿到某個使用者的資料，拿到收藏的article array跟attraction array後
   // 去articles跟places資料庫搜出來
@@ -179,6 +200,138 @@ function MyLovedArticles() {
     }
     getUser();
   }, [setMyLovedArticles, setMyLovedAttractions, user.uid]);
+
+  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
+  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
+  // 按下哪一個行程後，用那個index去抓那天的細節
+
+  useEffect(() => {
+    async function getUserArrayList() {
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log('Document data:', docSnap.data().owned_schedule_ids);
+      } else {
+        console.log('No such document!');
+      }
+      function getSchedulesFromList() {
+        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+          const docs = doc(db, 'schedules', item);
+          const Snap = await getDoc(docs);
+          if (Snap.exists()) {
+            if (Snap.data().deleted === false) {
+              console.log('這位使用者的行程', index, Snap.data());
+              setCategoryPageScheduleData((draft) => {
+                draft.push(Snap.data());
+              });
+            }
+          } else {
+            console.log('沒有這個行程！');
+          }
+        });
+      }
+      getSchedulesFromList();
+    }
+    getUserArrayList();
+  }, [setCategoryPageScheduleData, user.uid]);
+
+  // 確認加入
+
+  function ComfirmedAdded() {
+    console.log('已經加入囉！');
+    const newPlace = {
+      place_title: modalDetail?.name,
+      place_address: modalDetail?.formatted_address,
+      stay_time: 60,
+    };
+    // 用 immer 產生出新的行程資料
+    const newScheduleData = produce(categoryPageScheduleData, (draft) => {
+      console.log('哈哈', draft);
+      draft[clickedScheduleIndex]?.trip_days[dayIndex].places.push(newPlace);
+    });
+    console.log('newScheduleData', newScheduleData);
+    // 更新 state
+    setCategoryPageScheduleData(newScheduleData);
+    // 更新 firestore
+    async function passAddedDataToFirestore() {
+      console.log('修改好行程囉！');
+      const scheduleRef = doc(db, 'schedules', clickedScheduleId);
+      await updateDoc(scheduleRef, { ...newScheduleData[clickedScheduleIndex] });
+    }
+    passAddedDataToFirestore();
+  }
+
+  // 按下加入行程時先判斷有否登入，有的話才能繼續
+
+  function handleUserOrNot() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      setModalIsActive(false); setChooseScheduleModalIsActive(true);
+    }
+  }
+
+  // 打開modal時先確認有沒有追蹤過
+  // 有的話就讓星星亮起，沒有的話就讓星星空的
+  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
+
+  async function checkLikeOrNot(placeId) {
+    const userArticlesArray = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(userArticlesArray);
+    console.log(docSnap.data());
+    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
+      setLiked(true);
+      console.log('已經追蹤過嚕!');
+    } else {
+      console.log('沒有哦');
+      setLiked(false);
+    }
+  }
+
+  function ShowDetailNCheckLikedOrNot(clickedPlaceId) {
+    if (user.uid) {
+      checkLikeOrNot(clickedPlaceId);
+    } else {
+      setLiked(false);
+    }
+    setModalIsActive(true);
+    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
+      .then((response) => response.json()).then((jsonData) => {
+        console.log('我在useEffect中', jsonData.result);
+        setModalDetail(jsonData.result);
+        console.log('拿資料有成功嗎？');
+      }).catch((err) => {
+        console.log('錯誤:', err);
+      });
+  }
+
+  // 關掉modal
+
+  function handleModalClose() {
+    setModalIsActive(false);
+  }
+
+  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
+
+  async function handleFavorite(placeId) {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      const userArticlesArray = doc(db, 'users', user.uid);
+      if (liked) {
+        setLiked(false);
+        await updateDoc(userArticlesArray, {
+          loved_attraction_ids: arrayRemove(placeId),
+        });
+        console.log('已退追此景點!');
+      } else if (!liked) {
+        setLiked(true);
+        console.log('已追蹤此景點!');
+      }
+    }
+  }
 
   return (
     <>
@@ -222,7 +375,12 @@ function MyLovedArticles() {
           </MyArticlesContainer>
           <MyArticlesContainer isClicked={saveIsClicked}>
             {myLovedAttractions ? myLovedAttractions?.map((item) => (
-              <MyArticle>
+              <MyArticle
+                onClick={() => {
+                  console.log(item.place_id);
+                  ShowDetailNCheckLikedOrNot(item.place_id);
+                }}
+              >
                 <CoverPhotoInMyArticle
                   src={item?.place_url ? item?.place_url
                     : defaultArticleCoverPhoto[Math.floor(Math.random()
@@ -237,6 +395,118 @@ function MyLovedArticles() {
           </MyArticlesContainer>
         </MyArticlesArea>
       </PageWrapper>
+      <ModalBackground active={modalIsActive}>
+        <ModalBox>
+          {modalDetail
+            ? (
+              <>
+                <ModalLeftArea>
+                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                  <ButtonStarArea>
+                    <AddToScheduleButton
+                      onClick={() => { handleUserOrNot(); }}
+                    >
+                      加入行程
+                    </AddToScheduleButton>
+                    <AddFavoriteIcon
+                      onClick={() => { handleFavorite(modalDetail.place_id); }}
+                      src={liked ? filledStar : unfilledStar}
+                    />
+                  </ButtonStarArea>
+                </ModalLeftArea>
+                <ModalImgArea>
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+                </ModalImgArea>
+                <CloseModalButton
+                  type="button"
+                  onClick={() => { handleModalClose(); }}
+                >
+                  X
+                </CloseModalButton>
+              </>
+            )
+            : <Loading />}
+        </ModalBox>
+      </ModalBackground>
+      <ModalBackground active={chooseScheduleModalIsActive}>
+        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setModalIsActive(true);
+              setChooseScheduleModalIsActive(false);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
+                <ScheduleChoicesBox
+                  onClick={() => {
+                    setClickedScheduleId(item.schedule_id);
+                    setClickedScheduleIndex(index);
+                    setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                  }}
+                  id={item.schedule_id}
+                >
+                  <ScheduleChoiceTitle>
+                    {item.title}
+                  </ScheduleChoiceTitle>
+                </ScheduleChoicesBox>
+              )) : ''}
+            </ScheduleChoicesBoxWrapper>
+          </ModalContentWrapper>
+          <CloseModalButton
+            type="button"
+            onClick={() => setChooseScheduleModalIsActive(false)}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
+      <ModalBackground active={chooseDayModalIsActive}>
+        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setChooseDayModalIsActive(false);
+              setChooseScheduleModalIsActive(true);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {categoryPageScheduleData
+                ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                  <ScheduleChoicesBox
+                    clicked={dayIndex === index}
+                    onClick={() => {
+                      setDayIndex(index);
+                    }}
+                    style={{ display: 'flex' }}
+                  >
+                    <ScheduleChoiceTitle>
+                      第
+                      {index + 1}
+                      天
+                    </ScheduleChoiceTitle>
+                  </ScheduleChoicesBox>
+                )) : ''}
+            </ScheduleChoicesBoxWrapper>
+            <ConfirmChooseDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmChooseDayButton>
+          </ModalContentWrapper>
+          <CloseModalButton
+            type="button"
+            onClick={() => setChooseDayModalIsActive(false)}
+          >
+            X
+          </CloseModalButton>
+        </ModalBox>
+      </ModalBackground>
     </>
   );
 }
