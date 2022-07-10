@@ -17,7 +17,7 @@ import CampingSrc from './images/camping_2.jpg';
 import ArtsSrc from './images/art.jpg';
 import FamilySrc from './images/family.jpg';
 import CoupleSrc from './images/couple.jpg';
-import FoodSrc from './images/food.jpg';
+import FoodSrc from './images/food2.jpeg';
 import ShoppingSrc from './images/shopping.jpg';
 import NightLifeSrc from './images/bar.jpg';
 import ReligionSrc from './images/religion.jpg';
@@ -63,7 +63,7 @@ cursor:pointer;
 
 export const PlaceBox = styled.div`
 width: 200px;
-height: 280px;
+height: 290px;
 margin-top:10px;
 background-color:white;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -73,6 +73,7 @@ export const PlacePhoto = styled.img`
 margin-top:6px;
 width:188px;
 height:188px;
+object-fit:cover;
 `;
 
 export const PlaceBoxBelowPart = styled.div`

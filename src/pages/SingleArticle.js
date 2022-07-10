@@ -34,6 +34,7 @@ background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 position:relative;
 background-position:center;
+object-fit: cover;
 `;
 
 const ArticlePageBelowPart = styled.div`

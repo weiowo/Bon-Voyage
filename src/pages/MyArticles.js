@@ -210,7 +210,7 @@ function MyArticles() {
                   />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary}</MyArticleSummary>
+                    <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
                   </MyArticleBelowArea>
                 </MyArticle>
               </StyledLink>
@@ -227,7 +227,7 @@ function MyArticles() {
                   />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary}</MyArticleSummary>
+                    <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
                   </MyArticleBelowArea>
                 </MyArticle>
               </StyledLink>

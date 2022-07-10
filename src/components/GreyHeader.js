@@ -57,10 +57,14 @@ function GreyHeaderComponent() {
         <StyleNavLink to="/vr-page">
           VR專區
         </StyleNavLink>
-        <div style={{ cursor: 'pointer' }}>熱門景點</div>
-        <div style={{ cursor: 'pointer' }}>國內旅遊</div>
+        <StyleNavLink to="//city?lat=25.0329694&lng=121.5654177&city=台北&option=all">
+          熱門景點
+        </StyleNavLink>
         <StyleNavLink to="/all-articles">
           熱門遊記
+        </StyleNavLink>
+        <StyleNavLink to="/category?lat=25.0498583&lng=121.5172606&category=food">
+          美食特搜
         </StyleNavLink>
         <StyleNavLink to="/my-schedules">
           行程規劃
