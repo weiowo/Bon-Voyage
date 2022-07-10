@@ -129,52 +129,56 @@ color:black;
 border:none;
 `;
 
-function MyArticles() {
+function MyLovedArticles() {
   const user = useContext(UserContext);
-  const [myDraftArticles, setMyDraftArticles] = useImmer([]);
-  console.log(myDraftArticles);
-  const [myPublishedArticles, setMyPublishedArticles] = useImmer([]);
+  const [myLovedArticles, setMyLovedArticles] = useImmer([]);
+  const [myLovedAttractions, setMyLovedAttractions] = useImmer([]);
+  console.log(myLovedArticles);
+  console.log(myLovedAttractions);
   const [publishIsClicked, setPublishIsClciked] = useState(true);
   const [saveIsClicked, setSaveIsClciked] = useState(false);
   //   const navigate = useNavigate();
-  console.log(myPublishedArticles);
   console.log(user);
 
-  // 先拿到某個使用者的資料
-  // 再根據行程array，去做foreach拿到所有schedule資料
+  // 先拿到某個使用者的資料，拿到收藏的article array跟attraction array後
+  // 去articles跟places資料庫搜出來
 
   useEffect(() => {
-    async function getUserArticleArrayList() {
+    async function getUser() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data().owned_article_ids);
+        console.log('Document data:', docSnap.data().loved_article_ids);
       } else {
         console.log('No such document!');
       }
-      function getArticlesFromList() {
-        docSnap.data().owned_article_ids.forEach(async (item) => {
+      function getLovedArticles() {
+        docSnap.data().loved_article_ids.forEach(async (item) => {
           const docs = doc(db, 'articles', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
-            if (Snap.data().status === 'draft') {
-              setMyDraftArticles((draft) => {
-                draft.push(Snap.data());
-              });
-            } else {
-              setMyPublishedArticles((draft) => {
-                draft.push(Snap.data());
-              });
-            }
-          } else {
-            console.log('沒有這個行程！');
+            setMyLovedArticles((draft) => {
+              draft.push(Snap.data());
+            });
           }
         });
       }
-      getArticlesFromList();
+      function getLovedAttractions() {
+        docSnap.data().loved_attraction_ids.forEach(async (item) => {
+          const docs = doc(db, 'attractions', item);
+          const Snap = await getDoc(docs);
+          if (Snap.exists()) {
+            setMyLovedAttractions((draft) => {
+              draft.push(Snap.data());
+            });
+          }
+        });
+      }
+      getLovedArticles();
+      getLovedAttractions();
     }
-    getUserArticleArrayList();
-  }, [setMyDraftArticles, setMyPublishedArticles, user.uid]);
+    getUser();
+  }, [setMyLovedArticles, setMyLovedAttractions, user.uid]);
 
   return (
     <>
@@ -183,24 +187,24 @@ function MyArticles() {
         <ProfileSideBarElement />
         <Line />
         <MyArticlesArea>
-          <MyPageTitle>我的文章</MyPageTitle>
+          <MyPageTitle>我的收藏</MyPageTitle>
           <Tabs>
             <Tab
               isClicked={publishIsClicked}
               onClick={() => { setPublishIsClciked(true); setSaveIsClciked(false); }}
             >
-              發布
+              文章
             </Tab>
             <Tab
               isClicked={saveIsClicked}
               onClick={() => { setPublishIsClciked(false); setSaveIsClciked(true); }}
             >
-              草稿
+              景點
             </Tab>
           </Tabs>
           <UpperLine />
           <MyArticlesContainer isClicked={publishIsClicked}>
-            {myPublishedArticles ? myPublishedArticles?.map((item) => (
+            {myLovedArticles ? myLovedArticles?.map((item) => (
               <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                 <MyArticle>
                   <CoverPhotoInMyArticle
@@ -217,21 +221,18 @@ function MyArticles() {
             )) : ''}
           </MyArticlesContainer>
           <MyArticlesContainer isClicked={saveIsClicked}>
-            {myDraftArticles ? myDraftArticles?.map((item) => (
-              <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-                <MyArticle>
-                  <CoverPhotoInMyArticle
-                    src={item?.cover_img ? item?.cover_img
-                      : defaultArticleCoverPhoto[Math.floor(Math.random()
+            {myLovedAttractions ? myLovedAttractions?.map((item) => (
+              <MyArticle>
+                <CoverPhotoInMyArticle
+                  src={item?.place_url ? item?.place_url
+                    : defaultArticleCoverPhoto[Math.floor(Math.random()
                         * defaultArticleCoverPhoto.length)]}
-                  />
-                  <MyArticleBelowArea>
-                    <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary}</MyArticleSummary>
-                  </MyArticleBelowArea>
-                </MyArticle>
-              </StyledLink>
-
+                />
+                <MyArticleBelowArea>
+                  <MyArticleTitle>{item?.place_title}</MyArticleTitle>
+                  <MyArticleSummary>{item?.place_address}</MyArticleSummary>
+                </MyArticleBelowArea>
+              </MyArticle>
             )) : ''}
           </MyArticlesContainer>
         </MyArticlesArea>
@@ -240,4 +241,4 @@ function MyArticles() {
   );
 }
 
-export default MyArticles;
+export default MyLovedArticles;

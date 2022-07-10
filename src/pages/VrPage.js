@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect, useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useImmer } from 'use-immer';
+import { useNavigate } from 'react-router-dom';
 import {
-  doc, getDoc, updateDoc,
+  doc, getDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
-import SwiperCore, { EffectCoverflow, Pagination, Navigation } from 'swiper/core';
+import SwiperCore, { EffectCoverflow, Navigation } from 'swiper/core';
 import produce from 'immer';
 import UserContext from '../components/UserContextComponent';
 import db from '../utils/firebase-init';
@@ -18,19 +19,43 @@ import 'swiper/components/navigation/navigation.min.css';
 import './style.css';
 import leftArrow from './images/left-arrow.jpg';
 import vrPlaces from './vr-place-data';
+import rightArrow from './images/up-arrow.png';
+import BlackHeaderComponent from '../components/BlackHeader';
+import unfilledStar from './images/unfilled_star.jpg';
+import filledStar from './images/filled_star.jpg';
 
-// const photoArray = [angkorWat, bacelona,
-//   japan, machuPichu, mountRushmore, paris, pyramid, rio, rome];
+const PageTitle = styled.div`
+width:100%;
+height:30px;
+font-size:30px;
+color:white;
+text-shadow:2px 2px 3px black;
+font-weight:600;
+`;
 
-// const placeNameArray = ['吳哥窟', '聖家堂',
-//   '伏見稻荷大社', '馬丘比丘', '山', '巴黎鐵塔', '金字塔', '里約特內盧', '羅馬競技場'];
+const TitleStarArea = styled.div`
+width:100%;
+height:auto;
+display:flex;
+align-items:center;
+justify-content:center;
+`;
 
-// const placeNameEnglishArray = ['Angkor Wat', 'Sangria',
-//   'Temple', 'Machu Pichu',
-// 'Mount Rushmore', 'Eiffel Tower', 'Giza Pyramid', 'Mount', 'Collesium'];
-
-// const placeCountryeNameArray = ['Cambodia', 'Spain',
-//   'Japan', 'Peru', 'USA', 'France', 'Egypt', 'Brazil', 'Italy'];
+const ConfirmChooseDayButton = styled.button`
+width:20%;
+height:35px;
+background: linear-gradient(
+  312deg,
+  rgb(178, 228, 238) 0%,
+  rgb(161, 176, 246) 100%
+);
+border-radius:25px;
+border:none;
+color:black;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
+`;
 
 const PlaceBox = styled.div`
 width:100%;
@@ -53,6 +78,15 @@ color:white;
 text-shadow:1px 1px 2px black;
 `;
 
+const AddFavoriteIcon = styled.img`
+width:25px;
+height:25px;
+cursor:pointer;
+position:absolute;
+right:15%;
+justify-self:right;
+`;
+
 const PlaceCountryTitle = styled.div`
 @import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
 font-family: "Pangolin", sans-serif;
@@ -73,6 +107,28 @@ font-size:16px;
 font-weight:600;
 color:#F4E6D3;
 text-shadow:1px 1px 2px black;
+`;
+
+const RemindArrow = styled.img`
+width:50px;
+height:auto;
+position:absolute;
+bottom:20px;
+right:20px;
+animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+`;
+
+const RemindText = styled.div`
+width:60px;
+height:auto;
+position:absolute;
+bottom:-10px;
+right:20px;
+font-weight:550;
+font-size:12px;
+border-radius:3px;
+border:1px solid black;
+// animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
 `;
 
 const VRModalBackground = styled.div`
@@ -103,7 +159,7 @@ position: relative;
 align-items:center;
 `;
 
-export const ModalImgArea = styled.div`
+const ModalImgArea = styled.div`
 width:60%;
 height:100%;
 display:flex;
@@ -112,45 +168,92 @@ align-items:center;
 gap:10px;
 `;
 
-export const ModalImg = styled.img`
-width:10vw;
-height:10vw;
-border-radius:10px;
-`;
-
-export const ModalLeftArea = styled.div`
+const ModalLeftArea = styled.div`
 width:40%;
-height:100%;
+height:85%;
 display:flex;
 flex-direction:column;
 align-items:center;
-justify-content:center;
-gap:10px;
+justify-content:left;
+gap:15px;
+position:relative;
 `;
 
-export const ModalPlaceTitle = styled.div`
-font-size:26px;
+const IFrame = styled.iframe`
+width:90%;
+height:90%;
+border:0;
+border-radius:13px;
+cursor:pointer;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+const ModalPlaceTitle = styled.div`
+font-size:30px;
 font-weight:600;
-width:80%;
+width:75%;
 `;
 
-export const ModalPlaceAddress = styled.div`
-width:80%;
+const ModalPlaceSubtitle = styled.div`
+font-size:18px;
+font-weight:550;
+width:75%;
+color:grey;
+`;
+
+const ModalPlaceDescription = styled.div`
+font-size:15px;
+width:75%;
+text-align: justify;
+height:auto;
+`;
+
+const SeperateLine = styled.div`
+width:75%;
+height:1.5px;
+margin-top:10px;
+margin-bottom:10px;
+background-color:black;
+flex-shrink:0;
+`;
+
+const ModalPlaceAddress = styled.div`
+width:75%;
 color:#696969;
+font-size:13px;
+display:flex;
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+text-align:justify;
 `;
 
-export const AddToScheduleButton = styled.button`
-width:10vw;
-height:30px;
+const ModalPlaceCountry = styled.div`
+width:20%;
+display:flex;
+align-items:center;
+justify-content:center;
+height:20px;
+background-color:black;
+padding:5px 5px 5px 5px;
+border-radius:3px;
+color:white;
+font-weight:500;
+`;
+
+const AddToScheduleButton = styled.button`
+width:20%;
+height:40px;
 border-radius:5px;
 background-color:grey;
 font-weight:500;
 border:none;
 color:white;
 cursor:pointer;
+font-size:15px;
 `;
 
-export const CloseModalButton = styled.button`
+const CloseModalButton = styled.button`
 height:25px;
 width:25px;
 position:absolute;
@@ -164,7 +267,7 @@ color:white;
 cursor:pointer;
 `;
 
-export const LeftButton = styled.button`
+const LeftButton = styled.button`
 height:25px;
 width:25px;
 position:absolute;
@@ -182,7 +285,7 @@ color:white;
 cursor:pointer;
 `;
 
-export const CurrentSchedulesTitle = styled.div`
+const CurrentSchedulesTitle = styled.div`
 width:100%;
 height:30px;
 font-size:17px;
@@ -191,11 +294,11 @@ margin-top:20px;
 margin-bottom:10px;
 `;
 
-export const ScheduleChoicesBoxWrapper = styled.div`
+const ScheduleChoicesBoxWrapper = styled.div`
 display:flex;
 flex-flow:wrap;
 height:auto;
-width:auto;
+width:80%;
 align-items:center;
 justify-content:center;
 overflow:scroll;
@@ -205,11 +308,11 @@ padding-bottom:20px;
 padding-left:2px;
 &:after {
   content: "";
-  width:220px;
+  width:455px;
 }
 `;
 
-export const Loading = styled.div`
+const Loading = styled.div`
   margin: auto;
   border: 10px solid #EAF0F6;
   border-radius: 50%;
@@ -232,19 +335,20 @@ export const Loading = styled.div`
 // padding-bottom:20px;
 // `;
 
-export const ScheduleChoicesBox = styled.div`
+const ScheduleChoicesBox = styled.div`
 display:flex;
 align-items:center;
 width:220px;
 height:60px;
 border-radius:10px;
-background-color:#e7f5fe;
+cursor:pointer;
+background-color:${(props) => (props.clicked ? '#E6D1F2' : '#e7f5fe')};
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 &:hover {
   background-color:#E6D1F2;
 }`;
 
-export const ScheduleChoiceTitle = styled.div`
+const ScheduleChoiceTitle = styled.div`
 width:170px;
 text-align:left;
 height:auto;
@@ -253,36 +357,16 @@ font-size:15px;
 margin-left:20px;
 `;
 
-export const ChooseButton = styled.button`
-display:flex;
-align-items:center;
-justify-content:center;
-width:60px;
-height:25px;
-border-radius:10px;
-border:1px solid #296D98;
-font-size:13px;
-font-weight:550;
-margin-right:10px;
-cursor:pointer;
-background-color:${(props) => (props.clicked ? 'grey' : 'white')};
-color:${(props) => (props.clicked ? 'white' : 'black')};
-// &:hover {
-//   background-color:#296D98;
-//   color:white;
-// }
-`;
-
-export const ModalContentWrapper = styled.div`
-width:95%;
-height:95%;
+const ModalContentWrapper = styled.div`
+width:80%;
+height:80%;
 overflow:scroll;
 display:flex;
 flex-direction:column;
 align-items:center;
 `;
 
-SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
+SwiperCore.use([EffectCoverflow, Navigation]);
 
 function VR() {
   const [dayIndex, setDayIndex] = useState();
@@ -294,11 +378,80 @@ function VR() {
   const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
   const [modalIndex, setModalIndex] = useState(0);
   const user = useContext(UserContext);
-  console.log(modalIndex);
+  const navigate = useNavigate();
+  const [liked, setLiked] = useState(false);
+  const [clickedPlaceUrl, setClickedPlaceUrl] = useState('');
+  const [clickedPlaceName, setClickedPlaceName] = useState('');
+  const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
 
-  function ClickAndShowPlaceDetail(id) {
+  // 按下加入行程時先判斷有否登入，有的話才能繼續
+
+  function handleUserOrNot() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      setModalIsActive(false); setChooseScheduleModalIsActive(true);
+    }
+  }
+
+  // 打開modal時先確認有沒有追蹤過
+  // 有的話就讓星星亮起，沒有的話就讓星星空的
+  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
+
+  async function checkLikeOrNot(placeId) {
+    const userArticlesArray = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(userArticlesArray);
+    console.log(docSnap.data());
+    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
+      setLiked(true);
+      console.log('已經追蹤過嚕!');
+    } else {
+      console.log('沒有哦');
+      setLiked(false);
+    }
+  }
+
+  function ShowDetailNCheckLikedOrNot(clickedPlaceId, clickedPlaceIndex) {
+    if (user.uid) {
+      checkLikeOrNot(clickedPlaceId);
+    } else {
+      setLiked(false);
+    }
     setModalIsActive(true);
-    setModalIndex(id);
+    setModalIndex(clickedPlaceIndex);
+  }
+
+  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
+  // 按下星星後就先把這個位置存到db的attractions資料庫中～
+
+  async function handleFavorite(placeId) {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      const userArticlesArray = doc(db, 'users', user.uid);
+      if (liked) {
+        setLiked(false);
+        await updateDoc(userArticlesArray, {
+          loved_attraction_ids: arrayRemove(placeId),
+        });
+        console.log('已退追此景點!');
+      } else if (!liked) {
+        setLiked(true);
+        await updateDoc(userArticlesArray, {
+          loved_attraction_ids: arrayUnion(placeId),
+        });
+        console.log('已追蹤此景點!');
+        const createAttraction = doc(db, 'attractions', placeId);
+        await setDoc(createAttraction, ({
+          place_id: placeId,
+          place_title: clickedPlaceName,
+          place_address: clickedPlaceAddress,
+          place_url: clickedPlaceUrl,
+        }));
+      }
+    }
   }
 
   // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
@@ -357,28 +510,51 @@ function VR() {
   }
   return (
     <>
+      <BlackHeaderComponent />
       <VRModalBackground active={modalIsActive}>
         <ModalBox>
           {vrPlaces
             ? (
               <>
                 <ModalLeftArea>
-                  <ModalPlaceTitle>{vrPlaces?.[modalIndex]?.place_title}</ModalPlaceTitle>
+                  <TitleStarArea>
+                    <ModalPlaceTitle>
+                      {vrPlaces?.[modalIndex]?.place_title}
+                    </ModalPlaceTitle>
+                    <AddFavoriteIcon
+                      onClick={() => { handleFavorite(vrPlaces?.[modalIndex]?.place_id); }}
+                      src={liked ? filledStar : unfilledStar}
+                    />
+                  </TitleStarArea>
+                  <ModalPlaceSubtitle>{vrPlaces?.[modalIndex]?.place_subtitle}</ModalPlaceSubtitle>
+                  <SeperateLine />
+                  <ModalPlaceDescription>
+                    {vrPlaces?.[modalIndex]?.place_description}
+                  </ModalPlaceDescription>
+                  <SeperateLine />
                   <ModalPlaceAddress>
+                    <ModalPlaceCountry>
+                      {vrPlaces?.[modalIndex]
+                        ?.place_country_title}
+                    </ModalPlaceCountry>
+                    地址：
                     {vrPlaces?.[modalIndex]
-                      ?.place_country_title}
+                      ?.place_address}
                   </ModalPlaceAddress>
                   <AddToScheduleButton
-                    onClick={() => {
-                      setModalIsActive(false);
-                      setChooseScheduleModalIsActive(true);
-                    }}
+                    onClick={() => { handleUserOrNot(); }}
                   >
                     加入行程
                   </AddToScheduleButton>
+                  <RemindArrow src={rightArrow} />
+                  <RemindText>
+                    360°滑動
+                    <br />
+                    探索當地
+                  </RemindText>
                 </ModalLeftArea>
                 <ModalImgArea>
-                  <iframe title={vrPlaces?.[modalIndex]?.place_title} src={vrPlaces?.[modalIndex]?.vr_embed_link} width="90%" height="90%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+                  <IFrame title={vrPlaces?.[modalIndex]?.place_title} src={vrPlaces?.[modalIndex]?.vr_embed_link} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
                 </ModalImgArea>
                 <CloseModalButton
                   type="button"
@@ -405,20 +581,17 @@ function VR() {
             <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
             <ScheduleChoicesBoxWrapper>
               {vrPageScheduleData ? vrPageScheduleData.map((item, index) => (
-                <ScheduleChoicesBox id={item.schedule_id}>
+                <ScheduleChoicesBox
+                  onClick={() => {
+                    setClickedScheduleId(item.schedule_id);
+                    setClickedScheduleIndex(index);
+                    setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                  }}
+                  id={item.schedule_id}
+                >
                   <ScheduleChoiceTitle>
                     {item.title}
                   </ScheduleChoiceTitle>
-                  <ChooseButton
-                    onClick={() => {
-                      setClickedScheduleId(item.schedule_id);
-                      setClickedScheduleIndex(index);
-                      setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
-                    }}
-                    type="button"
-                  >
-                    選擇
-                  </ChooseButton>
                 </ScheduleChoicesBox>
               )) : ''}
             </ScheduleChoicesBoxWrapper>
@@ -445,25 +618,22 @@ function VR() {
             <ScheduleChoicesBoxWrapper>
               {vrPageScheduleData
                 ? vrPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
-                  <ScheduleChoicesBox style={{ display: 'flex' }}>
+                  <ScheduleChoicesBox
+                    clicked={dayIndex === index}
+                    onClick={() => {
+                      setDayIndex(index);
+                    }}
+                    style={{ display: 'flex' }}
+                  >
                     <ScheduleChoiceTitle>
                       第
                       {index + 1}
                       天
                     </ScheduleChoiceTitle>
-                    <ChooseButton
-                      clicked={dayIndex === index}
-                      onClick={() => {
-                        setDayIndex(index);
-                      }}
-                      type="button"
-                    >
-                      選擇
-                    </ChooseButton>
                   </ScheduleChoicesBox>
                 )) : ''}
             </ScheduleChoicesBoxWrapper>
-            <button type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</button>
+            <ConfirmChooseDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmChooseDayButton>
           </ModalContentWrapper>
           <CloseModalButton
             type="button"
@@ -474,11 +644,11 @@ function VR() {
         </ModalBox>
       </VRModalBackground>
       <div className="vr-container">
-        <div className="title_wrapper">
-          <div className="title_">
-            With VR, The world is just in front of you!
-          </div>
-        </div>
+        {/* <div className="title_wrapper"> */}
+        <PageTitle>
+          With VR, The world is just in front of you.
+        </PageTitle>
+        {/* </div> */}
         <Swiper
           navigation
           effect="coverflow"
@@ -492,13 +662,19 @@ function VR() {
             modifier: 1,
             slideShadows: true,
           }}
-          pagination={{
-            clickable: true,
-          }}
+          // pagination={{
+          //   clickable: true,
+          // }}
           className="mySwiper"
         >
           {vrPlaces?.map((item, index) => (
-            <SwiperSlide onClick={() => ClickAndShowPlaceDetail(index)} style={{ cursor: 'pointer' }}>
+            <SwiperSlide onClick={() => {
+              ShowDetailNCheckLikedOrNot(item.place_id, index);
+              setClickedPlaceUrl(item?.cover_photo);
+              setClickedPlaceName(item?.place_title);
+              setClickedPlaceAddress(item?.place_address);
+            }}
+            >
               <PlaceBox style={{ backgroundImage: `url(${item.cover_photo})` }}>
                 <PlaceTitle>{item.place_title}</PlaceTitle>
                 <PlaceEngishTitle>{item.place_english_title}</PlaceEngishTitle>
@@ -522,6 +698,7 @@ export default VR;
 // 羅馬競技場 ChIJrRMgU7ZhLxMRxAOFkC7I8Sg
 
 // 吳哥窟 ChIJLSea6ooWEDERjUGwVxGoqz4
+// https://www.google.com/maps/@13.4128744,103.867579,3a,75y,274.71h,114.45t/data=!3m6!1e1!3m4!1sgTlAssf57LjWHTdaye-G7w!2e0!7i13312!8i6656
 // https://www.google.com.tw/maps/place/%E5%90%B3%E5%93%A5%E7%AA%9F/@13.4124693,103.8669857,3a,75y,231.65h,132.9t/data=!3m8!1e1!3m6!1sAF1QipPQQoaugOQNo6f-cqEV6mQrFKSLR6VBSfKSnTg!2e10!3e11!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipPQQoaugOQNo6f-cqEV6mQrFKSLR6VBSfKSnTg%3Dw224-h298-k-no-pi-16.435272-ya345.2533-ro0-fo100!7i6000!8i3000!4m7!3m6!1s0x3110168aea9a272d:0x3eaba81157b0418d!8m2!3d13.4124693!4d103.8669857!14m1!1BCgIgARICCAI?hl=zh-TW
 
 // 阿根廷冰河國家公園 ChIJVZJRWSiypL0R3dHwpGmtXeY

@@ -34,6 +34,13 @@ import dragSrc from './images/drag-and-drop.png';
 import whiteTrashCan from './images/white-bin.png';
 import whiteDragSrc from './images/drag.png';
 import plusIcon from './images/plus.png';
+import Default1 from './images/default1.png';
+import Default2 from './images/default2.png';
+import Default3 from './images/default3.png';
+import Default4 from './images/default4.png';
+import Default5 from './images/default5.png';
+
+const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
 // import DragndDrop from './images/arrow-left.png';
 
@@ -944,7 +951,7 @@ function Schedule() {
                     </RecommendPlaceTitle>
                     <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place.name, clickedDayIndex); updatePlaceAddressBySearch(place.vicinity, clickedDayIndex); setActive(false); }} type="button">加入行程</AddToPlaceButton>
                   </RecommendPlaceLeftArea>
-                  <RecommendPlcePhoto alt="place" src={place.photos?.[0]?.getUrl?.() ?? '哈哈'} />
+                  <RecommendPlcePhoto alt="place" src={place.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]} />
                 </RecommendPlace>
               ))}
             </RecommendPlaces>

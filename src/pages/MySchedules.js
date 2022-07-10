@@ -696,6 +696,8 @@ function MySchedules() {
     status: 'draft',
     cover_img: '',
     summary: '',
+    author: user.displayName,
+    time: new Date(),
     article_creator_user_id: user.uid,
     schedule_id: selectedSchedule?.schedule_id,
     article_id: '',

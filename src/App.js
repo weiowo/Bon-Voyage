@@ -26,6 +26,7 @@ import MyArticles from './pages/MyArticles';
 import AllArticlePage from './pages/AllArticles';
 import Profile from './pages/Profile';
 import VR from './pages/VrPage';
+import MyLovedArticles from './pages/MyFavorites';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -105,6 +106,7 @@ function App() {
             <Route path="/all-articles" element={<AllArticlePage />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/vr-page" element={<VR />} />
+            <Route path="/my-favorites" element={<MyLovedArticles />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

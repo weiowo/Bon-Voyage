@@ -151,7 +151,6 @@ function SignIn() {
         );
         console.log('signUp', userData);
         console.log('successful', userCredentialData);
-        console.log('您創了一個新帳號唷！');
         alert('成功創立帳號囉!');
         // 在firestore上面創立一個新的user並給予相應的欄位
         const createNewUserData = doc(db, 'users', userData.uid);

@@ -1,11 +1,11 @@
 import React, {
   useCallback, useEffect, useRef, useState, useContext,
 } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import styled from 'styled-components/macro';
 import {
-  doc, getDoc, updateDoc,
+  doc, getDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
@@ -19,6 +19,29 @@ import Default2 from './images/default2.png';
 import Default3 from './images/default3.png';
 import Default4 from './images/default4.png';
 import Default5 from './images/default5.png';
+import unfilledStar from './images/unfilled_star.jpg';
+import filledStar from './images/filled_star.jpg';
+// import {
+//   PlaceBoxWrapper, Tap, PlaceBox, PlacePhoto,
+//   PlaceBoxBelowPart, PlaceTitle, AddPlaceToScheduleButton,
+// } from './Category';
+
+export const ButtonStarArea = styled.div`
+width:100%;
+height:auto;
+display:flex;
+align-items:center;
+justify-content:center;
+`;
+
+export const AddFavoriteIcon = styled.img`
+width:25px;
+height:25px;
+cursor:pointer;
+position:absolute;
+right:15%;
+justify-self:right;
+`;
 
 export const ModalBackground = styled.div`
 width:100vw;
@@ -72,6 +95,7 @@ flex-direction:column;
 align-items:center;
 justify-content:center;
 gap:10px;
+position:relative;
 `;
 
 export const ModalPlaceTitle = styled.div`
@@ -286,6 +310,22 @@ text-align:left;
 width:160px;
 `;
 
+export const ConfirmChooseDayButton = styled.button`
+width:20%;
+height:35px;
+background: linear-gradient(
+  312deg,
+  rgb(178, 228, 238) 0%,
+  rgb(161, 176, 246) 100%
+);
+border-radius:25px;
+border:none;
+color:black;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
+`;
+
 const RestaurantDescription = styled.div`
 font-size:10px;
 margin-top:5px;
@@ -342,19 +382,6 @@ export const Loading = styled.div`
   animation: spinner 3s linear infinite;
 `;
 
-// const DayChoicesBoxWrapper = styled.div`
-// display:flex;
-// flex-wrap:wrap;
-// height:100%;
-// wifth:100%;
-// align-items:center;
-// justify-content:center;
-// overflow:scroll;
-// gap:15px;
-// padding-top:10px;
-// padding-bottom:20px;
-// `;
-
 export const ScheduleChoicesBox = styled.div`
 display:flex;
 align-items:center;
@@ -362,6 +389,8 @@ width:220px;
 height:60px;
 border-radius:10px;
 background-color:#e7f5fe;
+cursor:pointer;
+background-color:${(props) => (props.clicked ? '#E6D1F2' : '#e7f5fe')};
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 &:hover {
   background-color:#E6D1F2;
@@ -434,19 +463,19 @@ function City() {
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
   const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
   const [modalDetail, setModalDetail] = useState();
-
+  const navigate = useNavigate();
+  const [liked, setLiked] = useState(false);
+  const [clickedPlaceUrl, setClickedPlaceUrl] = useState('');
+  const [clickedPlaceName, setClickedPlaceName] = useState('');
+  const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
   const lat = Number(new URLSearchParams(search).get('lat'));
   const lng = Number(new URLSearchParams(search).get('lng'));
   const cityFromUrl = new URLSearchParams(search).get('city');
   const optionFromUrl = new URLSearchParams(search).get('option');
 
-  // 關於modal部分
-
   function handleModalClose() {
     setModalIsActive(false);
   }
-
-  // 關於slick slider部分
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -486,20 +515,6 @@ function City() {
       }];
     }
 
-    // 如果只選到一種，type就會只放那種
-    // 如果選「全部」，那就會query三次，獲取20*3筆結果！
-
-    // function callback(results, status) {
-    //   // eslint-disable-next-line no-undef
-    //   console.log('callback', results, status, google.maps.places.PlacesServiceStatus.OK);
-    //   // eslint-disable-next-line no-undef
-    //   if (status === google.maps.places.PlacesServiceStatus.OK) {
-    //     console.log('哇哈哈哈哈哈哈哈(fromCity頁面)');
-    //     // { hotel: [], landmark: [] }
-    //     const data = { [optionFromUrl]: results };
-    //     setNearbyData(data);
-    //   }
-    // }
     // eslint-disable-next-line no-undef
     const service = new google.maps.places.PlacesService(mapRef.current);
     requests.forEach((request) => {
@@ -520,17 +535,6 @@ function City() {
     }, 1000);
   }, [searchNearby, isLoaded]);
   console.log({ lat, lng });
-
-  function ClickAndShowPlaceDetail(clickedPlaceId) {
-    setModalIsActive(true);
-    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-      .then((response) => response.json()).then((jsonData) => {
-        console.log('我在useEffect中', jsonData.result);
-        setModalDetail(jsonData.result);
-      }).catch((err) => {
-        console.log('錯誤:', err);
-      });
-  }
 
   // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
   // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
@@ -587,14 +591,81 @@ function City() {
     passAddedDataToFirestore();
   }
 
-  // function clicked(index) {
-  //   if (index === dayIndex) {
-  //     console.log(dayIndex);
-  //     setIsClicked(!isClicked);
-  //   }
-  // }
+  // 按下加入行程時先判斷有否登入，有的話才能繼續
 
-  // const clicked = () => (isClicked ? setIsClicked(false) : setIsClicked(true));
+  function handleUserOrNot() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      setModalIsActive(false); setChooseScheduleModalIsActive(true);
+    }
+  }
+
+  // 打開modal時先確認有沒有追蹤過
+  // 有的話就讓星星亮起，沒有的話就讓星星空的
+  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
+
+  async function checkLikeOrNot(placeId) {
+    const userArticlesArray = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(userArticlesArray);
+    console.log(docSnap.data());
+    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
+      setLiked(true);
+      console.log('已經追蹤過嚕!');
+    } else {
+      console.log('沒有哦');
+      setLiked(false);
+    }
+  }
+
+  function ShowDetailNCheckLikedOrNot(clickedPlaceId) {
+    if (user.uid) {
+      checkLikeOrNot(clickedPlaceId);
+    } else {
+      setLiked(false);
+    }
+    setModalIsActive(true);
+    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
+      .then((response) => response.json()).then((jsonData) => {
+        console.log('我在useEffect中', jsonData.result);
+        setModalDetail(jsonData.result);
+      }).catch((err) => {
+        console.log('錯誤:', err);
+      });
+  }
+
+  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
+  // 按下星星後就先把這個位置存到db的attractions資料庫中～
+
+  async function handleFavorite(placeId) {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      const userArticlesArray = doc(db, 'users', user.uid);
+      if (liked) {
+        setLiked(false);
+        await updateDoc(userArticlesArray, {
+          loved_attraction_ids: arrayRemove(placeId),
+        });
+        console.log('已退追此景點!');
+      } else if (!liked) {
+        setLiked(true);
+        await updateDoc(userArticlesArray, {
+          loved_attraction_ids: arrayUnion(placeId),
+        });
+        console.log('已追蹤此景點!');
+        const createAttraction = doc(db, 'attractions', placeId);
+        await setDoc(createAttraction, ({
+          place_id: placeId,
+          place_title: clickedPlaceName,
+          place_address: clickedPlaceAddress,
+          place_url: clickedPlaceUrl,
+        }));
+      }
+    }
+  }
 
   if (!isLoaded) return <div>City頁Loading出了點問題OWO!可以先到首頁看更多景點唷^__^!</div>;
 
@@ -609,14 +680,17 @@ function City() {
                 <ModalLeftArea>
                   <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
                   <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                  <AddToScheduleButton
-                    onClick={() => {
-                      setModalIsActive(false);
-                      setChooseScheduleModalIsActive(true);
-                    }}
-                  >
-                    加入行程
-                  </AddToScheduleButton>
+                  <ButtonStarArea>
+                    <AddToScheduleButton
+                      onClick={() => { handleUserOrNot(); }}
+                    >
+                      加入行程
+                    </AddToScheduleButton>
+                    <AddFavoriteIcon
+                      onClick={() => { handleFavorite(modalDetail.place_id); }}
+                      src={liked ? filledStar : unfilledStar}
+                    />
+                  </ButtonStarArea>
                 </ModalLeftArea>
                 <ModalImgArea>
                   <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
@@ -649,20 +723,17 @@ function City() {
             <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
             <ScheduleChoicesBoxWrapper>
               {cityPageScheduleData ? cityPageScheduleData.map((item, index) => (
-                <ScheduleChoicesBox id={item.schedule_id}>
+                <ScheduleChoicesBox
+                  onClick={() => {
+                    setClickedScheduleId(item.schedule_id);
+                    setClickedScheduleIndex(index);
+                    setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                  }}
+                  id={item.schedule_id}
+                >
                   <ScheduleChoiceTitle>
                     {item.title}
                   </ScheduleChoiceTitle>
-                  <ChooseButton
-                    onClick={() => {
-                      setClickedScheduleId(item.schedule_id);
-                      setClickedScheduleIndex(index);
-                      setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
-                    }}
-                    type="button"
-                  >
-                    選擇
-                  </ChooseButton>
                 </ScheduleChoicesBox>
               )) : ''}
             </ScheduleChoicesBoxWrapper>
@@ -689,25 +760,22 @@ function City() {
             <ScheduleChoicesBoxWrapper>
               {cityPageScheduleData
                 ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
-                  <ScheduleChoicesBox style={{ display: 'flex' }}>
+                  <ScheduleChoicesBox
+                    clicked={dayIndex === index}
+                    onClick={() => {
+                      setDayIndex(index);
+                    }}
+                    style={{ display: 'flex' }}
+                  >
                     <ScheduleChoiceTitle>
                       第
                       {index + 1}
                       天
                     </ScheduleChoiceTitle>
-                    <ChooseButton
-                      clicked={dayIndex === index}
-                      onClick={() => {
-                        setDayIndex(index);
-                      }}
-                      type="button"
-                    >
-                      選擇
-                    </ChooseButton>
                   </ScheduleChoicesBox>
                 )) : ''}
             </ScheduleChoicesBoxWrapper>
-            <button type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</button>
+            <ConfirmChooseDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmChooseDayButton>
           </ModalContentWrapper>
           <CloseModalButton
             type="button"
@@ -742,7 +810,12 @@ function City() {
               {nearbyData.tourist_attraction ? nearbyData.tourist_attraction.map((item, index) => (
                 <AttractionBox
                   id={item.place_id}
-                  onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+                  onClick={(e) => {
+                    ShowDetailNCheckLikedOrNot(e.target.id);
+                    setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
+                    setClickedPlaceName(item?.name);
+                    setClickedPlaceAddress(item?.vicinity);
+                  }}
                 >
                   <AttractionPhotoContainer
                     id={item.place_id}
@@ -775,7 +848,15 @@ function City() {
             </RestaurantAreaTitle>
             <RestaurantWrapper>
               {nearbyData.restaurant ? nearbyData.restaurant.map((item, index) => (
-                <RestaurantBox id={item.place_id}>
+                <RestaurantBox
+                  onClick={(e) => {
+                    ShowDetailNCheckLikedOrNot(e.target.id);
+                    setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
+                    setClickedPlaceName(item?.name);
+                    setClickedPlaceAddress(item?.vicinity);
+                  }}
+                  id={item.place_id}
+                >
                   <RestaurantPhoto
                     alt="attraction-photo"
                     src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
@@ -788,7 +869,6 @@ function City() {
                     <RestaurantDescription />
                     <RestaurantSeeMoreButton
                       id={item.place_id}
-                      onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
                     >
                       瞭解更多
 
@@ -802,7 +882,15 @@ function City() {
             </AttractionAreaTitle>
             <AttractionWrapper>
               {nearbyData.lodging ? nearbyData?.lodging.map((item, index) => (
-                <AttractionBox id={item.place_id}>
+                <AttractionBox
+                  onClick={(e) => {
+                    ShowDetailNCheckLikedOrNot(e.target.id);
+                    setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
+                    setClickedPlaceName(item?.name);
+                    setClickedPlaceAddress(item?.vicinity);
+                  }}
+                  id={item.place_id}
+                >
                   <AttractionPhotoContainer>
                     <AttractionPhoto
                       alt="attraction-photo"
@@ -816,7 +904,6 @@ function City() {
                   <AttractionDescription />
                   <AttractionSeeMoreButton
                     id={item.place_id}
-                    onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
                   >
                     瞭解更多
                   </AttractionSeeMoreButton>

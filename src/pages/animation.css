@@ -305,3 +305,9 @@ background-color:rgb(178, 228, 238),
     transform: rotateZ(0);
   }
 }
+
+@keyframes bounce {
+  50% {
+      transform: translateX(-15px);
+    }
+  }

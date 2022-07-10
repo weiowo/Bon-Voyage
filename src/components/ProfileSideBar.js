@@ -93,7 +93,9 @@ function ProfileSideBarElement() {
         <LinkWithoutDefaultStyle to="/my-articles">
           <NavBarChoice>我的文章</NavBarChoice>
         </LinkWithoutDefaultStyle>
-        <NavBarChoice>我的收藏</NavBarChoice>
+        <LinkWithoutDefaultStyle to="/my-favorites">
+          <NavBarChoice>我的收藏</NavBarChoice>
+        </LinkWithoutDefaultStyle>
         <LinkWithoutDefaultStyle to="/profile">
           <NavBarChoice>個人資料</NavBarChoice>
         </LinkWithoutDefaultStyle>

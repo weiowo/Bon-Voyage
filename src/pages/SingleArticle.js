@@ -2,9 +2,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import
 {
-  doc, getDoc,
+  doc, getDoc, updateDoc, arrayRemove, arrayUnion,
 } from 'firebase/firestore';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useImmer } from 'use-immer';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -13,6 +13,9 @@ import HeaderComponent from '../components/Header';
 import ShareBanner2 from './images/share_banner2.png';
 import db from '../utils/firebase-init';
 import defaultCover from './images/schedule_cover_rec3.jpg';
+import unfilledStar from './images/unfilled_star.jpg';
+import filledStar from './images/filled_star.jpg';
+import UserContext from '../components/UserContextComponent';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -41,12 +44,29 @@ align-items:center;
 display:flex;
 `;
 
+const ArticleAuthorDate = styled.div`
+color:grey;
+font-weight:600;
+`;
+
 const ArticleEditPart = styled.div`
 width:75vw;
 height:auto;
 display:flex;
-justify-content:center;
+justify-content:space-between;
 `;
+
+const AddFavoriteIcon = styled.img`
+width:30px;
+height:30px;
+cursor:pointer;
+`;
+
+// const RemoveFavoriteIcon = styled.img`
+// width:30px;
+// height:30px;
+// cursor:pointer;
+// `;
 
 const ArticleCoverPhotoWrapper = styled.img`
 width:50vw;
@@ -90,7 +110,7 @@ display:flex;
 `;
 
 const ArticleTitle = styled.div`
-width:55vw;
+width:50vw;
 height:auto;
 font-size:35px;
 font-weight:600;
@@ -99,10 +119,14 @@ margin-top:20px;
 margin-bottom:20px;
 outline:none;
 border:none;
+display:flex;
+align-items:center;
+justify-content:space-between;
+
 `;
 
 const EditingPart = styled.div`
-width:55vw;
+width:50vw;
 height:600px;
 display:flex;
 flex-direction:column;
@@ -209,6 +233,8 @@ flex-wrap:wrap;
 
 function ShowArticle() {
   const [shownArticle, updateShownArticle] = useImmer();
+  const [liked, setLiked] = useState(false);
+  const user = useContext(UserContext);
 
   // 拿指定一個article_id的article資料
   const { search } = useLocation();
@@ -229,6 +255,37 @@ function ShowArticle() {
     getCertainArticle();
   }, [currentArticleId, updateShownArticle]);
 
+  // 確認一下是否這個使用者有按過收藏，有的話星星是亮的
+
+  useEffect(() => {
+    async function checkLikeOrNot() {
+      const userArticlesArray = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(userArticlesArray);
+      console.log(docSnap.data());
+      if (docSnap.data().loved_article_ids.indexOf(currentArticleId) > -1) {
+        setLiked(true);
+      }
+    }
+    checkLikeOrNot();
+  }, [currentArticleId, user.uid]);
+
+  async function handleFavorite() {
+    const userArticlesArray = doc(db, 'users', user.uid);
+    if (liked) {
+      setLiked(false);
+      await updateDoc(userArticlesArray, {
+        loved_article_ids: arrayRemove(currentArticleId),
+      });
+      console.log('已退追!');
+    } else if (!liked) {
+      setLiked(true);
+      await updateDoc(userArticlesArray, {
+        loved_article_ids: arrayUnion(currentArticleId),
+      });
+      console.log('已追!');
+    }
+  }
+
   return (
     <>
       <HeaderComponent />
@@ -236,10 +293,23 @@ function ShowArticle() {
         <ArticleCoverImage type="file" />
         <ArticlePageBelowPart>
           <ArticleTitleButtonArea>
-            <ArticleTitle>{shownArticle?.article_title}</ArticleTitle>
+            <ArticleTitle>
+              {shownArticle?.article_title}
+              <AddFavoriteIcon
+                onClick={() => handleFavorite()}
+                src={liked ? filledStar : unfilledStar}
+              />
+            </ArticleTitle>
           </ArticleTitleButtonArea>
           <ArticleEditPart>
             <EditingPart>
+              <ArticleAuthorDate>
+                {shownArticle?.author}
+                {' '}
+                |
+                {' '}
+                {shownArticle?.time ? (new Date(shownArticle?.time?.toDate()))?.toISOString().split('T')[0] : ''}
+              </ArticleAuthorDate>
               <ArticleCoverPhotoWrapper src={shownArticle?.cover_img
                 ? shownArticle?.cover_img : defaultCover}
               />
@@ -280,7 +350,7 @@ function ShowArticle() {
             <ScheduleSummaryPart>
               {shownArticle ? shownArticle?.trip_days?.map((dayItem, dayIndex) => (
                 <ScheduleSummaryDayAndPlacePart>
-                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/article#day-${dayIndex + 1}`}>
+                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#day-${dayIndex + 1}`}>
                     <ScheduleSummaryDayPart>
                       第
                       {dayIndex + 1}
@@ -293,7 +363,7 @@ function ShowArticle() {
                   />
                   <ScheduleSummaryPlacePart>
                     {dayItem?.places ? dayItem?.places.map((placeItem, placeIndex) => (
-                      <HashLink style={{ textDecoration: 'none', color: 'black' }} smooth to={`/article#place-${dayIndex + 1}-${placeIndex + 1}`}>
+                      <HashLink style={{ textDecoration: 'none', color: 'black' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#place-${dayIndex + 1}-${placeIndex + 1}`}>
                         <SummaryPlaceTitle>
                           {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
                         </SummaryPlaceTitle>

@@ -33,24 +33,47 @@ body {
   -o-object-fit: cover;
      object-fit: cover;
 }
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 .vr-container {
-  position: relative;
+  /* position: relative;
   width: 100%;
   height: 60vh;
   background-color: #000;
-  display: block;
+  display: block; */
+  width:100vw;
+  height:100vh;
+  padding-top:20vh;
+  display:flex;
+  flex-direction:column;
+  gap:50px;
+  /* background: linear-gradient(-45deg, #141e30,  #243b55, #141e30,  #243b55); */
+  /* background: linear-gradient(-45deg, #141e30,  #243b55, #141e30,  #53749a); */
+  background: linear-gradient(-45deg, #bedde7, #acd1df, #fbebd0, #ffbdbd);
+  align-items:center;
+  animation: gradient 10s ease infinite;
+  background-size: 400% 400%;
 }
 
 .vr-container .swiper-container {
   width: 70%;
-  position: absolute;
-  left: 50%;
-  bottom: -16vw;
+  /* position: absolute; */
+  /* left: 50%; */
+  /* bottom: -16vw;
   -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+          transform: translateX(-50%); */
   z-index: 2;
-  padding-bottom: 3vw;
+  /* padding-bottom: 3vw; */
 }
 
 @media (max-width: 768px) {
@@ -60,61 +83,7 @@ body {
   }
 }
 
-.title_wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -ms-flex-line-pack: center;
-      align-content: center;
-  padding: 3vw 0 2vw 0;
-}
-
-@media (max-width: 768px) {
-  .title_wrapper {
-    padding-top: 13vw;
-  }
-}
-
-.title_wrapper .reactLogo {
-  width: 5vw;
-  height: 5vw;
-  margin-right: 1vw;
-}
-
-@media (max-width: 768px) {
-  .title_wrapper .reactLogo {
-    width: 25vw;
-    height: 25vw;
-  }
-}
-
-.title_wrapper .reactLogo img {
-  width: 100%;
-  height: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-
-.title_wrapper .title_ {
-  color: #fff;
-  text-align: left;
-  font-size: 2vw;
-}
-
-@media (max-width: 768px) {
-  .title_wrapper .title_ {
-    font-size: 7vw;
-  }
-}
-
-.title_wrapper .title_ span {
-  display: block;
-}
-
-.swiper-pagination-fraction {
+/* .swiper-pagination-fraction {
   bottom: 0;
 }
 
@@ -122,4 +91,5 @@ body {
   width: 25px;
   height: 5px;
   border-radius: 5px;
-}
+} */
+

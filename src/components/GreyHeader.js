@@ -54,15 +54,17 @@ function GreyHeaderComponent() {
         <Logo>Bon Voyage</Logo>
       </StyleNavLink>
       <NavBar>
-        <div style={{ cursor: 'pointer' }}>VR專區</div>
+        <StyleNavLink to="/vr-page">
+          VR專區
+        </StyleNavLink>
         <div style={{ cursor: 'pointer' }}>熱門景點</div>
         <div style={{ cursor: 'pointer' }}>國內旅遊</div>
-        <div style={{ cursor: 'pointer' }}>國外旅遊</div>
-        <div style={{ cursor: 'pointer' }}>
-          <StyleNavLink to="/my-schedules">
-            我的行程
-          </StyleNavLink>
-        </div>
+        <StyleNavLink to="/all-articles">
+          熱門遊記
+        </StyleNavLink>
+        <StyleNavLink to="/my-schedules">
+          行程規劃
+        </StyleNavLink>
         <StyleNavLink to="/profile">
           <ProfilePageNav>個人頁面</ProfilePageNav>
         </StyleNavLink>
