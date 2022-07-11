@@ -29,6 +29,7 @@ width:30px;
 height:30px;
 border-radius:50%;
 margin-left:23px;
+object-fit:cover;
 `;
 
 const UserName = styled.div`

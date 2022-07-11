@@ -144,7 +144,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 display:${(props) => (props.active ? 'flex' : 'none')};
-z-index:100;
+z-index:500;
 `;
 
 const ModalBox = styled.div`
@@ -157,6 +157,7 @@ border-radius:10px;
 z-index:200;
 position: relative;
 align-items:center;
+z-index:500;
 `;
 
 const ModalImgArea = styled.div`
@@ -285,6 +286,16 @@ color:white;
 cursor:pointer;
 `;
 
+const TransparentBackground = styled.div`
+width:100vw;
+height:450px;
+background-color:white;
+opacity:0.4;
+z-index:100;
+position:absolute;
+top:30%
+`;
+
 const CurrentSchedulesTitle = styled.div`
 width:100%;
 height:30px;
@@ -364,6 +375,7 @@ overflow:scroll;
 display:flex;
 flex-direction:column;
 align-items:center;
+z-index:500;
 `;
 
 SwiperCore.use([EffectCoverflow, Navigation]);
@@ -649,6 +661,7 @@ function VR() {
           With VR, The world is just in front of you.
         </PageTitle>
         {/* </div> */}
+        <TransparentBackground />
         <Swiper
           navigation
           effect="coverflow"

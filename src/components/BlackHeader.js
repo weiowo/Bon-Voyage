@@ -60,7 +60,7 @@ function BlackHeaderComponent() {
         <StyleNavLink to="/vr-page">
           VR專區
         </StyleNavLink>
-        <StyleNavLink to="//city?lat=25.0329694&lng=121.5654177&city=台北&option=all">
+        <StyleNavLink to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all">
           熱門景點
         </StyleNavLink>
         <StyleNavLink to="/all-articles">

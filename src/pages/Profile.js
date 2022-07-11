@@ -118,13 +118,12 @@ function Profile() {
   const [userEmail, setUserEmail] = useState();
   const [userName, setUserName] = useState();
 
-  console.log(photoUrl);
-  console.log('profile page', user);
   const auth = getAuth(app);
 
   function signOutFunction() {
     signOut(auth).then(() => {
       console.log('successfully sign out!');
+      alert('您已登出囉～');
     }).catch((error) => {
       console.log(error);
     });
@@ -158,30 +157,6 @@ function Profile() {
     console.log(user);
     console.log(url);
   }
-
-  // 同時querysnapshot，拿schedule中members的id array去找人
-
-  // useEffect(() => {
-  //   if (selectedSchedule?.schedule_id) {
-  //     const memberAdded = doc(db, 'schedules', selectedSchedule?.schedule_id);
-  //     onSnapshot(memberAdded, (querySnapshot) => {
-  //       console.log('我在拿更新的朋友名單', querySnapshot.data());
-  //       console.log(querySnapshot.data().members);
-  // querySnapshot.data().members.forEach(async (item, index) => {
-  //   const docs = doc(db, 'users', item);
-  //   const snap = await getDoc(docs);
-  //   if (snap.exists()) {
-  //     console.log('這些使用者的詳細資料', index, snap.data());
-  //     setSelectedMembers((draft) => {
-  //       draft.push(snap.data());
-  //     });
-  //   } else {
-  //     console.log('找不到這個使用者');
-  //   }
-  // });
-  //     });
-  //   }
-  // }, [selectedSchedule?.schedule_id, setSelectedMembers]);
 
   return (
     <>

@@ -182,7 +182,7 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 `;
 
-const DeleteAsk = styled.div`
+export const DeleteAsk = styled.div`
 width:100%;
 display:flex;
 align-items:center;
@@ -198,7 +198,7 @@ font-weight:600;
 font-size:18px;
 `;
 
-const DeleteButtonArea = styled.div`
+export const DeleteButtonArea = styled.div`
 width:100%;
 display:flex;
 justify-content:center;
@@ -214,7 +214,7 @@ height:18px;
 cursor:pointer;
 `;
 
-const ConfirmDeleteButton = styled.button`
+export const ConfirmDeleteButton = styled.button`
 width:30%;
 height:30px;
 background-color:#e7f5fe;
@@ -226,7 +226,7 @@ font-size:16px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
-const NoDeleteButton = styled.button`
+export const NoDeleteButton = styled.button`
 width:30%;
 height:30px;
 background-color:#E6D1F2;
@@ -452,7 +452,7 @@ background: linear-gradient(
 );
 `;
 
-const DeleteModalTitle = styled.div`
+export const DeleteModalTitle = styled.div`
 display: flex;
 align-items:center;
 justify-content:center;

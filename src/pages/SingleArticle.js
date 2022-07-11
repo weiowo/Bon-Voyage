@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { HashLink } from 'react-router-hash-link';
 import HeaderComponent from '../components/Header';
-import ShareBanner2 from './images/share_banner2.png';
+import ShareBanner2 from './images/share_banner2.jpeg';
 import db from '../utils/firebase-init';
 import defaultCover from './images/schedule_cover_rec3.jpg';
 import unfilledStar from './images/unfilled_star.jpg';
@@ -71,7 +71,7 @@ cursor:pointer;
 
 const ArticleCoverPhotoWrapper = styled.img`
 width:50vw;
-height:350px;
+height:380px;
 margin-left:5px;
 margin-top:2px;
 border-radius:3px;
@@ -84,7 +84,6 @@ background-blend-mode: multiply;
 background-position:center;
 flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-cursor:pointer;
 object-fit: cover;
 `;
 
@@ -127,7 +126,7 @@ justify-content:space-between;
 `;
 
 const EditingPart = styled.div`
-width:50vw;
+width:51vw;
 height:600px;
 display:flex;
 flex-direction:column;
@@ -224,7 +223,7 @@ object-fit: cover;
 
 const ImgDisplayArea = styled.div`
 display:flex;
-width:55vw;
+width:50vw;
 height:auto;
 gap:10px;
 margin-left:10px;
@@ -330,10 +329,7 @@ function ShowArticle() {
                             {placeItem.place_title}
                           </PlaceTitle>
                         </div>
-                        <ImgDisplayArea style={{
-                          display: 'flex', width: '55vw', height: 'auto',
-                        }}
-                        >
+                        <ImgDisplayArea>
                           {shownArticle?.trip_days?.[dayIndex]
                             ?.places?.[placeIndex]?.place_imgs?.map((item) => (
                               <div style={{ position: 'relative' }}>

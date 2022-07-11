@@ -7,7 +7,9 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
-import React, { useEffect, useState, useContext } from 'react';
+import React, {
+  useEffect, useState, useContext, useRef,
+} from 'react';
 import {
   // getDocs,
   collection, doc, getDoc, getDocs,
@@ -585,9 +587,7 @@ function Schedule() {
   const [selected, setSelected] = useState({}); // 搜尋後根據自動推薦選擇的地點
   const [clickedDayIndex, setClickedDayIndex] = useState('');
   const [openChat, setOpenChat] = useState(false);
-  console.log(openChat);
   const [unreadMessage, setUnreadMessage] = useState(0);
-  console.log(unreadMessage);
   // const [searchParams, setSearchParams] = useSearchParams();
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
@@ -598,6 +598,15 @@ function Schedule() {
   const [isEditing, setIsEditing] = useState(false);
   const { search } = useLocation();
   const existScheduleId = new URLSearchParams(search).get('id');
+
+  // 有新訊息要跑到最下面
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatBox]);
 
   // 天數的dragAndDrop
 
@@ -1095,7 +1104,7 @@ function Schedule() {
             </ChatRoomTitle>
             <MessagesDisplayArea>
               {chatBox ? chatBox?.messages.map((item) => (
-                <MessageBox>
+                <MessageBox ref={messagesEndRef}>
                   <UserPhoto src={item.photo_url} />
                   <NameMessage>
                     <Name>

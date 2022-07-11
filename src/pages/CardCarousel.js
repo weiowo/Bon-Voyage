@@ -111,7 +111,7 @@ align-items:center;
 justify-content:center;
 flex-wrap:wrap;
 position:relative;
-overflow:scroll;
+overflow:hidden;
 z-index:1;
 gap:20px;
 @media screen and (max-width:800px){
@@ -303,12 +303,12 @@ function CardsCarousel({ currentNearbyAttraction }) {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data().owned_schedule_ids);
+        console.log('Document data:', docSnap?.data()?.owned_schedule_ids);
       } else {
         console.log('No such document!');
       }
       function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+        docSnap.data()?.owned_schedule_ids?.forEach(async (item, index) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {

@@ -367,7 +367,7 @@ function MyLovedArticles() {
                   />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary}</MyArticleSummary>
+                    <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
                   </MyArticleBelowArea>
                 </MyArticle>
               </StyledLink>
@@ -387,8 +387,8 @@ function MyLovedArticles() {
                         * defaultArticleCoverPhoto.length)]}
                 />
                 <MyArticleBelowArea>
-                  <MyArticleTitle>{item?.place_title}</MyArticleTitle>
-                  <MyArticleSummary>{item?.place_address}</MyArticleSummary>
+                  <MyArticleTitle>{item?.place_title?.slice(0, 10)}</MyArticleTitle>
+                  <MyArticleSummary>{item?.place_address?.slice(0, 30)}</MyArticleSummary>
                 </MyArticleBelowArea>
               </MyArticle>
             )) : ''}

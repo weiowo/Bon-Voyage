@@ -26,6 +26,7 @@ import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 import ArticlesInHome from '../components/ArticlesInHome';
 import './animation.css';
+import Footer from '../components/Footer';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
@@ -369,6 +370,7 @@ function Home({ currentLatLng, user }) {
       <CategoryAreaInHome currentLatLng={currentLatLng} />
       <CityAreaInHomePage />
       <ArticlesInHome />
+      <Footer />
     </>
   );
 }

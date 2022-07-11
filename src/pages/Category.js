@@ -620,5 +620,5 @@ function Category({ currentLatLng }) {
 export default Category;
 
 Category.propTypes = {
-  currentLatLng: PropTypes.func.isRequired,
+  currentLatLng: PropTypes.objectOf.isRequired,
 };

@@ -16,7 +16,7 @@ import {
 } from 'firebase/storage';
 import db, { storage } from '../utils/firebase-init';
 import HeaderComponent from '../components/Header';
-import ShareBanner2 from './images/share_banner2.png';
+import ShareBanner2 from './images/share_banner2.jpeg';
 import CoverDefaultPhoto from './images/cover_photo_default.png';
 
 const PageWrapper = styled.div`
@@ -75,6 +75,7 @@ background-position:center;
 flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 cursor:pointer;
+object-fit:cover;
 `;
 
 const Description = styled.textarea`
@@ -533,6 +534,7 @@ function EditPage() {
                               fontSize: 14,
                               color: 'white',
                               fontWeight: 600,
+                              objectFit: 'cover',
                             }}
                           >
                             <input

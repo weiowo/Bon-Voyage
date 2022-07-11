@@ -1,14 +1,17 @@
 import styled from 'styled-components/macro';
 import React, { useEffect, useContext, useState } from 'react';
 import {
-  getDoc, doc,
+  getDoc, doc, updateDoc, arrayRemove, deleteDoc,
 //   query, where, collection, getDocs, arrayUnion, setDoc, updateDoc,
 } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import GreyHeaderComponent from '../components/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
-import { PageWrapper, Line } from './MySchedules';
+import {
+  PageWrapper, Line, DeleteModalTitle, DeleteAsk, DeleteButtonArea,
+  NoDeleteButton, ConfirmDeleteButton,
+} from './MySchedules';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
 import Cover1 from './images/schedule_cover_rec1.jpg';
@@ -17,6 +20,7 @@ import Cover3 from './images/schedule_cover_rec3.jpg';
 import Cover4 from './images/camping.jpg';
 import Cover5 from './images/schedule_cover_rec2.jpg';
 import Cover6 from './images/schedule_cover_rec4.jpg';
+import greyTrashCanSrc from './images/bin.png';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
@@ -69,6 +73,10 @@ padding-bottom:10px;
 padding-left:5px;
 display:${(props) => (props.isClicked ? 'flex' : 'none')};
 
+`;
+
+const ArticlePreviewAndDeleteWrapper = styled.div`
+position:relative;
 `;
 
 export const UpperLine = styled.div`
@@ -129,6 +137,33 @@ color:black;
 border:none;
 `;
 
+const DeletePublishedArticleIcon = styled.img`
+width:20px;
+height:20px;
+z-index:300;
+position:absolute;
+top:140px;
+right:20px;
+cursor:pointer;
+`;
+
+const DeleteDraftArticleIcon = styled.img`
+width:20px;
+height:20px;
+z-index:300;
+position:absolute;
+top:140px;
+right:20px;
+cursor:pointer;
+`;
+
+const ArticleTitleAndDeleteIcon = styled.div`
+width:100%;
+height:auto;
+display:flex;
+justify-content:space-between;
+`;
+
 function MyArticles() {
   const user = useContext(UserContext);
   const [myDraftArticles, setMyDraftArticles] = useImmer([]);
@@ -136,9 +171,26 @@ function MyArticles() {
   const [myPublishedArticles, setMyPublishedArticles] = useImmer([]);
   const [publishIsClicked, setPublishIsClciked] = useState(true);
   const [saveIsClicked, setSaveIsClciked] = useState(false);
+  const [clickedDeleteId, setClickedDeleteId] = useState('');
   //   const navigate = useNavigate();
   console.log(myPublishedArticles);
   console.log(user);
+
+  // 彈出刪除視窗動畫
+  const modal = document.querySelector('.modal');
+  const modalBackground = document.querySelector('.modal-background');
+
+  function toggleModal() {
+    modal?.classList.remove('hide');
+    modal?.classList.add('show');
+    modalBackground?.classList.add('show');
+  }
+
+  function closeModal() {
+    modal?.classList.remove('show');
+    modal?.classList.add('hide');
+    modalBackground?.classList.remove('show');
+  }
 
   // 先拿到某個使用者的資料
   // 再根據行程array，去做foreach拿到所有schedule資料
@@ -176,9 +228,31 @@ function MyArticles() {
     getUserArticleArrayList();
   }, [setMyDraftArticles, setMyPublishedArticles, user.uid]);
 
+  // 刪除文章：從user的owned articles array中刪除，也從articles db中刪除
+
+  async function handleArticleDelete() {
+    const userArticlesArray = doc(db, 'users', user.uid);
+    await updateDoc(userArticlesArray, {
+      owned_article_ids: arrayRemove(clickedDeleteId),
+    });
+    await deleteDoc(doc(db, 'articles', clickedDeleteId));
+  }
+
   return (
     <>
       <GreyHeaderComponent />
+      <div className="modal-background">
+        <div className="modal">
+          <DeleteModalTitle>
+            Delete
+          </DeleteModalTitle>
+          <DeleteAsk>確認要刪除嗎？</DeleteAsk>
+          <DeleteButtonArea>
+            <NoDeleteButton onClick={() => closeModal()} type="button">取消</NoDeleteButton>
+            <ConfirmDeleteButton onClick={() => { closeModal(); handleArticleDelete(); }} type="button">確認</ConfirmDeleteButton>
+          </DeleteButtonArea>
+        </div>
+      </div>
       <PageWrapper>
         <ProfileSideBarElement />
         <Line />
@@ -201,37 +275,56 @@ function MyArticles() {
           <UpperLine />
           <MyArticlesContainer isClicked={publishIsClicked}>
             {myPublishedArticles ? myPublishedArticles?.map((item) => (
-              <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-                <MyArticle>
-                  <CoverPhotoInMyArticle
-                    src={item?.cover_img ? item?.cover_img
-                      : defaultArticleCoverPhoto[Math.floor(Math.random()
+              <ArticlePreviewAndDeleteWrapper>
+                <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+                  <MyArticle>
+                    <CoverPhotoInMyArticle
+                      src={item?.cover_img ? item?.cover_img
+                        : defaultArticleCoverPhoto[Math.floor(Math.random()
                         * defaultArticleCoverPhoto.length)]}
-                  />
-                  <MyArticleBelowArea>
-                    <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
-                  </MyArticleBelowArea>
-                </MyArticle>
-              </StyledLink>
+                    />
+                    <MyArticleBelowArea>
+                      <ArticleTitleAndDeleteIcon>
+                        <MyArticleTitle>
+                          {item?.article_title}
+                        </MyArticleTitle>
+                      </ArticleTitleAndDeleteIcon>
+                      <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
+                    </MyArticleBelowArea>
+                  </MyArticle>
+                </StyledLink>
+                <DeletePublishedArticleIcon
+                  src={greyTrashCanSrc}
+                  onClick={() => { toggleModal(); setClickedDeleteId(item?.article_id); }}
+                />
+              </ArticlePreviewAndDeleteWrapper>
             )) : ''}
           </MyArticlesContainer>
           <MyArticlesContainer isClicked={saveIsClicked}>
             {myDraftArticles ? myDraftArticles?.map((item) => (
-              <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-                <MyArticle>
-                  <CoverPhotoInMyArticle
-                    src={item?.cover_img ? item?.cover_img
-                      : defaultArticleCoverPhoto[Math.floor(Math.random()
+              <ArticlePreviewAndDeleteWrapper>
+                <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+                  <MyArticle>
+                    <CoverPhotoInMyArticle
+                      src={item?.cover_img ? item?.cover_img
+                        : defaultArticleCoverPhoto[Math.floor(Math.random()
                         * defaultArticleCoverPhoto.length)]}
-                  />
-                  <MyArticleBelowArea>
-                    <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
-                  </MyArticleBelowArea>
-                </MyArticle>
-              </StyledLink>
-
+                    />
+                    <MyArticleBelowArea>
+                      <ArticleTitleAndDeleteIcon>
+                        <MyArticleTitle>
+                          {item?.article_title}
+                        </MyArticleTitle>
+                      </ArticleTitleAndDeleteIcon>
+                      <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
+                    </MyArticleBelowArea>
+                  </MyArticle>
+                </StyledLink>
+                <DeleteDraftArticleIcon
+                  src={greyTrashCanSrc}
+                  onClick={() => { toggleModal(); setClickedDeleteId(item?.article_id); }}
+                />
+              </ArticlePreviewAndDeleteWrapper>
             )) : ''}
           </MyArticlesContainer>
         </MyArticlesArea>

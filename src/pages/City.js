@@ -182,7 +182,7 @@ height:auto;
 font-size:26px;
 display:flex;
 justify-content:center;
-margin-top:20px;
+margin-top:50px;
 font-weight:600;
 `;
 
@@ -257,7 +257,7 @@ height:auto;
 font-size:26px;
 display:flex;
 justify-content:center;
-margin-top:20px;
+margin-top:50px;
 font-weight:600;
 `;
 
