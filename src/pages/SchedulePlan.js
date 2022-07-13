@@ -73,9 +73,7 @@ z-index:10;
 &::-webkit-scrollbar-track {
   -webkit-box-shadow: transparent;
   border-radius: 10px;
-  display:none;
 }
-
 &::-webkit-scrollbar {
   width: 3px;
   display:none;
@@ -87,6 +85,7 @@ z-index:10;
 }
 @media screen and (max-width:800px){
   width:100vw;
+  display:${(props) => (props.display ? 'flex' : 'none')};
 }
 `;
 
@@ -94,7 +93,9 @@ const RightContainer = styled.div`
 width:55vw;
 height:calc(100vh-60px);
 @media screen and (max-width:800px){
-  width:0vw;
+  display:${(props) => (props.display ? 'block' : 'none')};
+  width:100vw;
+  height:100vh;
 }
 `;
 
@@ -269,7 +270,6 @@ width:300px;
 height:300px;
 border-top-right-radius:10px;
 border-top-left-radius:10px;
-// border:black 1px solid;
 border-bottom:none;
 position: fixed;
 bottom: 0px;
@@ -277,6 +277,9 @@ right:50px;
 background-color:white;
 display:${(props) => (props.openChat ? 'flex' : 'none')};
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:800px){
+  right:30px;
+}
 `;
 
 const ChatIcon = styled.img`
@@ -439,6 +442,9 @@ position:relative;
 display:${(props) => (props.active ? 'block' : 'none')};
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 z-index:10;
+@media screen and (max-width:800px){
+  width:100vw;
+}
 `;
 
 const ResultsArea = styled.div`
@@ -449,6 +455,9 @@ align-items:center;
 height:85%;
 position:fixed;
 bottom:0;
+@media screen and (max-width:800px){
+  width:100%;
+}
 `;
 
 const SearchedPlace = styled.div`
@@ -460,6 +469,9 @@ justify-content:center;
 gap:30px;
 margin-bottom:5px;
 margin-top:20px;
+@media screen and (max-width:800px){
+  width:100%;
+}
 `;
 
 const RecommendPlaces = styled.div`
@@ -475,27 +487,37 @@ padding-top:20px;
 gap:10px;
 font-size:16px;
 font-weight:450;
+@media screen and (max-width:800px){
+  width:100%;
+}
 `;
 
 const RecommendPlace = styled.div`
 gap:30px;
 display:flex;
 justify-content:space-between;
-// width:33vw;
+width:90%;
 height:300px;
 border:1.5px #226788 solid;
 border-radius:15px;
 padding-top:20px;
 padding-bottom:20px;
 background-color:white;
+@media screen and (max-width:800px){
+  width:90%;
+}
 `;
 
 const RecommendPlaceLeftArea = styled.div`
 display:flex;
+width:50%;
 flex-direction:column;
 justify-content:center;
 margin-left:30px;
 gap:10px;
+@media screen and (max-width:800px){
+  width:100%;
+}
 `;
 
 const StyledInput = styled.input`
@@ -517,6 +539,9 @@ font-size:15px;
 text-align:left;
 width:270px;
 color:#226788;
+@media screen and (max-width:800px){
+  width:100%;
+}
 `;
 
 const SearchedPlaceTitle = styled.div`
@@ -617,7 +642,9 @@ padding-bottom:10px;
 padding-top:10px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 cursor:pointer;
-`;
+@media screen and (max-width:800px){
+margin-bottom:50px;
+}`;
 
 const ChooseShowMapOrSchedule = styled.div`
 display:none;
@@ -637,19 +664,29 @@ display:none;
   padding-top:10px;
   // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   cursor:pointer;
+  position:fixed;
+  bottom:0;
+  z-index:50;
 }`;
 
 const SeperateLine = styled.div`
 height:90%;
 width:1.2px;
 background-color:white;
-margin-right:18%;
-margin-left:18%;
 `;
 
 const AddNewScheduleIcon = styled.img`
 width:22px;
 height:22px;
+`;
+
+const SchdeuleMapButton = styled.button`
+background-color:transparent;
+font-weight:600;
+width:100%;
+color:white;
+border:none;
+cursor:pointer;
 `;
 
 const initialDnDState = {
@@ -683,7 +720,8 @@ function Schedule() {
   const [clickedDayIndex, setClickedDayIndex] = useState('');
   const [openChat, setOpenChat] = useState(false);
   const [unreadMessage, setUnreadMessage] = useState(0);
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const [schdeuleDisplay, setScheduleDisplay] = useState(true);
+  const [mapDisplay, setMapDisplay] = useState(false);
   const [distance, setDistance] = useImmer({});
   const [duration, setDuration] = useImmer({});
   const user = useContext(UserContext);
@@ -1032,7 +1070,7 @@ function Schedule() {
         <AddAndSearchBox active={active}>
           <CloseSearchIcon
             src={PinkCloseIcon}
-            onClick={() => setActive(false)}
+            onClick={() => { setScheduleDisplay(true); setActive(false); }}
           />
           <ResultsArea>
             <SearchedPlace>
@@ -1061,7 +1099,7 @@ function Schedule() {
             </RecommendPlaces>
           </ResultsArea>
         </AddAndSearchBox>
-        <LeftContainer active={active}>
+        <LeftContainer active={active} display={schdeuleDisplay}>
           <ScheduleTitleAndCompleteButtonArea>
             <Link to="/my-schedules">
               <GoBackIcon src={GoBackSrc} />
@@ -1173,18 +1211,18 @@ function Schedule() {
             ))
             : ''}
           <DayContainerBoxes />
-          <AddNewScheduleButton type="button" onClick={() => { setActive(true); addPlaceInDay(choosedDayIndex); setClickedDayIndex(choosedDayIndex); }}>
+          <AddNewScheduleButton type="button" onClick={() => { setActive(true); setScheduleDisplay(false); addPlaceInDay(choosedDayIndex); setClickedDayIndex(choosedDayIndex); }}>
             新增行程
             <AddNewScheduleIcon alt="add-new-schedule" src={plusIcon} />
           </AddNewScheduleButton>
-          <ChooseShowMapOrSchedule>
-            顯示行程
-            <SeperateLine />
-            顯示地圖
-          </ChooseShowMapOrSchedule>
         </LeftContainer>
-        <RightContainer>
-          {/* <Map
+        <ChooseShowMapOrSchedule>
+          <SchdeuleMapButton type="button" onClick={() => { setScheduleDisplay(true); setActive(false); setMapDisplay(false); }}>顯示行程</SchdeuleMapButton>
+          <SeperateLine />
+          <SchdeuleMapButton type="button" onClick={() => { setScheduleDisplay(false); setMapDisplay(true); }}>顯示地圖</SchdeuleMapButton>
+        </ChooseShowMapOrSchedule>
+        <RightContainer display={mapDisplay}>
+          <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
             selected={selected}
@@ -1196,45 +1234,45 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-          /> */}
-          <ChatRoom openChat={openChat}>
-            <ChatRoomTitle>
-              聊天室
-              <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
-            </ChatRoomTitle>
-            <MessagesDisplayArea>
-              {chatBox ? chatBox?.messages.map((item) => (
-                <MessageBox ref={messagesEndRef}>
-                  <UserPhoto src={item.photo_url} />
-                  <NameMessage>
-                    <Name>
-                      {item?.user_name}
-                    </Name>
-                    <Message>{item?.message}</Message>
-                  </NameMessage>
-                </MessageBox>
-              )) : ''}
-            </MessagesDisplayArea>
-            <EnterArea>
-              <MessageInput
-                onKeyPress={handleEnter}
-                value={inputMessage}
-                onChange={(e) => {
-                  setInputMessage(e.target.value);
-                }}
-              />
-              <EnterMessageButton onClick={() => { setInputMessage(''); addNewMessageToFirestoreFirst(); }}>
-                send
-              </EnterMessageButton>
-            </EnterArea>
-          </ChatRoom>
-          <div>
-            {unreadMessage > 1 && openChat === false
-              ? <UnreadMessage active={unreadMessage > 1 && openChat === false}>{unreadMessage - 1 }</UnreadMessage>
-              : ''}
-            <ChatIcon active={unreadMessage > 1 && openChat === false} src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
-          </div>
+          />
         </RightContainer>
+        <ChatRoom openChat={openChat}>
+          <ChatRoomTitle>
+            聊天室
+            <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
+          </ChatRoomTitle>
+          <MessagesDisplayArea>
+            {chatBox ? chatBox?.messages.map((item) => (
+              <MessageBox ref={messagesEndRef}>
+                <UserPhoto src={item.photo_url} />
+                <NameMessage>
+                  <Name>
+                    {item?.user_name}
+                  </Name>
+                  <Message>{item?.message}</Message>
+                </NameMessage>
+              </MessageBox>
+            )) : ''}
+          </MessagesDisplayArea>
+          <EnterArea>
+            <MessageInput
+              onKeyPress={handleEnter}
+              value={inputMessage}
+              onChange={(e) => {
+                setInputMessage(e.target.value);
+              }}
+            />
+            <EnterMessageButton onClick={() => { setInputMessage(''); addNewMessageToFirestoreFirst(); }}>
+              send
+            </EnterMessageButton>
+          </EnterArea>
+        </ChatRoom>
+        <div>
+          {unreadMessage > 1 && openChat === false
+            ? <UnreadMessage active={unreadMessage > 1 && openChat === false}>{unreadMessage - 1 }</UnreadMessage>
+            : ''}
+          <ChatIcon active={unreadMessage > 1 && openChat === false} src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
+        </div>
       </ScheduleWrapper>
     </>
   );

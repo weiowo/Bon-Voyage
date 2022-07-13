@@ -20,7 +20,9 @@ font-size:15px;
 z-index:20;
 padding-left:10px;
 outline:none;
-
+@media screen and (max-width:800px){
+  width:calc( 100vw - 85px );
+}
 `;
 
 export default function Search({

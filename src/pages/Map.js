@@ -29,10 +29,9 @@ const mapContainerStyle = {
 };
 
 const smallScreenMapContainerStyle = {
-  height: '100vw',
-  width: '100vh',
+  height: '100%',
+  width: '100vw',
   position: 'absolute',
-  display: 'none',
 };
 
 const options = {

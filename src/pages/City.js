@@ -921,12 +921,15 @@ function City() {
                 >
                   <AttractionPhotoContainer>
                     <AttractionPhoto
+                      id={item.place_id}
                       alt="attraction-photo"
                       src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
                         : defaultArray[index % 5]}
                     />
                   </AttractionPhotoContainer>
-                  <AttractionTitle>
+                  <AttractionTitle
+                    id={item.place_id}
+                  >
                     {item.name}
                   </AttractionTitle>
                   <AttractionDescription />
