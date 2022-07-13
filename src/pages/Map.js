@@ -22,13 +22,19 @@ import PurpleStar from './images/smile_star_purple.png';
 
 let service;
 
-// const libraries = ['places'];
-
 const mapContainerStyle = {
   height: 'calc( 100vh - 60px)',
   width: '55vw',
   position: 'absolute',
 };
+
+const smallScreenMapContainerStyle = {
+  height: '100vw',
+  width: '100vh',
+  position: 'absolute',
+  display: 'none',
+};
+
 const options = {
   disableDefaultUI: true,
   zoomControl: true,
@@ -336,7 +342,7 @@ function Map({
       <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
       <GoogleMap
         id="map"
-        mapContainerStyle={mapContainerStyle}
+        mapContainerStyle={window.innerWidth > 800 ? mapContainerStyle : smallScreenMapContainerStyle}
         zoom={10}
         center={center}
         options={options}

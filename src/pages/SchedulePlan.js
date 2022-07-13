@@ -85,11 +85,17 @@ z-index:10;
   -webkit-box-shadow: transparent;
   display:none;
 }
+@media screen and (max-width:800px){
+  width:100vw;
+}
 `;
 
 const RightContainer = styled.div`
 width:55vw;
 height:calc(100vh-60px);
+@media screen and (max-width:800px){
+  width:0vw;
+}
 `;
 
 const AddDayButton = styled.button`
@@ -192,7 +198,9 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 const PlaceContainerInputArea = styled.div`
 width:auto;
 height:auto;
-`;
+@media screen and (max-width:800px){
+  width:68%;
+}`;
 
 const InputBox = styled.div`
 display:flex;
@@ -200,7 +208,9 @@ align-items:center;
 justify-content:space-between;
 width:28vw;
 height:30px;
-`;
+@media screen and (max-width:800px){
+  width:100%;
+}`;
 
 const ScheduleTitleAndCompleteButtonArea = styled.div`
 width:40vw;
@@ -210,8 +220,11 @@ display:flex;
 align-items:center;
 margin-top:20px;
 gap:20px;
-// justify-content:center;
-`;
+@media screen and (max-width:800px){
+  width:100%;
+  padding-right:20px;
+  padding-left:20px;
+}`;
 
 const ScheduleTitle = styled.div`
 color:#226788;
@@ -226,6 +239,9 @@ align-items:center;
 width:40vw;
 gap:15px;
 font-weight:600;
+@media screen and (max-width:800px){
+  width:100%;
+}
 `;
 
 const CompleteButton = styled.button`
@@ -245,7 +261,7 @@ animation:${(props) => (props.isEditing ? 'hithere 1.1s ease 3' : 'none')};
 `;
 
 const ChatRoom = styled.div`
-z-index:1;
+z-index:20;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -267,13 +283,16 @@ const ChatIcon = styled.img`
 position: fixed;
 bottom: 50px;
 right:80px;
-z-index:1;
+z-index:100;
 width:50px;
 height:50px;
 cursor:pointer;
 display:${(props) => (props.openChat ? 'none' : 'block')};
 animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
-`;
+@media screen and (max-width:800px){
+  bottom:40px;
+  right:40px;
+}`;
 
 const CloseIcon = styled.img`
 width:15px;
@@ -488,7 +507,9 @@ outline:none;
 background-color:transparent;
 text-align:left;
 border-bottom: 1px solid grey;
-`;
+@media screen and (max-width:800px){
+  width:100%;
+}`;
 
 const RecommendPlaceTitle = styled.div`
 font-weight:600;
@@ -562,9 +583,12 @@ font-weight:500;
 position:fixed;
 bottom:85px;
 right:120px;
-z-index:30;
+z-index:300;
 animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
-`;
+@media screen and (max-width:800px){
+  bottom:75px;
+  right:80px;
+}`;
 
 const CarClockIconArea = styled.div`
 display: flex;
@@ -593,6 +617,34 @@ padding-bottom:10px;
 padding-top:10px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 cursor:pointer;
+`;
+
+const ChooseShowMapOrSchedule = styled.div`
+display:none;
+@media screen and (max-width:800px){
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-size:15px;
+  font-weight:600;
+  color:white;
+  width:100%;
+  height:50px;
+  border:none;
+  background-color: #226788;
+  padding-bottom:10px;
+  padding-top:10px;
+  // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor:pointer;
+}`;
+
+const SeperateLine = styled.div`
+height:90%;
+width:1.2px;
+background-color:white;
+margin-right:18%;
+margin-left:18%;
 `;
 
 const AddNewScheduleIcon = styled.img`
@@ -1125,9 +1177,14 @@ function Schedule() {
             新增行程
             <AddNewScheduleIcon alt="add-new-schedule" src={plusIcon} />
           </AddNewScheduleButton>
+          <ChooseShowMapOrSchedule>
+            顯示行程
+            <SeperateLine />
+            顯示地圖
+          </ChooseShowMapOrSchedule>
         </LeftContainer>
         <RightContainer>
-          <Map
+          {/* <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
             selected={selected}
@@ -1139,7 +1196,7 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-          />
+          /> */}
           <ChatRoom openChat={openChat}>
             <ChatRoomTitle>
               聊天室

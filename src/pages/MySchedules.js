@@ -598,7 +598,6 @@ function MySchedules() {
 
   useEffect(() => {
     if (user.uid) {
-      console.log('haha');
       const docRef = doc(db, 'users', user.uid);
       const unsubscribe = onSnapshot(docRef, (querySnapShot) => {
         console.log('query~', querySnapShot.data());

@@ -210,6 +210,7 @@ function Profile() {
   const [photoUrl, setPhotoUrl] = useState();
   const [userEmail, setUserEmail] = useState();
   const [userName, setUserName] = useState();
+  // const navigate = useNavigate();
 
   const auth = getAuth(app);
 
@@ -221,6 +222,35 @@ function Profile() {
       console.log(error);
     });
   }
+
+  // setTimeout(() => {
+  //   if (!user.uid) {
+  //     console.log('哈哈你沒登入', user.uid);
+  //     alert('請先登入哦');
+  //     navigate({ pathname: '/' });
+  //   } else {
+  //     console.log('哈哈你有登入啦', user.uid);
+  //   }
+  // }, 4000);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     // if (!user) {
+  //     //   console.log('5秒內', user);
+  //     //   alert('請先登入哦');
+  //     //   navigate({ pathname: '/' });
+  //     // } else {
+  //     //   alert('已經登入～');
+  //     //   console.log('5秒內登入啦', user);
+  //     // }
+  //     console.log(user.uid);
+  //     if (!user.uid) {
+  //       console.log('哈哈你沒登入', user.uid);
+  //     } else {
+  //       console.log('哈哈你有登入啦', user.uid);
+  //     }
+  //   }, 4000);
+  // }, [user, navigate]);
 
   // 更改個人資料要即時更新
 

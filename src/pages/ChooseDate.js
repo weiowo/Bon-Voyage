@@ -14,8 +14,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import TravelBgSrc from './images/travel2.jpg';
 
 const ModelBox = styled.div`
-width:50vw;
-height:33vw;
+width:700px;
+height:500px;
 background-color:white;
 z-index:10;
 border-radius:20px;
@@ -24,7 +24,10 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 gap:20px;
-`;
+@media screen and (max-width:800px){
+  width:300px;
+  height:350px;
+}`;
 
 const TripTitleAndInputArea = styled.div`
 width:80%;
@@ -32,7 +35,9 @@ height:50px;
 display:flex;
 align-items:center;
 justify-content:center;
-`;
+@media screen and (max-width:800px){
+height:auto;
+}`;
 
 const DatePickerWrapper = styled.div`
 width:100%;
@@ -40,20 +45,24 @@ height:auto;
 display:flex;
 gap:20px;
 justify-content:center;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 const TripTitleInput = styled.input`
 width: 70%;
 height:22px;
 font-weight:500;
-font-size:20px;
+font-size:18px;
 border:none;
 background-color:transparent;
 border-bottom:1px solid black;
 outline:none;
 padding-left:10px;
 padding-left:5px;
-`;
+@media screen and (max-width:800px){
+  font-size:16px;
+}`;
 
 const EmbarkDateWrpper = styled.div`
 display:flex;
@@ -67,7 +76,10 @@ const EmbarkEndDateTitle = styled.div`
 width:100%;
 font-weight:550;
 font-size:16px;
-`;
+color:grey;
+@media screen and (max-width:800px){
+  font-size:15px;
+}`;
 
 const ModalBackgroud = styled.div`
 width:100vw;
@@ -82,6 +94,7 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
+background-position:center;
 `;
 
 const ConfirmedButton = styled.button`
@@ -94,6 +107,25 @@ font-weight:600;
 border:none;
 border-radius:5px;
 cursor:pointer;
+`;
+
+const SmallCalendarWrapper = styled.div`
+display:none;
+@media screen and (max-width:800px){
+  display:flex;
+  width:80%;
+  height:50%;
+  flex-direction:column;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+}`;
+
+const SmallCalendarStyle = styled.div`
+border-radius:10px;
+height:50px;
+width:200px;
+background-color:red;
 `;
 
 function ChooseDate() {
@@ -132,7 +164,7 @@ function ChooseDate() {
     const newDay = {
       places: [],
     };
-    Array(diffDays + 1)?.fill('').forEach(() => {
+    Array(diffDays)?.fill('').forEach(() => {
       newSchedule.trip_days.push(newDay);
     });
   }, [diffDays, newSchedule.trip_days]);
@@ -177,17 +209,16 @@ function ChooseDate() {
           <TripTitleInput
             required
             type="text"
-            placeholder="旅程名稱....."
+            placeholder="請填寫旅程名稱..."
             value={newScheduleTitle}
             onChange={(e) => {
               setNewScheduleTitle(e.target.value);
             }}
           />
         </TripTitleAndInputArea>
-
         <DatePickerWrapper>
           <EmbarkDateWrpper>
-            <EmbarkEndDateTitle>出發時間</EmbarkEndDateTitle>
+            <EmbarkEndDateTitle>請選擇出發日期</EmbarkEndDateTitle>
             <DatePicker
               dateFormat="yyyy/MM/dd"
               selected={startDate}
@@ -199,7 +230,7 @@ function ChooseDate() {
             />
           </EmbarkDateWrpper>
           <EmbarkDateWrpper>
-            <EmbarkEndDateTitle>結束時間</EmbarkEndDateTitle>
+            <EmbarkEndDateTitle>請選擇結束日期</EmbarkEndDateTitle>
             <DatePicker
               dateFormat="yyyy/MM/dd"
               selected={finishDate}
@@ -211,8 +242,30 @@ function ChooseDate() {
               inline
             />
           </EmbarkDateWrpper>
-
         </DatePickerWrapper>
+        <SmallCalendarWrapper>
+          <EmbarkEndDateTitle>請選擇出發日期</EmbarkEndDateTitle>
+          <DatePicker
+            dateFormat="yyyy/MM/dd"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            endDate={finishDate}
+            calendarContainer={SmallCalendarStyle}
+          />
+          <EmbarkEndDateTitle>請選擇結束日期</EmbarkEndDateTitle>
+          <DatePicker
+            dateFormat="yyyy/MM/dd"
+            selected={finishDate}
+            onChange={(date) => setFinishEndDate(date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={finishDate}
+            minDate={startDate}
+            calendarContainer={SmallCalendarStyle}
+          />
+        </SmallCalendarWrapper>
         <ConfirmedButton type="button" onClick={() => setNewScheduleToDb()}>
           OK
         </ConfirmedButton>
