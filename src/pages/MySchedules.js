@@ -43,7 +43,9 @@ height:85vh;
 background-color:#D3D3D3;
 align-items:center;
 margin-top:20px;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 const ChoicesWrapper = styled.div` 
 width:33vw;
@@ -52,9 +54,23 @@ display:flex;
 flex-direction:column;
 align-items:center;
 gap:20px;
-overflow:scroll;
+overflow:auto;
 height:calc(100vh-80px);
 padding-bottom:5px;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 6px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
 `;
 
 const MySchedulesTitleAndCreateNewScheduleArea = styled.div`

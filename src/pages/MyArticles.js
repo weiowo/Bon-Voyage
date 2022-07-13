@@ -39,7 +39,10 @@ height:auto;
 font-size:28px;
 font-weight:600;
 text-align:left;
-`;
+@media screen and (max-width:800px){
+  text-align:center;
+  font-size:25px;
+}`;
 
 const Tabs = styled.div`
 display:flex;
@@ -65,14 +68,27 @@ cursor:pointer;
 const MyArticlesContainer = styled.div`
 width:100%;
 height:100%;
-overflow:scroll;
 flex-wrap:wrap;
 gap:15px;
 margin-top:10px;
 padding-bottom:10px;
 padding-left:5px;
 display:${(props) => (props.isClicked ? 'flex' : 'none')};
-
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 6px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
 `;
 
 const ArticlePreviewAndDeleteWrapper = styled.div`
@@ -82,7 +98,7 @@ position:relative;
 export const UpperLine = styled.div`
 height:1px;
 background-color:grey;
-width:75vw;
+width:90%;
 `;
 
 export const MyArticle = styled.div`

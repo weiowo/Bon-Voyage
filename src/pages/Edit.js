@@ -120,8 +120,22 @@ height:600px;
 display:flex;
 flex-direction:column;
 align-items:flex-start;
-overflow:scroll;
 gap:5px;
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 6px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
 `;
 
 const PlaceArea = styled.div`

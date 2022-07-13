@@ -129,7 +129,7 @@ display:none;
   justify-content:center;
   flex-wrap:wrap;
   position:relative;
-  overflow:scroll;
+  overflow:hidden;
   z-index:1;
   gap:17px;
 }`;
@@ -155,7 +155,7 @@ color:white;
 font-weight:600;
 position:relative;
 text-align:left;
-overflow:scroll;
+overflow:hidden;
 border-radius:10px;
 background-image: url(${BckSrc});
 cursor:pointer;
@@ -522,7 +522,19 @@ function CardsCarousel({ currentNearbyAttraction }) {
           <SmallScreenCards>
             {currentNearbyAttraction
               ? currentNearbyAttraction.slice(currentIndex, currentIndex + 3).map((item, index) => (
-                <Cards id={currentIndex} className={index} style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}>
+                <Cards
+                  onClick={(e) => {
+                    ShowDetailNCheckLikedOrNot(
+                      e.target.id,
+                    );
+                    setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
+                    setClickedPlaceName(item?.name);
+                    setClickedPlaceAddress(item?.vicinity);
+                  }}
+                  id={currentIndex}
+                  className={index}
+                  style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
+                >
                   <div>
                     {item.name}
                   </div>

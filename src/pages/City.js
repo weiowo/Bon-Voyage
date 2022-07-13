@@ -361,7 +361,6 @@ height:auto;
 width:auto;
 align-items:center;
 justify-content:center;
-overflow:scroll;
 gap:15px;
 padding-top:10px;
 padding-bottom:20px;
@@ -369,6 +368,21 @@ padding-left:2px;
 &:after {
   content: "";
   width:220px;
+}
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 6px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
 }
 `;
 
@@ -428,10 +442,24 @@ color:${(props) => (props.clicked ? 'white' : 'black')};
 export const ModalContentWrapper = styled.div`
 width:95%;
 height:95%;
-overflow:scroll;
 display:flex;
 flex-direction:column;
 align-items:center;
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 6px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
 `;
 
 const libraries = ['places'];

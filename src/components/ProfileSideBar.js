@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
-import UserPhotoSrc from '../pages/images/seal.png';
+// import UserPhotoSrc from '../pages/images/seal.png';
 import UserContext from './UserContextComponent';
 import db from '../utils/firebase-init';
 
@@ -13,7 +13,9 @@ display:flex;
 flex-direction:column;
 align-items:center;
 margin-top:60px;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 const SideNavBar = styled.div`
 margin-top:60px;
@@ -22,15 +24,18 @@ width:auto;
 display:flex;
 flex-direction:column;
 gap:30px;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 const UserPhoto = styled.img`
 width:30px;
 height:30px;
 border-radius:50%;
 margin-left:23px;
-object-fit:cover;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 const UserName = styled.div`
 font-size:15px;
@@ -38,13 +43,17 @@ font-weight:600;
 margin-left:15px;
 height:auto;
 width:75px;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 const NavBarChoice = styled.div`
 font-weight:600;
 font-size:15px;
 color:grey;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 const UserNameLogoBox = styled.div`
 width:160px;
@@ -56,7 +65,9 @@ align-items:center;
 height:auto;
 padding-top:7px;
 padding-bottom:7px;
-`;
+@media screen and (max-width:800px){
+  display:none;
+}`;
 
 export const LinkWithoutDefaultStyle = styled(Link)`
 text-decoration:none;
@@ -83,7 +94,7 @@ function ProfileSideBarElement() {
     <ProfileSideBar>
       <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">
         <UserNameLogoBox>
-          <UserPhoto src={photoUrl || UserPhotoSrc} />
+          <UserPhoto src={photoUrl || user.photoURl} />
           <UserName>{userName || ''}</UserName>
         </UserNameLogoBox>
       </Link>

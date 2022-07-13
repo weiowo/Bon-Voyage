@@ -12,21 +12,39 @@ import { updateDoc, doc, onSnapshot } from 'firebase/firestore';
 import db, { app, storage } from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
-import { PageWrapper, Line } from './MySchedules';
+import { Line } from './MySchedules';
 import UserContext from '../components/UserContextComponent';
 import SignIn from '../components/SignIn';
 import { UpperLine, MyPageTitle } from './MyArticles';
 import UserPhotoSrc from './images/seal.png';
 import CameraSrc from './images/camera_blue.png';
 
+const PageWrapper = styled.div`
+width:100vw;
+height:100vh;
+display:flex;
+padding-top:60px;
+@media screen and (max-width:800px){
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-left:0px;
+}`;
+
 const MyInfoArea = styled.div`
 margin-top:30px;
-width:80vw;
-height:85vh;
 display:flex;
+height:80%;
+width:80vw;
 flex-direction:column;
 padding-left:50px;
-`;
+@media screen and (max-width:800px){
+  display:flex;
+  align-items:center;
+  padding-left:0px;
+  height:100%;
+  width:100%;
+}`;
 
 const MyProfileWrapper = styled.div`
 width:200px;
@@ -46,7 +64,9 @@ border:1px solid black;
 border:none;
 flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
+@media screen and (max-width:800px){
+border-radius:20px;
+}`;
 
 const CameraIcon = styled.label`
 bottom:0px;
@@ -62,36 +82,109 @@ background-position:center;
 cursor:pointer;
 `;
 
+const ProfileNameEmailDisplay = styled.div`
+width:250px;
+height:auto;
+display:flex;
+flex-direction:row;
+align-items:flex-start;
+gap:10px;
+@media screen and (max-width:800px){
+  width:250px;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}`;
+
+const ProfileNameEmailTitle = styled.div`
+display:flex;
+align-items:center;
+justify-content:left;
+width:60px;
+height:30px;
+font-weight:600;
+font-size:15px;
+color:#2E5984;
+@media screen and (max-width:800px){
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:30px;
+  font-weight:600;
+  font-size:15px;
+  color:#2E5984;
+}`;
+
+const ProfileNamEmailContent = styled.div`
+width:300px;
+height:35px;
+font-color:blue;
+font-size:15px;
+background-color: #CDEEFD;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:20px;
+@media screen and (max-width:800px){
+  width:250px;
+  height:35px;
+  font-color:blue;
+  font-size:15px;
+  background-color: #CDEEFD;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:20px;
+}`;
+
 const ProfilePageBelowArea = styled.div`
-width:78vw;
+width:80%;
 margin-top:50px;
-height:40vh;
+height:90%;
 display:flex;
 gap:20px;
 font-size:18px;
 font-weight:600;
-`;
+@media screen and (max-width:800px){
+  flex-direction:column;
+  align-items:center;
+  height:90%;
+  margin-top:30px;
+}`;
 
 const ProfileInfoArea = styled.div`
 display:flex;
 flex-direction:column;
 align-items:flex-start;
 width:50%;
-height:180px;
+height:280px;
 gap:20px;
-`;
+@media screen and (max-width:800px){
+  align-items:center;
+  width:50%;
+  height:100%;
+}`;
 
 const LogOutButton = styled.button`
-width:100%;
-height:30px;
+width:100px;
+height:35px;
 border:none;
+margin-top:10px;
 border-radius:5px;
-background-color:grey;
+background-color:#2E5984;
 color:white;
 font-weight:600;
 font-size:15px;
 cursor:pointer;
-`;
+@media screen and (max-width:800px){
+  width:120px;
+  background-color:#2E5984;
+  margin-top:5px;
+}`;
 
 // const ButtonLink = styled(Link)`
 // width:30%;
@@ -188,22 +281,28 @@ function Profile() {
                     </CameraIcon>
                   </MyProfileWrapper>
                   <ProfileInfoArea>
-                    <div>
-                      暱稱:
-                      {userName || '' }
-                    </div>
-                    <div>
-                      Email:
-                      {userEmail || '' }
-                    </div>
-                    {/* <ButtonLink to="/"> */}
+                    <ProfileNameEmailDisplay>
+                      <ProfileNameEmailTitle>
+                        暱稱
+                      </ProfileNameEmailTitle>
+                      <ProfileNamEmailContent>
+                        {userName || '' }
+                      </ProfileNamEmailContent>
+                    </ProfileNameEmailDisplay>
+                    <ProfileNameEmailDisplay>
+                      <ProfileNameEmailTitle>
+                        Email
+                      </ProfileNameEmailTitle>
+                      <ProfileNamEmailContent>
+                        {userEmail || '' }
+                      </ProfileNamEmailContent>
+                    </ProfileNameEmailDisplay>
                     <a href="/">
                       <LogOutButton
                         onClick={() => {
                           signOutFunction();
                         }}
                       >
-                        {' '}
                         登出
                       </LogOutButton>
                     </a>

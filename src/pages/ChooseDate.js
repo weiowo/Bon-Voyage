@@ -120,7 +120,7 @@ function ChooseDate() {
     // end_date: (new Date(finishDate?.getTime() + 86400000)).toISOString().split('T')[0],
     embark_date: startDate.toISOString().split('T')[0],
     end_date: finishDate.toISOString().split('T')[0],
-    trip_days: [],
+    trip_days: [{ places: [] }],
     members: [
       user.uid,
     ],
@@ -147,23 +147,27 @@ function ChooseDate() {
   // user創建行程的時候就要把這個行程推進他的owned_schedules_list array中
 
   async function setNewScheduleToDb() {
-    console.log('您創了一筆新行程唷！');
-    const createNewScheduleData = doc(collection(db, 'schedules'));
-    await setDoc(
-      createNewScheduleData,
-      ({ ...newSchedule, schedule_id: createNewScheduleData.id }),
-    );
-    navigate({ pathname: '/schedule', search: `?id=${createNewScheduleData.id}` });
-    const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
-    await setDoc(
-      createNewChatRoomData,
-      // eslint-disable-next-line max-len
-      ({ ...newChatRoom, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }),
-    );
-    const userOwnedScheduleArray = doc(db, 'users', user.uid);
-    await updateDoc(userOwnedScheduleArray, {
-      owned_schedule_ids: arrayUnion(createNewScheduleData.id),
-    });
+    if (newScheduleTitle === '') {
+      alert('請填寫旅程名稱哦！');
+    } else {
+      console.log('您創了一筆新行程唷！');
+      const createNewScheduleData = doc(collection(db, 'schedules'));
+      await setDoc(
+        createNewScheduleData,
+        ({ ...newSchedule, schedule_id: createNewScheduleData.id }),
+      );
+      navigate({ pathname: '/schedule', search: `?id=${createNewScheduleData.id}` });
+      const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
+      await setDoc(
+        createNewChatRoomData,
+        // eslint-disable-next-line max-len
+        ({ ...newChatRoom, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }),
+      );
+      const userOwnedScheduleArray = doc(db, 'users', user.uid);
+      await updateDoc(userOwnedScheduleArray, {
+        owned_schedule_ids: arrayUnion(createNewScheduleData.id),
+      });
+    }
   }
 
   return (
@@ -171,7 +175,7 @@ function ChooseDate() {
       <ModelBox>
         <TripTitleAndInputArea>
           <TripTitleInput
-            required="required"
+            required
             type="text"
             placeholder="旅程名稱....."
             value={newScheduleTitle}

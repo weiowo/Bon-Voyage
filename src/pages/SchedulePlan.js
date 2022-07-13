@@ -70,6 +70,21 @@ height:calc( 100vh - 60px );
 display:${(props) => (props.active ? 'none' : 'flex')};
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 z-index:10;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  display:none;
+}
+
+&::-webkit-scrollbar {
+  width: 3px;
+  display:none;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  display:none;
+}
 `;
 
 const RightContainer = styled.div`
@@ -103,6 +118,20 @@ gap:5px;
 z-index:15;
 overflow:scroll;
 flex-shrink:0;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  display:none;
+}
+&::-webkit-scrollbar {
+  width: 3px;
+  display:none;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  display:none;
+}
 `;
 
 const DayContainerTitle = styled.div`
@@ -129,7 +158,21 @@ display:flex;
 flex-direction:column;
 gap:20px;
 height: 75vh;
-overflow:scroll;
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 3px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
 `;
 
 const PlaceContainer = styled.div`
@@ -698,15 +741,15 @@ function Schedule() {
     }
   };
   useEffect(() => {
-    console.log('place!Dragged From: ', placeDragAndDrop && placeDragAndDrop.placeDraggedFrom);
-    console.log('place!Dropping Into: ', placeDragAndDrop && placeDragAndDrop.placeDraggedTo);
+    console.log('place!Dragged From: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedFrom);
+    console.log('place!Dropping Into: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedTo);
   }, [placeDragAndDrop]);
   useEffect(() => {
   }, [scheduleData?.trip_days?.[choosedDayIndex]?.places]);
 
   const onPlaceDrop = () => {
     updateScheduleData((draft) => {
-      draft.trip_days[choosedDayIndex].places = placeDragAndDrop.placeUpdatedOrder;
+      draft.trip_days[choosedDayIndex].places = placeDragAndDrop?.placeUpdatedOrder;
     });
     setPlaceDragAndDrop({
       ...placeDragAndDrop,
@@ -952,15 +995,15 @@ function Schedule() {
             </SearchedPlace>
             <RecommendPlaces>
               周邊推薦景點：
-              {recommendList.map((place, index) => (
+              {recommendList?.map((place, index) => (
                 <RecommendPlace>
                   <RecommendPlaceLeftArea>
                     <RecommendPlaceTitle>
-                      {place.name}
+                      {place?.name}
                     </RecommendPlaceTitle>
-                    <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place.name, clickedDayIndex); updatePlaceAddressBySearch(place.vicinity, clickedDayIndex); setActive(false); }} type="button">加入行程</AddToPlaceButton>
+                    <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place?.name, clickedDayIndex); updatePlaceAddressBySearch(place?.vicinity, clickedDayIndex); setActive(false); }} type="button">加入行程</AddToPlaceButton>
                   </RecommendPlaceLeftArea>
-                  <RecommendPlcePhoto alt="place" src={place.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]} />
+                  <RecommendPlcePhoto alt="place" src={place?.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]} />
                 </RecommendPlace>
               ))}
             </RecommendPlaces>

@@ -31,12 +31,14 @@ import MyLovedArticles from './pages/MyFavorites';
 const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
-    };
-    body {
-        margin: 0;
-        font-family: NotoSansTC;
-      }
-    `;
+    }
+  `;
+
+// body {
+//     margin: 0;
+//     font-family: NotoSansTC;
+//   }
+// `;
 
 function App() {
   // state  current location

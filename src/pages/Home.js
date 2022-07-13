@@ -273,6 +273,7 @@ function Home({ currentLatLng, user }) {
   const [option, setOption] = useState('all'); // 預設想放'全部'
   const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState();
   const [LatLng, setLatLng] = useState({ lat: 25.03746, lng: 121.564558 });
+  console.log('有沒有給資訊呢？', LatLng);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,

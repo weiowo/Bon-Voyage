@@ -76,14 +76,27 @@ cursor:pointer;
 const MyArticlesContainer = styled.div`
 width:100%;
 height:100%;
-overflow:scroll;
 flex-wrap:wrap;
 gap:15px;
 margin-top:10px;
 padding-bottom:10px;
 padding-left:5px;
 display:${(props) => (props.isClicked ? 'flex' : 'none')};
-
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 6px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
 `;
 
 export const UpperLine = styled.div`

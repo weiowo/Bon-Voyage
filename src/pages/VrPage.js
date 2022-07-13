@@ -312,7 +312,6 @@ height:auto;
 width:80%;
 align-items:center;
 justify-content:center;
-overflow:scroll;
 gap:15px;
 padding-top:10px;
 padding-bottom:20px;
@@ -320,6 +319,21 @@ padding-left:2px;
 &:after {
   content: "";
   width:455px;
+}
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 5px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
 }
 `;
 
@@ -332,19 +346,6 @@ const Loading = styled.div`
   height: 70px;
   animation: spinner 3s linear infinite;
 `;
-
-// const DayChoicesBoxWrapper = styled.div`
-// display:flex;
-// flex-wrap:wrap;
-// height:100%;
-// wifth:100%;
-// align-items:center;
-// justify-content:center;
-// overflow:scroll;
-// gap:15px;
-// padding-top:10px;
-// padding-bottom:20px;
-// `;
 
 const ScheduleChoicesBox = styled.div`
 display:flex;
@@ -371,11 +372,25 @@ margin-left:20px;
 const ModalContentWrapper = styled.div`
 width:80%;
 height:80%;
-overflow:scroll;
 display:flex;
 flex-direction:column;
 align-items:center;
 z-index:500;
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 5px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
 `;
 
 SwiperCore.use([EffectCoverflow, Navigation]);
