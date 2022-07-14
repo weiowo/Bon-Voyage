@@ -95,11 +95,10 @@ function GreyHeaderComponent() {
   const user = useContext(UserContext);
   const [clicked, setClicked] = useState(false);
   const [headerBackground, setHeaderBackground] = useState(false);
-  console.log('我在headerComponents唷', user);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', () => { setHeaderBackground(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200); console.log('往下拉囉!'); });
+      window.addEventListener('scroll', () => { setHeaderBackground(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200); });
     }
   }, []);
   // const user = useContext(UserContext);

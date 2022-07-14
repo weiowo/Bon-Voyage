@@ -1,5 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
+/* eslint-disable no-undef */
+import React, {
+  useState, useContext, useEffect, useRef, useCallback,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
+import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import {
   doc, getDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
@@ -195,6 +199,13 @@ display:none;
   cursor:pointer;
 }`;
 
+const libraries = ['places'];
+
+const mapContainerStyle = {
+  height: '0vh',
+  width: '0vw',
+};
+
 function CardsCarousel({ currentNearbyAttraction }) {
   const user = useContext(UserContext);
   console.log(user);
@@ -210,6 +221,16 @@ function CardsCarousel({ currentNearbyAttraction }) {
   const [clickedPlaceUrl, setClickedPlaceUrl] = useState('');
   const [clickedPlaceName, setClickedPlaceName] = useState('');
   const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    libraries,
+  });
+
+  const mapRef = useRef();
+  const onMapLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
 
   console.log(liked);
   console.log('我在cardCarouselpage', currentNearbyAttraction);
@@ -254,13 +275,18 @@ function CardsCarousel({ currentNearbyAttraction }) {
       setLiked(false);
     }
     setModalIsActive(true);
-    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-      .then((response) => response.json()).then((jsonData) => {
-        console.log('我在useEffect中', jsonData.result);
-        setModalDetail(jsonData.result);
-      }).catch((err) => {
-        console.log('錯誤:', err);
-      });
+    const placeRequest = {
+      placeId: clickedPlaceId,
+    };
+    const service = new google.maps.places.PlacesService(mapRef.current);
+    service.getDetails(placeRequest, (place, status) => {
+      console.log(status);
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        setModalDetail(place);
+      } else {
+        console.log('error');
+      }
+    });
   }
 
   // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
@@ -277,13 +303,11 @@ function CardsCarousel({ currentNearbyAttraction }) {
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayRemove(placeId),
         });
-        console.log('已退追此景點!');
       } else if (!liked) {
         setLiked(true);
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayUnion(placeId),
         });
-        console.log('已追蹤此景點!');
         const createAttraction = doc(db, 'attractions', placeId);
         await setDoc(createAttraction, ({
           place_id: placeId,
@@ -303,11 +327,11 @@ function CardsCarousel({ currentNearbyAttraction }) {
     async function getUserArrayList() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap?.data()?.owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
+      // if (docSnap.exists()) {
+      //   console.log('Document data:', docSnap?.data()?.owned_schedule_ids);
+      // } else {
+      //   console.log('No such document!');
+      // }
       function getSchedulesFromList() {
         docSnap.data()?.owned_schedule_ids?.forEach(async (item, index) => {
           const docs = doc(db, 'schedules', item);
@@ -365,8 +389,15 @@ function CardsCarousel({ currentNearbyAttraction }) {
     }
   }
 
+  if (!isLoaded) return '';
+
   return (
     <>
+      <GoogleMap
+        id="map"
+        mapContainerStyle={mapContainerStyle}
+        onLoad={onMapLoad}
+      />
       <ModalBackground active={modalIsActive}>
         <ModalBox>
           <ModalLeftArea>
@@ -385,10 +416,10 @@ function CardsCarousel({ currentNearbyAttraction }) {
             </ButtonStarArea>
           </ModalLeftArea>
           <ModalImgArea>
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
+            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
           </ModalImgArea>
           <CloseModalButton
             type="button"
@@ -500,7 +531,9 @@ function CardsCarousel({ currentNearbyAttraction }) {
                 className={index}
                 style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? '哈哈'})` }}
               >
-                <div>
+                <div
+                  id={item.place_id}
+                >
                   {item.name}
                 </div>
               </Cards>
@@ -532,11 +565,13 @@ function CardsCarousel({ currentNearbyAttraction }) {
                     setClickedPlaceName(item?.name);
                     setClickedPlaceAddress(item?.vicinity);
                   }}
-                  id={currentIndex}
+                  id={item.place_id}
                   className={index}
                   style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
                 >
-                  <div>
+                  <div
+                    id={item.place_id}
+                  >
                     {item.name}
                   </div>
                 </Cards>

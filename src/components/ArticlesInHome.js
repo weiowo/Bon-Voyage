@@ -55,11 +55,16 @@ align-items:center;
 width:85vw;
 height:auto;
 display:flex;
+margin-bottom:20px;
 gap:30px;
 flex-wrap:wrap;
 &:after {
   content: "";
   width:410px;
+}
+@media screen and (max-width:800px){
+  width:92vw;
+  gap:20px;
 }
 `;
 
@@ -107,7 +112,7 @@ function ArticlesInHome() {
               />
               <MyArticleBelowArea>
                 <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
+                <MyArticleSummary>{item?.summary?.slice(0, 10)}</MyArticleSummary>
               </MyArticleBelowArea>
             </MyArticle>
           </StyledLink>

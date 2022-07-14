@@ -306,7 +306,6 @@ function Home({ currentLatLng, user }) {
   // 如果無法使用經緯度的話，就設經緯度為台北市
 
   const searchNearby = useCallback(() => {
-    console.log('我執行了此function!', LatLng);
     const a = new Date();
     const request = {
       location: LatLng,

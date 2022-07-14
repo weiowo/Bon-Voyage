@@ -131,7 +131,6 @@ background-color:red;
 function ChooseDate() {
   const [startDate, setStartDate] = useState(new Date());
   const [finishDate, setFinishEndDate] = useState(new Date());
-  console.log((new Date(finishDate?.getTime() + 86400000)).toISOString().split('T')[0]);
   const user = useContext(UserContext);
   const [newScheduleTitle, setNewScheduleTitle] = useState('');
   const navigate = useNavigate();
@@ -148,8 +147,6 @@ function ChooseDate() {
     schedule_creator_user_id: user.uid,
     title: newScheduleTitle,
     schedule_id: 1,
-    // embark_date: (new Date(startDate?.getTime() + 86400000)).toISOString().split('T')[0],
-    // end_date: (new Date(finishDate?.getTime() + 86400000)).toISOString().split('T')[0],
     embark_date: startDate.toISOString().split('T')[0],
     end_date: finishDate.toISOString().split('T')[0],
     trip_days: [{ places: [] }],
@@ -182,7 +179,6 @@ function ChooseDate() {
     if (newScheduleTitle === '') {
       alert('請填寫旅程名稱哦！');
     } else {
-      console.log('您創了一筆新行程唷！');
       const createNewScheduleData = doc(collection(db, 'schedules'));
       await setDoc(
         createNewScheduleData,

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, {
   useCallback, useEffect, useRef, useState, useContext,
 } from 'react';
@@ -63,13 +64,26 @@ export const ModalBox = styled.div`
 display:flex;
 width:50vw;
 height:30vw;
+flex-direction:row;
 background-color:white;
 z-index:10;
 border-radius:20px;
 z-index:200;
 position: relative;
 align-items:center;
-`;
+@media screen and (max-width:1200px){
+width:600px;
+height:370px;
+}
+@media screen and (max-width:630px){
+  width:80vw;
+  height:90vw;
+  flex-direction:column;
+}
+@media screen and (max-width:555px){
+  width:80vw;
+  height:115vw;
+}`;
 
 export const ModalImgArea = styled.div`
 width:25vw;
@@ -78,14 +92,42 @@ display:flex;
 flex-wrap:wrap;
 align-items:center;
 gap:10px;
-`;
+@media screen and (max-width:1200px){
+  width:50%;
+  height:70%;
+}
+@media screen and (max-width:630px){
+  width:100%;
+  height:50%;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+  padding-bottom:40px;
+}
+@media screen and (max-width:555px){
+  width:90%;
+  height:50%;
+  padding-bottom:40px;
+}`;
 
 export const ModalImg = styled.img`
 width:10vw;
 height:10vw;
 border-radius:10px;
 object-fit: cover;
-`;
+@media screen and (max-width:1200px){
+  width:120px;
+  height:120px;
+}
+@media screen and (max-width:630px){
+  width:160px;
+  height:100px;
+  flex-shrink:0;
+}
+@media screen and (max-width:555px){
+  width:40%;
+  height:50%;
+}`;
 
 export const ModalLeftArea = styled.div`
 width:25vw;
@@ -96,13 +138,24 @@ align-items:center;
 justify-content:center;
 gap:10px;
 position:relative;
-`;
+@media screen and (max-width:1200px){
+  width:50%;
+  height:80%;
+}
+@media screen and (max-width:630px){
+  width:90%;
+  height:50%;
+  gap:20px;
+}`;
 
 export const ModalPlaceTitle = styled.div`
 font-size:26px;
 font-weight:600;
 width:80%;
-`;
+@media screen and (max-width:480px){
+  font-size:20px;
+  width:90%;
+}`;
 
 export const ModalPlaceAddress = styled.div`
 width:80%;
@@ -118,7 +171,9 @@ font-weight:500;
 border:none;
 color:white;
 cursor:pointer;
-`;
+@media screen and (max-width:1200px){
+  width:110px;
+}`;
 
 export const CloseModalButton = styled.button`
 height:25px;
@@ -132,7 +187,10 @@ border-radius:50%;
 background-color:black;
 color:white;
 cursor:pointer;
-`;
+@media screen and (max-width:400px){
+  right:15px;
+  top:15px;
+}`;
 
 export const LeftButton = styled.button`
 height:25px;
@@ -150,11 +208,18 @@ border:none;
 border-radius:50%;
 color:white;
 cursor:pointer;
-`;
+@media screen and (max-width:400px){
+  left:15px;
+  top:15px;
+}`;
 
-const Banner = styled.img`
+const Banner = styled.div`
 width:100vw;
-height:auto;
+height:50vw;
+background-image: url(${CitySrc});
+background-size:cover;
+background-repeat: no-repeat;
+background-blend-mode: multiply;
 `;
 
 const CityTitle = styled.div`
@@ -164,7 +229,23 @@ z-index:10;
 font-size:35px;
 font-weight:600;
 position:absolute;
-top:150px;
+top:130px;
+@media screen and (max-width:1000px){
+  top:100px;
+  font-size:30px;
+}
+@media screen and (max-width:800px){
+  top:70px;
+  font-size:30px;
+}
+@media screen and (max-width:520px){
+  top:60px;
+  font-size:20px;
+}
+@media screen and (max-width:400px){
+  top:50px;
+  font-size:20px;
+}
 `;
 
 // 景點區域
@@ -193,6 +274,18 @@ height:auto;
 flex-wrap:wrap;
 justify-content:center;
 margin-top:0px;
+@media screen and (max-width:1000px){
+  gap:20px;
+}
+@media screen and (max-width:890px){
+  gap:10px;
+}
+@media screen and (max-width:777px){
+  gap:10px;
+}
+@media screen and (max-width:513px){
+  gap:10px;
+}
 `;
 
 const AttractionBox = styled.div`
@@ -203,6 +296,18 @@ width:250px;
 height:auto;
 margin-top:30px;
 cursor:pointer;
+@media screen and (max-width:1000px){
+  width:200px;
+}
+@media screen and (max-width:890px){
+  width:180px;
+}
+@media screen and (max-width:777px){
+  width:250px;
+}
+@media screen and (max-width:513px){
+  width:170px;
+}
 `;
 
 const AttractionPhotoContainer = styled.div`
@@ -211,6 +316,19 @@ display: inline-block;
 width:200px;
 height:240px;
 overflow: hidden;
+@media screen and (max-width:1000px){
+  width:200px;
+}
+@media screen and (max-width:890px){
+  width:180px;
+}
+@media screen and (max-width:777px){
+  width:200px;
+  height:240px;
+}
+@media screen and (max-width:513px){
+  width:170px;
+}
 `;
 
 const AttractionPhoto = styled.img`
@@ -222,7 +340,21 @@ object-fit: cover;
 transition: 0.5s all ease-in-out;
 &:hover {
     transform: scale(1.2);
-}`;
+}
+@media screen and (max-width:1000px){
+  width:200px;
+}
+@media screen and (max-width:890px){
+  width:180px;
+}
+@media screen and (max-width:777px){
+  width:200px;
+  height:240px;
+}
+@media screen and (max-width:513px){
+  width:170px;
+}
+`;
 
 const AttractionTitle = styled.div`
 font-size:14px;
@@ -269,6 +401,12 @@ flex-wrap:wrap;
 justify-content:center;
 margin-top:0px;
 gap:30px;
+@media screen and (max-width:777px){
+  gap:10px;
+}
+@media screen and (max-width:513px){
+  gap:10px;
+}
 `;
 
 const RestaurantBox = styled.div`
@@ -283,6 +421,16 @@ padding-left:38px;
 border-radius:15px;
 border: #3f3f3f solid 1px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:777px){
+  margin-top:15px;
+  width:330px;
+  padding-left:25px;
+}
+@media screen and (max-width:513px){
+  margin-top:15px;
+  width:330px;
+  padding-left:25px;
+}
 `;
 
 const RestaurantPhoto = styled.img`
@@ -654,13 +802,19 @@ function City() {
       setLiked(false);
     }
     setModalIsActive(true);
-    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-      .then((response) => response.json()).then((jsonData) => {
-        console.log('我在useEffect中', jsonData.result);
-        setModalDetail(jsonData.result);
-      }).catch((err) => {
-        console.log('錯誤:', err);
-      });
+    const placeRequest = {
+      placeId: clickedPlaceId,
+    };
+    const service = new google.maps.places.PlacesService(mapRef.current);
+    service.getDetails(placeRequest, (place, status) => {
+      console.log(status);
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        console.log('我在city頁面測試api', place);
+        setModalDetail(place);
+      } else {
+        console.log('error');
+      }
+    });
   }
 
   // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
@@ -695,7 +849,7 @@ function City() {
     }
   }
 
-  if (!isLoaded) return <div>City頁Loading出了點問題OWO!可以先到首頁看更多景點唷^__^!</div>;
+  if (!isLoaded) return '';
 
   return (
     <>
@@ -721,10 +875,10 @@ function City() {
                   </ButtonStarArea>
                 </ModalLeftArea>
                 <ModalImgArea>
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
                 </ModalImgArea>
                 <CloseModalButton
                   type="button"
@@ -732,7 +886,6 @@ function City() {
                 >
                   X
                 </CloseModalButton>
-
               </>
             )
             : <Loading />}
@@ -814,7 +967,7 @@ function City() {
         </ModalBox>
       </ModalBackground>
 
-      <Banner src={CitySrc} />
+      <Banner />
       <CityTitle>
         哈囉，
         {cityFromUrl}
@@ -886,15 +1039,20 @@ function City() {
                   id={item.place_id}
                 >
                   <RestaurantPhoto
+                    id={item.place_id}
                     alt="attraction-photo"
                     src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
                       : defaultArray[index % 5]}
                   />
                   <RestaurantBoxRightContent>
-                    <RestaurantTitle>
+                    <RestaurantTitle
+                      id={item.place_id}
+                    >
                       {item.name}
                     </RestaurantTitle>
-                    <RestaurantDescription />
+                    <RestaurantDescription
+                      id={item.place_id}
+                    />
                     <RestaurantSeeMoreButton
                       id={item.place_id}
                     >
@@ -932,7 +1090,9 @@ function City() {
                   >
                     {item.name}
                   </AttractionTitle>
-                  <AttractionDescription />
+                  <AttractionDescription
+                    id={item.place_id}
+                  />
                   <AttractionSeeMoreButton
                     id={item.place_id}
                   >

@@ -52,6 +52,39 @@ flex-wrap:wrap;
 justify-content:center;
 gap:30px;
 margin-top:90px;
+@media screen and (max-width:970px){
+  gap:20px;
+  width:95vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:805px){
+  gap:5px;
+  width:95vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:756px){
+  gap:0px;
+  width:95vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:745px){
+  gap:20px;
+  width:80vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:465px){
+  gap:5px;
+  width:90vw;
+  margin-top:40px;
+}
 `;
 
 export const PlaceBoxWrapper = styled.div`
@@ -59,6 +92,22 @@ position:relative;
 width:220px;
 height:320px;
 cursor:pointer;
+@media screen and (max-width:970px){
+  width:176px;
+  height:256px;
+}
+@media screen and (max-width:745px){
+  width:220px;
+  height:320px;
+}
+@media screen and (max-width:575px){
+  width:176px;
+  height:256px;
+}
+@media screen and (max-width:465px){
+  width:154px;
+  height:224px;
+}
 `;
 
 export const PlaceBox = styled.div`
@@ -67,6 +116,22 @@ height: 290px;
 margin-top:10px;
 background-color:white;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:970px){
+  width:160px;
+  height:232px;
+}
+@media screen and (max-width:745px){
+  width: 200px;
+  height: 290px;
+}
+@media screen and (max-width:575px){
+  width:160px;
+  height:232px;
+}
+@media screen and (max-width:465px){
+  width:140px;
+  height:210px;
+}
 `;
 
 export const PlacePhoto = styled.img`
@@ -74,6 +139,22 @@ margin-top:6px;
 width:188px;
 height:188px;
 object-fit:cover;
+@media screen and (max-width:970px){
+  width:150px;
+  height:150px;
+}
+@media screen and (max-width:745px){
+  width:188px;
+  height:188px;
+}
+@media screen and (max-width:575px){
+  width:150px;
+  height:150px;
+}
+@media screen and (max-width:465px){
+  width:132px;
+  height:132px;
+}
 `;
 
 export const PlaceBoxBelowPart = styled.div`
@@ -85,6 +166,11 @@ display:flex;
 flex-direction:column;
 align-items:flex-start;
 gap:5px;
+@media screen and (max-width:970px){
+  width:90%;
+  margin-left:10px;
+  height:30%
+}
 `;
 
 export const PlaceTitle = styled.div`
@@ -93,6 +179,12 @@ font-size:14px;
 font-weight:500;
 color:black;
 text-align:left;
+@media screen and (max-width:970px){
+  width:90%;
+}
+@media screen and (max-width:465px){
+  font-size:12px;
+}
 `;
 
 export const AddPlaceToScheduleButton = styled.div`
@@ -115,6 +207,10 @@ z-index:10;
 transform: rotate(25deg);
 right: -2px;
 top: 8px;
+@media screen and (max-width:465px){
+  width:65px;
+  height:17px;
+}
 `;
 
 const CategoryBanner = styled.img`
@@ -170,39 +266,6 @@ function Category({ currentLatLng }) {
     } else {
       setModalIsActive(false); setChooseScheduleModalIsActive(true);
     }
-  }
-
-  // 打開modal時先確認有沒有追蹤過
-  // 有的話就讓星星亮起，沒有的話就讓星星空的
-  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
-
-  async function checkLikeOrNot(placeId) {
-    const userArticlesArray = doc(db, 'users', user.uid);
-    const docSnap = await getDoc(userArticlesArray);
-    console.log(docSnap.data());
-    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
-      setLiked(true);
-      console.log('已經追蹤過嚕!');
-    } else {
-      console.log('沒有哦');
-      setLiked(false);
-    }
-  }
-
-  function ShowDetailNCheckLikedOrNot(clickedPlaceId) {
-    if (user.uid) {
-      checkLikeOrNot(clickedPlaceId);
-    } else {
-      setLiked(false);
-    }
-    setModalIsActive(true);
-    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-      .then((response) => response.json()).then((jsonData) => {
-        console.log('我在useEffect中', jsonData.result);
-        setModalDetail(jsonData.result);
-      }).catch((err) => {
-        console.log('錯誤:', err);
-      });
   }
 
   // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
@@ -454,6 +517,45 @@ function Category({ currentLatLng }) {
   }, [isLoaded, searchCategoryNearby]);
   //   console.log({ lat, lng });
 
+  // 打開modal時先確認有沒有追蹤過
+  // 有的話就讓星星亮起，沒有的話就讓星星空的
+  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
+
+  async function checkLikeOrNot(placeId) {
+    const userArticlesArray = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(userArticlesArray);
+    console.log(docSnap.data());
+    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
+      setLiked(true);
+      console.log('已經追蹤過嚕!');
+    } else {
+      console.log('沒有哦');
+      setLiked(false);
+    }
+  }
+
+  function ShowDetailNCheckLikedOrNot(clickedPlaceId) {
+    if (user.uid) {
+      checkLikeOrNot(clickedPlaceId);
+    } else {
+      setLiked(false);
+    }
+    setModalIsActive(true);
+    const placeRequest = {
+      placeId: clickedPlaceId,
+    };
+    const service = new google.maps.places.PlacesService(mapRef.current);
+    service.getDetails(placeRequest, (place, status) => {
+      console.log(status);
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        console.log('我在city頁面測試api', place);
+        setModalDetail(place);
+      } else {
+        console.log('error');
+      }
+    });
+  }
+
   if (!isLoaded) {
     return (
       ''
@@ -483,10 +585,10 @@ function Category({ currentLatLng }) {
                   </ButtonStarArea>
                 </ModalLeftArea>
                 <ModalImgArea>
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
                 </ModalImgArea>
                 <CloseModalButton
                   type="button"
@@ -597,7 +699,7 @@ function Category({ currentLatLng }) {
               />
               <PlaceBoxBelowPart id={item?.place_id}>
                 <PlaceTitle id={item?.place_id}>
-                  {item?.name}
+                  {item?.name?.slice(0, 20)}
                 </PlaceTitle>
                 <AddPlaceToScheduleButton>查看更多</AddPlaceToScheduleButton>
               </PlaceBoxBelowPart>

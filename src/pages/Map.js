@@ -94,7 +94,6 @@ function Map({
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         const data = JSON.stringify(results);
         window.localStorage.setItem('places', data);
-        // console.log(data);
         setRecommendList(results);
         for (let i = 0; i < results.length; i += 1) {
           // 這邊可以直接拿到url
@@ -119,65 +118,6 @@ function Map({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setRecommendList, recommendList]);
   // eslint-disable-next-line no-unused-expressions
-
-  // if (recommendList) {
-  //   console.log(recommendList);
-  // }
-
-  // function getRoute(){}
-  // const directionsService = new google.maps.DirectionsService();
-  // const request = {
-  //   origin: 'Greenwich, England',
-  //   destination: 'Stockholm, Sweden',
-  //   travelMode: 'WALKING',
-  // };
-  // directionsService.route(request, (response, status) => {
-  //   if (status === google.maps.DirectionsService.OK) {
-  //     const directionsDisplay = new google.maps.DirectionsRenderer({
-  //       map,
-  //       directions: response,
-  //     });
-  //     console.log('哈哈');
-  //   }
-  // });
-
-  // 同時拿distance跟route
-
-  // 拿陣列最後一個東西跟前面
-
-  // function getDistanceAndRoute(originTest, destinationTest, imageTest, colorTest) {
-  //   const request = {
-  //     origin: originTest,
-  //     destination: destinationTest,
-  //     travelMode: 'DRIVING',
-  //   };
-  //   const image = imageTest; // 放上不一樣的地標
-
-  //   const directionsService = new google.maps.DirectionsService();
-  //   const directionsDisplay = new google.maps.DirectionsRenderer();
-
-  //   // 客製化marker的樣子
-  //   const customizedMarker = {
-  //     icon: image,
-  //   };
-  //   // 客製化line的顏色
-  //   const customizedRoute = {
-  //     strokeColor: colorTest,
-  //   };
-
-  //   const map = mapRef.current;
-  //   directionsDisplay.setMap(map);
-  //   directionsService.route(request, (result, status) => {
-  //     if (status === 'OK') {
-  //       console.log(result.routes[0].legs[0].distance.text);
-  //       console.log(result.routes[0].legs[0].duration.text);
-  //       setDistance(result.routes[0].legs[0].distance.text);
-  //       setDuration(result.routes[0].legs[0].duration.text);
-  //       directionsDisplay.setDirections(result);
-  //       directionsDisplay.setOptions({ markerOptions: customizedMarker, polylineOptions: customizedRoute });
-  //     }
-  //   });
-  // }
 
   useEffect(() => {
     if (!scheduleData) { return; }

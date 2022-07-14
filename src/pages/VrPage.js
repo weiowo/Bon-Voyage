@@ -33,8 +33,7 @@ text-shadow:2px 2px 3px black;
 font-weight:600;
 @media screen and (max-width:768px){
   width:85%;
-  height:30px;
-  font-size:25px;
+  font-size:23px;
 }
 `;
 

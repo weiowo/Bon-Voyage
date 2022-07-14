@@ -142,7 +142,6 @@ display:none;
 }
 @media screen and (max-width:500px){
   width:60vw;
-
 }
 `;
 
@@ -256,11 +255,10 @@ function HeaderComponent() {
   const user = useContext(UserContext);
   const [clicked, setClicked] = useState(false);
   const [headerBackground, setHeaderBackground] = useState(false);
-  console.log('我在headerComponents唷', user);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', () => { setHeaderBackground(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200); console.log('往下拉囉!'); });
+      window.addEventListener('scroll', () => { setHeaderBackground(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200); });
     }
   }, []);
 
