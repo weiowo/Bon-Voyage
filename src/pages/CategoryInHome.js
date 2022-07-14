@@ -19,14 +19,22 @@ const CategoryWrapper = styled.div`
 align-self:center;
 margin-top:20px;
 width:100vw;
-height:350px;
+height:280px;
 display:flex;
 flex-direction:column;
 align-items:center;
 @media screen and (max-width:800px){
   width:100vw;
   margin-top:30px;
-  height:auto;
+  height:300px;
+}
+@media screen and (max-width:750px){
+  height:450px;
+}
+@media screen and (max-width:500px){
+  width:100%;
+  height:890px;
+  margin-left:0px;
 }`;
 
 const CategoryWrapperTitle = styled.div`
@@ -38,6 +46,7 @@ align-items:center;
 font-size:24px;
 font-weight:600;
 color:#1F456E;
+margin-bottom:30px;
 @media screen and (max-width:800px){
   font-size:30px;
 }`;
@@ -49,13 +58,28 @@ display:flex;
 justify-content:center;
 align-items:center;
 width:80vw;
-height:300px;
-display:flex;
 flex-wrap:wrap;
+height:auto;
+@media screen and (max-width:1249px){
+  margin-left:30px;
+}
 @media screen and (max-width:800px){
-  width:90vw;
+  margin-left:30px;
+}
+@media screen and (max-width:750px){
+  margin-left:0px;
+  margin-top:0px;
+}
+@media screen and (max-width:630px){
+  width:100%;
+  margin-top:0px;
+  margin-left:0px;
+}
+@media screen and (max-width:500px){
+  width:100%;
+  height:89s0px;
   margin-top:30px;
-  height:auto;
+  margin-left:0px;
 }`;
 
 const CategoryBox = styled.div`
@@ -64,6 +88,29 @@ height:100px;
 display:flex;
 align-items:center;
 gap:20px;
+@media screen and (max-width:1249px){
+  width:200px;
+}
+@media screen and (max-width:1000px){
+  width:180px;
+  gap:0px;
+}
+@media screen and (max-width:900px){
+  width:170px;
+  gap:0px;
+}
+@media screen and (max-width:850px){
+  width:150px;
+}
+@media screen and (max-width:750px){
+  width:230px;
+  justify-content:center;
+}
+@media screen and (max-width:500px){
+  width:80%;
+  justify-content:center;
+  gap:30px;
+}
 `;
 
 const CategoryIcon = styled.img`

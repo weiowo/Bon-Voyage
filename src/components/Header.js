@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 import UserContext from './UserContextComponent';
@@ -129,19 +129,22 @@ display:none;
 @media screen and (max-width:800px){
   position:fixed;
   top:0px;
-display:flex;
-flex-direction:column;
-align-items:center;
-width:45vw;
-height:100vh;
-gap:6px;
-z-index:500;
-// background-color:#B8E2F2;
-background-color:white;
-// position:relative;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-display:${(props) => (props.active ? 'flex' : 'none')};
-}`;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:45vw;
+  height:100vh;
+  gap:6px;
+  z-index:500;
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display:${(props) => (props.active ? 'flex' : 'none')};
+}
+@media screen and (max-width:500px){
+  width:60vw;
+
+}
+`;
 
 const StyleNavLink = styled(Link)`
 cursor:pointer;

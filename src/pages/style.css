@@ -26,6 +26,13 @@ body {
   }
 }
 
+@media (max-width: 600px) {
+  .swiper-slide {
+    width: 80%;
+    height: 100%;
+  }
+}
+
 .swiper-slide img {
   display: block;
   width: 100%;
@@ -80,8 +87,20 @@ body {
 
 @media (max-width: 768px) {
   .vr-container .swiper-container {
-    bottom: -58vw;
-    padding-bottom: 8vw;
+    bottom: 25vw;
+    top:25%;
+    /* padding-bottom: 8vw; */
+    height:60vh;
+  }
+
+  .vr-container {
+    padding-top:10vh;
+  }
+}
+
+@media (max-width: 1130px) {
+  .vr-container .swiper-container {
+    width: 80%;
   }
 }
 

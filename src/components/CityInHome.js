@@ -16,7 +16,7 @@ import NewYorkSrc from '../pages/images/newyork.png';
 import MexicoSrc from '../pages/images/mexico.png';
 
 const CityAtHomeWrapper = styled.div`
-margin-top:60px;
+margin-top:45px;
 width:100vw;
 height:520px;
 display:flex;

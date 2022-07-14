@@ -31,6 +31,11 @@ font-size:30px;
 color:white;
 text-shadow:2px 2px 3px black;
 font-weight:600;
+@media screen and (max-width:768px){
+  width:85%;
+  height:30px;
+  font-size:25px;
+}
 `;
 
 const TitleStarArea = styled.div`
@@ -66,6 +71,7 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.15);
 background-blend-mode: multiply;
+background-position:center;
 `;
 
 const PlaceTitle = styled.div`
@@ -116,6 +122,9 @@ position:absolute;
 bottom:20px;
 right:20px;
 animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+@media screen and (max-width:882px){
+  display:none;
+  }
 `;
 
 const RemindText = styled.div`
@@ -129,6 +138,9 @@ font-size:12px;
 border-radius:3px;
 border:1px solid black;
 // animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+@media screen and (max-width:882px){
+  display:none;
+  }
 `;
 
 const VRModalBackground = styled.div`
@@ -158,6 +170,19 @@ z-index:200;
 position: relative;
 align-items:center;
 z-index:500;
+flex-direction:row;
+@media screen and (max-width:1344px){
+  height:70vh;
+}
+@media screen and (max-width:1133px){
+  height:70vh;
+  width:90vw;
+}
+@media screen and (max-width:882px){
+  height:85vh;
+  width:90vw;
+  flex-direction:column;
+}
 `;
 
 const ModalImgArea = styled.div`
@@ -167,6 +192,10 @@ display:flex;
 flex-wrap:wrap;
 align-items:center;
 gap:10px;
+@media screen and (max-width:882px){
+  width:100%;
+  justify-content:center;
+}
 `;
 
 const ModalLeftArea = styled.div`
@@ -178,6 +207,14 @@ align-items:center;
 justify-content:left;
 gap:15px;
 position:relative;
+@media screen and (max-width:945px){
+  height:90%;
+}
+@media screen and (max-width:882px){
+  margin-top:30px;
+  width:100%;
+  height:50%;
+}
 `;
 
 const IFrame = styled.iframe`
@@ -187,6 +224,10 @@ border:0;
 border-radius:13px;
 cursor:pointer;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:882px){
+  width:90%;
+  height:95%;
+}
 `;
 
 const ModalPlaceTitle = styled.div`
@@ -200,6 +241,18 @@ font-size:18px;
 font-weight:550;
 width:75%;
 color:grey;
+@media screen and (max-width:1344px){
+  font-size:16px;
+}
+@media screen and (max-width:1133px){
+  font-size:15px;
+}
+@media screen and (max-width:945px){
+  font-size:14px;
+}
+@media screen and (max-width:882px){
+display:none;
+}
 `;
 
 const ModalPlaceDescription = styled.div`
@@ -207,6 +260,9 @@ font-size:15px;
 width:75%;
 text-align: justify;
 height:auto;
+@media screen and (max-width:882px){
+  width:85%;
+}
 `;
 
 const SeperateLine = styled.div`
@@ -216,6 +272,11 @@ margin-top:10px;
 margin-bottom:10px;
 background-color:black;
 flex-shrink:0;
+@media screen and (max-width:882px){
+  width:85%;
+  margin-top:5px;
+  margin-bottom:5px;
+}
 `;
 
 const ModalPlaceAddress = styled.div`
@@ -227,7 +288,10 @@ flex-direction:column;
 align-items:flex-start;
 gap:10px;
 text-align:justify;
-`;
+@media screen and (max-width:882px){
+  display:none;
+  }
+  `;
 
 const ModalPlaceCountry = styled.div`
 width:20%;
@@ -252,6 +316,31 @@ border:none;
 color:white;
 cursor:pointer;
 font-size:15px;
+@media screen and (max-width:1133px){
+  width:35%;
+}
+@media screen and (max-width:882px){
+  display:none;
+  }
+`;
+
+const SmallScreenAddButton = styled.button`
+display:none;
+@media screen and (max-width:882px){
+  display:block;
+  width:200px;
+  height:40px;
+  flex-shrink:0;
+  border-radius:25px;
+  background-color:grey;
+  font-weight:500;
+  border:none;
+  color:white;
+  cursor:pointer;
+  font-size:17px;
+  margin-bottom:30px;
+  margin-top:10px;
+  }
 `;
 
 const CloseModalButton = styled.button`
@@ -583,6 +672,11 @@ function VR() {
                 <ModalImgArea>
                   <IFrame title={vrPlaces?.[modalIndex]?.place_title} src={vrPlaces?.[modalIndex]?.vr_embed_link} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
                 </ModalImgArea>
+                <SmallScreenAddButton
+                  onClick={() => { handleUserOrNot(); }}
+                >
+                  加入行程
+                </SmallScreenAddButton>
                 <CloseModalButton
                   type="button"
                   onClick={() => setModalIsActive(false)}

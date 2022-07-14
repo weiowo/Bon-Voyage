@@ -262,7 +262,7 @@ animation:${(props) => (props.isEditing ? 'hithere 1.1s ease 3' : 'none')};
 `;
 
 const ChatRoom = styled.div`
-z-index:20;
+z-index:100;
 display:flex;
 flex-direction:column;
 align-items:center;

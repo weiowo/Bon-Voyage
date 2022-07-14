@@ -91,7 +91,9 @@ font-size:17px;
 box-sizing:border-box;
 padding-left:10px;
 outline: none;
-`;
+@media screen and (max-width:800px){
+  width:70%;
+}`;
 
 const Ulist = styled.ul`
 display:flex;
@@ -257,7 +259,7 @@ function SearchAtHomePage({ option, setOption }) {
           value={value}
           onChange={handleInput}
           disabled={!ready}
-          placeholder="請輸入想查詢的城市名稱OWO....."
+          placeholder="請輸入城市名稱....."
         />
       </SearchBarLittleWrapper>
       {/* We can use the "status" to decide whether we should display the dropdown or not */}

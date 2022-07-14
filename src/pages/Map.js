@@ -29,9 +29,11 @@ const mapContainerStyle = {
 };
 
 const smallScreenMapContainerStyle = {
-  height: '100%',
+  height: '100vh',
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
   width: '100vw',
-  position: 'absolute',
 };
 
 const options = {

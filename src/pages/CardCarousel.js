@@ -121,8 +121,8 @@ display:none;
 const SmallScreenCards = styled.div`
 display:none;
 @media screen and (max-width:800px){
-  width:83vw;
-  height:260px;
+  width:95%;
+  height:150px;
   display:flex; 
   flex-direction:column;
   align-items:center;
@@ -131,7 +131,6 @@ display:none;
   position:relative;
   overflow:hidden;
   z-index:1;
-  gap:17px;
 }`;
 
 // const ButtonStarArea = styled.div`
@@ -165,14 +164,16 @@ background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 // background: linear-gradient(#3204fdba, #9907facc), url(${BckSrc}) no-repeat cover;
 @media screen and (max-width:800px){
-  width:26vw;
+  width:30%;
   height:250px;
+  font-size:13px;
 }`;
 
 const SmallScreenCardsWrapper = styled.div`
 display:none;
 @media screen and (max-width:800px){
   display:flex;
+  width:90%;
   align-items:center;
   gap:10px;
 }`;
@@ -189,8 +190,8 @@ const SmallScreenArrow = styled.img`
 display:none;
 @media screen and (max-width:800px){
   display:block;
-  width:40px;
-  height:40px;
+  width:25px;
+  height:25px;
   cursor:pointer;
 }`;
 

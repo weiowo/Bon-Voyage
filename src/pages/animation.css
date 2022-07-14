@@ -142,12 +142,6 @@ background-color:rgb(178, 228, 238),
   display:flex;
   flex-direction:column;
   gap:20px;
-  /* background: rgb(167, 176, 215);
-  background: linear-gradient(
-    312deg,
-    rgb(178, 228, 238) 0%,
-    rgb(161, 176, 246) 100%
-  ); */
   background-color:white;
   border-radius: 10px;
   display: flex;
@@ -163,6 +157,9 @@ background-color:rgb(178, 228, 238),
   z-index:200;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
+
+
 
 .search-friend-modal{
   align-items: center;
@@ -182,6 +179,13 @@ background-color:rgb(178, 228, 238),
   width: 30vw;
   z-index:200;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+@media screen and (max-width: 1279px) {
+  .search-friend-modal {
+    width: 50vw;
+    /* height: 50vh; */
+  }
 }
 
 .modal-background{
