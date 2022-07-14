@@ -38,6 +38,9 @@ background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 position:relative;
 background-position:center;
+@media screen and (max-width:800px){
+  height:280px
+}
 `;
 
 function AllArticlePage() {
@@ -76,7 +79,10 @@ function AllArticlePage() {
                   />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
+                    <MyArticleSummary>
+                      {item?.summary?.slice(0, 15)}
+                      .....
+                    </MyArticleSummary>
                   </MyArticleBelowArea>
                 </MyArticle>
               </StyledLink>

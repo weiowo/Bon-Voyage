@@ -35,6 +35,9 @@ background-blend-mode: multiply;
 position:relative;
 background-position:center;
 object-fit: cover;
+@media screen and (max-width:800px){
+  height:300px;
+}
 `;
 
 const ArticlePageBelowPart = styled.div`
@@ -55,6 +58,9 @@ width:75vw;
 height:auto;
 display:flex;
 justify-content:space-between;
+@media screen and (max-width:800px){
+  width:85vw;
+}
 `;
 
 const AddFavoriteIcon = styled.img`
@@ -85,6 +91,10 @@ background-position:center;
 flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 object-fit: cover;
+@media screen and (max-width:680px){
+  width:100%;
+  height:auto;
+}
 `;
 
 const Description = styled.div`
@@ -101,12 +111,18 @@ outline:none;
 flex-shrink: 0;
 border-radius:5px;
 border: none;
+@media screen and (max-width:680px){
+  width:100%;
+}
 `;
 
 const ArticleTitleButtonArea = styled.div`
 width:75vw;
 height:auto;
 display:flex;
+@media screen and (max-width:800px){
+  width:85vw;
+}
 `;
 
 const ArticleTitle = styled.div`
@@ -122,7 +138,12 @@ border:none;
 display:flex;
 align-items:center;
 justify-content:space-between;
-
+@media screen and (max-width:800px){
+  width:55vw;
+}
+@media screen and (max-width:680px){
+  width:100%;
+}
 `;
 
 const EditingPart = styled.div`
@@ -147,6 +168,12 @@ overflow:auto;
   -webkit-box-shadow: transparent;
   background-color:#D3D3D3;
 }
+@media screen and (max-width:800px){
+  width:56vw;
+}
+@media screen and (max-width:680px){
+  width:100%;
+}
 `;
 
 const PlaceArea = styled.div`
@@ -164,6 +191,14 @@ flex-direction:column;
 gap:15px;
 margin-left:20px;
 padding-left:10px;
+@media screen and (max-width:800px){
+  width:25vw;
+  padding-left:0px;
+  margin-left:0px;
+}
+@media screen and (max-width:680px){
+  display:none;
+}
 `;
 
 const ScheduleSummaryDayAndPlacePart = styled.div`
@@ -173,6 +208,9 @@ height:auto;
 gap:10px;
 align-items:flex-start;
 paddin-left:15px;
+@media screen and (max-width:800px){
+  width:25vw;
+}
 `;
 
 const ScheduleSummaryDayPart = styled.div`
@@ -184,6 +222,9 @@ color:white;
 font-weight:550;
 gap:10px;
 cursor:pointer;
+@media screen and (max-width:800px){
+  width:7vw;
+}
 `;
 
 const ScheduleSummaryPlacePart = styled.div`
@@ -228,11 +269,15 @@ letter-spacing:2px;
 `;
 
 const PlaceImg = styled.img`
-width:100px;
-height:100px;
+width:100%;
+height:auto;
 position:relative;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 object-fit: cover;
+@media screen and (max-width:680px){
+  width:80vw;
+  height:auto;
+}
 `;
 
 const ImgDisplayArea = styled.div`
@@ -243,6 +288,9 @@ gap:10px;
 margin-left:10px;
 position:relative;
 flex-wrap:wrap;
+@media screen and (max-width:680px){
+  width:80vw;
+}
 `;
 
 function ShowArticle() {
@@ -347,7 +395,7 @@ function ShowArticle() {
                           {shownArticle?.trip_days?.[dayIndex]
                             ?.places?.[placeIndex]?.place_imgs?.map((item) => (
                               <div style={{ position: 'relative' }}>
-                                <PlaceImg style={{ width: '50vw', height: 'auto', position: 'relative' }} src={item} alt="place-img" />
+                                <PlaceImg src={item} alt="place-img" />
                               </div>
                             ))}
                         </ImgDisplayArea>

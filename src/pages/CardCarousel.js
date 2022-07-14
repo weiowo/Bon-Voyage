@@ -28,7 +28,7 @@ import {
   AddToScheduleButton, CloseModalButton, LeftButton,
   ModalContentWrapper, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
   ScheduleChoiceTitle, ModalPlaceTitle, ModalPlaceAddress, ConfirmChooseDayButton,
-  ButtonStarArea, AddFavoriteIcon,
+  ButtonStarArea, AddFavoriteIcon, Loading,
 } from './City';
 import UserContext from '../components/UserContextComponent';
 
@@ -400,33 +400,39 @@ function CardsCarousel({ currentNearbyAttraction }) {
       />
       <ModalBackground active={modalIsActive}>
         <ModalBox>
-          <ModalLeftArea>
-            <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-            <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-            <ButtonStarArea>
-              <AddToScheduleButton
-                onClick={() => { handleUserOrNot(); }}
-              >
-                加入行程
-              </AddToScheduleButton>
-              <AddFavoriteIcon
-                onClick={() => { handleFavorite(modalDetail.place_id); }}
-                src={liked ? filledStar : unfilledStar}
-              />
-            </ButtonStarArea>
-          </ModalLeftArea>
-          <ModalImgArea>
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
-            <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
-          </ModalImgArea>
-          <CloseModalButton
-            type="button"
-            onClick={() => { handleModalClose(); }}
-          >
-            X
-          </CloseModalButton>
+          {modalDetail
+            ? (
+              <>
+                <ModalLeftArea>
+                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                  <ButtonStarArea>
+                    <AddToScheduleButton
+                      onClick={() => { handleUserOrNot(); }}
+                    >
+                      加入行程
+                    </AddToScheduleButton>
+                    <AddFavoriteIcon
+                      onClick={() => { handleFavorite(modalDetail.place_id); }}
+                      src={liked ? filledStar : unfilledStar}
+                    />
+                  </ButtonStarArea>
+                </ModalLeftArea>
+                <ModalImgArea>
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
+                </ModalImgArea>
+                <CloseModalButton
+                  type="button"
+                  onClick={() => { handleModalClose(); }}
+                >
+                  X
+                </CloseModalButton>
+              </>
+            )
+            : <Loading />}
         </ModalBox>
       </ModalBackground>
       <ModalBackground active={chooseScheduleModalIsActive}>

@@ -37,7 +37,9 @@ background-blend-mode: multiply;
 position:relative;
 background-position:center;
 object-fit:cover;
-`;
+@media screen and (max-width:900px){
+  height:300px;
+}`;
 
 const ArticlePageBelowPart = styled.div`
 width:100vw;
@@ -52,7 +54,9 @@ width:75vw;
 height:auto;
 display:flex;
 justify-content:center;
-`;
+@media screen and (max-width:900px){
+  width:85vw;
+}`;
 
 const ArticleCoverPhoto = styled.input`
 display:none;
@@ -76,7 +80,15 @@ flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 cursor:pointer;
 object-fit:cover;
-`;
+@media screen and (max-width:900px){
+  width:55vw;
+}
+@media screen and (max-width:900px){
+  width:55vw;
+}
+@media screen and (max-width:750px){
+  width:80vw;
+}`;
 
 const Description = styled.textarea`
 padding-left:10px;
@@ -94,13 +106,23 @@ border: none;
 background-color: transparent;
 resize: none;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
+@media screen and (max-width:900px){
+  width:calc(55vw - 3px);
+  margin-top:10px;
+}
+@media screen and (max-width:750px){
+  width:80vw;
+}`;
 
 const ArticleTitleButtonArea = styled.div`
 width:75vw;
 height:auto;
 display:flex;
-`;
+@media screen and (max-width:900px){
+  width:85vw;
+  justify-content:space-between;
+  gap:0px;
+}`;
 
 const ArticleTitle = styled.input`
 width:55vw;
@@ -112,7 +134,13 @@ margin-top:20px;
 margin-bottom:20px;
 outline:none;
 border:none;
-`;
+@media screen and (max-width:900px){
+  width:60vw;
+}
+@media screen and (max-width:750px){
+  width:50vw;
+  font-size:27px;
+}`;
 
 const EditingPart = styled.div`
 width:55vw;
@@ -136,14 +164,24 @@ overflow:auto;
   -webkit-box-shadow: transparent;
   background-color:#D3D3D3;
 }
-`;
+@media screen and (max-width:900px){
+  width:60vw;
+}
+@media screen and (max-width:750px){
+  width:85vw
+}`;
 
 const PlaceArea = styled.div`
-width:100%;
+width:calc(50vw - 3px);
 display:flex;
 flex-direction:column;
 align-items:flex-start;
-`;
+@media screen and (max-width:900px){
+  width:calc(55vw - 3px);
+}
+@media screen and (max-width:750px){
+  width:80vw;
+}`;
 
 const ScheduleSummaryPart = styled.div`
 width:20vw;
@@ -153,7 +191,12 @@ flex-direction:column;
 gap:15px;
 margin-left:20px;
 padding-left:10px;
-`;
+@media screen and (max-width:900px){
+  width:25vw;
+}
+@media screen and (max-width:750px){
+display:none;
+}`;
 
 const ScheduleSummaryDayAndPlacePart = styled.div`
 display:flex;
@@ -162,7 +205,9 @@ height:auto;
 gap:10px;
 align-items:flex-start;
 paddin-left:15px;
-`;
+@media screen and (max-width:900px){
+  width:25vw;
+}`;
 
 const ScheduleSummaryDayPart = styled.div`
 width:5vw;
@@ -172,7 +217,9 @@ background-color:#729DC8;
 color:white;
 font-weight:550;
 gap:10px;
-`;
+@media screen and (max-width:900px){
+  width:7vw;
+}`;
 
 const ScheduleSummaryPlacePart = styled.div`
 width:15vw;
@@ -180,7 +227,9 @@ height:auto;
 display:flex;
 flex-direction:column;
 gap:8px;
-`;
+@media screen and (max-width:900px){
+  width:18vw;
+}`;
 
 const SummaryPlaceTitle = styled.div`
 font-weight:500;
@@ -213,7 +262,9 @@ margin-right:20px;
 font-weight:600;
 font-size:18px;
 letter-spacing:2px;
-`;
+@media screen and (max-width:900px){
+  height:40px;
+}`;
 
 // const PlaceUploadImgArea = styled.input`
 // width:180px;
@@ -274,7 +325,14 @@ align-items:center;
 justify-content:left;
 gap:20px;
 margin-left:15px;
-`;
+@media screen and (max-width:750px){
+  width:20vw;
+  gap:10px;
+  margin-left:0px;
+}
+@media screen and (max-width:450px){
+  width:30vw;
+}`;
 
 const SaveButton = styled.button`
 width:70px;
@@ -286,7 +344,15 @@ border:none;
 font-size:16px;
 cursor:pointer;
 font-weight:600;
-`;
+flex-shrink:0;
+@media screen and (max-width:750px){
+  width:50px;
+  font-size:13px;
+}
+@media screen and (max-width:450px){
+  width:50px;
+  font-size:13px;
+}`;
 
 const PublishedButton = styled.button`
 width:70px;
@@ -298,7 +364,15 @@ border:none;
 cursor:pointer;
 font-size:16px;
 font-weight:600;
-`;
+flex-shrink:0;
+@media screen and (max-width:750px){
+  width:50px;
+  font-size:13px;
+}
+@media screen and (max-width:450px){
+  width:50px;
+  font-size:13px;
+}`;
 
 function EditPage() {
   const [article, updateArticle] = useImmer();
@@ -529,7 +603,7 @@ function EditPage() {
                   <div>
                     {dayItem?.places.map((placeItem, placeIndex) => (
                       <PlaceArea id={`place-${dayIndex + 1}-${placeIndex + 1}`}>
-                        <div style={{ display: 'flex', textAlign: 'left' }}>
+                        <div style={{ display: 'flex', textAlign: 'left', alignItems: 'center' }}>
                           <PlaceTitle>
                             {placeItem.place_title}
                           </PlaceTitle>
@@ -549,6 +623,7 @@ function EditPage() {
                               color: 'white',
                               fontWeight: 600,
                               objectFit: 'cover',
+                              flexShrink: 0,
                             }}
                           >
                             <input

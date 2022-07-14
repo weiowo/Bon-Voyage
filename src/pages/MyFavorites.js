@@ -1,9 +1,13 @@
+/* eslint-disable no-undef */
 import styled from 'styled-components/macro';
-import React, { useEffect, useContext, useState } from 'react';
+import React, {
+  useEffect, useContext, useState, useRef, useCallback,
+} from 'react';
 import {
   getDoc, doc, updateDoc, arrayRemove,
 } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
 import GreyHeaderComponent from '../components/GreyHeader';
@@ -42,7 +46,11 @@ display:flex;
 flex-direction:column;
 padding-left:50px;
 margin-top:30px;
-`;
+@media screen and (max-width:800px){
+  padding-left:0px;
+  align-items:center;
+  width:80vw;
+}`;
 
 export const MyPageTitle = styled.div`
 width:100%;
@@ -50,7 +58,9 @@ height:auto;
 font-size:28px;
 font-weight:600;
 text-align:left;
-`;
+@media screen and (max-width:800px){
+  width:80vw;
+}`;
 
 const Tabs = styled.div`
 display:flex;
@@ -97,13 +107,19 @@ overflow:auto;
   -webkit-box-shadow: transparent;
   background-color:#D3D3D3;
 }
-`;
+@media screen and (max-width:800px){
+  align-items:center;
+  justify-content:center;
+  padding-left:0px;
+}`;
 
 export const UpperLine = styled.div`
 height:1px;
 background-color:grey;
-width:75vw;
-`;
+width:73vw;
+@media screen and (max-width:800px){
+  width:80vw;
+}`;
 
 export const MyArticle = styled.div`
 cursor:pointer;
@@ -157,6 +173,13 @@ color:black;
 border:none;
 `;
 
+const libraries = ['places'];
+
+const mapContainerStyle = {
+  height: '0vh',
+  width: '0vw',
+};
+
 function MyLovedArticles() {
   const user = useContext(UserContext);
   const [myLovedArticles, setMyLovedArticles] = useImmer([]);
@@ -173,6 +196,16 @@ function MyLovedArticles() {
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
   const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
   const [modalDetail, setModalDetail] = useState({});
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    libraries,
+  });
+
+  const mapRef = useRef();
+  const onMapLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
 
   // 先拿到某個使用者的資料，拿到收藏的article array跟attraction array後
   // 去articles跟places資料庫搜出來
@@ -309,14 +342,18 @@ function MyLovedArticles() {
       setLiked(false);
     }
     setModalIsActive(true);
-    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-      .then((response) => response.json()).then((jsonData) => {
-        console.log('我在useEffect中', jsonData.result);
-        setModalDetail(jsonData.result);
-        console.log('拿資料有成功嗎？');
-      }).catch((err) => {
-        console.log('錯誤:', err);
-      });
+    const placeRequest = {
+      placeId: clickedPlaceId,
+    };
+    const service = new google.maps.places.PlacesService(mapRef.current);
+    service.getDetails(placeRequest, (place, status) => {
+      console.log(status);
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        setModalDetail(place);
+      } else {
+        console.log('error');
+      }
+    });
   }
 
   // 關掉modal
@@ -346,8 +383,15 @@ function MyLovedArticles() {
     }
   }
 
+  if (!isLoaded) return '';
+
   return (
     <>
+      <GoogleMap
+        id="map"
+        mapContainerStyle={mapContainerStyle}
+        onLoad={onMapLoad}
+      />
       <GreyHeaderComponent />
       <PageWrapper>
         <ProfileSideBarElement />
@@ -429,10 +473,10 @@ function MyLovedArticles() {
                   </ButtonStarArea>
                 </ModalLeftArea>
                 <ModalImgArea>
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
                 </ModalImgArea>
                 <CloseModalButton
                   type="button"
