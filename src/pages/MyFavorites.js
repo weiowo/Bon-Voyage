@@ -12,7 +12,7 @@ import { useImmer } from 'use-immer';
 import produce from 'immer';
 import GreyHeaderComponent from '../components/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
-import { PageWrapper, Line } from './MySchedules';
+import { Line } from './MySchedules';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
 import Cover1 from './images/schedule_cover_rec1.jpg';
@@ -39,6 +39,17 @@ import {
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
+const PageWrapper = styled.div`
+width:100vw;
+height:calc(100vh-60px);
+display:flex;
+flex-direction:row;
+padding-top:60px;
+@media screen and (max-width:800px){
+justify-content:center;
+}
+`;
+
 const MyArticlesArea = styled.div`
 width:80vw;
 height:85vh;
@@ -48,27 +59,33 @@ padding-left:50px;
 margin-top:30px;
 @media screen and (max-width:800px){
   padding-left:0px;
-  align-items:center;
-  width:80vw;
-}`;
+}
+@media screen and (max-width:800px){
+  width:93vw;
+}
+`;
 
 export const MyPageTitle = styled.div`
-width:100%;
+width:90%;
 height:auto;
 font-size:28px;
 font-weight:600;
 text-align:left;
 @media screen and (max-width:800px){
-  width:80vw;
+  text-align:center;
+  font-size:25px;
+  width:100%;
 }`;
 
 const Tabs = styled.div`
 display:flex;
-width:100%;
+width:90%;
 height:auto;
 gap:20px;
 margin-top:10px;
-`;
+@media screen and (max-width:800px){
+  width:100%;
+}`;
 
 const Tab = styled.div`
 width:50px;
@@ -84,8 +101,7 @@ cursor:pointer;
 `;
 
 const MyArticlesContainer = styled.div`
-width:100%;
-height:100%;
+width:90%;
 flex-wrap:wrap;
 gap:15px;
 margin-top:10px;
@@ -108,18 +124,23 @@ overflow:auto;
   background-color:#D3D3D3;
 }
 @media screen and (max-width:800px){
-  align-items:center;
+  width:100%;
   justify-content:center;
   padding-left:0px;
+}
+@media screen and (max-width:380px){
+  gap:5px;
 }`;
 
 export const UpperLine = styled.div`
 height:1px;
+flex-shrink:0;
 background-color:grey;
-width:73vw;
+width:90%;
 @media screen and (max-width:800px){
-  width:80vw;
-}`;
+  width:100%;
+}
+`;
 
 export const MyArticle = styled.div`
 cursor:pointer;
@@ -128,6 +149,14 @@ height:250px;
 flex-shrink:0;
 border-radius:10px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:1200px){
+  width:160px;
+  height:200px;
+}
+@media screen and (max-width:450px){
+  width:160px;
+  height:200px;
+}
 `;
 
 export const CoverPhotoInMyArticle = styled.img`
@@ -424,7 +453,10 @@ function MyLovedArticles() {
                   />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
+                    <MyArticleSummary>
+                      {item?.summary?.slice(0, 16)}
+                      ...
+                    </MyArticleSummary>
                   </MyArticleBelowArea>
                 </MyArticle>
               </StyledLink>
@@ -445,7 +477,9 @@ function MyLovedArticles() {
                 />
                 <MyArticleBelowArea>
                   <MyArticleTitle>{item?.place_title?.slice(0, 10)}</MyArticleTitle>
-                  <MyArticleSummary>{item?.place_address?.slice(0, 30)}</MyArticleSummary>
+                  <MyArticleSummary>
+                    {item?.place_address?.slice(0, 16)}
+                  </MyArticleSummary>
                 </MyArticleBelowArea>
               </MyArticle>
             )) : ''}

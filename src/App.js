@@ -34,6 +34,31 @@ const GlobalStyle = createGlobalStyle`
     }
   `;
 
+// const GlobalStyle = createGlobalStyle`
+//   *  {
+//  margin: 0;
+//  padding: 0;
+//  box-sizing: border-box;
+//  }
+
+//  &::-webkit-scrollbar-track {
+//  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+//  border-radius: 0px;
+//  background-color: transparent;
+//  width:0px;
+// }
+
+// &::-webkit-scrollbar {
+//  width: 0px;
+//  background-color: transparent;
+// }
+
+// &::-webkit-scrollbar-thumb {
+//  border-radius: 10px;
+//  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+//  background-color: white;
+//  width:0px;
+// `;
 // body {
 //     margin: 0;
 //     font-family: NotoSansTC;

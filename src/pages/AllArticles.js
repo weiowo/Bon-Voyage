@@ -18,6 +18,7 @@ import Cover3 from './images/schedule_cover_rec3.jpg';
 import Cover4 from './images/camping.jpg';
 import Cover5 from './images/schedule_cover_rec2.jpg';
 import Cover6 from './images/schedule_cover_rec4.jpg';
+import Footer from '../components/Footer';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
@@ -89,6 +90,7 @@ function AllArticlePage() {
             )) : ''}
           </ArticlesBoxesContainer>
         </div>
+        <Footer />
       </PageWrapper>
     </>
   );

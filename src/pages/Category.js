@@ -596,7 +596,6 @@ function Category({ currentLatLng }) {
                 >
                   X
                 </CloseModalButton>
-
               </>
             )
             : <Loading />}

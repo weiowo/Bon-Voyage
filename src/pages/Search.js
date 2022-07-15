@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-use-before-define */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable camelcase */
@@ -22,18 +23,17 @@ padding-left:10px;
 outline:none;
 @media screen and (max-width:800px){
   width:calc( 100vw - 85px );
-}
-`;
+}`;
 
 export default function Search({
-  panTo, setSelected, selected, active,
+  panTo, setSelected, selected, active, clearSuggestions,
 }) {
   const {
     ready,
     value,
     suggestions: { status, data },
     setValue,
-    clearSuggestions,
+    // clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
       // types: ['(cities)'],
@@ -154,6 +154,7 @@ export default function Search({
         disabled={!ready}
         placeholder="想去哪兒呢？"
       />
+      {/* <button style={{ zIndex: 30 }} onClick={() => clearSuggestions()} type="button">測試</button> */}
       {/* 要把serachInput的value傳到map那邊去計算route跟duration */}
       {/* We can use the "status" to decide whether we should display the dropdown or not */}
       {status === 'OK' && <div style={{ paddingLeft: 'none', width: '100%', zIndex: '24' }}>{renderSuggestions()}</div>}

@@ -18,8 +18,9 @@ import {
   updateDoc,
   onSnapshot,
 } from 'firebase/firestore';
+import usePlacesAutocomplete from 'use-places-autocomplete';
 import { useImmer } from 'use-immer';
-import { useLocation, useSearchParams, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import UserContext from '../components/UserContextComponent';
 import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
@@ -1062,6 +1063,14 @@ function Schedule() {
     }
   };
 
+  const {
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+    },
+    debounce: 300,
+  });
+
   return (
     <>
       <GreyHeaderComponent />
@@ -1070,7 +1079,7 @@ function Schedule() {
         <AddAndSearchBox active={active}>
           <CloseSearchIcon
             src={PinkCloseIcon}
-            onClick={() => { setScheduleDisplay(true); setActive(false); }}
+            onClick={() => { setScheduleDisplay(true); setActive(false); clearSuggestions(); }}
           />
           <ResultsArea>
             <SearchedPlace>
@@ -1234,6 +1243,7 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
+            clearSuggestions={clearSuggestions}
           />
         </RightContainer>
         <ChatRoom openChat={openChat}>

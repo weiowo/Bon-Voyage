@@ -8,7 +8,6 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import { updateDoc, doc, onSnapshot } from 'firebase/firestore';
-// import { useNavigate } from 'react-router-dom';
 import db, { app, storage } from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
@@ -205,52 +204,23 @@ cursor:pointer;
 // border-radius:10px;
 // `;
 
+const auth = getAuth(app);
+
+export function signOutFunction() {
+  signOut(auth).then(() => {
+    console.log('successfully sign out!');
+    alert('您已登出囉～');
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
 function Profile() {
   const user = useContext(UserContext);
   const [photoUrl, setPhotoUrl] = useState();
   const [userEmail, setUserEmail] = useState();
   const [userName, setUserName] = useState();
   // const navigate = useNavigate();
-
-  const auth = getAuth(app);
-
-  function signOutFunction() {
-    signOut(auth).then(() => {
-      console.log('successfully sign out!');
-      alert('您已登出囉～');
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-
-  // setTimeout(() => {
-  //   if (!user.uid) {
-  //     console.log('哈哈你沒登入', user.uid);
-  //     alert('請先登入哦');
-  //     navigate({ pathname: '/' });
-  //   } else {
-  //     console.log('哈哈你有登入啦', user.uid);
-  //   }
-  // }, 4000);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     // if (!user) {
-  //     //   console.log('5秒內', user);
-  //     //   alert('請先登入哦');
-  //     //   navigate({ pathname: '/' });
-  //     // } else {
-  //     //   alert('已經登入～');
-  //     //   console.log('5秒內登入啦', user);
-  //     // }
-  //     console.log(user.uid);
-  //     if (!user.uid) {
-  //       console.log('哈哈你沒登入', user.uid);
-  //     } else {
-  //       console.log('哈哈你有登入啦', user.uid);
-  //     }
-  //   }, 4000);
-  // }, [user, navigate]);
 
   // 更改個人資料要即時更新
 
@@ -270,15 +240,13 @@ function Profile() {
     if (imageData === null) return;
     const imgRef = ref(storage, `profileImages/${imageData.name}`);
     const snap = await uploadBytes(imgRef, imageData);
+    console.log(snap);
     const url = await getDownloadURL(ref(storage, `profileImages/${imageData.name}`));
     const userRef = doc(db, 'users', user.uid);
     await updateDoc(userRef, { photo_url: url });
     await updateProfile(auth.currentUser, {
       photoURL: url,
     });
-    console.log(snap);
-    console.log(user);
-    console.log(url);
   }
 
   return (

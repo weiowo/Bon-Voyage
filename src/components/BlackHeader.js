@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import {
+  signOut,
+} from 'firebase/auth';
 import UserContext from './UserContextComponent';
 import BlackMenuIcon from '../pages/images/menu_black.png';
 import CloseIcon from '../pages/images/close-1.png';
@@ -11,7 +14,7 @@ import Travel from '../pages/images/travel.png';
 import VRsrc from '../pages/images/virtual-reality.png';
 import Plan from '../pages/images/suitcase.png';
 import {
-  Menu, SmallMenuCloseIcon, SmallHeader, SmallScreenBackground, SmallScreenNavBar,
+  auth, Menu, SmallMenuCloseIcon, SmallHeader, SmallScreenBackground, SmallScreenNavBar,
   HamburgerMenuLink, SmallLogOutButton, HamburgerProfileLink, SmallBarProfileBackground,
   SmallProfilePhoto, SmallNavIcon, SmallProfileName, SmallNavText,
 } from './Header';
@@ -89,6 +92,16 @@ function BlackHeaderComponent() {
   const user = useContext(UserContext);
   const [clicked, setClicked] = useState(false);
   const [headerBackground, setHeaderBackground] = useState(false);
+  const navigate = useNavigate();
+
+  function signOutFunction() {
+    signOut(auth).then(() => {
+      alert('您已登出囉～');
+      navigate({ pathname: '/' });
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -172,7 +185,13 @@ function BlackHeaderComponent() {
               <SmallNavIcon src={Favorite} />
               <SmallNavText>我的收藏</SmallNavText>
             </HamburgerMenuLink>
-            <SmallLogOutButton>登出</SmallLogOutButton>
+            <SmallLogOutButton
+              onClick={() => {
+                signOutFunction();
+              }}
+            >
+              登出
+            </SmallLogOutButton>
             <SmallMenuCloseIcon
               src={CloseIcon}
               active={clicked}

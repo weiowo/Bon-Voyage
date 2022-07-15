@@ -40,6 +40,8 @@ justify-content:center;
 }
 @media screen and (max-width:748px){
   flex-direction:column;
+  flex-shrink:0;
+  height:calc(100vh-60px);
 }`;
 
 export const Line = styled.div`
@@ -75,6 +77,7 @@ align-items:center;
 gap:20px;
 overflow:auto;
 height:calc(100vh-80px);
+flex-shrink:0;
 padding-bottom:5px;
 &::-webkit-scrollbar-track {
   -webkit-box-shadow: transparent;
@@ -96,9 +99,12 @@ padding-bottom:5px;
 @media screen and (max-width:748px){
   flex-direction:column;
   width:100vw;
-  height:30vh;
+  height:35vh;
   gap:10px;
+  flex-shrink:0;
   overflow:hidden;
+  padding-bottom:0px;
+  margin-bottom:0px;
 }`;
 
 const MySchedulesTitleAndCreateNewScheduleArea = styled.div`
@@ -113,7 +119,10 @@ margin-bottom:15px;
 @media screen and (max-width:748px){
 width:100%;
 display:flex;
+height:80px;
+margin-top:10px;
 align-items:center;
+margin-bottom:0px;
 justify-content:center;
 }`;
 
@@ -121,28 +130,30 @@ const ExistedSchedules = styled.div`
 display:flex;
 flex-direction:column;
 gap:15px;
+z-index:500;
 @media screen and (max-width:748px){
   width:100vw;
-  height:auto;
+  height:23vh;
   margin-left:30px;
   flex-direction:row;
-  overflow:auto;
+  overflow:scroll;
   padding-top:0px;
   padding-bottom:0px;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 5px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
+  flex-shrink:0;
+  // &::-webkit-scrollbar-track {
+  //   -webkit-box-shadow: transparent;
+  //   border-radius: 10px;
+  //   background-color:transparent;
+  // }
+  // &::-webkit-scrollbar {
+  //   width: 3px;
+  //   background-color:transparent;
+  // }
+  // &::-webkit-scrollbar-thumb {
+  //   border-radius: 10px;
+  //   -webkit-box-shadow: transparent;
+  //   background-color:#D3D3D3;
+  // }
 }`;
 
 const SchedulePreview = styled.div`
@@ -158,6 +169,7 @@ margin-bottom:15px;
   align-items:center;
   justify-content:center;
   width:100%;
+  margin-top:10px;
 }`;
 
 // const CalendarInviteWrapper = styled.div`
@@ -285,6 +297,7 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   box-shadow:none;
   padding-top:0px;
   padding-bottom:0px;
+  height:140px;
 }`;
 
 export const DeleteAsk = styled.div`
@@ -400,6 +413,7 @@ gap:15px;
 @media screen and (max-width:748px){
   width:100vw;
   margin-left:0px;
+  height:53vh;
   align-items:center;
 }
 `;
@@ -427,6 +441,7 @@ background-blend-mode: multiply;
   width:85vw;
   margin-left:0px;
   align-items:center;
+  height:120px;
 }
 `;
 

@@ -9,7 +9,7 @@ import { useImmer } from 'use-immer';
 import GreyHeaderComponent from '../components/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import {
-  PageWrapper, Line, DeleteModalTitle, DeleteAsk, DeleteButtonArea,
+  Line, DeleteModalTitle, DeleteAsk, DeleteButtonArea,
   NoDeleteButton, ConfirmDeleteButton,
 } from './MySchedules';
 import db from '../utils/firebase-init';
@@ -24,6 +24,17 @@ import greyTrashCanSrc from './images/bin.png';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
+const PageWrapper = styled.div`
+width:100vw;
+height:calc(100vh-60px);
+display:flex;
+flex-direction:row;
+padding-top:60px;
+@media screen and (max-width:800px){
+justify-content:center;
+}
+`;
+
 const MyArticlesArea = styled.div`
 width:80vw;
 height:85vh;
@@ -31,10 +42,16 @@ display:flex;
 flex-direction:column;
 padding-left:50px;
 margin-top:30px;
+@media screen and (max-width:800px){
+  padding-left:0px;
+}
+@media screen and (max-width:800px){
+  width:93vw;
+}
 `;
 
 export const MyPageTitle = styled.div`
-width:100%;
+width:90%;
 height:auto;
 font-size:28px;
 font-weight:600;
@@ -42,15 +59,18 @@ text-align:left;
 @media screen and (max-width:800px){
   text-align:center;
   font-size:25px;
+  width:100%;
 }`;
 
 const Tabs = styled.div`
 display:flex;
-width:100%;
+width:90%;
 height:auto;
 gap:20px;
 margin-top:10px;
-`;
+@media screen and (max-width:800px){
+  width:100%;
+}`;
 
 const Tab = styled.div`
 width:50px;
@@ -66,8 +86,7 @@ cursor:pointer;
 `;
 
 const MyArticlesContainer = styled.div`
-width:100%;
-height:100%;
+width:90%;
 flex-wrap:wrap;
 gap:15px;
 margin-top:10px;
@@ -89,16 +108,23 @@ overflow:auto;
   -webkit-box-shadow: transparent;
   background-color:#D3D3D3;
 }
-`;
-
-const ArticlePreviewAndDeleteWrapper = styled.div`
-position:relative;
-`;
+@media screen and (max-width:800px){
+  width:100%;
+  justify-content:center;
+  padding-left:0px;
+}
+@media screen and (max-width:380px){
+  gap:5px;
+}`;
 
 export const UpperLine = styled.div`
 height:1px;
+flex-shrink:0;
 background-color:grey;
 width:90%;
+@media screen and (max-width:800px){
+  width:100%;
+}
 `;
 
 export const MyArticle = styled.div`
@@ -108,9 +134,13 @@ height:250px;
 flex-shrink:0;
 border-radius:10px;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:1200px){
+  width:160px;
+  height:200px;
+}
 @media screen and (max-width:450px){
-  width:40vw;
-  height:50vw;
+  width:160px;
+  height:200px;
 }
 `;
 
@@ -157,15 +187,34 @@ color:black;
 border:none;
 `;
 
+const ArticlePreviewAndDeleteWrapper = styled.div`
+position:relative;
+width:190px;
+height:250px;
+@media screen and (max-width:1200px){
+  width:160px;
+  height:200px;
+}
+`;
+
 const DeletePublishedArticleIcon = styled.img`
 width:20px;
 height:20px;
-z-index:300;
 position:absolute;
 top:140px;
 right:20px;
 cursor:pointer;
-`;
+z-index:200;
+@media screen and (max-width:1200px){
+  top:115px;
+  right:20px;
+}
+@media screen and (max-width:380px){
+  top:115px;
+  right:30px;
+  width:18px;
+  height:18px;
+}`;
 
 const DeleteDraftArticleIcon = styled.img`
 width:20px;
@@ -175,6 +224,10 @@ position:absolute;
 top:140px;
 right:20px;
 cursor:pointer;
+@media screen and (max-width:1200px){
+  top:115px;
+  right:20px;
+}
 `;
 
 const ArticleTitleAndDeleteIcon = styled.div`
@@ -309,7 +362,10 @@ function MyArticles() {
                           {item?.article_title}
                         </MyArticleTitle>
                       </ArticleTitleAndDeleteIcon>
-                      <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
+                      <MyArticleSummary>
+                        {item?.summary?.slice(0, 16)}
+                        ...
+                      </MyArticleSummary>
                     </MyArticleBelowArea>
                   </MyArticle>
                 </StyledLink>
@@ -336,7 +392,10 @@ function MyArticles() {
                           {item?.article_title}
                         </MyArticleTitle>
                       </ArticleTitleAndDeleteIcon>
-                      <MyArticleSummary>{item?.summary?.slice(0, 30)}</MyArticleSummary>
+                      <MyArticleSummary>
+                        {item?.summary?.slice(0, 16)}
+                        ...
+                      </MyArticleSummary>
                     </MyArticleBelowArea>
                   </MyArticle>
                 </StyledLink>

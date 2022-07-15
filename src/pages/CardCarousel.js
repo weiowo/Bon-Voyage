@@ -51,7 +51,7 @@ flex-direction:row;
 align-items:center;
 justify-content:center;
 gap:10px;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   flex-direction:column;
   margin-top:30px;
   height:400px;
@@ -64,18 +64,19 @@ display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   width:80vw;
   height:100px;
   margin-right:0px;
-}`;
+}
+`;
 
 const NearbyPlaceTitle = styled.div`
 font-size:25px;
 color:#1F456E;
 font-weight:600;
 margin-bottom:15px;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   margin-bottom:5px;
   font-size:30px;
   margin-bottom:15px;
@@ -86,7 +87,7 @@ font-size:12px;
 color:grey;
 font-weight:600;
 margin-bottom:15px;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   font-size:16px;
   margin-bottom:25px;
 }`;
@@ -102,7 +103,7 @@ border-radius:5px;
 color:white;
 font-weight:600;
 letter-spacing:3px;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   display:none;
 }`;
 
@@ -118,13 +119,17 @@ position:relative;
 overflow:hidden;
 z-index:1;
 gap:20px;
-@media screen and (max-width:800px){
+@media screen and (max-width:1180px){
+  width:650px;
+  margin-right:0px;
+}
+@media screen and (max-width:900px){
 display:none;
 }`;
 
 const SmallScreenCards = styled.div`
 display:none;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   width:95%;
   height:150px;
   display:flex; 
@@ -166,8 +171,11 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
-// background: linear-gradient(#3204fdba, #9907facc), url(${BckSrc}) no-repeat cover;
-@media screen and (max-width:800px){
+@media screen and (max-width:1180px){
+  width:140px;
+  height:180px;
+}
+@media screen and (max-width:900px){
   width:30%;
   height:250px;
   font-size:13px;
@@ -175,7 +183,7 @@ background-blend-mode: multiply;
 
 const SmallScreenCardsWrapper = styled.div`
 display:none;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   display:flex;
   width:90%;
   align-items:center;
@@ -186,13 +194,13 @@ const Arrow = styled.img`
 width:40px;
 height:40px;
 cursor:pointer;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
 display:none;
 }`;
 
 const SmallScreenArrow = styled.img`
 display:none;
-@media screen and (max-width:800px){
+@media screen and (max-width:900px){
   display:block;
   width:25px;
   height:25px;
@@ -514,9 +522,9 @@ function CardsCarousel({ currentNearbyAttraction }) {
         <NearByPlaceLeftArea>
           <NearbyPlaceTitle>周邊景點</NearbyPlaceTitle>
           <NearByPlaceDescription>
-            天氣真好，該出門走走囉！
+            該出門走走囉！
             <br />
-            看看周邊有什麼景點呢？
+            周邊有什麼景點呢？
           </NearByPlaceDescription>
           <NearByViewMoreButton>查看更多</NearByViewMoreButton>
         </NearByPlaceLeftArea>

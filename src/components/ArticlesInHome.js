@@ -58,10 +58,7 @@ display:flex;
 margin-bottom:20px;
 gap:30px;
 flex-wrap:wrap;
-&:after {
-  content: "";
-  width:410px;
-}
+
 @media screen and (max-width:800px){
   width:92vw;
   gap:20px;

@@ -40,6 +40,14 @@ z-index:200;
 position: relative;
 align-items:center;
 justify-content:center;
+@media screen and (max-width:1200px){
+  width:350px;
+  height:350px;
+}
+@media screen and (max-width:450px){
+  width:330px;
+  height:330px;
+}
 `;
 
 const SignUpArea = styled.div`
@@ -50,6 +58,10 @@ flex-direction:column;
 align-items:center;
 justify-content:center;
 gap:10px;
+@media screen and (max-width:1200px){
+  width:90%;
+  height:90%;
+}
 `;
 
 const SignInSignUpTitle = styled.div`

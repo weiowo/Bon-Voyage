@@ -47,7 +47,7 @@ const center = {
 
 function Map({
   recommendList, setRecommendList,
-  active, setSelected, selected, scheduleData, setDuration, setDistance,
+  active, setSelected, selected, scheduleData, setDuration, setDistance, clearSuggestions,
 }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -280,7 +280,7 @@ function Map({
       <button type="button" onClick={() => clearRoute()}>清除路線</button> */}
       {/* <div>{distance}</div> */}
       {/* <div>{duration}</div> */}
-      <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
+      <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} clearSuggestions={clearSuggestions} />
       <GoogleMap
         id="map"
         mapContainerStyle={window.innerWidth > 800 ? mapContainerStyle : smallScreenMapContainerStyle}

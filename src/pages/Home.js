@@ -62,8 +62,9 @@ border-radius:15px;
 position:absolute;
 bottom:30px;
 background-color:rgba(255, 255, 255, 0.4);
-@media screen and (max-width:800px){
-  height:80px;
+@media screen and (max-width:600px){
+  width:86vw;
+  height:73px;
 }`;
 
 const SearchBarLittleWrapper = styled.div`
@@ -77,7 +78,9 @@ background-color:white;
 padding-left:20px;
 padding-right:20px;
 position:absolute;
-`;
+@media screen and (max-width:600px){
+  width:80vw;
+}`;
 
 const SearchInput = styled.input`
 display:flex;
@@ -91,8 +94,8 @@ font-size:17px;
 box-sizing:border-box;
 padding-left:10px;
 outline: none;
-@media screen and (max-width:800px){
-  width:70%;
+@media screen and (max-width:600px){
+  width:80%;
 }`;
 
 const Ulist = styled.ul`
@@ -110,11 +113,9 @@ border:1px grey solid;
 margin-top:15px;
 margin-bottom:0px;
 border-radius:15px;
-box-shadow
-// border-bottom-left-radius:20px;
-// border-bottom-right-radius:20px;
-
-`;
+@media screen and (max-width:600px){
+  width:80vw;
+}`;
 
 const List = styled.li`
 width:69vw;
@@ -131,6 +132,9 @@ cursor:pointer;
 &:hover {
   color:white;
   background-color:#67B7D1;
+}
+@media screen and (max-width:600px){
+  width:78vw;
 }`;
 
 // const SearchInputAndResults
@@ -148,7 +152,9 @@ font-weight:500;
 font-size:17px;
 margin-left:0px;
 outline: none;
-`;
+@media screen and (max-width:600px){
+  width:60px;
+}`;
 
 // google相關
 
