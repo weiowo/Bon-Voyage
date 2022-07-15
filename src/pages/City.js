@@ -22,10 +22,7 @@ import Default4 from './images/default4.png';
 import Default5 from './images/default5.png';
 import unfilledStar from './images/unfilled_star.jpg';
 import filledStar from './images/filled_star.jpg';
-// import {
-//   PlaceBoxWrapper, Tap, PlaceBox, PlacePhoto,
-//   PlaceBoxBelowPart, PlaceTitle, AddPlaceToScheduleButton,
-// } from './Category';
+import Footer from '../components/Footer';
 
 export const ButtonStarArea = styled.div`
 width:100%;
@@ -176,6 +173,9 @@ cursor:pointer;
 }`;
 
 export const CloseModalButton = styled.button`
+display:flex;
+align-items:center;
+justify-content:center;
 height:25px;
 width:25px;
 position:absolute;
@@ -988,41 +988,42 @@ function City() {
               {nearbyData.tourist_attraction ? `${cityFromUrl}必去景點推薦` : ''}
             </AttractionAreaTitle>
             <AttractionWrapper>
-              {nearbyData.tourist_attraction ? nearbyData.tourist_attraction.map((item, index) => (
-                <AttractionBox
-                  id={item.place_id}
-                  onClick={(e) => {
-                    ShowDetailNCheckLikedOrNot(e.target.id);
-                    setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
-                    setClickedPlaceName(item?.name);
-                    setClickedPlaceAddress(item?.vicinity);
-                  }}
-                >
-                  <AttractionPhotoContainer
+              {nearbyData.tourist_attraction
+                ? nearbyData.tourist_attraction.map((item, index) => (
+                  <AttractionBox
                     id={item.place_id}
+                    onClick={(e) => {
+                      ShowDetailNCheckLikedOrNot(e.target.id);
+                      setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
+                      setClickedPlaceName(item?.name);
+                      setClickedPlaceAddress(item?.vicinity);
+                    }}
                   >
-                    <AttractionPhoto
+                    <AttractionPhotoContainer
                       id={item.place_id}
-                      alt="attraction-photo"
-                      src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
-                        : defaultArray[index % 5]}
+                    >
+                      <AttractionPhoto
+                        id={item.place_id}
+                        alt="attraction-photo"
+                        src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
+                          : defaultArray[index % 5]}
+                      />
+                    </AttractionPhotoContainer>
+                    <AttractionTitle
+                      id={item.place_id}
+                    >
+                      {item.name}
+                    </AttractionTitle>
+                    <AttractionDescription
+                      id={item.place_id}
                     />
-                  </AttractionPhotoContainer>
-                  <AttractionTitle
-                    id={item.place_id}
-                  >
-                    {item.name}
-                  </AttractionTitle>
-                  <AttractionDescription
-                    id={item.place_id}
-                  />
-                  <AttractionSeeMoreButton
-                    id={item.place_id}
-                  >
-                    瞭解更多
-                  </AttractionSeeMoreButton>
-                </AttractionBox>
-              )) : ''}
+                    <AttractionSeeMoreButton
+                      id={item.place_id}
+                    >
+                      瞭解更多
+                    </AttractionSeeMoreButton>
+                  </AttractionBox>
+                )) : ''}
             </AttractionWrapper>
             <RestaurantAreaTitle>
               {nearbyData.restaurant ? `${cityFromUrl}必吃餐廳推薦` : ''}
@@ -1101,7 +1102,10 @@ function City() {
                 </AttractionBox>
               )) : ''}
             </AttractionWrapper>
+            <Footer />
+
           </ContentArea>
+
         )
         : (
           <div style={{ height: '30px', position: 'fixed', bottom: 0 }} className="progress container">

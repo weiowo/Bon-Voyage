@@ -23,17 +23,18 @@ padding-left:10px;
 outline:none;
 @media screen and (max-width:800px){
   width:calc( 100vw - 85px );
+  display:${(props) => (props.clicked ? 'flex' : 'none')};
 }`;
 
 export default function Search({
-  panTo, setSelected, selected, active, clearSuggestions,
+  panTo, setSelected, selected, active,
 }) {
   const {
     ready,
     value,
     suggestions: { status, data },
     setValue,
-    // clearSuggestions,
+    clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
       // types: ['(cities)'],
@@ -157,7 +158,7 @@ export default function Search({
       {/* <button style={{ zIndex: 30 }} onClick={() => clearSuggestions()} type="button">測試</button> */}
       {/* 要把serachInput的value傳到map那邊去計算route跟duration */}
       {/* We can use the "status" to decide whether we should display the dropdown or not */}
-      {status === 'OK' && <div style={{ paddingLeft: 'none', width: '100%', zIndex: '24' }}>{renderSuggestions()}</div>}
+      {status === 'OK' && active && <div style={{ paddingLeft: 'none', width: '100%', zIndex: '24' }}>{renderSuggestions()}</div>}
     </div>
   );
 }

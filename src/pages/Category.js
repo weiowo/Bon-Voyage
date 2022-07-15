@@ -39,6 +39,7 @@ import {
   ScheduleChoiceTitle, ModalContentWrapper, Loading, ConfirmChooseDayButton,
   ButtonStarArea, AddFavoriteIcon,
 } from './City';
+import Footer from '../components/Footer';
 
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
@@ -714,6 +715,7 @@ function Category({ currentLatLng }) {
         options={options}
         onLoad={onMapLoad}
       />
+      <Footer />
     </>
   );
 }

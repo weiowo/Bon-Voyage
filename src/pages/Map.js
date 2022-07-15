@@ -22,38 +22,62 @@ import PurpleStar from './images/smile_star_purple.png';
 
 let service;
 
-const mapContainerStyle = {
-  height: 'calc( 100vh - 60px)',
-  width: '55vw',
-  position: 'absolute',
-};
+// const mapContainerStyle = {
+//   height: 'calc( 100vh - 60px)',
+//   width: '55vw',
+//   position: 'absolute',
+// };
 
-const smallScreenMapContainerStyle = {
-  height: '100vh',
-  position: 'fixed',
-  top: 0,
-  bottom: 0,
-  width: '100vw',
-};
+// const smallScreenMapContainerStyle = {
+//   height: '100vh',
+//   position: 'fixed',
+//   top: 0,
+//   bottom: 0,
+//   width: '100vw',
+// };
 
-const options = {
-  disableDefaultUI: true,
-  zoomControl: true,
-};
-const center = {
-  lat: 25.105497,
-  lng: 121.597366,
-};
+// const options = {
+//   disableDefaultUI: true,
+//   zoomControl: true,
+// };
+// const center = {
+//   lat: 25.105497,
+//   lng: 121.597366,
+// };
 
 function Map({
   recommendList, setRecommendList,
-  active, setSelected, selected, scheduleData, setDuration, setDistance, clearSuggestions,
+  active, setSelected, selected, scheduleData, setDuration, setDistance, mapDisplay,
 }) {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ['places'],
   });
   const mapRef = useRef();
+  const mapContainerStyle = {
+    height: 'calc( 100vh - 60px)',
+    width: '55vw',
+    position: 'absolute',
+  };
+
+  const smallScreenMapContainerStyle = {
+    height: '100vh',
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+    width: '100vw',
+    display: mapDisplay ? 'block' : 'none',
+  };
+
+  const options = {
+    disableDefaultUI: true,
+    zoomControl: true,
+  };
+
+  const center = {
+    lat: 25.105497,
+    lng: 121.597366,
+  };
   // const originRef = useRef();
   // const destinationRef = useRef();
   // const [directionsResponse, setDirectionsResponse] = useState(null);
@@ -267,33 +291,23 @@ function Map({
 
   return (
     <div>
-      {/* <Autocomplete>
-        <input type="text" placeholder="出發點" ref={originRef} />
-      </Autocomplete>
-      <Autocomplete>
-        <input type="text" placeholder="第二個景點" ref={destinationRef} />
-      </Autocomplete> */}
-      {/* <Autocomplete>
-        <input type="text" placeholder="第三個景點" ref={destinationRef} />
-      </Autocomplete> */}
-      {/* <button type="button" onClick={() => calculateRoute()}>計算路線1</button>
-      <button type="button" onClick={() => clearRoute()}>清除路線</button> */}
-      {/* <div>{distance}</div> */}
-      {/* <div>{duration}</div> */}
-      <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} clearSuggestions={clearSuggestions} />
-      <GoogleMap
-        id="map"
-        mapContainerStyle={window.innerWidth > 800 ? mapContainerStyle : smallScreenMapContainerStyle}
-        zoom={10}
-        center={center}
-        options={options}
-        onLoad={onMapLoad}
-      >
-        {/* {directionsResponse && (
+      <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
+      <div>
+        <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
+        <GoogleMap
+          id="map"
+        // style={{ opacity: mapDisplay ? '1' : '0' }}
+          mapContainerStyle={window.innerWidth > 800 ? mapContainerStyle : smallScreenMapContainerStyle}
+          zoom={10}
+          center={center}
+          options={options}
+          onLoad={onMapLoad}
+        />
+      </div>
+      {/* {directionsResponse && (
         <DirectionsRenderer directions={directionsResponse} />
         )}
         <Marker position={center} /> */}
-      </GoogleMap>
     </div>
   );
 }

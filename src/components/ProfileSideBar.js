@@ -33,6 +33,7 @@ width:30px;
 height:30px;
 border-radius:50%;
 margin-left:23px;
+object-fit:cover;
 @media screen and (max-width:800px){
   display:none;
 }`;
@@ -43,6 +44,9 @@ font-weight:600;
 margin-left:15px;
 height:auto;
 width:75px;
+@media screen and (max-width:880px){
+  margin-left:10px;
+}
 @media screen and (max-width:800px){
   display:none;
 }`;
@@ -65,6 +69,9 @@ align-items:center;
 height:auto;
 padding-top:7px;
 padding-bottom:7px;
+@media screen and (max-width:880px){
+  width:150px;
+}
 @media screen and (max-width:800px){
   display:none;
 }`;

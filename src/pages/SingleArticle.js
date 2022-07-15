@@ -6,7 +6,7 @@ import
 } from 'firebase/firestore';
 import React, { useEffect, useState, useContext } from 'react';
 import { useImmer } from 'use-immer';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { HashLink } from 'react-router-hash-link';
 import HeaderComponent from '../components/Header';
@@ -153,7 +153,8 @@ display:flex;
 flex-direction:column;
 align-items:flex-start;
 gap:5px;
-overflow:auto;
+overflow-y:auto;
+overflow-x:hidden;
 &::-webkit-scrollbar-track {
   -webkit-box-shadow: transparent;
   border-radius: 10px;
@@ -297,6 +298,7 @@ function ShowArticle() {
   const [shownArticle, updateShownArticle] = useImmer();
   const [liked, setLiked] = useState(false);
   const user = useContext(UserContext);
+  const navigate = useNavigate();
 
   // 拿指定一個article_id的article資料
   const { search } = useLocation();
@@ -332,19 +334,24 @@ function ShowArticle() {
   }, [currentArticleId, user.uid]);
 
   async function handleFavorite() {
-    const userArticlesArray = doc(db, 'users', user.uid);
-    if (liked) {
-      setLiked(false);
-      await updateDoc(userArticlesArray, {
-        loved_article_ids: arrayRemove(currentArticleId),
-      });
-      console.log('已退追!');
-    } else if (!liked) {
-      setLiked(true);
-      await updateDoc(userArticlesArray, {
-        loved_article_ids: arrayUnion(currentArticleId),
-      });
-      console.log('已追!');
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      const userArticlesArray = doc(db, 'users', user.uid);
+      if (liked) {
+        setLiked(false);
+        await updateDoc(userArticlesArray, {
+          loved_article_ids: arrayRemove(currentArticleId),
+        });
+        console.log('已退追!');
+      } else if (!liked) {
+        setLiked(true);
+        await updateDoc(userArticlesArray, {
+          loved_article_ids: arrayUnion(currentArticleId),
+        });
+        console.log('已追!');
+      }
     }
   }
 
@@ -440,3 +447,51 @@ function ShowArticle() {
 }
 
 export default ShowArticle;
+
+// <div>
+// <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
+// <GoogleMap
+//   id="map"
+//   // style={{ opacity: mapDisplay ? '1' : '0' }}
+//   mapContainerStyle={window.innerWidth > 800 ? mapContainerStyle : smallScreenMapContainerStyle}
+//   zoom={10}
+//   center={center}
+//   options={options}
+//   onLoad={onMapLoad}
+// />
+// </div>
+
+// const smallScreenMapContainerStyle = {
+//   height: '100vh',
+//   position: 'fixed',
+//   top: 0,
+//   bottom: 0,
+//   width: '100vw',
+//   display: mapDisplay ? 'block' : 'none',
+// };
+
+// let service;
+
+// const mapContainerStyle = {
+//   height: 'calc( 100vh - 60px)',
+//   width: '55vw',
+//   position: 'absolute',
+// };
+
+// const smallScreenMapContainerStyle = {
+//   height: '100vh',
+//   position: 'fixed',
+//   top: 0,
+//   bottom: 0,
+//   width: '100vw',
+//   display: mapDisplay ? 'block' : 'none',
+// };
+
+// const options = {
+//   disableDefaultUI: true,
+//   zoomControl: true,
+// };
+// const center = {
+//   lat: 25.105497,
+//   lng: 121.597366,
+// };

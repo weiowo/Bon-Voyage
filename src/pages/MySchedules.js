@@ -130,7 +130,6 @@ const ExistedSchedules = styled.div`
 display:flex;
 flex-direction:column;
 gap:15px;
-z-index:500;
 @media screen and (max-width:748px){
   width:100vw;
   height:23vh;

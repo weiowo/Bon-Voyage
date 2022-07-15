@@ -10,6 +10,8 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-size:12px;
+flex-shrink:0;
+margin-top:50px;
 `;
 
 function Footer() {

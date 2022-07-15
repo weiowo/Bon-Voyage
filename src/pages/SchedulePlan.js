@@ -94,9 +94,10 @@ const RightContainer = styled.div`
 width:55vw;
 height:calc(100vh-60px);
 @media screen and (max-width:800px){
-  display:${(props) => (props.display ? 'block' : 'none')};
-  width:100vw;
-  height:100vh;
+  // display:${(props) => (props.display ? 'block' : 'none')};
+  display:block;
+  width:0vw;
+  height:0vh;
 }
 `;
 
@@ -1087,7 +1088,7 @@ function Schedule() {
                 {selected.structured_formatting ? selected.structured_formatting.main_text : ''}
               </SearchedPlaceTitle>
               <AddToPlaceButton
-                onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); setActive(false); }}
+                onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); setActive(false); setScheduleDisplay(true); }}
               >
                 加入行程
               </AddToPlaceButton>
@@ -1230,7 +1231,7 @@ function Schedule() {
           <SeperateLine />
           <SchdeuleMapButton type="button" onClick={() => { setScheduleDisplay(false); setMapDisplay(true); }}>顯示地圖</SchdeuleMapButton>
         </ChooseShowMapOrSchedule>
-        <RightContainer display={mapDisplay}>
+        <RightContainer>
           <Map
             recommendList={recommendList}
             setRecommendList={setRecommendList}
@@ -1244,6 +1245,7 @@ function Schedule() {
             duration={duration}
             setDuration={setDuration}
             clearSuggestions={clearSuggestions}
+            mapDisplay={mapDisplay}
           />
         </RightContainer>
         <ChatRoom openChat={openChat}>

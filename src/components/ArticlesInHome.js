@@ -1,11 +1,9 @@
 import styled from 'styled-components/macro';
 import React, { useEffect, useContext, useState } from 'react';
-import {
-//   getDoc, doc,
-  collection, getDocs,
+import
+{
+  collection, where, query, onSnapshot,
 } from 'firebase/firestore';
-// import { Link } from 'react-router-dom';
-// import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
 import UserContext from './UserContextComponent';
 import {
@@ -86,14 +84,26 @@ function ArticlesInHome() {
 
   // 拿到所有articles資料並放到首頁
 
+  // useEffect(() => {
+  //   async function getAllArticles() {
+  //     const querySnapshot = await getDocs(collection(db, 'articles'));
+  //     const articleList = querySnapshot.docs.map((item) => item.data());
+  //     console.log(articleList);
+  //     setArticles(articleList);
+  //   }
+  //   getAllArticles();
+  // }, []);
+
   useEffect(() => {
-    async function getAllArticles() {
-      const querySnapshot = await getDocs(collection(db, 'articles'));
-      const articleList = querySnapshot.docs.map((item) => item.data());
-      console.log(articleList);
-      setArticles(articleList);
-    }
-    getAllArticles();
+    const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
+    const unsubscribe = onSnapshot(pulishedArticlesRef, (querySnapshot) => {
+      const publishedArticlesArray = [];
+      querySnapshot.forEach((doc) => {
+        publishedArticlesArray.push(doc.data());
+      });
+      setArticles(publishedArticlesArray);
+    });
+    return unsubscribe;
   }, []);
 
   return (
@@ -109,7 +119,10 @@ function ArticlesInHome() {
               />
               <MyArticleBelowArea>
                 <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                <MyArticleSummary>{item?.summary?.slice(0, 10)}</MyArticleSummary>
+                <MyArticleSummary>
+                  {item?.summary?.slice(0, 16)}
+                  ...
+                </MyArticleSummary>
               </MyArticleBelowArea>
             </MyArticle>
           </StyledLink>
