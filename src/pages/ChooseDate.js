@@ -1,6 +1,6 @@
 /* eslint-disable no-unsafe-optional-chaining */
 import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   // getDocs,
   collection, doc,
@@ -13,10 +13,31 @@ import UserContext from '../components/UserContextComponent';
 import 'react-datepicker/dist/react-datepicker.css';
 import TravelBgSrc from './images/travel2.jpg';
 
+const CloseModalButton = styled.button`
+display:flex;
+align-items:center;
+justify-content:center;
+height:25px;
+width:25px;
+position:absolute;
+right:20px;
+top:20px;
+text-align:center;
+border:none;
+border-radius:50%;
+background-color:black;
+color:white;
+cursor:pointer;
+@media screen and (max-width:400px){
+  right:15px;
+  top:15px;
+}`;
+
 const ModelBox = styled.div`
 width:700px;
 height:500px;
 background-color:white;
+position:relative;
 z-index:10;
 border-radius:20px;
 align-items:center;
@@ -201,6 +222,9 @@ function ChooseDate() {
   return (
     <ModalBackgroud>
       <ModelBox>
+        <Link to="/my-schedules">
+          <CloseModalButton>X</CloseModalButton>
+        </Link>
         <TripTitleAndInputArea>
           <TripTitleInput
             required

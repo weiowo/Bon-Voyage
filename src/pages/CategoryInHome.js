@@ -29,11 +29,11 @@ align-items:center;
   height:300px;
 }
 @media screen and (max-width:750px){
-  height:450px;
+  height:480px;
 }
 @media screen and (max-width:500px){
   width:100%;
-  height:890px;
+  height:450px;
   margin-left:0px;
 }`;
 
@@ -48,7 +48,8 @@ font-weight:600;
 color:#1F456E;
 margin-bottom:30px;
 @media screen and (max-width:800px){
-  font-size:30px;
+  font-size:24px;
+  margin-bottom:20px;
 }`;
 
 const CategoryBoxesContainer = styled.div`
@@ -62,9 +63,13 @@ flex-wrap:wrap;
 height:auto;
 @media screen and (max-width:1249px){
   margin-left:30px;
+  width:85vw;
+  gap:15px;
 }
 @media screen and (max-width:800px){
   margin-left:30px;
+  width:85vw;
+  gap:10px;
 }
 @media screen and (max-width:750px){
   margin-left:0px;
@@ -78,8 +83,9 @@ height:auto;
 @media screen and (max-width:500px){
   width:100%;
   height:89s0px;
-  margin-top:30px;
+  margin-top:20px;
   margin-left:0px;
+  gap:10px;
 }`;
 
 const CategoryBox = styled.div`
@@ -107,9 +113,10 @@ gap:20px;
   justify-content:center;
 }
 @media screen and (max-width:500px){
-  width:80%;
+  width:40%;
   justify-content:center;
-  gap:30px;
+  gap:10px;
+  height:80px;
 }
 `;
 

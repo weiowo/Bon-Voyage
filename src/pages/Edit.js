@@ -553,6 +553,7 @@ function EditPage() {
         <ArticlePageBelowPart>
           <ArticleTitleButtonArea>
             <ArticleTitle
+              required
               value={article ? article?.article_title : ''}
               onChange={(e) => { updateArticleTitle(e.target.value); }}
             />

@@ -42,7 +42,9 @@ color:#1F456E;
 margin-bottom:30px;
 margin-top:30px;
 @media screen and (max-width:800px){
-  font-size:30px;
+  font-size:25px;
+  margin-bottom:10px;
+margin-top:20px;
 }`;
 
 export const ArticlesBoxesContainer = styled.div`

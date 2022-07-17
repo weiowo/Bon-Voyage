@@ -23,11 +23,60 @@ import SquareCover4 from './images/schedule_cover_square4.jpg';
 import SquareCover5 from './images/schedule_cover_square5.jpg';
 import SquareCover6 from './images/schedule_cover_square6.jpg';
 import RecCover3 from './images/schedule_cover_rec3.jpg';
+import Travel from './images/travel-2.png';
+import Suitcase from './images/suitcase-2.png';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import SignIn from '../components/SignIn';
 import './animation.css';
 import Add from './images/invite.png';
 import CloseSearchIcon from './images/close-1.png';
+
+export const RemindWrapper = styled.div`
+width:26vw;
+height:180px;
+display:flex;
+gap:20px;
+`;
+
+export const ClickAndAdd = styled.div`
+width:80px;
+height:auto;
+font-size:15px;
+background-color:white;
+position:absolute;
+bottom:35px;
+font-weight:600;
+left:10px;
+border: 1.5px solid black;
+border-radius:5px;
+cursor:pointer;
+`;
+
+export const RemindText = styled.div`
+width:100%;
+font-weight:550;
+font-size:15px;
+text-align:left;
+`;
+
+export const RemindIcon = styled.img`
+width:180px;
+height:180px;
+`;
+
+export const SuitcaseIcon = styled.img`
+width: 100px;
+height:100px;
+`;
+
+export const RemindRightPart = styled.div`
+width:70%;
+height:180px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+position:relative;
+`;
 
 export const PageWrapper = styled.div`
 width:100vw;
@@ -208,6 +257,7 @@ font-weight:500;
 @media screen and (max-width:800px){
   width:80px;
   height:20px;
+  flex-shrink:0;
 }
 `;
 
@@ -224,6 +274,7 @@ cursor:pointer;
 @media screen and (max-width:800px){
   width:70px;
   height:20px;
+  flex-shrink:0;
 }
 `;
 
@@ -525,6 +576,13 @@ color:white;
 border:none;
 `;
 
+export const StyledBlackLink = styled(Link)`
+cursor:pointer;
+text-decoration:none;
+color:black;
+border:none;
+`;
+
 const CalendarBox = styled.div`
 width:35vw;
 height:120px;
@@ -682,15 +740,9 @@ cursor:pointer;
 }
 `;
 
-// const DateDisplay = styled.div
+// const NoSchedule = styled.div`
 
-const initialDnDState = {
-  draggedFrom: null,
-  draggedTo: null,
-  isDragging: false,
-  originalOrder: [],
-  updatedOrder: [],
-};
+// `
 
 function MySchedules() {
   const user = useContext(UserContext);
@@ -705,71 +757,6 @@ function MySchedules() {
   const [searchResultIsActive, setSearchResultIsActive] = useState(false);
   const navigate = useNavigate();
   const [targetIndex, setTargetIndex] = useState(null);
-  const [dragAndDrop, setDragAndDrop] = useState(initialDnDState);
-
-  const onDragStart = (event) => {
-    const initialPosition = Number(event.currentTarget.dataset.position);
-
-    setDragAndDrop({
-      ...dragAndDrop,
-      draggedFrom: initialPosition,
-      isDragging: true,
-      originalOrder: schedules,
-    });
-    event.dataTransfer.setData('text/html', '');
-  };
-  const onDragOver = (event) => {
-    // in order for the onDrop
-    // event to fire, we have
-    // to cancel out this one
-    event.preventDefault();
-    let newList = dragAndDrop.originalOrder;
-    // index of the item being dragged
-    const { draggedFrom } = dragAndDrop;
-    // index of the droppable area being hovered
-    const draggedTo = Number(event.currentTarget.dataset.position);
-    const itemDragged = newList[draggedFrom];
-    const remainingItems = newList.filter((item, index) => index !== draggedFrom);
-    newList = [
-      ...remainingItems.slice(0, draggedTo),
-      itemDragged,
-      ...remainingItems.slice(draggedTo),
-    ];
-    if (draggedTo !== dragAndDrop.draggedTo) {
-      setDragAndDrop({
-        ...dragAndDrop,
-        updatedOrder: newList,
-        draggedTo,
-      });
-    }
-  };
-
-  useEffect(() => {
-    console.log('Dragged From: ', dragAndDrop && dragAndDrop.draggedFrom);
-    console.log('Dropping Into: ', dragAndDrop && dragAndDrop.draggedTo);
-  }, [dragAndDrop]);
-
-  useEffect(() => {
-    console.log('List updated!');
-  }, [schedules]);
-
-  const onDrop = () => {
-    setSchedules(dragAndDrop.updatedOrder);
-
-    setDragAndDrop({
-      ...dragAndDrop,
-      draggedFrom: null,
-      draggedTo: null,
-      isDragging: false,
-    });
-  };
-
-  const onDragLeave = () => {
-    setDragAndDrop({
-      ...dragAndDrop,
-      draggedTo: null,
-    });
-  };
 
   // 先拿到某個使用者的資料
   // 再根據行程array，去做foreach拿到所有schedule資料
@@ -780,13 +767,11 @@ function MySchedules() {
     if (user.uid) {
       const docRef = doc(db, 'users', user.uid);
       const unsubscribe = onSnapshot(docRef, (querySnapShot) => {
-        console.log('query~', querySnapShot.data());
-        querySnapShot.data().owned_schedule_ids.forEach(async (item, index) => {
+        querySnapShot.data().owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              console.log('這位使用者的行程', index, Snap.data());
               setSchedules((draft) => {
                 draft.push(Snap.data());
               });
@@ -801,38 +786,10 @@ function MySchedules() {
     return undefined;
   }, [user.uid, setSchedules]);
 
-  // useEffect(() => {
-  //   async function getUserArrayList() {
-  //     const docRef = doc(db, 'users', user.uid);
-  //     const docSnap = await getDoc(docRef);
-  //     if (docSnap.exists()) {
-  //       console.log('Document data:', docSnap.data().owned_schedule_ids);
-  //     } else {
-  //       console.log('No such document!');
-  //     }
-  //     function getSchedulesFromList() {
-  //       docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
-  //         const docs = doc(db, 'schedules', item);
-  //         const Snap = await getDoc(docs);
-  //         if (Snap.exists()) {
-  //           console.log('這位使用者的行程', index, Snap.data());
-  //           setSchedules((draft) => {
-  //             draft.push(Snap.data());
-  //           });
-  //         } else {
-  //           console.log('沒有這個行程！');
-  //         }
-  //       });
-  //     }
-  //     getSchedulesFromList();
-  //   }
-  //   getUserArrayList();
-  // }, [setSchedules, user.uid]);
-
   // 刪除行程
   function deleteScheduleOfTheUser(targetDeleteIndex) {
     console.log('刪除這個行程囉！');
-    setSchedules(schedules.filter(
+    setSchedules(schedules?.filter(
       (item, index) => index !== targetDeleteIndex,
     ));
   }
@@ -878,9 +835,6 @@ function MySchedules() {
   }
 
   const colorArray = ['#618CAC', '#A9B7AA', '#7A848D', '#976666', '#A0C1D2'];
-
-  // const photoArray = [Member1, Member2,
-  //   Member3, Member4, Member5, Member6, Member7, Member8, Member9, Member10];
 
   // 06/30更新
   // user按下「撰寫旅程回憶」的時候就要從database拿此筆行程資訊，做成新的article
@@ -1038,60 +992,71 @@ function MySchedules() {
                 </CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
               <ExistedSchedules>
-                {schedules ? schedules.map((item, index) => (
-                  <ExistedSchedule
-                    key={index}
-                    data-position={index}
-                    draggable
-                    onDragStart={onDragStart}
-                    onDragOver={onDragOver}
-                    onDrop={onDrop}
-                    onDragLeave={onDragLeave}
-                    className={dragAndDrop && dragAndDrop.draggedTo === Number(index) ? 'dropArea' : ''}
-                    isSelected={index === targetIndex}
+                {schedules.length === 0
+                  ? (
+                    <RemindWrapper>
+                      <RemindIcon src={Travel} />
+                      <RemindRightPart>
+                        <RemindText>
+                          還沒有行程捏～
+                          <br />
+                          是時候創建行程囉！
+                        </RemindText>
+                        <StyledBlackLink to="/choose-date">
+                          <ClickAndAdd>點我創建</ClickAndAdd>
+                        </StyledBlackLink>
+                        <SuitcaseIcon src={Suitcase} />
+                      </RemindRightPart>
+                    </RemindWrapper>
+                  )
+                  : schedules?.map((item, index) => (
+                    <ExistedSchedule
+                      key={index}
+                      data-position={index}
+                      isSelected={index === targetIndex}
                   >
-                    <div className="modal-background">
-                      <div className="modal">
-                        <DeleteModalTitle>
-                          Delete
-                        </DeleteModalTitle>
-                        <DeleteAsk>確認要刪除嗎？</DeleteAsk>
-                        <DeleteButtonArea>
-                          <NoDeleteButton onClick={() => closeModal()} type="button">取消</NoDeleteButton>
-                          <ConfirmDeleteButton onClick={() => { deleteScheduleOfTheUser(index); closeModal(); deleteCertainSchedule(item.schedule_id); }} type="button">確認</ConfirmDeleteButton>
-                        </DeleteButtonArea>
+                      <div className="modal-background">
+                        <div className="modal">
+                          <DeleteModalTitle>
+                            Delete
+                          </DeleteModalTitle>
+                          <DeleteAsk>確認要刪除嗎？</DeleteAsk>
+                          <DeleteButtonArea>
+                            <NoDeleteButton onClick={() => closeModal()} type="button">取消</NoDeleteButton>
+                            <ConfirmDeleteButton onClick={() => { deleteScheduleOfTheUser(index); closeModal(); deleteCertainSchedule(item.schedule_id); }} type="button">確認</ConfirmDeleteButton>
+                          </DeleteButtonArea>
+                        </div>
                       </div>
-                    </div>
-                    <PhotoInExistedSchedule src={schedulePhotoArray[index % 5]} />
-                    <LargeScreenExistedScheduleRightPart>
-                      <ExistedScheuleTitle id={item.schedule_id}>
-                        {item.title}
-                      </ExistedScheuleTitle>
-                      <ButtonArea>
-                        <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
-                          選擇
-                        </Button>
-                        <Button className="button" onClick={() => { toggleModal(); }} id={item.schedule_id} type="button">
-                          刪除
-                        </Button>
-                      </ButtonArea>
-                    </LargeScreenExistedScheduleRightPart>
+                      <PhotoInExistedSchedule src={schedulePhotoArray[index % 5]} />
+                      <LargeScreenExistedScheduleRightPart>
+                        <ExistedScheuleTitle id={item?.schedule_id}>
+                          {item?.title}
+                        </ExistedScheuleTitle>
+                        <ButtonArea>
+                          <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
+                            選擇
+                          </Button>
+                          <Button className="button" onClick={() => { toggleModal(); }} id={item?.schedule_id} type="button">
+                            刪除
+                          </Button>
+                        </ButtonArea>
+                      </LargeScreenExistedScheduleRightPart>
 
-                    <SmallScreenExistedScheduleRightPart>
-                      <ExistedScheuleTitle id={item.schedule_id}>
-                        {item.title}
-                      </ExistedScheuleTitle>
-                      <ButtonArea>
-                        <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item.schedule_id); }} id={item.schedule_id} type="button">
-                          選擇
-                        </Button>
-                        <Button onClick={() => toggleModal()} id={item.schedule_id} type="button">
-                          刪除
-                        </Button>
-                      </ButtonArea>
-                    </SmallScreenExistedScheduleRightPart>
-                  </ExistedSchedule>
-                )) : ''}
+                      <SmallScreenExistedScheduleRightPart>
+                        <ExistedScheuleTitle id={item?.schedule_id}>
+                          {item.title}
+                        </ExistedScheuleTitle>
+                        <ButtonArea>
+                          <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
+                            選擇
+                          </Button>
+                          <Button onClick={() => toggleModal()} id={item?.schedule_id} type="button">
+                            刪除
+                          </Button>
+                        </ButtonArea>
+                      </SmallScreenExistedScheduleRightPart>
+                    </ExistedSchedule>
+                  ))}
               </ExistedSchedules>
             </ChoicesWrapper>
             <Line />

@@ -2,16 +2,19 @@ import styled from 'styled-components/macro';
 import React, { useEffect, useContext, useState } from 'react';
 import {
   getDoc, doc, updateDoc, arrayRemove, deleteDoc,
-//   query, where, collection, getDocs, arrayUnion, setDoc, updateDoc,
+  collection, arrayUnion, setDoc,
 } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import GreyHeaderComponent from '../components/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import {
   Line, DeleteModalTitle, DeleteAsk, DeleteButtonArea,
-  NoDeleteButton, ConfirmDeleteButton,
+  NoDeleteButton, ConfirmDeleteButton, RemindWrapper, ClickAndAdd,
+  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
 } from './MySchedules';
+import Travel from './images/travel-2.png';
+import Suitcase from './images/suitcase-2.png';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
 import Cover1 from './images/schedule_cover_rec1.jpg';
@@ -21,8 +24,65 @@ import Cover4 from './images/camping.jpg';
 import Cover5 from './images/schedule_cover_rec2.jpg';
 import Cover6 from './images/schedule_cover_rec4.jpg';
 import greyTrashCanSrc from './images/bin.png';
+import WriteRemindIcon from './images/picture.png';
+import {
+  ModalBackground, ModalBox, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper,
+  ScheduleChoicesBox, ScheduleChoiceTitle, CloseModalButton, ModalContentWrapper,
+} from './City';
+// import Suitcase from './images/suitcase.png';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
+
+const WriteArticleRemind = styled.div`
+width:50%;
+height:150px;
+display:flex;
+margin-top:20px;
+`;
+
+const ConfirmWritingButton = styled.button`
+width:80px;
+height:35px;
+background-color:#598BAF;
+color:white;
+border-radius:10px;
+border:none;
+flex-shrink:0;
+cursor:pointer;
+font-weight:600;
+`;
+
+const WriteArticleImg = styled.img`
+width:150px;
+height:150px;
+`;
+
+const WriteRightArea = styled.div`
+width:40%;
+height:150px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:20px;
+`;
+
+const WriteText = styled.div`
+font-size:15px;
+font-weight:600;
+`;
+
+const WriteButton = styled.button`
+width:80px;
+height:40px;
+border-radius:10px;
+background-color:#598BAF;
+color:white;
+font-weight:600;
+border:none;
+font-size:15px;
+cursor:pointer;
+`;
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -242,12 +302,103 @@ function MyArticles() {
   const [myDraftArticles, setMyDraftArticles] = useImmer([]);
   console.log(myDraftArticles);
   const [myPublishedArticles, setMyPublishedArticles] = useImmer([]);
+  console.log(myPublishedArticles);
   const [publishIsClicked, setPublishIsClciked] = useState(true);
   const [saveIsClicked, setSaveIsClciked] = useState(false);
   const [clickedDeleteId, setClickedDeleteId] = useState('');
+  console.log(clickedDeleteId);
+  const [deletedArtStatus, setDeletedArtStatus] = useState('');
+  console.log(deletedArtStatus);
+  const [myArtPageScheduleData, setMyArtPageScheduleData] = useImmer([]);
+  const [modalIsActive, setModalIsActive] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState();
+  const [selectedScheduleIndex, setSelectedScheduleIndex] = useState();
+  const navigate = useNavigate();
+  console.log(selectedSchedule);
+  console.log(myArtPageScheduleData);
+
+  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
+  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
+  // 按下哪一個行程後，用那個index去抓那天的細節
+
+  useEffect(() => {
+    async function getUserArrayList() {
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log('Document data:', docSnap.data().owned_schedule_ids);
+      } else {
+        console.log('No such document!');
+      }
+      function getSchedulesFromList() {
+        docSnap.data().owned_schedule_ids.forEach(async (item) => {
+          const docs = doc(db, 'schedules', item);
+          const Snap = await getDoc(docs);
+          if (Snap.exists()) {
+            if (Snap.data().deleted === false) {
+              setMyArtPageScheduleData((draft) => {
+                draft.push(Snap.data());
+              });
+            }
+          } else {
+            console.log('沒有這個行程！');
+          }
+        });
+      }
+      getSchedulesFromList();
+    }
+    getUserArrayList();
+  }, [setMyArtPageScheduleData, user.uid]);
+
+  const newArticle = {
+    status: 'draft',
+    cover_img: '',
+    summary: '',
+    author: user.displayName,
+    time: new Date(),
+    article_creator_user_id: user.uid,
+    schedule_id: selectedSchedule?.schedule_id,
+    article_id: '',
+    article_title: selectedSchedule?.title,
+    trip_days: selectedSchedule?.trip_days.map((item) => (
+      {
+        places: item?.places?.map((placeItem) => (
+          {
+            place_title: placeItem?.place_title,
+            place_description: '',
+            place_imgs: [],
+          }
+        )),
+      }
+    )),
+  };
+
+  async function setNewArticleToDb() {
+    console.log('您創了一筆新的遊記唷！');
+    const createArticleData = doc(collection(db, 'articles'));
+    await setDoc(
+      createArticleData,
+      ({ ...newArticle, article_id: createArticleData.id }),
+    );
+    navigate({ pathname: '/edit', search: `?art_id=${createArticleData.id}&sch_id=${selectedSchedule?.schedule_id}` });
+    const userOwnedArticlesArray = doc(db, 'users', user.uid);
+    await updateDoc(userOwnedArticlesArray, {
+      owned_article_ids: arrayUnion(createArticleData.id),
+    });
+  }
+
+  // // 刪除某一天
+  // function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
+  //   console.log('刪除這個景點囉！', targetDeleteDayIndex, targetDeletePlaceIndex);
+  //   updateScheduleData(((draft) => {
+  //     draft.trip_days
+  // [targetDeleteDayIndex].places = draft.trip_days[targetDeleteDayIndex].places.filter(
+  //       (item, index) => index !== targetDeletePlaceIndex,
+  //     );
+  //   }));
+  //   setIsEditing(true);
+  // }
   //   const navigate = useNavigate();
-  console.log(myPublishedArticles);
-  console.log(user);
 
   // 彈出刪除視窗動畫
   const modal = document.querySelector('.modal');
@@ -264,6 +415,51 @@ function MyArticles() {
     modal?.classList.add('hide');
     modalBackground?.classList.remove('show');
   }
+
+  // useEffect(() => {
+  //   const docRef = doc(db, 'users', user.uid);
+  //   const unsubscribe = onSnapshot(docRef, (querySnapShot) => {
+  //     console.log('我在測試onsnapshot', querySnapShot.data());
+  //     querySnapShot.data().owned_article_ids.forEach(async (item) => {
+  //       const docs = doc(db, 'articles', item);
+  //       const Snap = await getDoc(docs);
+  //       if (Snap.exists()) {
+  //         if (Snap.data().status === 'draft') {
+  //           setMyDraftArticles((draft) => {
+  //             draft.push(Snap.data());
+  //           });
+  //         } else {
+  //           setMyPublishedArticles((draft) => {
+  //             draft.push(Snap.data());
+  //           });
+  //         }
+  //       } else {
+  //         console.log('沒有這個行程！');
+  //       }
+  //     });
+  //   });
+  //   return unsubscribe;
+  // }, [user.uid, setMyDraftArticles, setMyPublishedArticles]);
+
+  // useEffect(() => {
+  //   const docRef = doc(db, 'users', user.uid);
+  //   const unsubscribe = onSnapshot(docRef, async (querySnapshot) => {
+  //     // eslint-disable-next-line max-len
+  //     const articleData = await Promise.all
+  // (querySnapshot.data().owned_article_ids.map(async (item) => {
+  //       const docs = doc(db, 'articles', item);
+  //       const snap = await getDoc(docs);
+  //       if (snap.exists()) {
+  //         return snap.data();
+  //       }
+  //       return null;
+  //     }));
+  //     console.log('測試promises all and onsnapshot', articleData);
+  //   });
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [user.uid]);
 
   // 先拿到某個使用者的資料
   // 再根據行程array，去做foreach拿到所有schedule資料
@@ -304,6 +500,12 @@ function MyArticles() {
   // 刪除文章：從user的owned articles array中刪除，也從articles db中刪除
 
   async function handleArticleDelete() {
+    if (deletedArtStatus === 'draft') {
+      setMyDraftArticles(myDraftArticles.filter((item) => item.article_id !== clickedDeleteId));
+    } else if (deletedArtStatus === 'published') {
+      setMyPublishedArticles(myPublishedArticles
+        .filter((item) => item.article_id !== clickedDeleteId));
+    }
     const userArticlesArray = doc(db, 'users', user.uid);
     await updateDoc(userArticlesArray, {
       owned_article_ids: arrayRemove(clickedDeleteId),
@@ -311,6 +513,9 @@ function MyArticles() {
     await deleteDoc(doc(db, 'articles', clickedDeleteId));
   }
 
+  function filterArticle() {
+    setMyDraftArticles(myDraftArticles.filter((item) => item.article_id !== clickedDeleteId));
+  }
   return (
     <>
       <GreyHeaderComponent />
@@ -322,7 +527,7 @@ function MyArticles() {
           <DeleteAsk>確認要刪除嗎？</DeleteAsk>
           <DeleteButtonArea>
             <NoDeleteButton onClick={() => closeModal()} type="button">取消</NoDeleteButton>
-            <ConfirmDeleteButton onClick={() => { closeModal(); handleArticleDelete(); }} type="button">確認</ConfirmDeleteButton>
+            <ConfirmDeleteButton onClick={() => { closeModal(); handleArticleDelete(); filterArticle(); }} type="button">確認</ConfirmDeleteButton>
           </DeleteButtonArea>
         </div>
       </div>
@@ -346,65 +551,147 @@ function MyArticles() {
             </Tab>
           </Tabs>
           <UpperLine />
+          <ModalBackground active={modalIsActive}>
+            <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
+              <ModalContentWrapper>
+                <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+                <ScheduleChoicesBoxWrapper>
+                  {myArtPageScheduleData.length === 0 ? (
+                    <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                      <RemindIcon src={Travel} />
+                      <RemindRightPart style={{ width: 'auto' }}>
+                        <RemindText>
+                          還沒有行程捏～
+                          <br />
+                          是時候創建行程囉！
+                        </RemindText>
+                        <StyledBlackLink to="/choose-date">
+                          <ClickAndAdd>點我創建</ClickAndAdd>
+                        </StyledBlackLink>
+                        <SuitcaseIcon src={Suitcase} />
+                      </RemindRightPart>
+                    </RemindWrapper>
+                  )
+                    : myArtPageScheduleData.map((item, index) => (
+                      <ScheduleChoicesBox
+                        clicked={index === selectedScheduleIndex}
+                        onClick={() => {
+                          setSelectedSchedule(item);
+                          setSelectedScheduleIndex(index);
+                        }}
+                        id={item.schedule_id}
+                      >
+                        <ScheduleChoiceTitle>
+                          {item.title}
+                        </ScheduleChoiceTitle>
+                      </ScheduleChoicesBox>
+                    ))}
+                </ScheduleChoicesBoxWrapper>
+                {myArtPageScheduleData.length === 0 ? '' : <ConfirmWritingButton type="button" onClick={() => setNewArticleToDb()}>確認</ConfirmWritingButton>}
+              </ModalContentWrapper>
+              <CloseModalButton
+                type="button"
+                onClick={() => setModalIsActive(false)}
+              >
+                X
+              </CloseModalButton>
+            </ModalBox>
+          </ModalBackground>
           <MyArticlesContainer isClicked={publishIsClicked}>
-            {myPublishedArticles ? myPublishedArticles?.map((item) => (
-              <ArticlePreviewAndDeleteWrapper>
-                <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-                  <MyArticle>
-                    <CoverPhotoInMyArticle
-                      src={item?.cover_img ? item?.cover_img
-                        : defaultArticleCoverPhoto[Math.floor(Math.random()
+            {myPublishedArticles.length === 0
+              ? (
+                <WriteArticleRemind>
+                  <WriteArticleImg src={WriteRemindIcon} />
+                  <WriteRightArea>
+                    <WriteText>
+                      還沒有文章唷～
+                      <br />
+                      趕快來撰寫遊記
+                      <br />
+                      分享旅遊心得吧!
+                    </WriteText>
+                    <WriteButton onClick={() => { setModalIsActive(true); }}>點我撰寫</WriteButton>
+                  </WriteRightArea>
+                </WriteArticleRemind>
+              ) : myPublishedArticles?.map((item) => (
+                <ArticlePreviewAndDeleteWrapper>
+                  <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+                    <MyArticle>
+                      <CoverPhotoInMyArticle
+                        src={item?.cover_img ? item?.cover_img
+                          : defaultArticleCoverPhoto[Math.floor(Math.random()
                         * defaultArticleCoverPhoto.length)]}
-                    />
-                    <MyArticleBelowArea>
-                      <ArticleTitleAndDeleteIcon>
-                        <MyArticleTitle>
-                          {item?.article_title}
-                        </MyArticleTitle>
-                      </ArticleTitleAndDeleteIcon>
-                      <MyArticleSummary>
-                        {item?.summary?.slice(0, 16)}
-                        ...
-                      </MyArticleSummary>
-                    </MyArticleBelowArea>
-                  </MyArticle>
-                </StyledLink>
-                <DeletePublishedArticleIcon
-                  src={greyTrashCanSrc}
-                  onClick={() => { toggleModal(); setClickedDeleteId(item?.article_id); }}
-                />
-              </ArticlePreviewAndDeleteWrapper>
-            )) : ''}
+                      />
+                      <MyArticleBelowArea>
+                        <ArticleTitleAndDeleteIcon>
+                          <MyArticleTitle>
+                            {item?.article_title}
+                          </MyArticleTitle>
+                        </ArticleTitleAndDeleteIcon>
+                        <MyArticleSummary>
+                          {item?.summary?.slice(0, 16)}
+                          ...
+                        </MyArticleSummary>
+                      </MyArticleBelowArea>
+                    </MyArticle>
+                  </StyledLink>
+                  <DeletePublishedArticleIcon
+                    src={greyTrashCanSrc}
+                    onClick={() => {
+                      toggleModal(); setClickedDeleteId(item?.article_id);
+                      setDeletedArtStatus(item?.status);
+                    }}
+                  />
+                </ArticlePreviewAndDeleteWrapper>
+              ))}
           </MyArticlesContainer>
           <MyArticlesContainer isClicked={saveIsClicked}>
-            {myDraftArticles ? myDraftArticles?.map((item) => (
-              <ArticlePreviewAndDeleteWrapper>
-                <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-                  <MyArticle>
-                    <CoverPhotoInMyArticle
-                      src={item?.cover_img ? item?.cover_img
-                        : defaultArticleCoverPhoto[Math.floor(Math.random()
+            {myDraftArticles.length === 0
+              ? (
+                <WriteArticleRemind>
+                  <WriteArticleImg src={WriteRemindIcon} />
+                  <WriteRightArea>
+                    <WriteText>
+                      還沒有文章唷～
+                      <br />
+                      趕快來撰寫遊記
+                      <br />
+                      分享旅遊心得吧!
+                    </WriteText>
+                    <WriteButton onClick={() => { setModalIsActive(true); }}>點我撰寫</WriteButton>
+                  </WriteRightArea>
+                </WriteArticleRemind>
+              ) : myDraftArticles?.map((item) => (
+                <ArticlePreviewAndDeleteWrapper>
+                  <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+                    <MyArticle>
+                      <CoverPhotoInMyArticle
+                        src={item?.cover_img ? item?.cover_img
+                          : defaultArticleCoverPhoto[Math.floor(Math.random()
                         * defaultArticleCoverPhoto.length)]}
-                    />
-                    <MyArticleBelowArea>
-                      <ArticleTitleAndDeleteIcon>
-                        <MyArticleTitle>
-                          {item?.article_title}
-                        </MyArticleTitle>
-                      </ArticleTitleAndDeleteIcon>
-                      <MyArticleSummary>
-                        {item?.summary?.slice(0, 16)}
-                        ...
-                      </MyArticleSummary>
-                    </MyArticleBelowArea>
-                  </MyArticle>
-                </StyledLink>
-                <DeleteDraftArticleIcon
-                  src={greyTrashCanSrc}
-                  onClick={() => { toggleModal(); setClickedDeleteId(item?.article_id); }}
-                />
-              </ArticlePreviewAndDeleteWrapper>
-            )) : ''}
+                      />
+                      <MyArticleBelowArea>
+                        <ArticleTitleAndDeleteIcon>
+                          <MyArticleTitle>
+                            {item?.article_title}
+                          </MyArticleTitle>
+                        </ArticleTitleAndDeleteIcon>
+                        <MyArticleSummary>
+                          {item?.summary?.slice(0, 16)}
+                          ...
+                        </MyArticleSummary>
+                      </MyArticleBelowArea>
+                    </MyArticle>
+                  </StyledLink>
+                  <DeleteDraftArticleIcon
+                    src={greyTrashCanSrc}
+                    onClick={() => {
+                      toggleModal(); setClickedDeleteId(item?.article_id);
+                      setDeletedArtStatus(item?.status);
+                    }}
+                  />
+                </ArticlePreviewAndDeleteWrapper>
+              ))}
           </MyArticlesContainer>
         </MyArticlesArea>
       </PageWrapper>

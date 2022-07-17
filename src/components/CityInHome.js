@@ -23,7 +23,10 @@ display:flex;
 flex-direction:column;
 align-items:center;
 @media screen and (max-width:800px){
-  height:1000px;
+  height:850px;
+}
+@media screen and (max-width:580px){
+  height:740px;
 }`;
 
 const CityAtHomeWrapperTitle = styled.div`
@@ -37,7 +40,8 @@ font-weight:600;
 color:#1F456E;
 margin-bottom:60px;
 @media screen and (max-width:800px){
-  font-size:30px;
+  font-size:25px;
+  margin-bottom:30px;
 }`;
 
 const CityAtHomeBelowPart = styled.div`
@@ -46,7 +50,7 @@ height:auto;
 display:flex;
 flex-direction:row;
 justify-content:center;
-gap:0px;
+gap:10px;
 @media screen and (max-width:800px){
   flex-direction:column;
   gap:15px;
@@ -71,6 +75,10 @@ flex-direction:column;
 gap:15px;
 @media screen and (max-width:800px){
   width:60vw;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  height: 330px;
 }`;
 
 const TainanWrapper = styled.div`
@@ -201,6 +209,10 @@ overflow:hidden;
 border-radius:10px;
 @media screen and (max-width:800px){
   width:40vw;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  height: 330px;
 }`;
 
 const SecondVerticalBlcok = styled.div`
@@ -237,6 +249,10 @@ flex-direction:column;
 gap:15px;
 @media screen and (max-width:800px){
   width:40vw;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  height: 330px;
 }`;
 
 const ThridVerticalBlockUpperPart = styled.div`
@@ -246,7 +262,11 @@ display:flex;
 gap:15px;
 @media screen and (max-width:800px){
   width:40vw;
-}`;
+}
+@media screen and (max-width:580px){
+  width:52vw;
+}
+`;
 
 const NewYorkWrapper = styled.div`
 position:relative;
@@ -256,7 +276,11 @@ overflow:hidden;
 border-radius:10px;
 @media screen and (max-width:800px){
   width:15vw;
-}`;
+}
+@media screen and (max-width:800px){
+  width:21vw;
+}
+`;
 
 const NewYork = styled.div`
 position:absolute;
@@ -292,7 +316,11 @@ overflow:hidden;
 border-radius:10px;
 @media screen and (max-width:800px){
   width:25vw;
-}`;
+}
+@media screen and (max-width:580px){
+  width:31vw;
+}
+`;
 
 const CamBridge = styled.div`
 position:absolute;
@@ -328,7 +356,11 @@ overflow:hidden;
 border-radius:10px;
 @media screen and (max-width:800px){
   width:40vw;
-}`;
+}
+@media screen and (max-width:580px){
+  width:52vw;
+}
+`;
 
 const Amsterdam = styled.div`
 position:absolute;
@@ -365,6 +397,7 @@ overflow:hidden;
 border-radius:10px;
 @media screen and (max-width:800px){
   width:25vw;
+  height: 380px;
 }`;
 
 const FourthVerticalBlock = styled.div`
@@ -382,7 +415,9 @@ transition:0.8s;
 &:hover {
     transform: scale(1.1);
 }
-`;
+@media screen and (max-width:580px){
+  display:none;
+}`;
 
 const ParisTitle = styled.div`
 font-size:26px;
@@ -391,6 +426,9 @@ color:white;
 position:absolute;
 bottom:15px;
 right:15px;
+@media screen and (max-width:580px){
+  display:none;
+}
 `;
 
 const FifthVerticalBlock = styled.div`
@@ -401,7 +439,13 @@ flex-direction:column;
 gap:15px;
 @media screen and (max-width:800px){
   width:35vw;
-}`;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  width:45vw;
+  height:330px;
+}
+`;
 
 const MexicoWrapper = styled.div`
 position:relative;
@@ -411,7 +455,11 @@ overflow:hidden;
 border-radius:10px;
 @media screen and (max-width:800px){
   width:35vw;
-}`;
+}
+@media screen and (max-width:580px){
+  width:45vw;
+}
+`;
 
 const Mexico = styled.div`
 position:absolute;
@@ -447,7 +495,13 @@ overflow:hidden;
 border-radius:10px;
 @media screen and (max-width:800px){
   width:35vw;
-}`;
+}
+@media screen and (max-width:580px){
+  width:45vw;
+  height:185px;
+
+}
+`;
 
 const Egypt = styled.div`
 position:absolute;

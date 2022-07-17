@@ -213,6 +213,7 @@ width:28vw;
 height:30px;
 @media screen and (max-width:800px){
   width:100%;
+  flex-shrink:0;
 }`;
 
 const ScheduleTitleAndCompleteButtonArea = styled.div`
@@ -314,7 +315,11 @@ position:absolute;
 cursor:pointer;
 top:20px;
 right:20px;
-`;
+// @media screen and (max-width:800px){
+//   position:fixed;
+//   top:20px;
+//   left:20px;
+}`;
 
 const ChatRoomTitle = styled.div`
 display:flex;
@@ -533,6 +538,8 @@ text-align:left;
 border-bottom: 1px solid grey;
 @media screen and (max-width:800px){
   width:100%;
+  flex-shrink:0;
+  font-size:14px;
 }`;
 
 const RecommendPlaceTitle = styled.div`
@@ -747,6 +754,7 @@ function Schedule() {
 
   const onDragStart = (event) => {
     const initialPosition = Number(event.currentTarget.dataset.position);
+    console.log('我在手機拖曳start~~');
     setDragAndDrop({
       ...dragAndDrop,
       draggedFrom: initialPosition,
@@ -756,6 +764,7 @@ function Schedule() {
     event.dataTransfer.setData('text/html', '');
   };
   const onDragOver = (event) => {
+    console.log('我在手機拖曳中over~~');
     // in order for the onDrop
     // event to fire, we have
     // to cancel out this one
@@ -783,6 +792,7 @@ function Schedule() {
   };
 
   const onDrop = () => {
+    console.log('我在手機拖曳後放下drop~~');
     updateScheduleData((draft) => {
       draft.trip_days = dragAndDrop.updatedOrder;
     });
@@ -794,6 +804,7 @@ function Schedule() {
     });
   };
   const onDragLeave = () => {
+    console.log('我在手機拖曳中leave~~');
     setDragAndDrop({
       ...dragAndDrop,
       draggedTo: null,
@@ -802,6 +813,7 @@ function Schedule() {
   // // PLACE的dragAndDrop
 
   const onPlaceDragStart = (event) => {
+    console.log('我在手機拖曳景點後放下~~');
     const initialPosition = Number(event.currentTarget.dataset.position);
     setPlaceDragAndDrop({
       ...placeDragAndDrop,
@@ -812,6 +824,7 @@ function Schedule() {
     event.dataTransfer.setData('text/html', '');
   };
   const onPlaceDragOver = (event) => {
+    console.log('我在手機拖曳中over~~');
     event.preventDefault();
     let placeNewList = placeDragAndDrop.placeOriginalOrder;
     const { placeDraggedFrom } = placeDragAndDrop;
@@ -832,14 +845,15 @@ function Schedule() {
       });
     }
   };
-  useEffect(() => {
-    console.log('place!Dragged From: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedFrom);
-    console.log('place!Dropping Into: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedTo);
-  }, [placeDragAndDrop]);
-  useEffect(() => {
-  }, [scheduleData?.trip_days?.[choosedDayIndex]?.places]);
+  // useEffect(() => {
+  //   console.log('place!Dragged From: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedFrom);
+  //   console.log('place!Dropping Into: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedTo);
+  // }, [placeDragAndDrop]);
+  // useEffect(() => {
+  // }, [scheduleData?.trip_days?.[choosedDayIndex]?.places]);
 
   const onPlaceDrop = () => {
+    console.log('我在手機拖曳景點後放下drop~~');
     updateScheduleData((draft) => {
       draft.trip_days[choosedDayIndex].places = placeDragAndDrop?.placeUpdatedOrder;
     });
@@ -852,6 +866,7 @@ function Schedule() {
   };
 
   const onPlaceDragLeave = () => {
+    console.log('我在手機拖曳中leave~~');
     setPlaceDragAndDrop({
       ...placeDragAndDrop,
       placeDraggedTo: null,
@@ -1101,7 +1116,7 @@ function Schedule() {
                     <RecommendPlaceTitle>
                       {place?.name}
                     </RecommendPlaceTitle>
-                    <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place?.name, clickedDayIndex); updatePlaceAddressBySearch(place?.vicinity, clickedDayIndex); setActive(false); }} type="button">加入行程</AddToPlaceButton>
+                    <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place?.name, clickedDayIndex); updatePlaceAddressBySearch(place?.vicinity, clickedDayIndex); setActive(false); setScheduleDisplay(true); }} type="button">加入行程</AddToPlaceButton>
                   </RecommendPlaceLeftArea>
                   <RecommendPlcePhoto alt="place" src={place?.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]} />
                 </RecommendPlace>
@@ -1139,6 +1154,12 @@ function Schedule() {
                   key={dayIndex}
                   data-position={dayIndex}
                   draggable
+                  style={{ touchAction: 'auto' }}
+                  onTouchStart={() => { console.log('onTouchStart'); onDragStart(); }}
+                  onTouchMove={() => { console.log('onTouchMove'); onDragOver(); }}
+                  onTouchEnd={() => { console.log('onTouchEnd'); onDragOver(); }}
+                  onTouchLeave={() => { console.log('onTouchLeave'); onDrop(); }}
+                  onTouchCancel={() => { console.log('onTouchCancel'); onDragLeave(); }}
                   onDragStart={onDragStart}
                   onDragOver={onDragOver}
                   onDrop={onDrop}
@@ -1179,8 +1200,15 @@ function Schedule() {
                   : '')}
                 <PlaceContainer
                   key={placeIndex}
+                  // style={{ touchAction: 'none' }}
                   data-position={placeIndex}
                   draggable
+                  style={{ touchAction: 'auto' }}
+                  onTouchStart={() => { console.log('onTouchStart'); onPlaceDragStart(); }}
+                  onTouchMove={() => { console.log('onTouchMove'); onPlaceDragOver(); console.log('onTouchMove'); }}
+                  onTouchEnd={() => { console.log('onTouchEnd'); onPlaceDragOver(); }}
+                  onTouchLeave={() => { console.log('onTouchLeave'); onPlaceDrop(); }}
+                  onTouchCancel={() => { console.log('onTouchCancel'); onPlaceDragLeave(); }}
                   onDragStart={onPlaceDragStart}
                   onDragOver={onPlaceDragOver}
                   onDrop={onPlaceDrop}

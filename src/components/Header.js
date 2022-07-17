@@ -155,6 +155,21 @@ const StyleNavLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
 color:${(props) => (props.active ? 'black' : 'white')};
+&:hover {
+  border-bottom:${(props) => (props.active ? '1.5px solid black' : '1.5px solid white')};
+}
+@media screen and (max-width:800px){
+  font-size:20px;
+  margin-left:10px;
+  width:150px;
+  position:absolute;
+  margin-top:${(props) => (props.active ? '8px' : '0px')};
+}`;
+
+const ProfileNavLink = styled(Link)`
+cursor:pointer;
+text-decoration:none;
+color:${(props) => (props.active ? 'black' : 'white')};
 @media screen and (max-width:800px){
   font-size:20px;
   margin-left:10px;
@@ -281,9 +296,9 @@ function HeaderComponent() {
   return (
     <>
       <Header active={headerBackground}>
-        <StyleNavLink to="/">
+        <ProfileNavLink to="/">
           <Logo active={headerBackground}>Bon Voyage</Logo>
-        </StyleNavLink>
+        </ProfileNavLink>
         <NavBar active={headerBackground}>
           <StyleNavLink active={headerBackground} to="/vr-page">
             VR專區
@@ -300,9 +315,9 @@ function HeaderComponent() {
           <StyleNavLink active={headerBackground} to="/my-schedules">
             行程規劃
           </StyleNavLink>
-          <StyleNavLink active={headerBackground} to="/profile">
+          <ProfileNavLink active={headerBackground} to="/profile">
             <ProfilePageNav active={headerBackground}>個人頁面</ProfilePageNav>
-          </StyleNavLink>
+          </ProfileNavLink>
         </NavBar>
       </Header>
       <SmallHeader active={headerBackground}>

@@ -115,7 +115,7 @@ export default function Search({
           listStyle: 'none',
           textDecoration: 'none',
           backgroundColor: 'white',
-          width: 'calc( 45vw - 85px )',
+          width: window.innerWidth > 800 ? 'calc( 45vw - 85px )' : 'calc( 100vw - 85px )',
           height: '30px',
           borderBottom:
           '1px black solid',
@@ -140,12 +140,14 @@ export default function Search({
 
   return (
     <div style={{
-      position: 'absolute',
+      position: window.innerWidth > 800 ? 'absolute' : 'fixed',
       left: '20px',
       top: '80px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      height: 35,
+      zIndex: 30,
     }}
     >
       <SearchInput

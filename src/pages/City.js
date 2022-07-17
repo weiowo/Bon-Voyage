@@ -77,9 +77,12 @@ height:370px;
   height:90vw;
   flex-direction:column;
 }
-@media screen and (max-width:555px){
+@media screen and (max-width:575px){
   width:80vw;
-  height:115vw;
+  height:110vw;
+}
+@media screen and (max-width:430px){
+  height:120vw;
 }`;
 
 export const ModalImgArea = styled.div`
@@ -95,17 +98,22 @@ gap:10px;
 }
 @media screen and (max-width:630px){
   width:100%;
-  height:50%;
+  height:60%;
   flex-wrap:wrap;
   justify-content:center;
   gap:20px;
   padding-bottom:40px;
 }
-@media screen and (max-width:555px){
+@media screen and (max-width:575px){
   width:90%;
+  height:60%;
+  padding-bottom:30px;
+}
+@media screen and (max-width:430px){
   height:50%;
-  padding-bottom:40px;
-}`;
+  gap:8px;
+}
+`;
 
 export const ModalImg = styled.img`
 width:10vw;
@@ -117,14 +125,27 @@ object-fit: cover;
   height:120px;
 }
 @media screen and (max-width:630px){
-  width:160px;
-  height:100px;
+  width:170px;
+  height:130px;
   flex-shrink:0;
 }
-@media screen and (max-width:555px){
-  width:40%;
-  height:50%;
-}`;
+@media screen and (max-width:575px){
+  width:140px;
+  height:115px;
+}
+@media screen and (max-width:480px){
+  width:120px;
+  height:100px;
+}
+@media screen and (max-width:430px){
+  width:110px;
+  height:100px;
+}
+@media screen and (max-width:390px){
+  width:120px;
+  height:100px;
+}
+`;
 
 export const ModalLeftArea = styled.div`
 width:25vw;
@@ -143,7 +164,17 @@ position:relative;
   width:90%;
   height:50%;
   gap:20px;
-}`;
+}
+@media screen and (max-width:570px){
+  width:90%;
+  height:45%;
+  gap:20px;
+}
+@media screen and (max-width:430px){
+  height:50%;
+}
+
+`;
 
 export const ModalPlaceTitle = styled.div`
 font-size:26px;
@@ -536,9 +567,10 @@ overflow:auto;
 
 export const Loading = styled.div`
   margin: auto;
+  margin-top:50px;
   border: 10px solid #EAF0F6;
   border-radius: 50%;
-  border-top: 10px solid #FF7A59;
+  border-top: 10px solid #E6D1F2;
   width: 70px;
   height: 70px;
   animation: spinner 3s linear infinite;
@@ -710,7 +742,6 @@ function City() {
       searchNearby();
     }, 1000);
   }, [searchNearby, isLoaded]);
-  console.log({ lat, lng });
 
   // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
   // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
@@ -726,12 +757,12 @@ function City() {
         console.log('No such document!');
       }
       function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+        docSnap.data().owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              console.log('這位使用者的行程', index, Snap.data());
+              // console.log('這位使用者的行程', index, Snap.data());
               setCityPageScheduleData((draft) => {
                 draft.push(Snap.data());
               });
@@ -749,7 +780,6 @@ function City() {
   // 選好行程跟天數時，會把行程的名稱跟地址加到immer中，並送到database中
 
   function ComfirmedAdded() {
-    console.log('已經加入囉！');
     const newPlace = {
       place_title: modalDetail?.name,
       place_address: modalDetail?.formatted_address,
@@ -785,12 +815,10 @@ function City() {
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
-    console.log(docSnap.data());
+    // console.log(docSnap.data());
     if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
       setLiked(true);
-      console.log('已經追蹤過嚕!');
     } else {
-      console.log('沒有哦');
       setLiked(false);
     }
   }
@@ -807,9 +835,7 @@ function City() {
     };
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.getDetails(placeRequest, (place, status) => {
-      console.log(status);
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        console.log('我在city頁面測試api', place);
         setModalDetail(place);
       } else {
         console.log('error');
@@ -831,13 +857,11 @@ function City() {
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayRemove(placeId),
         });
-        console.log('已退追此景點!');
       } else if (!liked) {
         setLiked(true);
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayUnion(placeId),
         });
-        console.log('已追蹤此景點!');
         const createAttraction = doc(db, 'attractions', placeId);
         await setDoc(createAttraction, ({
           place_id: placeId,
@@ -1108,16 +1132,19 @@ function City() {
 
         )
         : (
-          <div style={{ height: '30px', position: 'fixed', bottom: 0 }} className="progress container">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
+          <Loading />
+        //   <div style={{ height: '30px', position:
+        // 'fixed', bottom: 0 }} className="progress container">
+        //     <span />
+        //     <span />
+        //     <span />
+        //     <span />
+        //     <span />
+        //     <span />
+        //     <span />
+        //     <span />
+        //   </div>
+        //
         )}
     </>
   );

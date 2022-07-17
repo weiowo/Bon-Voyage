@@ -45,16 +45,20 @@ const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
 const NearByPlaceWrapper = styled.div`
 width:100vw;
-height:450px;
+height:340px;
 display:flex;
 flex-direction:row;
 align-items:center;
 justify-content:center;
 gap:10px;
+@media screen and (max-width:1180px){
+  height:280px;
+  margin-top:20px;
+}
 @media screen and (max-width:900px){
   flex-direction:column;
   margin-top:30px;
-  height:400px;
+  height:370px;
 }`;
 
 const NearByPlaceLeftArea = styled.div`
@@ -78,7 +82,7 @@ font-weight:600;
 margin-bottom:15px;
 @media screen and (max-width:900px){
   margin-bottom:5px;
-  font-size:30px;
+  font-size:24px;
   margin-bottom:15px;
 }`;
 
@@ -109,7 +113,7 @@ letter-spacing:3px;
 
 const CardsWrapper = styled.div`
 width:800px;
-height:280px;
+height:290px;
 display:flex; 
 flex-direction:column;
 align-items:center;
@@ -131,7 +135,7 @@ const SmallScreenCards = styled.div`
 display:none;
 @media screen and (max-width:900px){
   width:95%;
-  height:150px;
+  height:200px;
   display:flex; 
   flex-direction:column;
   align-items:center;
@@ -140,6 +144,14 @@ display:none;
   position:relative;
   overflow:hidden;
   z-index:1;
+}
+@media screen and (max-width:900px){
+  width:100%;
+}
+@media screen and (max-width:500px){
+  height:160px;
+  overflow:auto;
+  width:100%;
 }`;
 
 // const ButtonStarArea = styled.div`
@@ -177,8 +189,15 @@ background-blend-mode: multiply;
 }
 @media screen and (max-width:900px){
   width:30%;
-  height:250px;
+  height:280px;
   font-size:13px;
+}
+@media screen and (max-width:500px){
+  width:30%;
+  height:180px;
+}
+@media screen and (max-width:500px){
+  height:150px;
 }`;
 
 const SmallScreenCardsWrapper = styled.div`
@@ -188,6 +207,12 @@ display:none;
   width:90%;
   align-items:center;
   gap:10px;
+}
+@media screen and (max-width:500px){
+  width:100%;
+  gap:0px;
+  padding-right:3px;
+  padding-left:3px;
 }`;
 
 const Arrow = styled.img`
@@ -552,16 +577,17 @@ function CardsCarousel({ currentNearbyAttraction }) {
                 </div>
               </Cards>
             )) : (
-              <div className="progress container">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
+              <Loading />
+              // <div className="progress container">
+              //   <span />
+              //   <span />
+              //   <span />
+              //   <span />
+              //   <span />
+              //   <span />
+              //   <span />
+              //   <span />
+              // </div>
             )}
           {/* 為何字沒有跑出？ */}
         </CardsWrapper>
@@ -590,16 +616,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
                   </div>
                 </Cards>
               )) : (
-                <div className="progress container">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
+                <Loading />
               )}
             {/* 為何字沒有跑出？ */}
           </SmallScreenCards>

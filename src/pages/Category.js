@@ -216,8 +216,10 @@ top: 8px;
 
 const CategoryBanner = styled.img`
 width:100vw;
+height:100vh;
+@media screen and (max-width:800px){
 height:auto;
-`;
+}`;
 
 const libraries = ['places'];
 
@@ -282,13 +284,13 @@ function Category({ currentLatLng }) {
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayRemove(placeId),
         });
-        console.log('已退追此景點!');
+        // console.log('已退追此景點!');
       } else if (!liked) {
         setLiked(true);
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayUnion(placeId),
         });
-        console.log('已追蹤此景點!');
+        // console.log('已追蹤此景點!');
         const createAttraction = doc(db, 'attractions', placeId);
         await setDoc(createAttraction, ({
           place_id: placeId,
@@ -314,12 +316,12 @@ function Category({ currentLatLng }) {
         console.log('No such document!');
       }
       function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+        docSnap.data().owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              console.log('這位使用者的行程', index, Snap.data());
+              // console.log('這位使用者的行程', index, Snap.data());
               setCategoryPageScheduleData((draft) => {
                 draft.push(Snap.data());
               });
@@ -337,7 +339,7 @@ function Category({ currentLatLng }) {
   // 確認加入
 
   function ComfirmedAdded() {
-    console.log('已經加入囉！');
+    // console.log('已經加入囉！');
     const newPlace = {
       place_title: modalDetail?.name,
       place_address: modalDetail?.formatted_address,
@@ -345,15 +347,12 @@ function Category({ currentLatLng }) {
     };
     // 用 immer 產生出新的行程資料
     const newScheduleData = produce(categoryPageScheduleData, (draft) => {
-      console.log('哈哈', draft);
       draft[clickedScheduleIndex]?.trip_days[dayIndex].places.push(newPlace);
     });
-    console.log('newScheduleData', newScheduleData);
     // 更新 state
     setCategoryPageScheduleData(newScheduleData);
     // 更新 firestore
     async function passAddedDataToFirestore() {
-      console.log('修改好行程囉！');
       const scheduleRef = doc(db, 'schedules', clickedScheduleId);
       await updateDoc(scheduleRef, { ...newScheduleData[clickedScheduleIndex] });
     }
@@ -383,7 +382,6 @@ function Category({ currentLatLng }) {
   }
 
   const [categoryNearbyData, setCategoryNearbyData] = useState([]);
-  console.log(categoryNearbyData);
 
   // 先loadmap
 
@@ -495,17 +493,14 @@ function Category({ currentLatLng }) {
 
     const service = new google.maps.places.PlacesService(mapRef.current);
     // service.nearbySearch(requests, callback);
-    console.log(service);
     requests.forEach((request) => {
       service.nearbySearch(request, (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log('嘿嘿拿到種類資料惹呵呵(fromCategory頁面)');
           setCategoryNearbyData((preData) => ([...preData, ...results]));
           // 這樣會變兩個array在一個array、如果包{}則會變成分開兩次
         }
       });
     });
-    console.log(requests);
   }, [categoryFromUrl, currentLatLng, isLoaded]);
 
   useEffect(() => {
@@ -525,12 +520,12 @@ function Category({ currentLatLng }) {
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
-    console.log(docSnap.data());
+    // console.log(docSnap.data());
     if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
       setLiked(true);
-      console.log('已經追蹤過嚕!');
+      // console.log('已經追蹤過嚕!');
     } else {
-      console.log('沒有哦');
+      // console.log('沒有哦');
       setLiked(false);
     }
   }
@@ -547,9 +542,9 @@ function Category({ currentLatLng }) {
     };
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.getDetails(placeRequest, (place, status) => {
-      console.log(status);
+      // console.log(status);
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        console.log('我在city頁面測試api', place);
+        // console.log('我在city頁面測試api', place);
         setModalDetail(place);
       } else {
         console.log('error');

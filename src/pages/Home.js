@@ -30,7 +30,7 @@ import Footer from '../components/Footer';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
-height:50vw;
+height:100vh;
 display:flex;
 flex-direction:column;
 background-image: url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9);
@@ -41,7 +41,7 @@ background-repeat: no-repeat;
 // background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 @media screen and (max-width:800px){
-  height:60vw;
+  height:70vw;
 }
 `;
 
