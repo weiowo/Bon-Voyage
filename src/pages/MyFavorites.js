@@ -28,6 +28,7 @@ import Default2 from './images/default2.png';
 import Default3 from './images/default3.png';
 import Default4 from './images/default4.png';
 import Default5 from './images/default5.png';
+import FavoriteIcon from './images/favorite.png';
 import {
   ModalBackground, ModalBox, ModalImgArea, ModalImg,
   ModalLeftArea, ModalPlaceTitle, ModalPlaceAddress, AddToScheduleButton, CloseModalButton,
@@ -35,6 +36,10 @@ import {
   ScheduleChoiceTitle, ModalContentWrapper, Loading, ConfirmChooseDayButton,
   ButtonStarArea, AddFavoriteIcon,
 } from './City';
+import {
+  WriteArticleRemind, WriteArticleImg, WriteRightArea, WriteText,
+  WriteButton,
+} from './MyArticles';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
@@ -184,6 +189,7 @@ height:30px;
 font-weight:550;
 font-size:16px;
 text-align:left;
+color:black;
 `;
 
 export const MyArticleSummary = styled.div`
@@ -198,7 +204,7 @@ color:grey;
 export const StyledLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
-color:black;
+color:white;
 border:none;
 `;
 
@@ -290,18 +296,15 @@ function MyLovedArticles() {
         console.log('No such document!');
       }
       function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+        docSnap.data().owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              console.log('這位使用者的行程', index, Snap.data());
               setCategoryPageScheduleData((draft) => {
                 draft.push(Snap.data());
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       }
@@ -313,31 +316,21 @@ function MyLovedArticles() {
   // 確認加入
 
   function ComfirmedAdded() {
-    console.log('已經加入囉！');
     const newPlace = {
       place_title: modalDetail?.name,
       place_address: modalDetail?.formatted_address,
       stay_time: 60,
     };
-    // 用 immer 產生出新的行程資料
     const newScheduleData = produce(categoryPageScheduleData, (draft) => {
-      console.log('哈哈', draft);
       draft[clickedScheduleIndex]?.trip_days[dayIndex].places.push(newPlace);
     });
-    console.log('newScheduleData', newScheduleData);
-    // 更新 state
     setCategoryPageScheduleData(newScheduleData);
-    // 更新 firestore
     async function passAddedDataToFirestore() {
-      console.log('修改好行程囉！');
       const scheduleRef = doc(db, 'schedules', clickedScheduleId);
       await updateDoc(scheduleRef, { ...newScheduleData[clickedScheduleIndex] });
     }
     passAddedDataToFirestore();
   }
-
-  // 按下加入行程時先判斷有否登入，有的話才能繼續
-
   function handleUserOrNot() {
     if (!user.uid) {
       alert('請先登入唷～');
@@ -347,14 +340,9 @@ function MyLovedArticles() {
     }
   }
 
-  // 打開modal時先確認有沒有追蹤過
-  // 有的話就讓星星亮起，沒有的話就讓星星空的
-  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
-
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
-    console.log(docSnap.data());
     if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
       setLiked(true);
       console.log('已經追蹤過嚕!');
@@ -376,7 +364,6 @@ function MyLovedArticles() {
     };
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.getDetails(placeRequest, (place, status) => {
-      console.log(status);
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         setModalDetail(place);
       } else {
@@ -404,10 +391,8 @@ function MyLovedArticles() {
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayRemove(placeId),
         });
-        console.log('已退追此景點!');
       } else if (!liked) {
         setLiked(true);
-        console.log('已追蹤此景點!');
       }
     }
   }
@@ -443,7 +428,25 @@ function MyLovedArticles() {
           </Tabs>
           <UpperLine />
           <MyArticlesContainer isClicked={publishIsClicked}>
-            {myLovedArticles ? myLovedArticles?.map((item) => (
+            {myLovedArticles.length === 0 ? (
+              <WriteArticleRemind>
+                <WriteArticleImg src={FavoriteIcon} />
+                <WriteRightArea>
+                  <WriteText>
+                    還沒有收藏唷～
+                    <br />
+                    收藏景點與文章
+                    <br />
+                    準備開啟旅行吧！
+                  </WriteText>
+                  <WriteButton>
+                    <StyledLink to="/">
+                      點我去收藏
+                    </StyledLink>
+                  </WriteButton>
+                </WriteRightArea>
+              </WriteArticleRemind>
+            ) : myLovedArticles?.map((item) => (
               <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                 <MyArticle>
                   <CoverPhotoInMyArticle
@@ -460,13 +463,30 @@ function MyLovedArticles() {
                   </MyArticleBelowArea>
                 </MyArticle>
               </StyledLink>
-            )) : ''}
+            ))}
           </MyArticlesContainer>
           <MyArticlesContainer isClicked={saveIsClicked}>
-            {myLovedAttractions ? myLovedAttractions?.map((item) => (
+            {myLovedAttractions.length === 0 ? (
+              <WriteArticleRemind>
+                <WriteArticleImg src={FavoriteIcon} />
+                <WriteRightArea>
+                  <WriteText>
+                    還沒有收藏唷～
+                    <br />
+                    收藏景點與文章
+                    <br />
+                    準備開啟旅行吧！
+                  </WriteText>
+                  <WriteButton>
+                    <StyledLink to="/">
+                      點我去收藏
+                    </StyledLink>
+                  </WriteButton>
+                </WriteRightArea>
+              </WriteArticleRemind>
+            ) : myLovedAttractions?.map((item) => (
               <MyArticle
                 onClick={() => {
-                  console.log(item.place_id);
                   ShowDetailNCheckLikedOrNot(item.place_id);
                 }}
               >
@@ -482,7 +502,7 @@ function MyLovedArticles() {
                   </MyArticleSummary>
                 </MyArticleBelowArea>
               </MyArticle>
-            )) : ''}
+            ))}
           </MyArticlesContainer>
         </MyArticlesArea>
       </PageWrapper>

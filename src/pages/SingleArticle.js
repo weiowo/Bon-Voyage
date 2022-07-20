@@ -310,10 +310,7 @@ function ShowArticle() {
       const docRef = doc(db, 'articles', currentArticleId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('找到您的文章囉!', docSnap.data());
         updateShownArticle(docSnap.data());
-      } else {
-        console.log('沒找到文章捏>__<');
       }
     }
     getCertainArticle();
@@ -325,7 +322,6 @@ function ShowArticle() {
     async function checkLikeOrNot() {
       const userArticlesArray = doc(db, 'users', user.uid);
       const docSnap = await getDoc(userArticlesArray);
-      console.log(docSnap.data());
       if (docSnap.data().loved_article_ids.indexOf(currentArticleId) > -1) {
         setLiked(true);
       }
@@ -344,13 +340,11 @@ function ShowArticle() {
         await updateDoc(userArticlesArray, {
           loved_article_ids: arrayRemove(currentArticleId),
         });
-        console.log('已退追!');
       } else if (!liked) {
         setLiked(true);
         await updateDoc(userArticlesArray, {
           loved_article_ids: arrayUnion(currentArticleId),
         });
-        console.log('已追!');
       }
     }
   }

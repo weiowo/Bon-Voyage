@@ -29,51 +29,57 @@ import {
   ModalBackground, ModalBox, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper,
   ScheduleChoicesBox, ScheduleChoiceTitle, CloseModalButton, ModalContentWrapper,
 } from './City';
-// import Suitcase from './images/suitcase.png';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
-const WriteArticleRemind = styled.div`
-width:50%;
-height:150px;
-display:flex;
-margin-top:20px;
+export const WriteArticleRemind = styled.div`
+  width:50%;
+  height:150px;
+  display:flex;
+  margin-top:20px;
+  gap:15px;
+@media screen and (max-width:800px){
+  width:100%;
+  justify-content:center;
+}`;
+
+export const ConfirmWritingButton = styled.button`
+  width:80px;
+  height:35px;
+  background-color:#598BAF;
+  color:white;
+  border-radius:10px;
+  border:none;
+  flex-shrink:0;
+  cursor:pointer;
+  font-weight:600;
 `;
 
-const ConfirmWritingButton = styled.button`
-width:80px;
-height:35px;
-background-color:#598BAF;
-color:white;
-border-radius:10px;
-border:none;
-flex-shrink:0;
-cursor:pointer;
-font-weight:600;
-`;
-
-const WriteArticleImg = styled.img`
+export const WriteArticleImg = styled.img`
 width:150px;
 height:150px;
 `;
 
-const WriteRightArea = styled.div`
-width:40%;
-height:150px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:20px;
+export const WriteRightArea = styled.div`
+  width:auto;
+  height:150px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:20px;
+@media screen and (max-width:800px){
+  width:auto;
+}`;
+
+export const WriteText = styled.div`
+  font-size:15px;
+  font-weight:600;
+  text-align:left;
 `;
 
-const WriteText = styled.div`
-font-size:15px;
-font-weight:600;
-`;
-
-const WriteButton = styled.button`
-width:80px;
+export const WriteButton = styled.button`
+width:100px;
 height:40px;
 border-radius:10px;
 background-color:#598BAF;
@@ -300,26 +306,16 @@ justify-content:space-between;
 function MyArticles() {
   const user = useContext(UserContext);
   const [myDraftArticles, setMyDraftArticles] = useImmer([]);
-  console.log(myDraftArticles);
   const [myPublishedArticles, setMyPublishedArticles] = useImmer([]);
-  console.log(myPublishedArticles);
   const [publishIsClicked, setPublishIsClciked] = useState(true);
   const [saveIsClicked, setSaveIsClciked] = useState(false);
   const [clickedDeleteId, setClickedDeleteId] = useState('');
-  console.log(clickedDeleteId);
   const [deletedArtStatus, setDeletedArtStatus] = useState('');
-  console.log(deletedArtStatus);
   const [myArtPageScheduleData, setMyArtPageScheduleData] = useImmer([]);
   const [modalIsActive, setModalIsActive] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState();
   const [selectedScheduleIndex, setSelectedScheduleIndex] = useState();
   const navigate = useNavigate();
-  console.log(selectedSchedule);
-  console.log(myArtPageScheduleData);
-
-  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
-  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
-  // 按下哪一個行程後，用那個index去抓那天的細節
 
   useEffect(() => {
     async function getUserArrayList() {
@@ -374,7 +370,6 @@ function MyArticles() {
   };
 
   async function setNewArticleToDb() {
-    console.log('您創了一筆新的遊記唷！');
     const createArticleData = doc(collection(db, 'articles'));
     await setDoc(
       createArticleData,
@@ -386,19 +381,6 @@ function MyArticles() {
       owned_article_ids: arrayUnion(createArticleData.id),
     });
   }
-
-  // // 刪除某一天
-  // function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
-  //   console.log('刪除這個景點囉！', targetDeleteDayIndex, targetDeletePlaceIndex);
-  //   updateScheduleData(((draft) => {
-  //     draft.trip_days
-  // [targetDeleteDayIndex].places = draft.trip_days[targetDeleteDayIndex].places.filter(
-  //       (item, index) => index !== targetDeletePlaceIndex,
-  //     );
-  //   }));
-  //   setIsEditing(true);
-  // }
-  //   const navigate = useNavigate();
 
   // 彈出刪除視窗動畫
   const modal = document.querySelector('.modal');
@@ -415,54 +397,6 @@ function MyArticles() {
     modal?.classList.add('hide');
     modalBackground?.classList.remove('show');
   }
-
-  // useEffect(() => {
-  //   const docRef = doc(db, 'users', user.uid);
-  //   const unsubscribe = onSnapshot(docRef, (querySnapShot) => {
-  //     console.log('我在測試onsnapshot', querySnapShot.data());
-  //     querySnapShot.data().owned_article_ids.forEach(async (item) => {
-  //       const docs = doc(db, 'articles', item);
-  //       const Snap = await getDoc(docs);
-  //       if (Snap.exists()) {
-  //         if (Snap.data().status === 'draft') {
-  //           setMyDraftArticles((draft) => {
-  //             draft.push(Snap.data());
-  //           });
-  //         } else {
-  //           setMyPublishedArticles((draft) => {
-  //             draft.push(Snap.data());
-  //           });
-  //         }
-  //       } else {
-  //         console.log('沒有這個行程！');
-  //       }
-  //     });
-  //   });
-  //   return unsubscribe;
-  // }, [user.uid, setMyDraftArticles, setMyPublishedArticles]);
-
-  // useEffect(() => {
-  //   const docRef = doc(db, 'users', user.uid);
-  //   const unsubscribe = onSnapshot(docRef, async (querySnapshot) => {
-  //     // eslint-disable-next-line max-len
-  //     const articleData = await Promise.all
-  // (querySnapshot.data().owned_article_ids.map(async (item) => {
-  //       const docs = doc(db, 'articles', item);
-  //       const snap = await getDoc(docs);
-  //       if (snap.exists()) {
-  //         return snap.data();
-  //       }
-  //       return null;
-  //     }));
-  //     console.log('測試promises all and onsnapshot', articleData);
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [user.uid]);
-
-  // 先拿到某個使用者的資料
-  // 再根據行程array，去做foreach拿到所有schedule資料
 
   useEffect(() => {
     async function getUserArticleArrayList() {
@@ -487,8 +421,6 @@ function MyArticles() {
                 draft.push(Snap.data());
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       }
@@ -496,8 +428,6 @@ function MyArticles() {
     }
     getUserArticleArrayList();
   }, [setMyDraftArticles, setMyPublishedArticles, user.uid]);
-
-  // 刪除文章：從user的owned articles array中刪除，也從articles db中刪除
 
   async function handleArticleDelete() {
     if (deletedArtStatus === 'draft') {
@@ -561,7 +491,7 @@ function MyArticles() {
                       <RemindIcon src={Travel} />
                       <RemindRightPart style={{ width: 'auto' }}>
                         <RemindText>
-                          還沒有行程捏～
+                          沒有可編輯行程～
                           <br />
                           是時候創建行程囉！
                         </RemindText>
@@ -663,7 +593,7 @@ function MyArticles() {
                 </WriteArticleRemind>
               ) : myDraftArticles?.map((item) => (
                 <ArticlePreviewAndDeleteWrapper>
-                  <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+                  <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                     <MyArticle>
                       <CoverPhotoInMyArticle
                         src={item?.cover_img ? item?.cover_img

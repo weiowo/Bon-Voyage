@@ -27,7 +27,7 @@ outline:none;
 }`;
 
 export default function Search({
-  panTo, setSelected, selected, active,
+  panTo, setSelected, active,
 }) {
   const {
     ready,
@@ -36,65 +36,26 @@ export default function Search({
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
-    requestOptions: {
-      // types: ['(cities)'],
-      // componentRestrictions: { country: 'fr' }, // 限制國家
-      // 感覺是搜尋過的會紀錄！清除快取與cookie！！
-      // fields: ['formatted_address', 'geometry', 'name'], // 要放在哪？
-      /* Define search scope here */
-    },
+    fields: ['geometry', 'formatted_address', 'address_components'],
     debounce: 300,
   });
 
   const handleInput = (e) => {
-    // Update the keyword of the input element
     setValue(e.target.value);
   };
 
-  //   useEffect(() => {
-  //     fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJuaGhlow9aTQRfHNZ8O0BGxw&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o')
-  //       .then((response) => {
-  //         console.log(response);
-  //         return response.json();
-  //       }).then((jsonData) => {
-  //         console.log(jsonData);
-  //         const jsonDataPhotoUrl = jsonData.result.photos[0];
-  //         console.log(jsonDataPhotoUrl);
-  //         window.localStorage.setItem('PlcesSearched', jsonData);
-  //       }).catch((err) => {
-  //         console.log('錯誤:', err);
-  //       });
-  //   }, []);
-
   const handleSelect = (selected_place) => () => {
-    // selected_place是user選到的那個地方！選好後上面就會顯示那個字，不會再autocomplete一次
-    // When user selects a place, we can replace the keyword without request data from API
-    // by setting the second parameter to "false"
-    // setValue(selected_place.description, false);
     setValue('');
-    // console.log(selected_place); // 選到的那個地方的地址
-    const selected_place_data = JSON.stringify(selected_place);
-    window.localStorage.setItem('selected_recommend_place', selected_place_data);
-    // const placePhotoUrl = selected_place_data.place_id.getUrl({ maxWidth: 640 });
-    // fetchPhotoUrl(selected_place_data.place_id);
-    // console.log(placePhotoUrl);
-    // const place = results[i];
-    // console.log(place);
     setSelected(selected_place);
-    // setValue('');
-    console.log(selected);
     clearSuggestions();
     getGeocode({ address: selected_place.description })
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
         panTo({ lat, lng });
-        // setSelected({ lat, lng });
-        console.log({ lat, lng });
       })
       .catch((error) => {
-        console.log('😱 Error: ', error);
+        console.log('Error:', error);
       });
-    // 去拿那個地址的經緯度！
   };
 
   console.log(active);
@@ -104,8 +65,6 @@ export default function Search({
       place_id,
       structured_formatting: { main_text },
     } = suggestion;
-
-    // 試著console.log出用戶選的地點
 
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events
@@ -157,9 +116,6 @@ export default function Search({
         disabled={!ready}
         placeholder="想去哪兒呢？"
       />
-      {/* <button style={{ zIndex: 30 }} onClick={() => clearSuggestions()} type="button">測試</button> */}
-      {/* 要把serachInput的value傳到map那邊去計算route跟duration */}
-      {/* We can use the "status" to decide whether we should display the dropdown or not */}
       {status === 'OK' && active && <div style={{ paddingLeft: 'none', width: '100%', zIndex: '24' }}>{renderSuggestions()}</div>}
     </div>
   );

@@ -163,22 +163,20 @@ display:flex;
 width:80vw;
 height:40vw;
 background-color:white;
-z-index:10;
 border-radius:10px;
-z-index:200;
 position: relative;
 align-items:center;
-z-index:500;
+z-index:1500;
 flex-direction:row;
 @media screen and (max-width:1344px){
-  height:70vh;
+  height:80vh;
 }
 @media screen and (max-width:1133px){
-  height:70vh;
+  height:85vh;
   width:90vw;
 }
 @media screen and (max-width:882px){
-  height:85vh;
+  height:80vh;
   width:90vw;
   flex-direction:column;
 }
@@ -210,9 +208,10 @@ position:relative;
   height:90%;
 }
 @media screen and (max-width:882px){
-  margin-top:30px;
+  margin-top:20px;
   width:100%;
   height:50%;
+  gap:5px;
 }
 `;
 
@@ -233,6 +232,9 @@ const ModalPlaceTitle = styled.div`
 font-size:30px;
 font-weight:600;
 width:75%;
+@media screen and (max-width:882px){
+  font-size:25px;
+}
 `;
 
 const ModalPlaceSubtitle = styled.div`
@@ -346,6 +348,9 @@ const CloseModalButton = styled.button`
 height:25px;
 width:25px;
 position:absolute;
+display:flex;
+align-items:center;
+justify-content:center;
 right:20px;
 top:20px;
 text-align:center;
@@ -510,19 +515,12 @@ function VR() {
     }
   }
 
-  // 打開modal時先確認有沒有追蹤過
-  // 有的話就讓星星亮起，沒有的話就讓星星空的
-  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
-
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
-    console.log(docSnap.data());
     if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
       setLiked(true);
-      console.log('已經追蹤過嚕!');
     } else {
-      console.log('沒有哦');
       setLiked(false);
     }
   }
@@ -537,9 +535,6 @@ function VR() {
     setModalIndex(clickedPlaceIndex);
   }
 
-  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
-  // 按下星星後就先把這個位置存到db的attractions資料庫中～
-
   async function handleFavorite(placeId) {
     if (!user.uid) {
       alert('請先登入唷～');
@@ -551,13 +546,11 @@ function VR() {
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayRemove(placeId),
         });
-        console.log('已退追此景點!');
       } else if (!liked) {
         setLiked(true);
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayUnion(placeId),
         });
-        console.log('已追蹤此景點!');
         const createAttraction = doc(db, 'attractions', placeId);
         await setDoc(createAttraction, ({
           place_id: placeId,
@@ -569,10 +562,6 @@ function VR() {
     }
   }
 
-  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
-  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
-  // 按下哪一個行程後，用那個index去抓那天的細節
-
   useEffect(() => {
     async function getUserArrayList() {
       const docRef = doc(db, 'users', user.uid);
@@ -583,18 +572,15 @@ function VR() {
         console.log('No such document!');
       }
       function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+        docSnap.data().owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              console.log('這位使用者的行程', index, Snap.data());
               setVrPageScheduleData((draft) => {
                 draft.push(Snap.data());
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       }
@@ -603,16 +589,12 @@ function VR() {
     getUserArrayList();
   }, [setVrPageScheduleData, user.uid]);
 
-  // 選好行程跟天數時，會把行程的名稱跟地址加到immer中，並送到database中
-
   function ComfirmedAdded() {
-    console.log('已經加入囉！');
     const newPlace = {
       place_title: vrPlaces[modalIndex].place_title,
       place_address: vrPlaces[modalIndex].place_address,
       stay_time: 60,
     };
-      // 用 immer 產生出新的行程資料
     const newScheduleData = produce(vrPageScheduleData, (draft) => {
       draft[clickedScheduleIndex]?.trip_days[dayIndex]?.places?.push(newPlace);
     });
@@ -702,6 +684,7 @@ function VR() {
             <ScheduleChoicesBoxWrapper>
               {vrPageScheduleData ? vrPageScheduleData.map((item, index) => (
                 <ScheduleChoicesBox
+                  key={item?.schedule_id}
                   onClick={() => {
                     setClickedScheduleId(item.schedule_id);
                     setClickedScheduleIndex(index);
@@ -709,7 +692,9 @@ function VR() {
                   }}
                   id={item.schedule_id}
                 >
-                  <ScheduleChoiceTitle>
+                  <ScheduleChoiceTitle
+                    key={`${item?.schedule_id}+${item?.title}`}
+                  >
                     {item.title}
                   </ScheduleChoiceTitle>
                 </ScheduleChoicesBox>
@@ -739,13 +724,16 @@ function VR() {
               {vrPageScheduleData
                 ? vrPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
                   <ScheduleChoicesBox
+                    key={`${item?.schedule_id}+${item?.title}`}
                     clicked={dayIndex === index}
                     onClick={() => {
                       setDayIndex(index);
                     }}
                     style={{ display: 'flex' }}
                   >
-                    <ScheduleChoiceTitle>
+                    <ScheduleChoiceTitle
+                      key={`${item?.schedule_id}day${item?.title}`}
+                    >
                       第
                       {index + 1}
                       天
@@ -789,14 +777,19 @@ function VR() {
           className="mySwiper"
         >
           {vrPlaces?.map((item, index) => (
-            <SwiperSlide onClick={() => {
-              ShowDetailNCheckLikedOrNot(item.place_id, index);
-              setClickedPlaceUrl(item?.cover_photo);
-              setClickedPlaceName(item?.place_title);
-              setClickedPlaceAddress(item?.place_address);
-            }}
+            <SwiperSlide
+              key={item?.place_id}
+              onClick={() => {
+                ShowDetailNCheckLikedOrNot(item.place_id, index);
+                setClickedPlaceUrl(item?.cover_photo);
+                setClickedPlaceName(item?.place_title);
+                setClickedPlaceAddress(item?.place_address);
+              }}
             >
-              <PlaceBox style={{ backgroundImage: `url(${item.cover_photo})` }}>
+              <PlaceBox
+                key={item?.place_id}
+                style={{ backgroundImage: `url(${item.cover_photo})` }}
+              >
                 <PlaceTitle>{item.place_title}</PlaceTitle>
                 <PlaceEngishTitle>{item.place_english_title}</PlaceEngishTitle>
                 <PlaceCountryTitle>{item.place_country_title}</PlaceCountryTitle>

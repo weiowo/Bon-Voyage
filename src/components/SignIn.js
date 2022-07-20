@@ -144,9 +144,6 @@ function SignIn() {
     'https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/profileImages%2Fmember7.png?alt=media&token=94cba2ac-36f4-46c9-88d7-c66bf84fe64e',
   ];
 
-  console.log('隨機號碼', Math.floor(Math.random() * defaultPhoto.length));
-  console.log('隨機值', defaultPhoto[Math.floor(Math.random() * defaultPhoto.length)]);
-
   // 這裡存完後不用set到user的state，直接送到firestore、然後在app.js那邊會抓取是否有登入的狀況
   function signUp() {
     createUserWithEmailAndPassword(auth, email, password)
@@ -201,17 +198,6 @@ function SignIn() {
         alert(errorMessage);
       });
   }
-
-  // function signOutFunction() {
-  //   signOut(auth).then(() => {
-  //     console.log('successfully sign out!');
-  //     console.log();
-
-  //     // Sign-out successful.
-  //   }).catch((error) => {
-  //     console.log(error);
-  //   });
-  // }
 
   return (
     <SignInModalBackground>

@@ -208,7 +208,6 @@ const auth = getAuth(app);
 
 export function signOutFunction() {
   signOut(auth).then(() => {
-    console.log('successfully sign out!');
     alert('您已登出囉～');
   }).catch((error) => {
     console.log(error);
@@ -272,7 +271,6 @@ function Profile() {
                         type="file"
                         id="profile-photo"
                         onChange={(e) => {
-                          console.log('uploadProfileImg');
                           uploadProfileImg(e.target.files[0]);
                         }}
                       />

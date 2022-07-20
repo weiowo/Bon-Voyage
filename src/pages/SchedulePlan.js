@@ -11,7 +11,6 @@ import React, {
   useEffect, useState, useContext, useRef,
 } from 'react';
 import {
-  // getDocs,
   collection, doc, getDoc, getDocs,
   query, where,
   setDoc, arrayUnion,
@@ -44,13 +43,6 @@ import Default4 from './images/default4.png';
 import Default5 from './images/default5.png';
 
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
-
-// import DragndDrop from './images/arrow-left.png';
-
-// 最新版！！（2022/06/20）
-// chooseDate完成後就創立一個新的行程id，並放到url上面
-// embark date and enddate都直接從db拿，用這個來產生空的天數
-// 也同時先創聊天室id
 
 const ScheduleWrapper = styled.div`
     display:flex;
@@ -251,8 +243,6 @@ font-weight:600;
 const CompleteButton = styled.button`
 width:50px;
 height:30px;
-// background-color:white;
-// color:#226788;
 border-radius:10px;
 border: solid #226788 2px;
 font-weight:600;
@@ -725,7 +715,7 @@ function Schedule() {
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
   const [active, setActive] = useState(false);
-  const [selected, setSelected] = useState({}); // 搜尋後根據自動推薦選擇的地點
+  const [selected, setSelected] = useState({});
   const [clickedDayIndex, setClickedDayIndex] = useState('');
   const [openChat, setOpenChat] = useState(false);
   const [unreadMessage, setUnreadMessage] = useState(0);
@@ -740,9 +730,8 @@ function Schedule() {
   const [isEditing, setIsEditing] = useState(false);
   const { search } = useLocation();
   const existScheduleId = new URLSearchParams(search).get('id');
-
-  // 有新訊息要跑到最下面
   const messagesEndRef = useRef(null);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -750,11 +739,8 @@ function Schedule() {
     scrollToBottom();
   }, [chatBox]);
 
-  // 天數的dragAndDrop
-
   const onDragStart = (event) => {
     const initialPosition = Number(event.currentTarget.dataset.position);
-    console.log('我在手機拖曳start~~');
     setDragAndDrop({
       ...dragAndDrop,
       draggedFrom: initialPosition,
@@ -764,15 +750,9 @@ function Schedule() {
     event.dataTransfer.setData('text/html', '');
   };
   const onDragOver = (event) => {
-    console.log('我在手機拖曳中over~~');
-    // in order for the onDrop
-    // event to fire, we have
-    // to cancel out this one
     event.preventDefault();
     let newList = dragAndDrop.originalOrder;
-    // index of the item being dragged
     const { draggedFrom } = dragAndDrop;
-    // index of the droppable area being hovered
     const draggedTo = Number(event.currentTarget.dataset.position);
     const itemDragged = newList[draggedFrom];
     const remainingItems = newList.filter((item, index) => index !== draggedFrom);
@@ -792,7 +772,6 @@ function Schedule() {
   };
 
   const onDrop = () => {
-    console.log('我在手機拖曳後放下drop~~');
     updateScheduleData((draft) => {
       draft.trip_days = dragAndDrop.updatedOrder;
     });
@@ -804,7 +783,6 @@ function Schedule() {
     });
   };
   const onDragLeave = () => {
-    console.log('我在手機拖曳中leave~~');
     setDragAndDrop({
       ...dragAndDrop,
       draggedTo: null,
@@ -813,24 +791,22 @@ function Schedule() {
   // // PLACE的dragAndDrop
 
   const onPlaceDragStart = (event) => {
-    console.log('我在手機拖曳景點後放下~~');
     const initialPosition = Number(event.currentTarget.dataset.position);
     setPlaceDragAndDrop({
       ...placeDragAndDrop,
       placeDraggedFrom: initialPosition,
       placeIsDragging: true,
-      placeOriginalOrder: scheduleData?.trip_days[choosedDayIndex].places,
+      placeOriginalOrder: scheduleData?.trip_days[choosedDayIndex]?.places,
     });
     event.dataTransfer.setData('text/html', '');
   };
   const onPlaceDragOver = (event) => {
-    console.log('我在手機拖曳中over~~');
     event.preventDefault();
     let placeNewList = placeDragAndDrop.placeOriginalOrder;
     const { placeDraggedFrom } = placeDragAndDrop;
     const placeDraggedTo = Number(event.currentTarget.dataset.position);
     const placeItemDragged = placeNewList[placeDraggedFrom];
-    const placeRemainingItems = placeNewList.filter((item, index) => index !== placeDraggedFrom);
+    const placeRemainingItems = placeNewList?.filter((item, index) => index !== placeDraggedFrom);
     placeNewList = [
       ...placeRemainingItems.slice(0, placeDraggedTo),
       placeItemDragged,
@@ -845,12 +821,6 @@ function Schedule() {
       });
     }
   };
-  // useEffect(() => {
-  //   console.log('place!Dragged From: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedFrom);
-  //   console.log('place!Dropping Into: ', placeDragAndDrop && placeDragAndDrop?.placeDraggedTo);
-  // }, [placeDragAndDrop]);
-  // useEffect(() => {
-  // }, [scheduleData?.trip_days?.[choosedDayIndex]?.places]);
 
   const onPlaceDrop = () => {
     console.log('我在手機拖曳景點後放下drop~~');
@@ -866,7 +836,6 @@ function Schedule() {
   };
 
   const onPlaceDragLeave = () => {
-    console.log('我在手機拖曳中leave~~');
     setPlaceDragAndDrop({
       ...placeDragAndDrop,
       placeDraggedTo: null,
@@ -881,7 +850,6 @@ function Schedule() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         updateScheduleData(docSnap.data());
-        // const dateTestFromDb = Date.parse(docSnap.data().embark_date);
         updateChatBox((draft) => {
           draft.chat_room_id = docSnap.data().chat_room_id;
         });
@@ -902,10 +870,7 @@ function Schedule() {
     getChatRoom();
   }, [updateScheduleData, existScheduleId, updateChatBox]);
 
-  // 刪除某一天
-  // 把不是按到那個index的留下來
   function deleteCertainDay(targetDeleteDayIndex) {
-    console.log('刪除這一天囉！', targetDeleteDayIndex);
     updateScheduleData((draft) => {
       draft.trip_days = draft.trip_days.filter(
         (item, index) => index !== targetDeleteDayIndex,
@@ -913,24 +878,16 @@ function Schedule() {
     });
     setIsEditing(true);
   }
-
-  // 刪除某一天
   function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
-    console.log('刪除這個景點囉！', targetDeleteDayIndex, targetDeletePlaceIndex);
     updateScheduleData(((draft) => {
-      draft.trip_days[targetDeleteDayIndex].places = draft.trip_days[targetDeleteDayIndex].places.filter(
+      draft.trip_days[targetDeleteDayIndex].places = draft.trip_days[targetDeleteDayIndex]?.places.filter(
         (item, index) => index !== targetDeletePlaceIndex,
       );
     }));
     setIsEditing(true);
   }
-
-  // 如果沒有id，表示是新行程，創建資料後再次把行set進去
-  // 如果有id，則是編輯既有的行程，編輯後update進去db，並創建一個新的聊天室
-
   async function setCompletedScheduleToDb() {
     if (existScheduleId) {
-      console.log('修改好行程囉！');
       const scheduleRef = doc(db, 'schedules', existScheduleId);
       await updateDoc(scheduleRef, scheduleData);
     } else {
@@ -942,11 +899,8 @@ function Schedule() {
         draft.chat_room_id = createNewChatRoomData.id;
         draft.schedule_id = createNewScheduleData.id;
       });
-      // const params = { id: createNewScheduleData.id };
-      // setSearchParams(params);
     }
   }
-
   // 把state的訊息放進去object，然後推進整個messages array
   const newMessage = {
     user_id: user.uid, // 放user.id
@@ -965,22 +919,16 @@ function Schedule() {
     });
   }
 
-  // 有訊息更新時就要及時拿出來！
-  // 如果聊天室是關的，就要說有未讀訊息！
-  // useEffect在render畫面時就會先跑一次加1，所以取用未讀訊息state時要減一
-
   useEffect(() => {
     if (existScheduleId) {
       const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
       return onSnapshot(chatRoomMessageArray, (querySnapshot) => {
         if (openChat === false) {
-          console.log(openChat, '有訊息沒讀唷～！');
           querySnapshot.forEach((doc) => {
             updateChatBox(doc.data());
             setUnreadMessage((prev) => prev + 1);
           });
         } else if (openChat === true) {
-          console.log(openChat, '聊天室有開，直接顯示訊息！');
           querySnapshot.forEach((doc) => {
             updateChatBox(doc.data());
             setUnreadMessage(0);
@@ -1124,7 +1072,7 @@ function Schedule() {
             </RecommendPlaces>
           </ResultsArea>
         </AddAndSearchBox>
-        <LeftContainer active={active} display={schdeuleDisplay}>
+        <LeftContainer active={active} display={schdeuleDisplay?.toString()}>
           <ScheduleTitleAndCompleteButtonArea>
             <Link to="/my-schedules">
               <GoBackIcon src={GoBackSrc} />
@@ -1155,11 +1103,6 @@ function Schedule() {
                   data-position={dayIndex}
                   draggable
                   style={{ touchAction: 'auto' }}
-                  onTouchStart={() => { console.log('onTouchStart'); onDragStart(); }}
-                  onTouchMove={() => { console.log('onTouchMove'); onDragOver(); }}
-                  onTouchEnd={() => { console.log('onTouchEnd'); onDragOver(); }}
-                  onTouchLeave={() => { console.log('onTouchLeave'); onDrop(); }}
-                  onTouchCancel={() => { console.log('onTouchCancel'); onDragLeave(); }}
                   onDragStart={onDragStart}
                   onDragOver={onDragOver}
                   onDrop={onDrop}
@@ -1204,11 +1147,6 @@ function Schedule() {
                   data-position={placeIndex}
                   draggable
                   style={{ touchAction: 'auto' }}
-                  onTouchStart={() => { console.log('onTouchStart'); onPlaceDragStart(); }}
-                  onTouchMove={() => { console.log('onTouchMove'); onPlaceDragOver(); console.log('onTouchMove'); }}
-                  onTouchEnd={() => { console.log('onTouchEnd'); onPlaceDragOver(); }}
-                  onTouchLeave={() => { console.log('onTouchLeave'); onPlaceDrop(); }}
-                  onTouchCancel={() => { console.log('onTouchCancel'); onPlaceDragLeave(); }}
                   onDragStart={onPlaceDragStart}
                   onDragOver={onPlaceDragOver}
                   onDrop={onPlaceDrop}

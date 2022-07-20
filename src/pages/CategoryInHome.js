@@ -1,7 +1,7 @@
 // 在首頁按下種類的時候，會把種類跟使用者所在位置的經緯度紀錄
 // 接著到category頁面執行相關搜尋
 // 不同的種類上面的banner可以不一樣
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 // import { useNavigate } from 'react-router-dom';
@@ -149,14 +149,6 @@ color:grey;
 `;
 
 function CategoryAreaInHome({ currentLatLng }) {
-  // const [categoryOption, setCategoryOption] = useState('');
-  useEffect(() => {
-    console.log('我在CategoryPage');
-    console.log({ currentLatLng });
-    console.log(currentLatLng);
-    console.log(currentLatLng.lat, currentLatLng.lng);
-  }, [currentLatLng]);
-
   const navigate = useNavigate();
 
   function navigateToCategoryPage(id) {
@@ -229,7 +221,11 @@ function CategoryAreaInHome({ currentLatLng }) {
 }
 
 CategoryAreaInHome.propTypes = {
-  currentLatLng: PropTypes.func.isRequired,
+  currentLatLng: PropTypes.shape({ lat: PropTypes.number, lng: PropTypes.number }),
+};
+
+CategoryAreaInHome.defaultProps = {
+  currentLatLng: PropTypes.shape({ lat: 25.03746, lng: 121.564558 }),
 };
 
 export default CategoryAreaInHome;

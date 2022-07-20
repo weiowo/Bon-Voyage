@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 // import UserPhotoSrc from '../pages/images/seal.png';
 import UserContext from './UserContextComponent';
 import db from '../utils/firebase-init';
@@ -78,12 +78,16 @@ padding-bottom:7px;
 
 export const LinkWithoutDefaultStyle = styled(Link)`
 text-decoration:none;
+&:hover {
+  border-bottom:1.5px solid grey;
+}
 `;
 
 function ProfileSideBarElement() {
   const user = useContext(UserContext);
   const [photoUrl, setPhotoUrl] = useState();
   const [userName, setUserName] = useState();
+  const currentUrl = useLocation();
 
   // 更改個人資料要即時更新
 
@@ -106,19 +110,31 @@ function ProfileSideBarElement() {
         </UserNameLogoBox>
       </Link>
       <SideNavBar>
-        <LinkWithoutDefaultStyle to="/my-schedules">
+        <LinkWithoutDefaultStyle
+          to="/my-schedules"
+          style={{ borderBottom: currentUrl.pathname === '/my-schedules' ? '1.5px solid grey' : '' }}
+        >
           <NavBarChoice>我的行程</NavBarChoice>
         </LinkWithoutDefaultStyle>
-        <LinkWithoutDefaultStyle to="/my-articles">
+        <LinkWithoutDefaultStyle
+          to="/my-articles"
+          style={{ borderBottom: currentUrl.pathname === '/my-articles' ? '1.5px solid grey' : '' }}
+        >
           <NavBarChoice>我的文章</NavBarChoice>
         </LinkWithoutDefaultStyle>
-        <LinkWithoutDefaultStyle to="/my-favorites">
+        <LinkWithoutDefaultStyle
+          to="/my-favorites"
+          style={{ borderBottom: currentUrl.pathname === '/my-favorites' ? '1.5px solid grey' : '' }}
+        >
           <NavBarChoice>我的收藏</NavBarChoice>
         </LinkWithoutDefaultStyle>
-        <LinkWithoutDefaultStyle to="/profile">
+        <LinkWithoutDefaultStyle
+          to="/profile"
+          style={{ borderBottom: currentUrl.pathname === '/profile' ? '1.5px solid grey' : '' }}
+        >
           <NavBarChoice>個人資料</NavBarChoice>
         </LinkWithoutDefaultStyle>
-        <NavBarChoice>地圖成就</NavBarChoice>
+        {/* <NavBarChoice>地圖成就</NavBarChoice> */}
       </SideNavBar>
     </ProfileSideBar>
   );

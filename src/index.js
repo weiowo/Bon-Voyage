@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <App />,
-  // 因為有些functioin會自動執行兩次所以先把strict mode拿掉
 );
 
 // If you want to start measuring performance in your app, pass a function

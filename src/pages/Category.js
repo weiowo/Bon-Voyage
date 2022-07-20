@@ -39,6 +39,12 @@ import {
   ScheduleChoiceTitle, ModalContentWrapper, Loading, ConfirmChooseDayButton,
   ButtonStarArea, AddFavoriteIcon,
 } from './City';
+import {
+  RemindWrapper, ClickAndAdd,
+  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from './MySchedules';
+import Travel from './images/travel-2.png';
+import Suitcase from './images/suitcase-2.png';
 import Footer from '../components/Footer';
 
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
@@ -284,13 +290,11 @@ function Category({ currentLatLng }) {
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayRemove(placeId),
         });
-        // console.log('已退追此景點!');
       } else if (!liked) {
         setLiked(true);
         await updateDoc(userArticlesArray, {
           loved_attraction_ids: arrayUnion(placeId),
         });
-        // console.log('已追蹤此景點!');
         const createAttraction = doc(db, 'attractions', placeId);
         await setDoc(createAttraction, ({
           place_id: placeId,
@@ -310,24 +314,16 @@ function Category({ currentLatLng }) {
     async function getUserArrayList() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data().owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getSchedulesFromList() {
         docSnap.data().owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              // console.log('這位使用者的行程', index, Snap.data());
               setCategoryPageScheduleData((draft) => {
                 draft.push(Snap.data());
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       }
@@ -339,19 +335,15 @@ function Category({ currentLatLng }) {
   // 確認加入
 
   function ComfirmedAdded() {
-    // console.log('已經加入囉！');
     const newPlace = {
       place_title: modalDetail?.name,
       place_address: modalDetail?.formatted_address,
       stay_time: 60,
     };
-    // 用 immer 產生出新的行程資料
     const newScheduleData = produce(categoryPageScheduleData, (draft) => {
       draft[clickedScheduleIndex]?.trip_days[dayIndex].places.push(newPlace);
     });
-    // 更新 state
     setCategoryPageScheduleData(newScheduleData);
-    // 更新 firestore
     async function passAddedDataToFirestore() {
       const scheduleRef = doc(db, 'schedules', clickedScheduleId);
       await updateDoc(scheduleRef, { ...newScheduleData[clickedScheduleIndex] });
@@ -398,7 +390,6 @@ function Category({ currentLatLng }) {
   // 拿到url上的種類、找附近此種類的景點
 
   const searchCategoryNearby = useCallback(() => {
-    console.log('searchCategoryNearby', isLoaded);
     if (!isLoaded) return;
     let requests = [];
 
@@ -407,7 +398,6 @@ function Category({ currentLatLng }) {
         location: { lat: 24.5711502, lng: 120.8154358 },
         radius: '50000',
         type: 'campground',
-        // 很少，先放苗栗的
       }];
     } else if (categoryFromUrl === 'arts') {
       requests = [{
@@ -511,21 +501,13 @@ function Category({ currentLatLng }) {
       searchCategoryNearby();
     }, 2000);
   }, [isLoaded, searchCategoryNearby]);
-  //   console.log({ lat, lng });
-
-  // 打開modal時先確認有沒有追蹤過
-  // 有的話就讓星星亮起，沒有的話就讓星星空的
-  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
 
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
-    // console.log(docSnap.data());
     if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
       setLiked(true);
-      // console.log('已經追蹤過嚕!');
     } else {
-      // console.log('沒有哦');
       setLiked(false);
     }
   }
@@ -541,15 +523,17 @@ function Category({ currentLatLng }) {
       placeId: clickedPlaceId,
     };
     const service = new google.maps.places.PlacesService(mapRef.current);
-    service.getDetails(placeRequest, (place, status) => {
-      // console.log(status);
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        // console.log('我在city頁面測試api', place);
-        setModalDetail(place);
-      } else {
-        console.log('error');
-      }
-    });
+    service.getDetails(
+      placeRequest,
+      (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          console.log(place);
+          setModalDetail(place);
+        } else {
+          console.log('error');
+        }
+      },
+    );
   }
 
   if (!isLoaded) {
@@ -609,7 +593,22 @@ function Category({ currentLatLng }) {
           <ModalContentWrapper>
             <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
             <ScheduleChoicesBoxWrapper>
-              {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
+              {categoryPageScheduleData.length === 0 ? (
+                <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                  <RemindIcon src={Travel} />
+                  <RemindRightPart style={{ width: 'auto' }}>
+                    <RemindText>
+                      還沒有行程捏～
+                      <br />
+                      是時候創建行程囉！
+                    </RemindText>
+                    <StyledBlackLink to="/choose-date">
+                      <ClickAndAdd>點我創建</ClickAndAdd>
+                    </StyledBlackLink>
+                    <SuitcaseIcon src={Suitcase} />
+                  </RemindRightPart>
+                </RemindWrapper>
+              ) : categoryPageScheduleData.map((item, index) => (
                 <ScheduleChoicesBox
                   onClick={() => {
                     setClickedScheduleId(item.schedule_id);
@@ -622,7 +621,7 @@ function Category({ currentLatLng }) {
                     {item.title}
                   </ScheduleChoiceTitle>
                 </ScheduleChoicesBox>
-              )) : ''}
+              ))}
             </ScheduleChoicesBoxWrapper>
           </ModalContentWrapper>
           <CloseModalButton
@@ -718,5 +717,9 @@ function Category({ currentLatLng }) {
 export default Category;
 
 Category.propTypes = {
-  currentLatLng: PropTypes.objectOf.isRequired,
+  currentLatLng: PropTypes.shape({ lat: PropTypes.number, lng: PropTypes.number }),
+};
+
+Category.defaultProps = {
+  currentLatLng: PropTypes.shape({ lat: 25.03746, lng: 121.564558 }),
 };

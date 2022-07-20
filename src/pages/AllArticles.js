@@ -46,10 +46,6 @@ background-position:center;
 
 function AllArticlePage() {
   const [allArticles, setAllArticles] = useState([]);
-  console.log(allArticles);
-
-  // 有文章更新時就要及時拿出來！
-  // unsubscribe讓它結束監聽
 
   useEffect(() => {
     const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));

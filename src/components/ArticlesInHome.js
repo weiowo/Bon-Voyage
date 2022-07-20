@@ -80,21 +80,7 @@ cursor:pointer;
 function ArticlesInHome() {
   const user = useContext(UserContext);
   const [articles, setArticles] = useState();
-  console.log(articles);
-  //   const navigate = useNavigate();
   console.log(user);
-
-  // 拿到所有articles資料並放到首頁
-
-  // useEffect(() => {
-  //   async function getAllArticles() {
-  //     const querySnapshot = await getDocs(collection(db, 'articles'));
-  //     const articleList = querySnapshot.docs.map((item) => item.data());
-  //     console.log(articleList);
-  //     setArticles(articleList);
-  //   }
-  //   getAllArticles();
-  // }, []);
 
   useEffect(() => {
     const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
@@ -113,15 +99,17 @@ function ArticlesInHome() {
       <ArticlesWrapperTitle>熱門遊記</ArticlesWrapperTitle>
       <ArticlesBoxesContainer>
         {articles ? articles.slice(0, 10).map((item) => (
-          <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-            <MyArticle>
-              <CoverPhotoInMyArticle src={item?.cover_img ? item?.cover_img
-                : defaultArticleCoverPhoto[Math.floor(Math.random()
+          <StyledLink key={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`} to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+            <MyArticle key={item?.article_id}>
+              <CoverPhotoInMyArticle
+                key={item?.schedule_id}
+                src={item?.cover_img ? item?.cover_img
+                  : defaultArticleCoverPhoto[Math.floor(Math.random()
                         * defaultArticleCoverPhoto.length)]}
               />
               <MyArticleBelowArea>
-                <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                <MyArticleSummary>
+                <MyArticleTitle key={item?.article_title}>{item?.article_title}</MyArticleTitle>
+                <MyArticleSummary key={item?.summary}>
                   {item?.summary?.slice(0, 16)}
                   ...
                 </MyArticleSummary>

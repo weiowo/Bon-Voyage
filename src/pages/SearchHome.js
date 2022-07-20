@@ -31,7 +31,6 @@ const center = {
 
 function SearchHome() {
   const [theInput, setTheInput] = useState('');
-  //   let inputRef = useRef(null);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries: ['places'],
@@ -51,23 +50,12 @@ function SearchHome() {
 
   function callback(results, status) {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
-      console.log('哈哈');
+      console.log('有成功');
     } else {
       console.log('沒成功');
     }
   }
-  //   service.getPlacePredictions(
-  //     {
-  //       input: '台北市大同區',
-  //       types: ['cities'],
-  //       componentRestrictions: { country: 'us' },
-  //     },
-  //     (predictions, status) => {
-  //       if (status === google.maps.places.PlacesServiceStatus.OK) {
-  //         console.log(predictions);
-  //       }
-  //     },
-  //   );
+
   if (!isLoaded) return <div>test...</div>;
 
   return (

@@ -1,9 +1,7 @@
 /* eslint-disable max-len */
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
-// import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
 import {
@@ -36,7 +34,20 @@ width:26vw;
 height:180px;
 display:flex;
 gap:20px;
-`;
+@media screen and (max-width:1180px){
+  width:100%;
+  height:150px;
+}
+@media screen and (max-width:1000px){
+  width:100%;
+}
+@media screen and (max-width:748px){
+  justify-content:center;
+  width:100%;
+}
+@media screen and (max-width:480px){
+  height:130px;
+}`;
 
 export const ClickAndAdd = styled.div`
 width:80px;
@@ -50,24 +61,50 @@ left:10px;
 border: 1.5px solid black;
 border-radius:5px;
 cursor:pointer;
-`;
+@media screen and (max-width:400px){
+  font-size:13px;
+  left:5px;
+}`;
 
 export const RemindText = styled.div`
 width:100%;
 font-weight:550;
 font-size:15px;
 text-align:left;
-`;
+@media screen and (max-width:1180px){
+  font-size:13px;
+}
+@media screen and (max-width:400px){
+  font-size:13px;
+}`;
 
 export const RemindIcon = styled.img`
 width:180px;
 height:180px;
-`;
+@media screen and (max-width:1180px){
+  width:150px;
+  height:150px;
+}
+@media screen and (max-width:1000px){
+  width:140px;
+  height:140px;
+}
+@media screen and (max-width:480px){
+  width:130px;
+  height:130px;
+}`;
 
 export const SuitcaseIcon = styled.img`
 width: 100px;
 height:100px;
-`;
+@media screen and (max-width:1000px){
+  width:95px;
+  height:95px;
+}
+@media screen and (max-width:480px){
+  height:90px;
+  width:90px;
+}`;
 
 export const RemindRightPart = styled.div`
 width:70%;
@@ -76,7 +113,18 @@ display:flex;
 flex-direction:column;
 justify-content:space-between;
 position:relative;
-`;
+@media screen and (max-width:1180px){
+  height:150px;
+}
+@media screen and (max-width:1000px){
+  height:140px;
+}
+@media screen and (max-width:1000px){
+  width:auto;
+}
+@media screen and (max-width:480px){
+  height:130px;
+}`;
 
 export const PageWrapper = styled.div`
 width:100vw;
@@ -740,10 +788,6 @@ cursor:pointer;
 }
 `;
 
-// const NoSchedule = styled.div`
-
-// `
-
 function MySchedules() {
   const user = useContext(UserContext);
   const [schedules, setSchedules] = useImmer([]);
@@ -758,11 +802,6 @@ function MySchedules() {
   const navigate = useNavigate();
   const [targetIndex, setTargetIndex] = useState(null);
 
-  // 先拿到某個使用者的資料
-  // 再根據行程array，去做foreach拿到所有schedule資料
-  // 即時監聽此人的個人資料是否有改變
-  // 同時也要監聽這格資料的delete or not????
-
   useEffect(() => {
     if (user.uid) {
       const docRef = doc(db, 'users', user.uid);
@@ -776,8 +815,6 @@ function MySchedules() {
                 draft.push(Snap.data());
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       });
@@ -786,15 +823,11 @@ function MySchedules() {
     return undefined;
   }, [user.uid, setSchedules]);
 
-  // 刪除行程
   function deleteScheduleOfTheUser(targetDeleteIndex) {
-    console.log('刪除這個行程囉！');
     setSchedules(schedules?.filter(
       (item, index) => index !== targetDeleteIndex,
     ));
   }
-
-  // 拿點到的這則行程的id去搜尋哪個user schedule array list有包含這個schedule id
 
   useEffect(() => {
     if (!selectedSchedule) { return; }
@@ -804,42 +837,29 @@ function MySchedules() {
       const userData = await getDocs(q);
       const members = [];
       userData.forEach((doc) => {
-        console.log('這些人有參加這行程唷', doc.data());
         members.push(doc.data());
       });
-      console.log(members);
-      // setSelectedScheduleMembers(members);
     }
     getArray();
   }, [selectedSchedule?.schedule_id, selectedSchedule]);
 
-  // 拿到點按下去的那筆行程
   async function getSelectedSchedule(id) {
     const docRef = doc(db, 'schedules', id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      setSelectedSchedule(docSnap.data()); // 放進state中
-    } else {
-      console.log('沒有這個行程！');
+      setSelectedSchedule(docSnap.data());
     }
   }
 
-  // 刪除某比行程
-
   async function deleteCertainSchedule(id) {
     const docRef = doc(db, 'schedules', id);
-    const docSnap = await getDoc(docRef);
-    console.log(docSnap.data());
+    // const docSnap = await getDoc(docRef);
+    // console.log(docSnap.data());
     await updateDoc(docRef, ({ deleted: true }));
   }
 
   const colorArray = ['#618CAC', '#A9B7AA', '#7A848D', '#976666', '#A0C1D2'];
-
-  // 06/30更新
-  // user按下「撰寫旅程回憶」的時候就要從database拿此筆行程資訊，做成新的article
-  // 並創造到articles database那邊，然後把這個id推到他的「owned_article_array」
-  // 到編輯頁面的時候再從articles去抓這篇下來做編輯（加入status為draft或published的key）
 
   const newArticle = {
     status: 'draft',
@@ -865,7 +885,6 @@ function MySchedules() {
   };
 
   async function setNewArticleToDb() {
-    console.log('您創了一筆新的遊記唷！');
     const createArticleData = doc(collection(db, 'articles'));
     await setDoc(
       createArticleData,
@@ -878,8 +897,6 @@ function MySchedules() {
     });
   }
 
-  // 搜尋朋友是否有在這網站
-
   async function submitSearch() {
     setSearchFriendValue('');
     const userEmailQuery = query(collection(db, 'users'), where('email', '==', searchFriendValue));
@@ -888,18 +905,13 @@ function MySchedules() {
       console.log('查無此人！');
     } else {
       querySnapShot.forEach((doc) => {
-        console.log('有這個人唷！', doc.id, '=>', doc.data());
         setSearchedFriendId(doc.id);
       });
     }
   }
 
-  // 確認把朋友加到這個行程中
-  // 增加朋友到selectedSchedule中'members'的這個key，同時把這個行程推到他的owned_schedule_array
-
   async function addFriendToTheSchedule() {
     const searchedFriendScheduleArray = doc(db, 'users', searchedFriendId);
-    // Atomically add a new region to the "regions" array field.
     await updateDoc(searchedFriendScheduleArray, {
       owned_schedule_ids: arrayUnion(selectedSchedule?.schedule_id),
     });
@@ -911,13 +923,10 @@ function MySchedules() {
     });
   }
 
-  // 同時querysnapshot，拿schedule中members的id array去找人
-
   useEffect(() => {
     if (selectedSchedule?.schedule_id) {
       const memberAdded = doc(db, 'schedules', selectedSchedule?.schedule_id);
       const unsubscribe = onSnapshot(memberAdded, async (querySnapshot) => {
-        // eslint-disable-next-line max-len
         const memberData = await Promise.all(querySnapshot.data().members.map(async (item) => {
           const docs = doc(db, 'users', item);
           const snap = await getDoc(docs);
@@ -936,12 +945,9 @@ function MySchedules() {
     return () => {};
   }, [selectedSchedule?.schedule_id, setSelectedMembers]);
 
-  // // 新增朋友即時更新
-
   const schedulePhotoArray = [SquareCover1,
     SquareCover2, SquareCover3, SquareCover4, SquareCover5, SquareCover6];
 
-  // 彈出刪除視窗動畫
   const modal = document.querySelector('.modal');
   const modalBackground = document.querySelector('.modal-background');
 
@@ -957,7 +963,6 @@ function MySchedules() {
     modalBackground?.classList.remove('show');
   }
 
-  // 彈出搜尋朋友視窗動畫
   const searchFriendModal = document.querySelector('.search-friend-modal');
   const searchFriendModalBackground = document.querySelector('.search-friend-modal-background');
 
@@ -975,7 +980,6 @@ function MySchedules() {
 
   return (
     <div>
-      {' '}
       {user.uid ? (
         <>
           <GreyHeaderComponent style={{ position: 'fixed', top: '0px;' }} />
@@ -991,73 +995,121 @@ function MySchedules() {
                   </StyledLink>
                 </CreateNewScheduleButton>
               </MySchedulesTitleAndCreateNewScheduleArea>
-              <ExistedSchedules>
-                {schedules.length === 0
-                  ? (
-                    <RemindWrapper>
-                      <RemindIcon src={Travel} />
-                      <RemindRightPart>
-                        <RemindText>
-                          還沒有行程捏～
-                          <br />
-                          是時候創建行程囉！
-                        </RemindText>
-                        <StyledBlackLink to="/choose-date">
-                          <ClickAndAdd>點我創建</ClickAndAdd>
-                        </StyledBlackLink>
-                        <SuitcaseIcon src={Suitcase} />
-                      </RemindRightPart>
-                    </RemindWrapper>
-                  )
-                  : schedules?.map((item, index) => (
-                    <ExistedSchedule
-                      key={index}
-                      data-position={index}
-                      isSelected={index === targetIndex}
+              {schedules.length === 0
+                ? (
+                  <RemindWrapper>
+                    <RemindIcon src={Travel} />
+                    <RemindRightPart>
+                      <RemindText>
+                        還沒有行程捏～
+                        <br />
+                        該創建行程囉！
+                      </RemindText>
+                      <StyledBlackLink to="/choose-date">
+                        <ClickAndAdd>點我創建</ClickAndAdd>
+                      </StyledBlackLink>
+                      <SuitcaseIcon src={Suitcase} />
+                    </RemindRightPart>
+                  </RemindWrapper>
+                )
+                : (
+                  <ExistedSchedules>
+                    {schedules?.map((item, index) => (
+                      <ExistedSchedule
+                        key={`${item?.schedule_id}and${item?.embark_date}+${item?.end_date}`}
+                        data-position={index}
+                        isSelected={index === targetIndex}
                   >
-                      <div className="modal-background">
-                        <div className="modal">
-                          <DeleteModalTitle>
-                            Delete
-                          </DeleteModalTitle>
-                          <DeleteAsk>確認要刪除嗎？</DeleteAsk>
-                          <DeleteButtonArea>
-                            <NoDeleteButton onClick={() => closeModal()} type="button">取消</NoDeleteButton>
-                            <ConfirmDeleteButton onClick={() => { deleteScheduleOfTheUser(index); closeModal(); deleteCertainSchedule(item.schedule_id); }} type="button">確認</ConfirmDeleteButton>
-                          </DeleteButtonArea>
-                        </div>
-                      </div>
-                      <PhotoInExistedSchedule src={schedulePhotoArray[index % 5]} />
-                      <LargeScreenExistedScheduleRightPart>
-                        <ExistedScheuleTitle id={item?.schedule_id}>
-                          {item?.title}
-                        </ExistedScheuleTitle>
-                        <ButtonArea>
-                          <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
-                            選擇
-                          </Button>
-                          <Button className="button" onClick={() => { toggleModal(); }} id={item?.schedule_id} type="button">
-                            刪除
-                          </Button>
-                        </ButtonArea>
-                      </LargeScreenExistedScheduleRightPart>
+                        <div
+                          key={`${item?.schedule_id}`}
+                          className="modal-background">
+                          <div
+                            key={`${item?.title}and${item?.schedule_id}+${item?.embark_date}`}
+                            className="modal">
+                            <DeleteModalTitle
+                              key={`${item?.schedule_id}and${item?.title}`}
 
-                      <SmallScreenExistedScheduleRightPart>
-                        <ExistedScheuleTitle id={item?.schedule_id}>
-                          {item.title}
-                        </ExistedScheuleTitle>
-                        <ButtonArea>
-                          <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
-                            選擇
-                          </Button>
-                          <Button onClick={() => toggleModal()} id={item?.schedule_id} type="button">
-                            刪除
-                          </Button>
-                        </ButtonArea>
-                      </SmallScreenExistedScheduleRightPart>
-                    </ExistedSchedule>
-                  ))}
-              </ExistedSchedules>
+                            >
+                              Delete
+                            </DeleteModalTitle>
+                            <DeleteAsk
+                              key={`${item?.schedule_id}+${item?.title}+${item?.end_date}`}
+                              >
+                              確認要刪除嗎？
+
+                            </DeleteAsk>
+                            <DeleteButtonArea
+                              key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.end_date}`}
+                            >
+                              <NoDeleteButton
+                                key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
+                                onClick={() => closeModal()}
+                                type="button">
+                                取消
+                              </NoDeleteButton>
+                              <ConfirmDeleteButton
+                                key={`${item?.deleted}`}
+                                onClick={() => { deleteScheduleOfTheUser(index); closeModal(); deleteCertainSchedule(item.schedule_id); }}
+                                type="button">
+                                確認
+
+                              </ConfirmDeleteButton>
+                            </DeleteButtonArea>
+                          </div>
+                        </div>
+                        <PhotoInExistedSchedule
+                          key={`${item?.title}`}
+                          src={schedulePhotoArray[index % 5]} />
+                        <LargeScreenExistedScheduleRightPart
+                          key={`${item?.embark_date}+${item?.end_date}`}
+
+                        >
+                          <ExistedScheuleTitle
+                            key={`${item?.title}+${item?.deleted}`}
+                            id={item?.schedule_id}>
+                            {item?.title}
+                          </ExistedScheuleTitle>
+                          <ButtonArea
+                            key={`${item?.embark_date}and`}
+                                                    >
+                            <Button key={`${item?.schedule_id}+${item?.end_date}`} onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
+                              選擇
+                            </Button>
+                            <Button key={`${item?.title}+${item?.end_date}`} className="button" onClick={() => { toggleModal(); }} id={item?.schedule_id} type="button">
+                              刪除
+                            </Button>
+                          </ButtonArea>
+                        </LargeScreenExistedScheduleRightPart>
+
+                        <SmallScreenExistedScheduleRightPart>
+                          <ExistedScheuleTitle
+                            key={`${item?.title}+${item?.deleted}+${item?.end_date}`}
+                            id={item?.schedule_id}>
+                            {item.title}
+                          </ExistedScheuleTitle>
+                          <ButtonArea
+                            key={`${item?.schedule_id}+${item?.title}+${item?.deleted}+${item?.end_date}`}
+                          >
+                            <Button
+                              key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
+                              onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }}
+                              id={item?.schedule_id}
+                              type="button">
+                              選擇
+                            </Button>
+                            <Button
+                              key={`${item?.schedule_id}+${item?.title}+${item?.end_date}+${item?.deleted}+${item?.embark_date}`}
+                              onClick={() => toggleModal()}
+                              id={item?.schedule_id}
+                              type="button">
+                              刪除
+                            </Button>
+                          </ButtonArea>
+                        </SmallScreenExistedScheduleRightPart>
+                      </ExistedSchedule>
+                    ))}
+                  </ExistedSchedules>
+                )}
             </ChoicesWrapper>
             <Line />
             <SmallScreenLine />
@@ -1088,6 +1140,7 @@ function MySchedules() {
                     {selectedMembers?.map((item, index) => (
                       <>
                         <ScheduleMemberWord
+                          key={item?.email}
                           hovered={showMemberWord}
                           onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }}
                           onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }}
@@ -1099,6 +1152,7 @@ function MySchedules() {
                           onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }}
                           onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }}
                           alt="member"
+                          key={item?.photo_url}
                           src={item.photo_url} />
                       </>
                     ))}
@@ -1194,75 +1248,6 @@ function MySchedules() {
                       )}
                     </div>
                   </div>
-                  {/* <InviteFriendBox>
-                      <InviteFriendTitle>加朋友進此行程？</InviteFriendTitle>
-                      <InviteFriendBelowArea active={searchInputIsActive}>
-                        <InviteFriendInput
-                          value={searchFriendValue}
-                          type="text"
-                          inputMode="text"
-                          onChange={(e) => setSearchFriendValue(e.target.value)}
-                          placeholder="請輸入email....." />
-                        <ConfirmSearchButton
-                          onClick={() => {
-                            submitSearch();
-                            setSearchInputIsActive(false);
-                            setSearchResultIsActive(true);
-                          }}
-                          type="button">
-                          確認搜尋
-                        </ConfirmSearchButton>
-                      </InviteFriendBelowArea>
-                      {searchedFriendId ? (
-                        <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
-                          <div>
-                            找到此用戶囉！
-                            <br />
-                            要加入他嗎？
-                          </div>
-                          <div>
-                            <ConfirmSearchButton
-                              onClick={() => {
-                                addFriendToTheSchedule();
-                                setSearchInputIsActive(true);
-                                setSearchResultIsActive(false);
-                                setSearchedFriendId(null);
-                              }}
-                              type="button">
-                              確認加入
-                            </ConfirmSearchButton>
-                            <ConfirmSearchButton
-                              style={{ marginTop: '10px' }}
-                              onClick={() => {
-                                setSearchInputIsActive(true);
-                                setSearchResultIsActive(false);
-                                setSearchedFriendId(null);
-                              }}
-                              type="button">
-                              回上一頁
-                            </ConfirmSearchButton>
-                          </div>
-                        </InviteFriendBelowArea>
-                      ) : (
-                        <InviteFriendBelowArea active={searchResultIsActive} style={{ marginTop: '30px' }}>
-                          <div>
-                            沒有此用戶～
-                            <br />
-                            試試看別的email吧！
-                          </div>
-                          <ConfirmSearchButton
-                            onClick={() => {
-                              setSearchInputIsActive(true);
-                              setSearchResultIsActive(false);
-                              setSearchedFriendId(null);
-                            }}
-                            type="button">
-                            回上一頁
-                          </ConfirmSearchButton>
-                        </InviteFriendBelowArea>
-                      )}
-                    </InviteFriendBox> */}
-                  {/* </CalendarInviteWrapper> */}
                 </>
               ) : ''}
             </SelectedScheduleWrapper>

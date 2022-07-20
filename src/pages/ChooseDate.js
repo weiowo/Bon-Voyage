@@ -159,10 +159,9 @@ function ChooseDate() {
   // 拿日期相減的天數
 
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-
   const diffDays = Math.round(Math.abs((startDate - finishDate) / oneDay)); // 加一天
 
-  // 新增天數
+  // 新行程
 
   const newSchedule = {
     schedule_creator_user_id: user.uid,
@@ -209,8 +208,11 @@ function ChooseDate() {
       const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
       await setDoc(
         createNewChatRoomData,
-        // eslint-disable-next-line max-len
-        ({ ...newChatRoom, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }),
+        ({
+          ...newChatRoom,
+          schedule_id: createNewScheduleData.id,
+          chat_room_id: createNewChatRoomData.id,
+        }),
       );
       const userOwnedScheduleArray = doc(db, 'users', user.uid);
       await updateDoc(userOwnedScheduleArray, {

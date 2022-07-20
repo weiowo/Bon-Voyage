@@ -278,20 +278,6 @@ position:relative;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
 
-// const ConfirmedUploadButton = styled.div`
-// display:flex;
-// align-items:center;
-// justify-content:center;
-// width:80px;
-// height:30px;
-// background-color:#729DC8;
-// border-radius:3px;
-// color:white;
-// font-size:14px;
-// font-weight:500;
-// cursor:pointer;
-// `;
-
 const ImgDisplayArea = styled.div`
 display:flex;
 width:55vw;
@@ -378,29 +364,8 @@ function EditPage() {
   const [article, updateArticle] = useImmer();
   const navigate = useNavigate();
 
-  // const [image, setImage] = useState(null); // 就是影片中的imgupload
-  console.log(article);
-  // const [imageList, setImageList] = useState([]);
-  // console.log(article);
-  // console.log(imageList);
-  // const [imageUrl, setImageUrl] = useState('');
-  // const [imgPath, setImgPath] = useState('');
-
-  // 拿所有這個資料夾的image url
-
-  // const imageListRef = ref(storage, 'images/');
-
-  // function uploadImg() {
-  //   if (image === null) return;
-  //   const imgRef = ref(storage, `images/${image.name}`);
-  //   uploadBytes(imgRef, image).then(() => {
-  //     console.log('image uploaded!');
-  //   });
-  // }
-
   // 按下上傳圖片！
   async function uploadImg(dayIndex, placeIndex, placeImgaeData) {
-    console.log('uploadImguploadImg');
     if (placeImgaeData === null) return;
     const imgRef = ref(storage, `images/${placeImgaeData.name}`);
     const snap = await uploadBytes(imgRef, placeImgaeData);
@@ -425,26 +390,6 @@ function EditPage() {
     console.log(url);
   }
 
-  // async function uploadImg() {
-  //   if (image === null) return;
-  //   const imgRef = ref(storage, `images/${image.name}`);
-  //   const snap = await uploadBytes(imgRef, image);
-  //   const url = await getDownloadURL(ref(storage.ref.fullpath));
-  // }
-
-  // 拿照片
-
-  // useEffect(() => {
-  //   listAll(imageListRef).then((response) => {
-  //     response.items.forEach((item) => {
-  //       getDownloadURL(item).then((url) => {
-  //         setImageList((prev) => [...prev, url]);
-  //       });
-  //     });
-  //   });
-  // }, []);
-
-  // 拿指定一個article_id的單一筆schedule資料
   const { search } = useLocation();
   const currentArticleId = new URLSearchParams(search).get('art_id');
   const currentScheduleId = new URLSearchParams(search).get('sch_id');
@@ -455,28 +400,11 @@ function EditPage() {
       const docRef = doc(db, 'articles', currentArticleId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('找到您的文章囉!', docSnap.data());
         updateArticle(docSnap.data());
-      } else {
-        console.log('沒找到文章捏>__<');
       }
     }
     getCertainArticle();
   }, [currentArticleId, updateArticle]);
-
-  // 有新增要及時更新
-
-  // useEffect(() => {
-  //   if (currentArticleId) {
-  //     const theArticleBeingEdited = doc(db, 'articles', currentArticleId);
-  //     onSnapshot(theArticleBeingEdited, (querySnapshot) => {
-  //       console.log(querySnapshot);
-  //       updateArticle(querySnapshot.data());
-  //     });
-  //   }
-  // }, [currentArticleId, updateArticle]);
-
-  // 新增內容！
 
   function updateArticleTitle(articleTitle) {
     updateArticle((draft) => {
@@ -496,26 +424,7 @@ function EditPage() {
     });
   }
 
-  // 上傳照片後放到firestore
-  // 上傳首張封面照片
-
-  // function updateArticleCoverPhoto(coverPhotoUrl) {
-  //   updateArticle((draft) => {
-  //     draft.cover_img = coverPhotoUrl;
-  //   });
-  // }
-
-  // 上傳place的照片
-  // function updatePlaceImg(dayIndex, placeIndex) {
-  //   updateArticle((draft) => {
-  //     draft.trip_days[dayIndex].places[placeIndex].place_imgs.push('照片src');
-  //   });
-  // }
-
-  // 刪除place的照片功能
-
   function deletePlaceImg(dayIndex, placeIndex, photoIndex) {
-    console.log('delete~');
     updateArticle((draft) => {
       draft.trip_days[dayIndex].places[placeIndex].place_imgs = draft.trip_days[dayIndex]
         .places[placeIndex].place_imgs.filter(
@@ -524,8 +433,6 @@ function EditPage() {
     });
   }
 
-  // 儲存未發布功能
-
   async function SaveArticle() {
     if (!currentArticleId) { return; }
     if (currentArticleId) {
@@ -533,8 +440,6 @@ function EditPage() {
       await updateDoc(articleRef, article);
     }
   }
-
-  // 發佈功能
 
   async function PublishArticle() {
     if (!currentArticleId) { return; }
@@ -632,7 +537,6 @@ function EditPage() {
                               id={`photo-${dayIndex}-${placeIndex}`}
                               style={{ display: 'none' }}
                               onChange={(e) => {
-                                console.log('onChangeonChangeonChange');
                                 uploadImg(dayIndex, placeIndex, e.target.files[0]);
                               }}
                               // onChange={(e) => {

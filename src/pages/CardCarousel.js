@@ -21,6 +21,8 @@ import Default3 from './images/default3.png';
 import Default4 from './images/default4.png';
 import Default5 from './images/default5.png';
 import unfilledStar from './images/unfilled_star.jpg';
+import Travel from './images/travel-2.png';
+import Suitcase from './images/suitcase-2.png';
 import filledStar from './images/filled_star.jpg';
 import './animation.css';
 import {
@@ -30,18 +32,13 @@ import {
   ScheduleChoiceTitle, ModalPlaceTitle, ModalPlaceAddress, ConfirmChooseDayButton,
   ButtonStarArea, AddFavoriteIcon, Loading,
 } from './City';
+import {
+  RemindWrapper, ClickAndAdd,
+  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from './MySchedules';
 import UserContext from '../components/UserContextComponent';
 
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
-
-// const AddFavoriteIcon = styled.img`
-// width:25px;
-// height:25px;
-// cursor:pointer;
-// position:absolute;
-// right:15%;
-// justify-self:right;
-// `;
 
 const NearByPlaceWrapper = styled.div`
 width:100vw;
@@ -154,14 +151,6 @@ display:none;
   width:100%;
 }`;
 
-// const ButtonStarArea = styled.div`
-// width:100%;
-// height:auto;
-// display:flex;
-// align-items:center;
-// justify-content:center;
-// `;
-
 const Cards = styled.div`
 display:flex;
 padding-left:15px;
@@ -241,10 +230,9 @@ const mapContainerStyle = {
 
 function CardsCarousel({ currentNearbyAttraction }) {
   const user = useContext(UserContext);
-  console.log(user);
-  const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]); // 是這個人所有的行程哦！不是單一筆行程!
-  const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
-  const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
+  const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]);
+  const [clickedScheduleIndex, setClickedScheduleIndex] = useState();
+  const [clickedScheduleId, setClickedScheduleId] = useState();
   const [dayIndex, setDayIndex] = useState();
   const [modalIsActive, setModalIsActive] = useState(false);
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
@@ -265,10 +253,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
     mapRef.current = map;
   }, []);
 
-  console.log(liked);
-  console.log('我在cardCarouselpage', currentNearbyAttraction);
   const navigate = useNavigate();
-  //   const attractions = JSON.parse(window.localStorage.getItem('周遭景點暫存區STRING'));
   const [currentIndex, setCurrnetIndex] = useState(5);
 
   function nextPhotos() {
@@ -284,19 +269,12 @@ function CardsCarousel({ currentNearbyAttraction }) {
     }
   }
 
-  // 打開modal時先確認有沒有追蹤過
-  // 有的話就讓星星亮起，沒有的話就讓星星空的
-  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
-
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
-    console.log(docSnap.data());
-    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
+    if (docSnap?.data()?.loved_attraction_ids?.indexOf(placeId) > -1) {
       setLiked(true);
-      console.log('已經追蹤過嚕!');
     } else {
-      console.log('沒有哦');
       setLiked(false);
     }
   }
@@ -313,17 +291,11 @@ function CardsCarousel({ currentNearbyAttraction }) {
     };
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.getDetails(placeRequest, (place, status) => {
-      console.log(status);
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         setModalDetail(place);
-      } else {
-        console.log('error');
       }
     });
   }
-
-  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
-  // 按下星星後就先把這個位置存到db的attractions資料庫中～
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
@@ -360,24 +332,16 @@ function CardsCarousel({ currentNearbyAttraction }) {
     async function getUserArrayList() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      // if (docSnap.exists()) {
-      //   console.log('Document data:', docSnap?.data()?.owned_schedule_ids);
-      // } else {
-      //   console.log('No such document!');
-      // }
       function getSchedulesFromList() {
-        docSnap.data()?.owned_schedule_ids?.forEach(async (item, index) => {
+        docSnap.data()?.owned_schedule_ids?.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              console.log('這位使用者的行程', index, Snap.data());
               setCityPageScheduleData((draft) => {
                 draft.push(Snap.data());
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       }
@@ -386,16 +350,12 @@ function CardsCarousel({ currentNearbyAttraction }) {
     getUserArrayList();
   }, [setCityPageScheduleData, user.uid]);
 
-  // 選好行程跟天數時，會把行程的名稱跟地址加到immer中，並送到database中
-
   function ComfirmedAdded() {
-    console.log('已經加入囉！');
     const newPlace = {
       place_title: modalDetail.name,
       place_address: modalDetail.formatted_address,
       stay_time: 60,
     };
-    // 用 immer 產生出新的行程資料
     const newScheduleData = produce(cityPageScheduleData, (draft) => {
       draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
     });
@@ -406,8 +366,6 @@ function CardsCarousel({ currentNearbyAttraction }) {
     }
     passAddedDataToFirestore();
   }
-
-  // 關於modal部分
 
   function handleModalClose() {
     setModalIsActive(false);
@@ -480,20 +438,36 @@ function CardsCarousel({ currentNearbyAttraction }) {
           <ModalContentWrapper>
             <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
             <ScheduleChoicesBoxWrapper>
-              {cityPageScheduleData ? cityPageScheduleData.map((item, index) => (
+              {cityPageScheduleData.length === 0 ? (
+                <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                  <RemindIcon src={Travel} />
+                  <RemindRightPart style={{ width: 'auto' }}>
+                    <RemindText>
+                      還沒有行程捏～
+                      <br />
+                      是時候創建行程囉！
+                    </RemindText>
+                    <StyledBlackLink to="/choose-date">
+                      <ClickAndAdd>點我創建</ClickAndAdd>
+                    </StyledBlackLink>
+                    <SuitcaseIcon src={Suitcase} />
+                  </RemindRightPart>
+                </RemindWrapper>
+              ) : cityPageScheduleData.map((item, index) => (
                 <ScheduleChoicesBox
+                  key={item?.schedule_id}
                   onClick={() => {
-                    setClickedScheduleId(item.schedule_id);
+                    setClickedScheduleId(item?.schedule_id);
                     setClickedScheduleIndex(index);
                     setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
                   }}
                   id={item.schedule_id}
                 >
-                  <ScheduleChoiceTitle>
+                  <ScheduleChoiceTitle key={item?.title}>
                     {item.title}
                   </ScheduleChoiceTitle>
                 </ScheduleChoicesBox>
-              )) : ''}
+              ))}
             </ScheduleChoicesBoxWrapper>
           </ModalContentWrapper>
           <CloseModalButton
@@ -519,13 +493,14 @@ function CardsCarousel({ currentNearbyAttraction }) {
               {cityPageScheduleData
                 ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
                   <ScheduleChoicesBox
+                    key={item?.schedule_id}
                     clicked={dayIndex === index}
                     onClick={() => {
                       setDayIndex(index);
                     }}
                     style={{ display: 'flex' }}
                   >
-                    <ScheduleChoiceTitle>
+                    <ScheduleChoiceTitle key={`${item?.schedule_id}day${item?.title}`}>
                       第
                       {index + 1}
                       天
@@ -558,6 +533,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
           {currentNearbyAttraction
             ? currentNearbyAttraction.slice(currentIndex, currentIndex + 4).map((item, index) => (
               <Cards
+                key={item.place_id}
                 id={item.place_id}
                 onClick={(e) => {
                   ShowDetailNCheckLikedOrNot(
@@ -571,6 +547,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
                 style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? '哈哈'})` }}
               >
                 <div
+                  key={`${item?.name}+${item?.place_id}`}
                   id={item.place_id}
                 >
                   {item.name}
@@ -597,6 +574,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
             {currentNearbyAttraction
               ? currentNearbyAttraction.slice(currentIndex, currentIndex + 3).map((item, index) => (
                 <Cards
+                  key={item.place_id}
                   onClick={(e) => {
                     ShowDetailNCheckLikedOrNot(
                       e.target.id,
@@ -610,6 +588,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
                   style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
                 >
                   <div
+                    key={`${item?.name}+${item?.place_id}`}
                     id={item.place_id}
                   >
                     {item.name}
@@ -618,7 +597,6 @@ function CardsCarousel({ currentNearbyAttraction }) {
               )) : (
                 <Loading />
               )}
-            {/* 為何字沒有跑出？ */}
           </SmallScreenCards>
           <SmallScreenArrow onClick={() => nextPhotos()} src={ArrowToRightSrc} />
         </SmallScreenCardsWrapper>
@@ -629,7 +607,12 @@ function CardsCarousel({ currentNearbyAttraction }) {
 }
 
 CardsCarousel.propTypes = {
-  currentNearbyAttraction: PropTypes.func.isRequired,
+  // eslint-disable-next-line max-len
+  currentNearbyAttraction: PropTypes.arrayOf(PropTypes.shape({ place_id: PropTypes.string }).isRequired),
+};
+
+CardsCarousel.defaultProps = {
+  currentNearbyAttraction: [],
 };
 
 export default CardsCarousel;

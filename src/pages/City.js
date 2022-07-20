@@ -23,6 +23,12 @@ import Default5 from './images/default5.png';
 import unfilledStar from './images/unfilled_star.jpg';
 import filledStar from './images/filled_star.jpg';
 import Footer from '../components/Footer';
+import Travel from './images/travel-2.png';
+import Suitcase from './images/suitcase-2.png';
+import {
+  RemindWrapper, ClickAndAdd,
+  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from './MySchedules';
 
 export const ButtonStarArea = styled.div`
 width:100%;
@@ -751,24 +757,16 @@ function City() {
     async function getUserArrayList() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data().owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item) => {
+        docSnap?.data()?.owned_schedule_ids?.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
             if (Snap.data().deleted === false) {
-              // console.log('這位使用者的行程', index, Snap.data());
               setCityPageScheduleData((draft) => {
                 draft.push(Snap.data());
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       }
@@ -777,15 +775,12 @@ function City() {
     getUserArrayList();
   }, [setCityPageScheduleData, user.uid]);
 
-  // 選好行程跟天數時，會把行程的名稱跟地址加到immer中，並送到database中
-
   function ComfirmedAdded() {
     const newPlace = {
       place_title: modalDetail?.name,
       place_address: modalDetail?.formatted_address,
       stay_time: 60,
     };
-    // 用 immer 產生出新的行程資料
     const newScheduleData = produce(cityPageScheduleData, (draft) => {
       draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
     });
@@ -796,8 +791,6 @@ function City() {
     }
     passAddedDataToFirestore();
   }
-
-  // 按下加入行程時先判斷有否登入，有的話才能繼續
 
   function handleUserOrNot() {
     if (!user.uid) {
@@ -815,8 +808,7 @@ function City() {
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
-    // console.log(docSnap.data());
-    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
+    if (docSnap?.data()?.loved_attraction_ids?.indexOf(placeId) > -1) {
       setLiked(true);
     } else {
       setLiked(false);
@@ -837,14 +829,9 @@ function City() {
     service.getDetails(placeRequest, (place, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         setModalDetail(place);
-      } else {
-        console.log('error');
       }
     });
   }
-
-  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
-  // 按下星星後就先把這個位置存到db的attractions資料庫中～
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
@@ -893,16 +880,16 @@ function City() {
                       加入行程
                     </AddToScheduleButton>
                     <AddFavoriteIcon
-                      onClick={() => { handleFavorite(modalDetail.place_id); }}
+                      onClick={() => { handleFavorite(modalDetail?.place_id); }}
                       src={liked ? filledStar : unfilledStar}
                     />
                   </ButtonStarArea>
                 </ModalLeftArea>
                 <ModalImgArea>
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() || defaultArray[0]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() || defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() || defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() || defaultArray[3]} />
                 </ModalImgArea>
                 <CloseModalButton
                   type="button"
@@ -927,20 +914,35 @@ function City() {
           <ModalContentWrapper>
             <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
             <ScheduleChoicesBoxWrapper>
-              {cityPageScheduleData ? cityPageScheduleData.map((item, index) => (
+              {cityPageScheduleData.length === 0 ? (
+                <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                  <RemindIcon src={Travel} />
+                  <RemindRightPart style={{ width: 'auto' }}>
+                    <RemindText>
+                      還沒有行程捏～
+                      <br />
+                      是時候創建行程囉！
+                    </RemindText>
+                    <StyledBlackLink to="/choose-date">
+                      <ClickAndAdd>點我創建</ClickAndAdd>
+                    </StyledBlackLink>
+                    <SuitcaseIcon src={Suitcase} />
+                  </RemindRightPart>
+                </RemindWrapper>
+              ) : cityPageScheduleData.map((item, index) => (
                 <ScheduleChoicesBox
                   onClick={() => {
-                    setClickedScheduleId(item.schedule_id);
+                    setClickedScheduleId(item?.schedule_id);
                     setClickedScheduleIndex(index);
                     setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
                   }}
-                  id={item.schedule_id}
+                  id={item?.schedule_id}
                 >
                   <ScheduleChoiceTitle>
-                    {item.title}
+                    {item?.title}
                   </ScheduleChoiceTitle>
                 </ScheduleChoicesBox>
-              )) : ''}
+              ))}
             </ScheduleChoicesBoxWrapper>
           </ModalContentWrapper>
           <CloseModalButton
@@ -1127,24 +1129,10 @@ function City() {
               )) : ''}
             </AttractionWrapper>
             <Footer />
-
           </ContentArea>
-
         )
         : (
           <Loading />
-        //   <div style={{ height: '30px', position:
-        // 'fixed', bottom: 0 }} className="progress container">
-        //     <span />
-        //     <span />
-        //     <span />
-        //     <span />
-        //     <span />
-        //     <span />
-        //     <span />
-        //     <span />
-        //   </div>
-        //
         )}
     </>
   );

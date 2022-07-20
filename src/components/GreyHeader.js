@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   signOut,
 } from 'firebase/auth';
@@ -123,31 +123,54 @@ function GreyHeaderComponent() {
       window.addEventListener('scroll', () => { setHeaderBackground(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200); });
     }
   }, []);
+
+  const currentUrl = useLocation();
+
   // const user = useContext(UserContext);
   return (
     <>
-      <Header active={headerBackground}>
+      <Header active={headerBackground?.toString()}>
         <ProfileNavLink to="/">
-          <Logo active={headerBackground}>Bon Voyage</Logo>
+          <Logo active={headerBackground?.toString()}>Bon Voyage</Logo>
         </ProfileNavLink>
-        <NavBar active={headerBackground}>
-          <StyleNavLink active={headerBackground} to="/vr-page">
+        <NavBar active={headerBackground?.toString()}>
+          <StyleNavLink
+            style={{ borderBottom: currentUrl.pathname === '/vr-page' ? '1.5px solid white' : '' }}
+            active={headerBackground?.toString()}
+            to="/vr-page"
+          >
             VR專區
           </StyleNavLink>
-          <StyleNavLink active={headerBackground} to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all">
+          <StyleNavLink
+            style={{ borderBottom: currentUrl.pathname === '/city' ? '1.5px solid white' : '' }}
+            active={headerBackground?.toString()}
+            to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all"
+          >
             熱門景點
           </StyleNavLink>
-          <StyleNavLink active={headerBackground} to="/all-articles">
+          <StyleNavLink
+            style={{ borderBottom: currentUrl.pathname === '/all-articles' ? '1.5px solid white' : '' }}
+            active={headerBackground?.toString()}
+            to="/all-articles"
+          >
             熱門遊記
           </StyleNavLink>
-          <StyleNavLink active={headerBackground} to="/category?lat=25.0498583&lng=121.5172606&category=food">
+          <StyleNavLink
+            style={{ borderBottom: currentUrl.pathname === '/category' ? '1.5px solid white' : '' }}
+            active={headerBackground?.toString()}
+            to="/category?lat=25.0498583&lng=121.5172606&category=food"
+          >
             美食特搜
           </StyleNavLink>
-          <StyleNavLink active={headerBackground} to="/my-schedules">
+          <StyleNavLink
+            style={{ borderBottom: currentUrl.pathname === '/my-schedules' ? '1.5px solid white' : '' }}
+            active={headerBackground?.toString()}
+            to="/my-schedules"
+          >
             行程規劃
           </StyleNavLink>
-          <ProfileNavLink active={headerBackground} to="/profile">
-            <ProfilePageNav active={headerBackground}>個人頁面</ProfilePageNav>
+          <ProfileNavLink active={headerBackground?.toString()} to="/profile">
+            <ProfilePageNav active={headerBackground?.toString()}>個人頁面</ProfilePageNav>
           </ProfileNavLink>
         </NavBar>
       </Header>
@@ -158,8 +181,8 @@ function GreyHeaderComponent() {
           active={clicked}
           onClick={() => setClicked(true)}
         />
-        <StyleNavLink active={headerBackground} to="/">
-          <Logo active={headerBackground}>Bon Voyage</Logo>
+        <StyleNavLink active={headerBackground?.toString()} to="/">
+          <Logo active={headerBackground?.toString()}>Bon Voyage</Logo>
         </StyleNavLink>
         <SmallScreenBackground active={clicked}>
           <SmallScreenNavBar active={clicked}>

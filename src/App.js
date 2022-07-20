@@ -12,7 +12,6 @@ import MySchedules from './pages/MySchedules';
 import Map from './pages/Map';
 import SearchHome from './pages/SearchHome';
 import City from './pages/City';
-import PlaceModal from './components/PlaceModal';
 import CardsCarousel from './pages/CardCarousel';
 import CityAreaInHomePage from './components/CityInHome';
 import CategoryAreaInHome from './pages/CategoryInHome';
@@ -27,6 +26,7 @@ import AllArticlePage from './pages/AllArticles';
 import Profile from './pages/Profile';
 import VR from './pages/VrPage';
 import MyLovedArticles from './pages/MyFavorites';
+import PageNotFound from './pages/PageNotFound';
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -80,8 +80,6 @@ function App() {
       if (userData) {
         setUser(userData);
         console.log('您已登入囉(app.js)!', userData.uid, userData.providerId, userData.email);
-        const now = auth.currentUser;
-        console.log('onAuthStateChanged', now);
       } else {
         console.log('您尚未登入唷(app.js)!');
       }
@@ -121,7 +119,6 @@ function App() {
             <Route path="/map-new" element={<Map />} />
             <Route path="/home-search" element={<SearchHome />} />
             <Route path="/city" element={<City />} />
-            <Route path="/place-modal" element={<PlaceModal />} />
             <Route path="/category-in-home" element={<CategoryAreaInHome currentLatLng={currentLatLng} />} />
             <Route path="/carousel" element={<CardsCarousel />} />
             <Route path="/city-home" element={<CityAreaInHomePage />} />
@@ -134,6 +131,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/vr-page" element={<VR />} />
             <Route path="/my-favorites" element={<MyLovedArticles />} />
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
