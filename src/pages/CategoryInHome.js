@@ -1,7 +1,7 @@
 // 在首頁按下種類的時候，會把種類跟使用者所在位置的經緯度紀錄
 // 接著到category頁面執行相關搜尋
 // 不同的種類上面的banner可以不一樣
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 // import { useNavigate } from 'react-router-dom';
@@ -19,14 +19,22 @@ const CategoryWrapper = styled.div`
 align-self:center;
 margin-top:20px;
 width:100vw;
-height:350px;
+height:280px;
 display:flex;
 flex-direction:column;
 align-items:center;
 @media screen and (max-width:800px){
   width:100vw;
   margin-top:30px;
-  height:auto;
+  height:300px;
+}
+@media screen and (max-width:750px){
+  height:480px;
+}
+@media screen and (max-width:500px){
+  width:100%;
+  height:450px;
+  margin-left:0px;
 }`;
 
 const CategoryWrapperTitle = styled.div`
@@ -38,8 +46,10 @@ align-items:center;
 font-size:24px;
 font-weight:600;
 color:#1F456E;
+margin-bottom:30px;
 @media screen and (max-width:800px){
-  font-size:30px;
+  font-size:24px;
+  margin-bottom:20px;
 }`;
 
 const CategoryBoxesContainer = styled.div`
@@ -49,13 +59,33 @@ display:flex;
 justify-content:center;
 align-items:center;
 width:80vw;
-height:300px;
-display:flex;
 flex-wrap:wrap;
+height:auto;
+@media screen and (max-width:1249px){
+  margin-left:30px;
+  width:85vw;
+  gap:15px;
+}
 @media screen and (max-width:800px){
-  width:90vw;
-  margin-top:30px;
-  height:auto;
+  margin-left:30px;
+  width:85vw;
+  gap:10px;
+}
+@media screen and (max-width:750px){
+  margin-left:0px;
+  margin-top:0px;
+}
+@media screen and (max-width:630px){
+  width:100%;
+  margin-top:0px;
+  margin-left:0px;
+}
+@media screen and (max-width:500px){
+  width:100%;
+  height:89s0px;
+  margin-top:20px;
+  margin-left:0px;
+  gap:10px;
 }`;
 
 const CategoryBox = styled.div`
@@ -64,6 +94,30 @@ height:100px;
 display:flex;
 align-items:center;
 gap:20px;
+@media screen and (max-width:1249px){
+  width:200px;
+}
+@media screen and (max-width:1000px){
+  width:180px;
+  gap:0px;
+}
+@media screen and (max-width:900px){
+  width:170px;
+  gap:0px;
+}
+@media screen and (max-width:850px){
+  width:150px;
+}
+@media screen and (max-width:750px){
+  width:230px;
+  justify-content:center;
+}
+@media screen and (max-width:500px){
+  width:40%;
+  justify-content:center;
+  gap:10px;
+  height:80px;
+}
 `;
 
 const CategoryIcon = styled.img`
@@ -95,14 +149,6 @@ color:grey;
 `;
 
 function CategoryAreaInHome({ currentLatLng }) {
-  // const [categoryOption, setCategoryOption] = useState('');
-  useEffect(() => {
-    console.log('我在CategoryPage');
-    console.log({ currentLatLng });
-    console.log(currentLatLng);
-    console.log(currentLatLng.lat, currentLatLng.lng);
-  }, [currentLatLng]);
-
   const navigate = useNavigate();
 
   function navigateToCategoryPage(id) {
@@ -175,7 +221,11 @@ function CategoryAreaInHome({ currentLatLng }) {
 }
 
 CategoryAreaInHome.propTypes = {
-  currentLatLng: PropTypes.func.isRequired,
+  currentLatLng: PropTypes.shape({ lat: PropTypes.number, lng: PropTypes.number }),
+};
+
+CategoryAreaInHome.defaultProps = {
+  currentLatLng: PropTypes.shape({ lat: 25.03746, lng: 121.564558 }),
 };
 
 export default CategoryAreaInHome;

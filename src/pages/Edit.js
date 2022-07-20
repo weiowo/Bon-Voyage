@@ -7,6 +7,7 @@ import
 } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { useImmer } from 'use-immer';
+import { HashLink } from 'react-router-hash-link';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import {
@@ -15,8 +16,7 @@ import {
 } from 'firebase/storage';
 import db, { storage } from '../utils/firebase-init';
 import HeaderComponent from '../components/Header';
-// import ShareBanner1 from './images/share_banner1.png';
-import ShareBanner2 from './images/share_banner2.png';
+import ShareBanner2 from './images/share_banner2.jpeg';
 import CoverDefaultPhoto from './images/cover_photo_default.png';
 
 const PageWrapper = styled.div`
@@ -36,7 +36,10 @@ background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 position:relative;
 background-position:center;
-`;
+object-fit:cover;
+@media screen and (max-width:900px){
+  height:300px;
+}`;
 
 const ArticlePageBelowPart = styled.div`
 width:100vw;
@@ -51,7 +54,9 @@ width:75vw;
 height:auto;
 display:flex;
 justify-content:center;
-`;
+@media screen and (max-width:900px){
+  width:85vw;
+}`;
 
 const ArticleCoverPhoto = styled.input`
 display:none;
@@ -74,7 +79,16 @@ background-position:center;
 flex-shrink: 0;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 cursor:pointer;
-`;
+object-fit:cover;
+@media screen and (max-width:900px){
+  width:55vw;
+}
+@media screen and (max-width:900px){
+  width:55vw;
+}
+@media screen and (max-width:750px){
+  width:80vw;
+}`;
 
 const Description = styled.textarea`
 padding-left:10px;
@@ -92,13 +106,23 @@ border: none;
 background-color: transparent;
 resize: none;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`;
+@media screen and (max-width:900px){
+  width:calc(55vw - 3px);
+  margin-top:10px;
+}
+@media screen and (max-width:750px){
+  width:80vw;
+}`;
 
 const ArticleTitleButtonArea = styled.div`
 width:75vw;
 height:auto;
 display:flex;
-`;
+@media screen and (max-width:900px){
+  width:85vw;
+  justify-content:space-between;
+  gap:0px;
+}`;
 
 const ArticleTitle = styled.input`
 width:55vw;
@@ -110,7 +134,13 @@ margin-top:20px;
 margin-bottom:20px;
 outline:none;
 border:none;
-`;
+@media screen and (max-width:900px){
+  width:60vw;
+}
+@media screen and (max-width:750px){
+  width:50vw;
+  font-size:27px;
+}`;
 
 const EditingPart = styled.div`
 width:55vw;
@@ -118,16 +148,40 @@ height:600px;
 display:flex;
 flex-direction:column;
 align-items:flex-start;
-overflow:scroll;
 gap:5px;
-`;
+overflow:auto;
+&::-webkit-scrollbar-track {
+  -webkit-box-shadow: transparent;
+  border-radius: 10px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar {
+  width: 6px;
+  background-color:transparent;
+}
+&::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: transparent;
+  background-color:#D3D3D3;
+}
+@media screen and (max-width:900px){
+  width:60vw;
+}
+@media screen and (max-width:750px){
+  width:85vw
+}`;
 
 const PlaceArea = styled.div`
-width:100%;
+width:calc(50vw - 3px);
 display:flex;
 flex-direction:column;
 align-items:flex-start;
-`;
+@media screen and (max-width:900px){
+  width:calc(55vw - 3px);
+}
+@media screen and (max-width:750px){
+  width:80vw;
+}`;
 
 const ScheduleSummaryPart = styled.div`
 width:20vw;
@@ -137,7 +191,12 @@ flex-direction:column;
 gap:15px;
 margin-left:20px;
 padding-left:10px;
-`;
+@media screen and (max-width:900px){
+  width:25vw;
+}
+@media screen and (max-width:750px){
+display:none;
+}`;
 
 const ScheduleSummaryDayAndPlacePart = styled.div`
 display:flex;
@@ -146,7 +205,9 @@ height:auto;
 gap:10px;
 align-items:flex-start;
 paddin-left:15px;
-`;
+@media screen and (max-width:900px){
+  width:25vw;
+}`;
 
 const ScheduleSummaryDayPart = styled.div`
 width:5vw;
@@ -156,7 +217,9 @@ background-color:#729DC8;
 color:white;
 font-weight:550;
 gap:10px;
-`;
+@media screen and (max-width:900px){
+  width:7vw;
+}`;
 
 const ScheduleSummaryPlacePart = styled.div`
 width:15vw;
@@ -164,7 +227,9 @@ height:auto;
 display:flex;
 flex-direction:column;
 gap:8px;
-`;
+@media screen and (max-width:900px){
+  width:18vw;
+}`;
 
 const SummaryPlaceTitle = styled.div`
 font-weight:500;
@@ -197,7 +262,9 @@ margin-right:20px;
 font-weight:600;
 font-size:18px;
 letter-spacing:2px;
-`;
+@media screen and (max-width:900px){
+  height:40px;
+}`;
 
 // const PlaceUploadImgArea = styled.input`
 // width:180px;
@@ -210,20 +277,6 @@ height:100px;
 position:relative;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
-
-// const ConfirmedUploadButton = styled.div`
-// display:flex;
-// align-items:center;
-// justify-content:center;
-// width:80px;
-// height:30px;
-// background-color:#729DC8;
-// border-radius:3px;
-// color:white;
-// font-size:14px;
-// font-weight:500;
-// cursor:pointer;
-// `;
 
 const ImgDisplayArea = styled.div`
 display:flex;
@@ -258,7 +311,14 @@ align-items:center;
 justify-content:left;
 gap:20px;
 margin-left:15px;
-`;
+@media screen and (max-width:750px){
+  width:20vw;
+  gap:10px;
+  margin-left:0px;
+}
+@media screen and (max-width:450px){
+  width:30vw;
+}`;
 
 const SaveButton = styled.button`
 width:70px;
@@ -270,7 +330,15 @@ border:none;
 font-size:16px;
 cursor:pointer;
 font-weight:600;
-`;
+flex-shrink:0;
+@media screen and (max-width:750px){
+  width:50px;
+  font-size:13px;
+}
+@media screen and (max-width:450px){
+  width:50px;
+  font-size:13px;
+}`;
 
 const PublishedButton = styled.button`
 width:70px;
@@ -282,35 +350,22 @@ border:none;
 cursor:pointer;
 font-size:16px;
 font-weight:600;
-`;
+flex-shrink:0;
+@media screen and (max-width:750px){
+  width:50px;
+  font-size:13px;
+}
+@media screen and (max-width:450px){
+  width:50px;
+  font-size:13px;
+}`;
 
 function EditPage() {
   const [article, updateArticle] = useImmer();
   const navigate = useNavigate();
 
-  // const [image, setImage] = useState(null); // 就是影片中的imgupload
-  console.log(article);
-  // const [imageList, setImageList] = useState([]);
-  // console.log(article);
-  // console.log(imageList);
-  // const [imageUrl, setImageUrl] = useState('');
-  // const [imgPath, setImgPath] = useState('');
-
-  // 拿所有這個資料夾的image url
-
-  // const imageListRef = ref(storage, 'images/');
-
-  // function uploadImg() {
-  //   if (image === null) return;
-  //   const imgRef = ref(storage, `images/${image.name}`);
-  //   uploadBytes(imgRef, image).then(() => {
-  //     console.log('image uploaded!');
-  //   });
-  // }
-
   // 按下上傳圖片！
   async function uploadImg(dayIndex, placeIndex, placeImgaeData) {
-    console.log('uploadImguploadImg');
     if (placeImgaeData === null) return;
     const imgRef = ref(storage, `images/${placeImgaeData.name}`);
     const snap = await uploadBytes(imgRef, placeImgaeData);
@@ -335,26 +390,6 @@ function EditPage() {
     console.log(url);
   }
 
-  // async function uploadImg() {
-  //   if (image === null) return;
-  //   const imgRef = ref(storage, `images/${image.name}`);
-  //   const snap = await uploadBytes(imgRef, image);
-  //   const url = await getDownloadURL(ref(storage.ref.fullpath));
-  // }
-
-  // 拿照片
-
-  // useEffect(() => {
-  //   listAll(imageListRef).then((response) => {
-  //     response.items.forEach((item) => {
-  //       getDownloadURL(item).then((url) => {
-  //         setImageList((prev) => [...prev, url]);
-  //       });
-  //     });
-  //   });
-  // }, []);
-
-  // 拿指定一個article_id的單一筆schedule資料
   const { search } = useLocation();
   const currentArticleId = new URLSearchParams(search).get('art_id');
   const currentScheduleId = new URLSearchParams(search).get('sch_id');
@@ -365,28 +400,11 @@ function EditPage() {
       const docRef = doc(db, 'articles', currentArticleId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        console.log('找到您的文章囉!', docSnap.data());
         updateArticle(docSnap.data());
-      } else {
-        console.log('沒找到文章捏>__<');
       }
     }
     getCertainArticle();
   }, [currentArticleId, updateArticle]);
-
-  // 有新增要及時更新
-
-  // useEffect(() => {
-  //   if (currentArticleId) {
-  //     const theArticleBeingEdited = doc(db, 'articles', currentArticleId);
-  //     onSnapshot(theArticleBeingEdited, (querySnapshot) => {
-  //       console.log(querySnapshot);
-  //       updateArticle(querySnapshot.data());
-  //     });
-  //   }
-  // }, [currentArticleId, updateArticle]);
-
-  // 新增內容！
 
   function updateArticleTitle(articleTitle) {
     updateArticle((draft) => {
@@ -406,26 +424,7 @@ function EditPage() {
     });
   }
 
-  // 上傳照片後放到firestore
-  // 上傳首張封面照片
-
-  // function updateArticleCoverPhoto(coverPhotoUrl) {
-  //   updateArticle((draft) => {
-  //     draft.cover_img = coverPhotoUrl;
-  //   });
-  // }
-
-  // 上傳place的照片
-  // function updatePlaceImg(dayIndex, placeIndex) {
-  //   updateArticle((draft) => {
-  //     draft.trip_days[dayIndex].places[placeIndex].place_imgs.push('照片src');
-  //   });
-  // }
-
-  // 刪除place的照片功能
-
   function deletePlaceImg(dayIndex, placeIndex, photoIndex) {
-    console.log('delete~');
     updateArticle((draft) => {
       draft.trip_days[dayIndex].places[placeIndex].place_imgs = draft.trip_days[dayIndex]
         .places[placeIndex].place_imgs.filter(
@@ -434,8 +433,6 @@ function EditPage() {
     });
   }
 
-  // 儲存未發布功能
-
   async function SaveArticle() {
     if (!currentArticleId) { return; }
     if (currentArticleId) {
@@ -443,8 +440,6 @@ function EditPage() {
       await updateDoc(articleRef, article);
     }
   }
-
-  // 發佈功能
 
   async function PublishArticle() {
     if (!currentArticleId) { return; }
@@ -463,6 +458,7 @@ function EditPage() {
         <ArticlePageBelowPart>
           <ArticleTitleButtonArea>
             <ArticleTitle
+              required
               value={article ? article?.article_title : ''}
               onChange={(e) => { updateArticleTitle(e.target.value); }}
             />
@@ -505,15 +501,15 @@ function EditPage() {
               />
               {article ? article?.trip_days?.map((dayItem, dayIndex) => (
                 <>
-                  <DayTitle>
+                  <DayTitle id={`day-${dayIndex + 1}`}>
                     第
                     {dayIndex + 1}
                     天
                   </DayTitle>
                   <div>
                     {dayItem?.places.map((placeItem, placeIndex) => (
-                      <PlaceArea>
-                        <div style={{ display: 'flex', textAlign: 'left' }}>
+                      <PlaceArea id={`place-${dayIndex + 1}-${placeIndex + 1}`}>
+                        <div style={{ display: 'flex', textAlign: 'left', alignItems: 'center' }}>
                           <PlaceTitle>
                             {placeItem.place_title}
                           </PlaceTitle>
@@ -532,6 +528,8 @@ function EditPage() {
                               fontSize: 14,
                               color: 'white',
                               fontWeight: 600,
+                              objectFit: 'cover',
+                              flexShrink: 0,
                             }}
                           >
                             <input
@@ -539,7 +537,6 @@ function EditPage() {
                               id={`photo-${dayIndex}-${placeIndex}`}
                               style={{ display: 'none' }}
                               onChange={(e) => {
-                                console.log('onChangeonChangeonChange');
                                 uploadImg(dayIndex, placeIndex, e.target.files[0]);
                               }}
                               // onChange={(e) => {
@@ -588,20 +585,24 @@ function EditPage() {
             <ScheduleSummaryPart>
               {article ? article?.trip_days?.map((dayItem, dayIndex) => (
                 <ScheduleSummaryDayAndPlacePart>
-                  <ScheduleSummaryDayPart>
-                    第
-                    {dayIndex + 1}
-                    天
-                  </ScheduleSummaryDayPart>
+                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/edit#day-${dayIndex + 1}`}>
+                    <ScheduleSummaryDayPart>
+                      第
+                      {dayIndex + 1}
+                      天
+                    </ScheduleSummaryDayPart>
+                  </HashLink>
                   <div style={{
                     height: '20px', width: '2px', backgroundColor: 'black', marginTop: '2px',
                   }}
                   />
                   <ScheduleSummaryPlacePart>
-                    {dayItem?.places ? dayItem?.places.map((placeItem) => (
-                      <SummaryPlaceTitle>
-                        {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
-                      </SummaryPlaceTitle>
+                    {dayItem?.places ? dayItem?.places.map((placeItem, placeIndex) => (
+                      <HashLink style={{ textDecoration: 'none', color: 'black' }} smooth to={`/edit#place-${dayIndex + 1}-${placeIndex + 1}`}>
+                        <SummaryPlaceTitle>
+                          {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
+                        </SummaryPlaceTitle>
+                      </HashLink>
                     )) : ''}
                   </ScheduleSummaryPlacePart>
                 </ScheduleSummaryDayAndPlacePart>

@@ -1,6 +1,6 @@
 import
 {
-  getDocs, collection, where, query, onSnapshot,
+  collection, where, query, onSnapshot,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
@@ -12,6 +12,15 @@ import {
   MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
 } from './MyArticles';
 import { ArticlesBoxesContainer } from '../components/ArticlesInHome';
+import Cover1 from './images/schedule_cover_rec1.jpg';
+import Cover2 from './images/schedule_cover_rec5.jpg';
+import Cover3 from './images/schedule_cover_rec3.jpg';
+import Cover4 from './images/camping.jpg';
+import Cover5 from './images/schedule_cover_rec2.jpg';
+import Cover6 from './images/schedule_cover_rec4.jpg';
+import Footer from '../components/Footer';
+
+export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -30,48 +39,21 @@ background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 position:relative;
 background-position:center;
+@media screen and (max-width:800px){
+  height:280px
+}
 `;
 
 function AllArticlePage() {
   const [allArticles, setAllArticles] = useState([]);
-  console.log(allArticles);
-
-  // 拿到所有articles資料並放到頁面
 
   useEffect(() => {
-    async function getAllArticles() {
-      const querySnapshot = await getDocs(collection(db, 'articles'));
-      const articleList = querySnapshot.docs.map((item) => item.data());
-      console.log(articleList);
-      setAllArticles(articleList);
-    }
-    getAllArticles();
-  }, []);
-
-  useEffect(() => {
-    async function getPublisedArticles() {
-      const publishedArticlesArray = [];
-      const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
-      const publushedArticles = await getDocs(pulishedArticlesRef);
-      publushedArticles.forEach((doc) => {
-        publishedArticlesArray.push(doc.data());
-      });
-      setAllArticles(publishedArticlesArray);
-    }
-    getPublisedArticles();
-  }, []);
-
-  // 有文章更新時就要及時拿出來！
-  // unsubscribe是讓它結束監聽
-
-  useEffect(() => {
-    const publishedArticlesArray = [];
     const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
     const unsubscribe = onSnapshot(pulishedArticlesRef, (querySnapshot) => {
+      const publishedArticlesArray = [];
       querySnapshot.forEach((doc) => {
         publishedArticlesArray.push(doc.data());
       });
-      console.log(publishedArticlesArray);
       setAllArticles(publishedArticlesArray);
     });
     return unsubscribe;
@@ -87,16 +69,24 @@ function AllArticlePage() {
             {allArticles ? allArticles.map((item) => (
               <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                 <MyArticle>
-                  <CoverPhotoInMyArticle src={item?.cover_img} />
+                  <CoverPhotoInMyArticle src={item?.cover_img
+                    ? item?.cover_img
+                    : defaultArticleCoverPhoto[Math.floor(Math.random()
+                      * defaultArticleCoverPhoto.length)]}
+                  />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>{item?.summary}</MyArticleSummary>
+                    <MyArticleSummary>
+                      {item?.summary?.slice(0, 15)}
+                      .....
+                    </MyArticleSummary>
                   </MyArticleBelowArea>
                 </MyArticle>
               </StyledLink>
             )) : ''}
           </ArticlesBoxesContainer>
         </div>
+        <Footer />
       </PageWrapper>
     </>
   );

@@ -5,122 +5,51 @@ import React,
 } from 'react';
 import styled from 'styled-components/macro';
 import {
-  doc, updateDoc,
+  doc, updateDoc, getDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import db from '../utils/firebase-init';
 import CampingSrc from './images/camping_2.jpg';
 import ArtsSrc from './images/art.jpg';
 import FamilySrc from './images/family.jpg';
 import CoupleSrc from './images/couple.jpg';
-import FoodSrc from './images/food.jpg';
+import FoodSrc from './images/food2.jpeg';
 import ShoppingSrc from './images/shopping.jpg';
 import NightLifeSrc from './images/bar.jpg';
 import ReligionSrc from './images/religion.jpg';
-// import PhotoSrc from './images/photo.jpg';
 import TapSrc from './images/tap.png';
 import BlackHeaderComponent
   from '../components/BlackHeader';
 import UserContext from '../components/UserContextComponent';
-import { defaultArray } from './City';
+import Default1 from './images/default1.png';
+import Default2 from './images/default2.png';
+import Default3 from './images/default3.png';
+import Default4 from './images/default4.png';
+import Default5 from './images/default5.png';
+import unfilledStar from './images/unfilled_star.jpg';
+import filledStar from './images/filled_star.jpg';
+import {
+  ModalBackground, ModalBox, ModalImgArea, ModalImg,
+  ModalLeftArea, ModalPlaceTitle, ModalPlaceAddress, AddToScheduleButton, CloseModalButton,
+  LeftButton, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
+  ScheduleChoiceTitle, ModalContentWrapper, Loading, ConfirmChooseDayButton,
+  ButtonStarArea, AddFavoriteIcon,
+} from './City';
+import {
+  RemindWrapper, ClickAndAdd,
+  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from './MySchedules';
+import Travel from './images/travel-2.png';
+import Suitcase from './images/suitcase-2.png';
+import Footer from '../components/Footer';
+
+const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
 // modal
-
-const ModalTitle = styled.div`
-font-size:27px;
-font-weight:600;
-width:20vw;
-height:auto;
-`;
-
-const ModalDescription = styled.div`
-font-size:12px;
-font-weight:500;
-width:23vw;
-height:auto;
-color:grey;
-`;
-
-const ModalBackground = styled.div`
-width:100vw;
-height:100vh;
-position:fixed;
-top:0;
-bottom:0;
-left:0;
-right:0;
-background-color:rgba(0, 0, 0, 0.7);
-display:flex;
-justify-content:center;
-align-items:center;
-display:${(props) => (props.active ? 'flex' : 'none')};
-z-index:100;
-`;
-
-const ModalBox = styled.div`
-display:flex;
-width:50vw;
-height:30vw;
-background-color:white;
-z-index:10;
-border-radius:20px;
-z-index:200;
-position: relative;
-align-items:center;
-`;
-
-const ModalImgArea = styled.div`
-width:25vw;
-height:22vw;
-display:flex;
-flex-wrap:wrap;
-align-items:center;
-gap:10px;
-`;
-
-const ModalImg = styled.img`
-width:10vw;
-height:10vw;
-border-radius:10px;
-`;
-
-const ModalLeftArea = styled.div`
-width:25vw;
-height:28vw;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:10px;
-`;
-
-const AddToScheduleButton = styled.button`
-width:10vw;
-height:30px;
-border-radius:5px;
-background-color:grey;
-color:white;
-cursor:pointer;
-border:none;
-`;
-
-const CloseModalButton = styled.button`
-height:25px;
-width:25px;
-position:absolute;
-right:20px;
-top:20px;
-text-align:center;
-border:none;
-border-radius:50%;
-background-color:black;
-color:white;
-cursor:pointer;
-`;
 
 const PlaceBoxesWrapper = styled.div`
 width:100vw;
@@ -130,29 +59,112 @@ flex-wrap:wrap;
 justify-content:center;
 gap:30px;
 margin-top:90px;
+@media screen and (max-width:970px){
+  gap:20px;
+  width:95vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:805px){
+  gap:5px;
+  width:95vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:756px){
+  gap:0px;
+  width:95vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:745px){
+  gap:20px;
+  width:80vw;
+  justify-self:center;
+  margin:0 auto;
+  margin-top:60px;
+}
+@media screen and (max-width:465px){
+  gap:5px;
+  width:90vw;
+  margin-top:40px;
+}
 `;
 
-const PlaceBoxWrapper = styled.div`
+export const PlaceBoxWrapper = styled.div`
 position:relative;
 width:220px;
 height:320px;
+cursor:pointer;
+@media screen and (max-width:970px){
+  width:176px;
+  height:256px;
+}
+@media screen and (max-width:745px){
+  width:220px;
+  height:320px;
+}
+@media screen and (max-width:575px){
+  width:176px;
+  height:256px;
+}
+@media screen and (max-width:465px){
+  width:154px;
+  height:224px;
+}
 `;
 
-const PlaceBox = styled.div`
+export const PlaceBox = styled.div`
 width: 200px;
-height: 280px;
+height: 290px;
 margin-top:10px;
 background-color:white;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+@media screen and (max-width:970px){
+  width:160px;
+  height:232px;
+}
+@media screen and (max-width:745px){
+  width: 200px;
+  height: 290px;
+}
+@media screen and (max-width:575px){
+  width:160px;
+  height:232px;
+}
+@media screen and (max-width:465px){
+  width:140px;
+  height:210px;
+}
 `;
 
-const PlacePhoto = styled.img`
+export const PlacePhoto = styled.img`
 margin-top:6px;
 width:188px;
 height:188px;
+object-fit:cover;
+@media screen and (max-width:970px){
+  width:150px;
+  height:150px;
+}
+@media screen and (max-width:745px){
+  width:188px;
+  height:188px;
+}
+@media screen and (max-width:575px){
+  width:150px;
+  height:150px;
+}
+@media screen and (max-width:465px){
+  width:132px;
+  height:132px;
+}
 `;
 
-const PlaceBoxBelowPart = styled.div`
+export const PlaceBoxBelowPart = styled.div`
 width:188px;
 padding-top:3px;
 height:80px;
@@ -161,17 +173,28 @@ display:flex;
 flex-direction:column;
 align-items:flex-start;
 gap:5px;
+@media screen and (max-width:970px){
+  width:90%;
+  margin-left:10px;
+  height:30%
+}
 `;
 
-const PlaceTitle = styled.div`
+export const PlaceTitle = styled.div`
 width:175px;
 font-size:14px;
 font-weight:500;
 color:black;
 text-align:left;
+@media screen and (max-width:970px){
+  width:90%;
+}
+@media screen and (max-width:465px){
+  font-size:12px;
+}
 `;
 
-const AddPlaceToScheduleButton = styled.div`
+export const AddPlaceToScheduleButton = styled.div`
 width:65px;
 font-size:10px;
 height:20px;
@@ -191,12 +214,18 @@ z-index:10;
 transform: rotate(25deg);
 right: -2px;
 top: 8px;
+@media screen and (max-width:465px){
+  width:65px;
+  height:17px;
+}
 `;
 
 const CategoryBanner = styled.img`
 width:100vw;
+height:100vh;
+@media screen and (max-width:800px){
 height:auto;
-`;
+}`;
 
 const libraries = ['places'];
 
@@ -216,52 +245,65 @@ const center = {
 function Category({ currentLatLng }) {
   const { search } = useLocation();
   const user = useContext(UserContext);
-  //   const lat = Number(new URLSearchParams(search).get('lat'));
-  //   const lng = Number(new URLSearchParams(search).get('lng'));
   const categoryFromUrl = new URLSearchParams(search).get('category');
-  console.log(search);
-  console.log({ search });
-  console.log('從category頁面直接拿到經緯度囉！', currentLatLng);
-  console.log(currentLatLng);
   const [categoryPageScheduleData, setCategoryPageScheduleData] = useImmer([]); // 是這個人所有行程！不是單一!
   const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
-  console.log('行程Index喔', clickedScheduleIndex);
   const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
-  console.log('行程ID喔', clickedScheduleId);
   const [dayIndex, setDayIndex] = useState();
-  console.log('我要加在這一天！', dayIndex);
   const [modalIsActive, setModalIsActive] = useState(false);
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
   const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
   const [modalDetail, setModalDetail] = useState({});
-  console.log('我在category page useState中modalDetail', modalDetail);
-
-  // 關於modal部分
+  const navigate = useNavigate();
+  const [liked, setLiked] = useState(false);
+  const [clickedPlaceUrl, setClickedPlaceUrl] = useState('');
+  const [clickedPlaceName, setClickedPlaceName] = useState('');
+  const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
 
   // 關掉modal
 
   function handleModalClose() {
-    console.log('closed!');
     setModalIsActive(false);
   }
 
-  // 打開modal
+  // 按下加入行程時先判斷有否登入，有的話才能繼續
 
-  function ClickAndShowPlaceDetail(clickedPlaceId) {
-    console.log(clickedPlaceId);
-    console.log('opened!');
-    setModalIsActive(true);
-    fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${clickedPlaceId}&language=zh-TW&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      }).then((jsonData) => {
-        console.log('我在useEffect中', jsonData.result);
-        setModalDetail(jsonData.result);
-        // window.localStorage.setItem('PlcesSearched', jsonData);
-      }).catch((err) => {
-        console.log('錯誤:', err);
-      });
+  function handleUserOrNot() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      setModalIsActive(false); setChooseScheduleModalIsActive(true);
+    }
+  }
+
+  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
+
+  async function handleFavorite(placeId) {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else {
+      const userArticlesArray = doc(db, 'users', user.uid);
+      if (liked) {
+        setLiked(false);
+        await updateDoc(userArticlesArray, {
+          loved_attraction_ids: arrayRemove(placeId),
+        });
+      } else if (!liked) {
+        setLiked(true);
+        await updateDoc(userArticlesArray, {
+          loved_attraction_ids: arrayUnion(placeId),
+        });
+        const createAttraction = doc(db, 'attractions', placeId);
+        await setDoc(createAttraction, ({
+          place_id: placeId,
+          place_title: clickedPlaceName,
+          place_address: clickedPlaceAddress,
+          place_url: clickedPlaceUrl,
+        }));
+      }
+    }
   }
 
   // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
@@ -272,22 +314,16 @@ function Category({ currentLatLng }) {
     async function getUserArrayList() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data().owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getSchedulesFromList() {
-        docSnap.data().owned_schedule_ids.forEach(async (item, index) => {
+        docSnap.data().owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
           const Snap = await getDoc(docs);
           if (Snap.exists()) {
-            console.log('這位使用者的行程', index, Snap.data());
-            setCategoryPageScheduleData((draft) => {
-              draft.push(Snap.data());
-            });
-          } else {
-            console.log('沒有這個行程！');
+            if (Snap.data().deleted === false) {
+              setCategoryPageScheduleData((draft) => {
+                draft.push(Snap.data());
+              });
+            }
           }
         });
       }
@@ -299,23 +335,16 @@ function Category({ currentLatLng }) {
   // 確認加入
 
   function ComfirmedAdded() {
-    console.log('已經加入囉！');
     const newPlace = {
-      place_title: modalDetail.name,
-      place_address: modalDetail.formatted_address,
-      stay_time: '',
+      place_title: modalDetail?.name,
+      place_address: modalDetail?.formatted_address,
+      stay_time: 60,
     };
-    // 用 immer 產生出新的行程資料
     const newScheduleData = produce(categoryPageScheduleData, (draft) => {
-      console.log('哈哈', draft);
-      draft[clickedScheduleIndex].trip_days[dayIndex].places.push(newPlace);
+      draft[clickedScheduleIndex]?.trip_days[dayIndex].places.push(newPlace);
     });
-    console.log('newScheduleData', newScheduleData);
-    // 更新 state
     setCategoryPageScheduleData(newScheduleData);
-    // 更新 firestore
     async function passAddedDataToFirestore() {
-      console.log('修改好行程囉！');
       const scheduleRef = doc(db, 'schedules', clickedScheduleId);
       await updateDoc(scheduleRef, { ...newScheduleData[clickedScheduleIndex] });
     }
@@ -345,7 +374,6 @@ function Category({ currentLatLng }) {
   }
 
   const [categoryNearbyData, setCategoryNearbyData] = useState([]);
-  console.log(categoryNearbyData);
 
   // 先loadmap
 
@@ -362,7 +390,6 @@ function Category({ currentLatLng }) {
   // 拿到url上的種類、找附近此種類的景點
 
   const searchCategoryNearby = useCallback(() => {
-    console.log('searchCategoryNearby', isLoaded);
     if (!isLoaded) return;
     let requests = [];
 
@@ -371,7 +398,6 @@ function Category({ currentLatLng }) {
         location: { lat: 24.5711502, lng: 120.8154358 },
         radius: '50000',
         type: 'campground',
-        // 很少，先放苗栗的
       }];
     } else if (categoryFromUrl === 'arts') {
       requests = [{
@@ -457,17 +483,14 @@ function Category({ currentLatLng }) {
 
     const service = new google.maps.places.PlacesService(mapRef.current);
     // service.nearbySearch(requests, callback);
-    console.log(service);
     requests.forEach((request) => {
       service.nearbySearch(request, (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log('嘿嘿拿到種類資料惹呵呵(fromCategory頁面)');
           setCategoryNearbyData((preData) => ([...preData, ...results]));
           // 這樣會變兩個array在一個array、如果包{}則會變成分開兩次
         }
       });
     });
-    console.log(requests);
   }, [categoryFromUrl, currentLatLng, isLoaded]);
 
   useEffect(() => {
@@ -478,55 +501,129 @@ function Category({ currentLatLng }) {
       searchCategoryNearby();
     }, 2000);
   }, [isLoaded, searchCategoryNearby]);
-  //   console.log({ lat, lng });
 
-  if (!isLoaded) return <div>City頁Loading出了點問題OWO!可以先到首頁看更多景點唷^__^!</div>;
+  async function checkLikeOrNot(placeId) {
+    const userArticlesArray = doc(db, 'users', user.uid);
+    const docSnap = await getDoc(userArticlesArray);
+    if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }
+
+  function ShowDetailNCheckLikedOrNot(clickedPlaceId) {
+    if (user.uid) {
+      checkLikeOrNot(clickedPlaceId);
+    } else {
+      setLiked(false);
+    }
+    setModalIsActive(true);
+    const placeRequest = {
+      placeId: clickedPlaceId,
+    };
+    const service = new google.maps.places.PlacesService(mapRef.current);
+    service.getDetails(
+      placeRequest,
+      (place, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          console.log(place);
+          setModalDetail(place);
+        } else {
+          console.log('error');
+        }
+      },
+    );
+  }
+
+  if (!isLoaded) {
+    return (
+      ''
+    );
+  }
 
   return (
     <>
       <ModalBackground active={modalIsActive}>
         <ModalBox>
-          <ModalLeftArea>
-            <ModalTitle>{modalDetail.name}</ModalTitle>
-            <ModalDescription>{modalDetail.formatted_address}</ModalDescription>
-            <AddToScheduleButton
-              onClick={() => { setModalIsActive(false); setChooseScheduleModalIsActive(true); }}
-            >
-              加入行程
-            </AddToScheduleButton>
-          </ModalLeftArea>
-          <ModalImgArea>
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[1]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[1]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[2]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[2]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[3]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[3]} />
-            <ModalImg alt="detail_photo" src={modalDetail.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=250&photoreference=${modalDetail?.photos[4]?.photo_reference}&key=${process.env.REACT_APP_GOOGLE_API_KEY}` : defaultArray[4]} />
-          </ModalImgArea>
-          <CloseModalButton
-            type="button"
-            onClick={() => { handleModalClose(); }}
-          >
-            X
-          </CloseModalButton>
+          {modalDetail
+            ? (
+              <>
+                <ModalLeftArea>
+                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                  <ButtonStarArea>
+                    <AddToScheduleButton
+                      onClick={() => { handleUserOrNot(); }}
+                    >
+                      加入行程
+                    </AddToScheduleButton>
+                    <AddFavoriteIcon
+                      onClick={() => { handleFavorite(modalDetail.place_id); }}
+                      src={liked ? filledStar : unfilledStar}
+                    />
+                  </ButtonStarArea>
+                </ModalLeftArea>
+                <ModalImgArea>
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
+                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
+                </ModalImgArea>
+                <CloseModalButton
+                  type="button"
+                  onClick={() => { handleModalClose(); }}
+                >
+                  X
+                </CloseModalButton>
+              </>
+            )
+            : <Loading />}
         </ModalBox>
       </ModalBackground>
-
       <ModalBackground active={chooseScheduleModalIsActive}>
         <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <div>
-            <div>您的現有行程</div>
-            {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
-              <div>
-                <div style={{ display: 'flex' }} id={item.schedule_id}>
-                  <div>
-                    {index + 1}
-                    :
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setModalIsActive(true);
+              setChooseScheduleModalIsActive(false);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {categoryPageScheduleData.length === 0 ? (
+                <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                  <RemindIcon src={Travel} />
+                  <RemindRightPart style={{ width: 'auto' }}>
+                    <RemindText>
+                      還沒有行程捏～
+                      <br />
+                      是時候創建行程囉！
+                    </RemindText>
+                    <StyledBlackLink to="/choose-date">
+                      <ClickAndAdd>點我創建</ClickAndAdd>
+                    </StyledBlackLink>
+                    <SuitcaseIcon src={Suitcase} />
+                  </RemindRightPart>
+                </RemindWrapper>
+              ) : categoryPageScheduleData.map((item, index) => (
+                <ScheduleChoicesBox
+                  onClick={() => {
+                    setClickedScheduleId(item.schedule_id);
+                    setClickedScheduleIndex(index);
+                    setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                  }}
+                  id={item.schedule_id}
+                >
+                  <ScheduleChoiceTitle>
                     {item.title}
-                  </div>
-                  <button onClick={() => { setClickedScheduleId(item.schedule_id); setClickedScheduleIndex(index); setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false); }} type="button">選擇</button>
-                </div>
-              </div>
-            )) : ''}
-          </div>
+                  </ScheduleChoiceTitle>
+                </ScheduleChoicesBox>
+              ))}
+            </ScheduleChoicesBoxWrapper>
+          </ModalContentWrapper>
           <CloseModalButton
             type="button"
             onClick={() => setChooseScheduleModalIsActive(false)}
@@ -535,26 +632,37 @@ function Category({ currentLatLng }) {
           </CloseModalButton>
         </ModalBox>
       </ModalBackground>
-
       <ModalBackground active={chooseDayModalIsActive}>
         <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <div>
-            <div>請選擇天數</div>
-            {categoryPageScheduleData
-              ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
-                <div>
-                  <div style={{ display: 'flex' }}>
-                    <div>
+          <LeftButton
+            type="button"
+            onClick={() => {
+              setChooseDayModalIsActive(false);
+              setChooseScheduleModalIsActive(true);
+            }}
+          />
+          <ModalContentWrapper>
+            <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
+            <ScheduleChoicesBoxWrapper>
+              {categoryPageScheduleData
+                ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                  <ScheduleChoicesBox
+                    clicked={dayIndex === index}
+                    onClick={() => {
+                      setDayIndex(index);
+                    }}
+                    style={{ display: 'flex' }}
+                  >
+                    <ScheduleChoiceTitle>
                       第
                       {index + 1}
                       天
-                    </div>
-                    <button onClick={() => { setDayIndex(index); }} type="button">選擇</button>
-                  </div>
-                </div>
-              )) : ''}
-            <button type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</button>
-          </div>
+                    </ScheduleChoiceTitle>
+                  </ScheduleChoicesBox>
+                )) : ''}
+            </ScheduleChoicesBoxWrapper>
+            <ConfirmChooseDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmChooseDayButton>
+          </ModalContentWrapper>
           <CloseModalButton
             type="button"
             onClick={() => setChooseDayModalIsActive(false)}
@@ -568,8 +676,13 @@ function Category({ currentLatLng }) {
       <PlaceBoxesWrapper>
         {categoryNearbyData ? categoryNearbyData.map((item, index) => (
           <PlaceBoxWrapper
-            id={item.place_id}
-            onClick={(e) => { ClickAndShowPlaceDetail(e.target.id); }}
+            id={item?.place_id}
+            onClick={(e) => {
+              ShowDetailNCheckLikedOrNot(e.target.id);
+              setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
+              setClickedPlaceName(item?.name);
+              setClickedPlaceAddress(item?.vicinity);
+            }}
           >
             <Tap id={item.place_id} src={TapSrc} />
             <PlaceBox id={item.place_id}>
@@ -578,9 +691,9 @@ function Category({ currentLatLng }) {
                 alt="place_photo"
                 src={item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]}
               />
-              <PlaceBoxBelowPart id={item.place_id}>
-                <PlaceTitle id={item.place_id}>
-                  {item.name}
+              <PlaceBoxBelowPart id={item?.place_id}>
+                <PlaceTitle id={item?.place_id}>
+                  {item?.name?.slice(0, 20)}
                 </PlaceTitle>
                 <AddPlaceToScheduleButton>查看更多</AddPlaceToScheduleButton>
               </PlaceBoxBelowPart>
@@ -596,6 +709,7 @@ function Category({ currentLatLng }) {
         options={options}
         onLoad={onMapLoad}
       />
+      <Footer />
     </>
   );
 }
@@ -603,5 +717,9 @@ function Category({ currentLatLng }) {
 export default Category;
 
 Category.propTypes = {
-  currentLatLng: PropTypes.func.isRequired,
+  currentLatLng: PropTypes.shape({ lat: PropTypes.number, lng: PropTypes.number }),
+};
+
+Category.defaultProps = {
+  currentLatLng: PropTypes.shape({ lat: 25.03746, lng: 121.564558 }),
 };

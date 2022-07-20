@@ -1,0 +1,116 @@
+/* * {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #eee;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  font-family: 'Martel', serif;
+  overflow: hidden;
+} */
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+  height: 400px;
+}
+
+@media (max-width: 768px) {
+  .swiper-slide {
+    width: 250px;
+    height: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .swiper-slide {
+    width: 80%;
+    height: 100%;
+  }
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.vr-container {
+  /* position: relative;
+  width: 100%;
+  height: 60vh;
+  background-color: #000;
+  display: block; */
+  width:100vw;
+  height:100vh;
+  padding-top:20vh;
+  display:flex;
+  flex-direction:column;
+  gap:50px;
+  /* background: linear-gradient(-45deg, #141e30,  #243b55, #141e30,  #243b55); */
+  /* background: linear-gradient(-45deg, #141e30,  #243b55, #141e30,  #53749a); */
+  background: linear-gradient(-45deg, #bedde7, #acd1df, #fbebd0, #ffbdbd);
+  align-items:center;
+  animation: gradient 10s ease infinite;
+  background-size: 400% 400%;
+}
+
+.vr-container .swiper-container {
+  width: 70%;
+  /* position: absolute; */
+  /* left: 50%; */
+  /* bottom: -16vw;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%); */
+  z-index: 300;
+  position:absolute;
+  top:33%;
+  /* padding-bottom: 3vw; */
+}
+
+@media (max-width: 768px) {
+  .vr-container .swiper-container {
+    bottom: 25vw;
+    top:25%;
+    /* padding-bottom: 8vw; */
+    height:60vh;
+  }
+
+  .vr-container {
+    padding-top:10vh;
+  }
+}
+
+@media (max-width: 1130px) {
+  .vr-container .swiper-container {
+    width: 80%;
+  }
+}
+
+/* .swiper-pagination-fraction {
+  bottom: 0;
+}
+
+.swiper-pagination-bullet {
+  width: 25px;
+  height: 5px;
+  border-radius: 5px;
+} */
+

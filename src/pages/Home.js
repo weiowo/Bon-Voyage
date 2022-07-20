@@ -1,36 +1,32 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-use-before-define */
 /* eslint-disable no-undef */
-/* eslint-disable no-new */
 /* eslint-disable camelcase */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from 'use-places-autocomplete';
-// import onClickOutside from 'react-onclickoutside';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 import styled from 'styled-components/macro';
-import HomeBanner from './images/index_banner.png';
 import HeaderComponent
   from '../components/Header';
 import CardsCarousel from './CardCarousel';
 import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 import ArticlesInHome from '../components/ArticlesInHome';
+import './animation.css';
+import Footer from '../components/Footer';
 
 const HomeTopAreaWrapper = styled.div`
 width:100vw;
-height:50vw;
+height:100vh;
 display:flex;
 flex-direction:column;
-background-image: url(${HomeBanner});
+background-image: url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9);
 align-items:center;
 position:relative;
 background-size:cover;
@@ -38,15 +34,9 @@ background-repeat: no-repeat;
 // background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 @media screen and (max-width:800px){
-  height:60vw;
+  height:70vw;
 }
 `;
-
-// const HomeBannerPhoto = styled.img`
-// width:100vw;
-// height:auto;
-// position:relative;
-// `;
 
 const SearchBarBackground = styled.div`
 display:flex;
@@ -59,8 +49,9 @@ border-radius:15px;
 position:absolute;
 bottom:30px;
 background-color:rgba(255, 255, 255, 0.4);
-@media screen and (max-width:800px){
-  height:80px;
+@media screen and (max-width:600px){
+  width:86vw;
+  height:73px;
 }`;
 
 const SearchBarLittleWrapper = styled.div`
@@ -74,7 +65,9 @@ background-color:white;
 padding-left:20px;
 padding-right:20px;
 position:absolute;
-`;
+@media screen and (max-width:600px){
+  width:80vw;
+}`;
 
 const SearchInput = styled.input`
 display:flex;
@@ -88,7 +81,9 @@ font-size:17px;
 box-sizing:border-box;
 padding-left:10px;
 outline: none;
-`;
+@media screen and (max-width:600px){
+  width:80%;
+}`;
 
 const Ulist = styled.ul`
 display:flex;
@@ -105,11 +100,9 @@ border:1px grey solid;
 margin-top:15px;
 margin-bottom:0px;
 border-radius:15px;
-box-shadow
-// border-bottom-left-radius:20px;
-// border-bottom-right-radius:20px;
-
-`;
+@media screen and (max-width:600px){
+  width:80vw;
+}`;
 
 const List = styled.li`
 width:69vw;
@@ -126,9 +119,10 @@ cursor:pointer;
 &:hover {
   color:white;
   background-color:#67B7D1;
+}
+@media screen and (max-width:600px){
+  width:78vw;
 }`;
-
-// const SearchInputAndResults
 
 const OptionForm = styled.form`
 width:70px;
@@ -143,9 +137,9 @@ font-weight:500;
 font-size:17px;
 margin-left:0px;
 outline: none;
-`;
-
-// google相關
+@media screen and (max-width:600px){
+  width:60px;
+}`;
 
 const libraries = ['places'];
 
@@ -165,7 +159,6 @@ const center = {
 function SearchAtHomePage({ option, setOption }) {
   const navigate = useNavigate();
 
-  // const [Latlng, setLatlng] = useState('');
   const {
     ready,
     value,
@@ -174,28 +167,20 @@ function SearchAtHomePage({ option, setOption }) {
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions:
-    /* Define search scope here */
     { types: ['(cities)'] },
     debounce: 300,
   });
 
   const handleInput = (e) => {
-    // Update the keyword of the input element
     setValue(e.target.value);
   };
 
   const handleSelect = (selected_place_at_homePage) => () => {
-    // When user selects a place, we can replace the keyword without request data from API
-    // by setting the second parameter to "false"
-    // const selected_place_data_at_homePage = JSON.stringify(selected_place_at_homePage);
     setValue(selected_place_at_homePage.description, false);
     clearSuggestions();
-
-    // Get latitude and longitude via utility functions
     getGeocode({ address: selected_place_at_homePage.description })
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
-        console.log({ lat, lng });
         navigate({ pathname: '/city', search: `?lat=${lat}&lng=${lng}&city=${selected_place_at_homePage.structured_formatting.main_text}&option=${option}` });
         searchNearby({ lat, lng });
       })
@@ -255,21 +240,18 @@ function SearchAtHomePage({ option, setOption }) {
           value={value}
           onChange={handleInput}
           disabled={!ready}
-          placeholder="請輸入想查詢的城市名稱OWO....."
+          placeholder="請輸入城市名稱....."
         />
       </SearchBarLittleWrapper>
-      {/* We can use the "status" to decide whether we should display the dropdown or not */}
       {status === 'OK' && <Ulist>{renderSuggestions()}</Ulist>}
     </SearchBarBackground>
   );
 }
 
-// 這邊是從app.js去拿的經緯度
-
 function Home({ currentLatLng, user }) {
-  // const [query, setQuery] = useState('');
-  const [option, setOption] = useState('all'); // 預設想放'全部'
-  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
+  const [option, setOption] = useState('all');
+  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState();
+  const [LatLng, setLatLng] = useState({ lat: 25.03746, lng: 121.564558 });
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -279,51 +261,64 @@ function Home({ currentLatLng, user }) {
     mapRef.current = map;
   }, []);
 
-  // 拿到使用者的經緯度後，從這邊去查周邊的tourist attraction跟restaurant
-  // 如果無法使用經緯度的話，就設經緯度為台北市
+  function getCurrentLatLng() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
+      });
+    } else {
+      console.log('geolocation is not available');
+    }
+  }
+  useEffect(() => {
+    getCurrentLatLng();
+  }, []);
 
   const searchNearby = useCallback(() => {
-    console.log('我執行了此funcion!');
-    const a = new Date();
     const request = {
-      location: currentLatLng,
+      location: LatLng,
       radius: '2000',
-      type: ['tourist_attraction', 'restaurant'],
+      type: ['tourist_attraction'],
     };
-
-    // 如果只選到一種，type就會只放那種
-    // 如果選「全部」，那就會query三次，獲取20*3筆結果！
 
     function callback(results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         setCurrentNearbyAttraction(results);
       }
-      const b = new Date();
-      console.log('searchNearby', b - a);
     }
 
     const service = new google.maps.places.PlacesService(mapRef.current);
     service.nearbySearch(request, callback);
-    console.log('我執行了此funcion!');
-  }, [currentLatLng]);
+  }, [LatLng]);
 
   useEffect(() => {
     if (!isLoaded) return;
     // if (!nearbyData) return;
     searchNearby();
-    console.log('我執行了此funcion!');
     // setTimeout(() => {
     //   searchNearby();
     // }, 1000);
   }, [searchNearby, isLoaded]);
 
-  if (!isLoaded) return <div>沒有成功...</div>;
+  if (!isLoaded) {
+    return (
+      <div className="progress container">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    );
+  }
 
   return (
     <>
       <HomeTopAreaWrapper>
         <HeaderComponent user={user} />
-        {/* <HomeBannerPhoto src={HomeBanner} /> */}
         <SearchAtHomePage option={option} setOption={setOption} />
       </HomeTopAreaWrapper>
       <GoogleMap
@@ -338,6 +333,7 @@ function Home({ currentLatLng, user }) {
       <CategoryAreaInHome currentLatLng={currentLatLng} />
       <CityAreaInHomePage />
       <ArticlesInHome />
+      <Footer />
     </>
   );
 }
@@ -350,34 +346,11 @@ SearchAtHomePage.propTypes = {
 };
 
 Home.propTypes = {
-  currentLatLng: PropTypes.func.isRequired,
-  user: PropTypes.func.isRequired,
+  currentLatLng: PropTypes.shape({ lat: PropTypes.number, lng: PropTypes.number }),
+  user: PropTypes.string,
 };
 
-// SearchAtHomePage.propTypes = {
-//   panTo:PropTypes.func
-// };
-
-// 自己建立行程後，把資料送到schedules-members的db
-// 還是直接放在scheduleData的immer裡面就好？？
-// 同時把這個行程id，送到這個user的行程array
-
-// 在別人按下確認邀請後，做一樣的事
-
-// 日期：放進去是放string，拿出來也是string
-// 拿出來後先把string轉成milliseconds，然後按下加一天的話就加上一天的milliseconds
-
-// 資料：先搜尋資料後拿到place_id，再用這個place_id去拿它的detail，再用這個detail中的photo_reference去拿照片
-
-// useEffect(() => {
-//   fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1500&type=restaurant&keyword=cruise&key=AIzaSyCcEAICVrVkj_NJ6NU-aYqVMxHFfjrOV6o')
-//     .then((response) => {
-//       console.log(response);
-//       return response.json();
-//     }).then((jsonData) => {
-//       console.log(jsonData);
-//       window.localStorage.setItem('PlcesSearched', jsonData);
-//     }).catch((err) => {
-//       console.log('錯誤:', err);
-//     });
-// }, []);
+Home.defaultProps = {
+  currentLatLng: PropTypes.shape({ lat: 25.03746, lng: 121.564558 }),
+  user: '',
+};

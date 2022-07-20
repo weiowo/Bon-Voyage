@@ -1,17 +1,23 @@
 import styled from 'styled-components/macro';
 import React, { useEffect, useContext, useState } from 'react';
-import {
-//   getDoc, doc,
-  collection, getDocs,
+import
+{
+  collection, where, query, onSnapshot,
 } from 'firebase/firestore';
-// import { Link } from 'react-router-dom';
-// import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
 import UserContext from './UserContextComponent';
 import {
   MyArticle, CoverPhotoInMyArticle,
   MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
 } from '../pages/MyArticles';
+import Cover1 from '../pages/images/schedule_cover_rec1.jpg';
+import Cover2 from '../pages/images/schedule_cover_rec5.jpg';
+import Cover3 from '../pages/images/schedule_cover_rec3.jpg';
+import Cover4 from '../pages/images/camping.jpg';
+import Cover5 from '../pages/images/schedule_cover_rec2.jpg';
+import Cover6 from '../pages/images/schedule_cover_rec4.jpg';
+
+export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
 const ArticlesAreaWrapper = styled.div`
 margin-top:20px;
@@ -20,6 +26,7 @@ height:auto;
 display:flex;
 flex-direction:column;
 align-items:center;
+margin-bottom:60px;
 `;
 
 const ArticlesWrapperTitle = styled.div`
@@ -35,7 +42,9 @@ color:#1F456E;
 margin-bottom:30px;
 margin-top:30px;
 @media screen and (max-width:800px){
-  font-size:30px;
+  font-size:25px;
+  margin-bottom:10px;
+margin-top:20px;
 }`;
 
 export const ArticlesBoxesContainer = styled.div`
@@ -46,92 +55,43 @@ align-items:center;
 width:85vw;
 height:auto;
 display:flex;
+margin-bottom:20px;
 gap:30px;
 flex-wrap:wrap;
-&:after {
-  content: "";
-  width:380px;
+
+@media screen and (max-width:800px){
+  width:92vw;
+  gap:20px;
 }
 `;
 
-// const MyArticle = styled.div`
-// cursor:pointer;
-// width:190px;
-// height:250px;
-// border-radius:10px;
-// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-// `;
-
-// const CoverPhotoInMyArticle = styled.img`
-// width:100%;
-// height:50%;
-// border-top-right-radius:10px;
-// border-top-left-radius:10px;
-// `;
-
-// const MyArticleBelowArea = styled.div`
-// width:80%;
-// height:auto;
-// display:flex;
-// flex-direction:column;
-// align-items:center;
-// margin-left:15px;
-// margin-top:10px;
-// margin-right:15px;
-// `;
-
-// const MyArticleTitle = styled.div`
-// width:100%;
-// height:30px;
-// font-weight:550;
-// font-size:16px;
-// text-align:left;
-// `;
-
-// const MyArticleSummary = styled.div`
-// width:100%;
-// height:30px;
-// font-size:13px;
-// text-align:left;
-// font-weight:500;
-// color:grey;
-// `;
-
-// const StyledLink = styled(Link)`
-// cursor:pointer;
-// text-decoration:none;
-// color:black;
-// border:none;
-// `;
-
 const CheckMoreButton = styled.button`
 width:100px;
-height:30px;
+height:40px;
 background-color:#0492c2;
 color:white;
 border:none;
-border-radius:10px;
+border-radius:8px;
 margin-top:20px;
 font-weight:550;
+cursor:pointer;
 `;
 
 function ArticlesInHome() {
   const user = useContext(UserContext);
   const [articles, setArticles] = useState();
-  console.log(articles);
-  //   const navigate = useNavigate();
   console.log(user);
 
-  // 拿到所有articles資料並放到首頁
-
   useEffect(() => {
-    async function getAllArticles() {
-      const querySnapshot = await getDocs(collection(db, 'articles'));
-      const articleList = querySnapshot.docs.map((item) => item.data());
-      console.log(articleList);
-      setArticles(articleList);
-    }
-    getAllArticles();
+    const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
+    const unsubscribe = onSnapshot(pulishedArticlesRef, (querySnapshot) => {
+      const publishedArticlesArray = [];
+      querySnapshot.forEach((doc) => {
+        publishedArticlesArray.push(doc.data());
+      });
+      setArticles(publishedArticlesArray);
+    });
+    return unsubscribe;
   }, []);
 
   return (
@@ -139,12 +99,20 @@ function ArticlesInHome() {
       <ArticlesWrapperTitle>熱門遊記</ArticlesWrapperTitle>
       <ArticlesBoxesContainer>
         {articles ? articles.slice(0, 10).map((item) => (
-          <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-            <MyArticle>
-              <CoverPhotoInMyArticle src={item?.cover_img} />
+          <StyledLink key={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`} to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+            <MyArticle key={item?.article_id}>
+              <CoverPhotoInMyArticle
+                key={item?.schedule_id}
+                src={item?.cover_img ? item?.cover_img
+                  : defaultArticleCoverPhoto[Math.floor(Math.random()
+                        * defaultArticleCoverPhoto.length)]}
+              />
               <MyArticleBelowArea>
-                <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                <MyArticleSummary>{item?.summary}</MyArticleSummary>
+                <MyArticleTitle key={item?.article_title}>{item?.article_title}</MyArticleTitle>
+                <MyArticleSummary key={item?.summary}>
+                  {item?.summary?.slice(0, 16)}
+                  ...
+                </MyArticleSummary>
               </MyArticleBelowArea>
             </MyArticle>
           </StyledLink>

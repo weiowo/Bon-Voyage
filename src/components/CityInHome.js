@@ -1,6 +1,3 @@
-// 在首頁按下種類的時候，會把種類跟使用者所在位置的經緯度紀錄
-// 接著到category頁面執行相關搜尋
-// 不同的種類上面的banner可以不一樣
 import React from 'react';
 import styled from 'styled-components/macro';
 import { Link } from 'react-router-dom';
@@ -16,13 +13,18 @@ import NewYorkSrc from '../pages/images/newyork.png';
 import MexicoSrc from '../pages/images/mexico.png';
 
 const CityAtHomeWrapper = styled.div`
-margin-top:60px;
+margin-top:45px;
 width:100vw;
 height:520px;
 display:flex;
 flex-direction:column;
 align-items:center;
-`;
+@media screen and (max-width:800px){
+  height:850px;
+}
+@media screen and (max-width:580px){
+  height:740px;
+}`;
 
 const CityAtHomeWrapperTitle = styled.div`
 width:100vw;
@@ -35,32 +37,56 @@ font-weight:600;
 color:#1F456E;
 margin-bottom:60px;
 @media screen and (max-width:800px){
-  font-size:30px;
+  font-size:25px;
+  margin-bottom:30px;
 }`;
 
 const CityAtHomeBelowPart = styled.div`
 width:100vw;
 height:auto;
 display:flex;
+flex-direction:row;
+justify-content:center;
+gap:10px;
+@media screen and (max-width:800px){
+  flex-direction:column;
+  gap:15px;
+}`;
+
+const SmallScreenCity = styled.div`
+width:50%;
+display:flex;
+gap:15px;
+@media screen and (max-width:800px){
+  width:100vw;
+display:flex;
 justify-content:center;
 gap:15px;
-`;
+}`;
 
 const FirstVerticalBlock = styled.div`
-width:33vw;
+width:33.5vw;
 height:430px;
 display:flex;
 flex-direction:column;
 gap:15px;
-`;
+@media screen and (max-width:800px){
+  width:60vw;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  height: 330px;
+}`;
 
 const TainanWrapper = styled.div`
 position:relative;
-width:33vw;
+width:33.5vw;
 height:290px;
 overflow:hidden;
 border-radius:10px;
-`;
+@media screen and (max-width:800px){
+  width:60vw;
+}`;
 
 const Tainan = styled.div`
 position:absolute;
@@ -90,11 +116,13 @@ left:20px;
 `;
 
 const FirstVerticalBlockBelowPart = styled.div`
-width:33vw;
+width:33.5vw;
 height:140px;
 display:flex;
 gap:15px;
-`;
+@media screen and (max-width:800px){
+  width:60vw;
+}`;
 
 const BarcelonaWrapper = styled.div`
 position:relative;
@@ -102,7 +130,9 @@ width:13vw;
 height:140px;
 overflow:hidden;
 border-radius:10px;
-`;
+@media screen and (max-width:800px){
+  width:20vw;
+}`;
 
 const Barcelona = styled.div`
 position:relative;
@@ -115,11 +145,12 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
-transition:0.8s;
 &:hover {
     transform: scale(1.2);
 }
-`;
+@media screen and (max-width:800px){
+  width:20vw;
+}`;
 
 const BarcelonaTitle = styled.div`
 font-size:18px;
@@ -136,7 +167,9 @@ width:20vw;
 height:140px;
 overflow:hidden;
 border-radius:10px;
-`;
+@media screen and (max-width:800px){
+  width:40vw;
+}`;
 
 const Provence = styled.div`
 position:relative;
@@ -149,11 +182,12 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.1);
 background-blend-mode: multiply;
-transition:0.8s;
 &:hover {
     transform: scale(1.2);
 }
-`;
+@media screen and (max-width:800px){
+  width:40vw;
+}`;
 
 const ProvenceTitle = styled.div`
 font-size:18px;
@@ -166,11 +200,17 @@ right:12px;
 
 const SecondVerticalBlcokWrapper = styled.div`
 position:relative;
-width:14vw;
+width:14.5vw;
 height:430px;
 overflow:hidden;
 border-radius:10px;
-`;
+@media screen and (max-width:800px){
+  width:40vw;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  height: 330px;
+}`;
 
 const SecondVerticalBlcok = styled.div`
 position:absolute;
@@ -204,13 +244,25 @@ height:430px;
 display:flex;
 flex-direction:column;
 gap:15px;
-`;
+@media screen and (max-width:800px){
+  width:40vw;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  height: 330px;
+}`;
 
 const ThridVerticalBlockUpperPart = styled.div`
 width:19vw;
 height:172px;
 display:flex;
 gap:15px;
+@media screen and (max-width:800px){
+  width:40vw;
+}
+@media screen and (max-width:580px){
+  width:52vw;
+}
 `;
 
 const NewYorkWrapper = styled.div`
@@ -219,6 +271,12 @@ width:7.7vw;
 height:172px;
 overflow:hidden;
 border-radius:10px;
+@media screen and (max-width:800px){
+  width:15vw;
+}
+@media screen and (max-width:800px){
+  width:21vw;
+}
 `;
 
 const NewYork = styled.div`
@@ -253,6 +311,12 @@ width:11.3vw;
 height:172px;
 overflow:hidden;
 border-radius:10px;
+@media screen and (max-width:800px){
+  width:25vw;
+}
+@media screen and (max-width:580px){
+  width:31vw;
+}
 `;
 
 const CamBridge = styled.div`
@@ -287,6 +351,12 @@ width:19vw;
 height:258px;
 overflow:hidden;
 border-radius:10px;
+@media screen and (max-width:800px){
+  width:40vw;
+}
+@media screen and (max-width:580px){
+  width:52vw;
+}
 `;
 
 const Amsterdam = styled.div`
@@ -322,7 +392,10 @@ width:18vw;
 height:430px;
 overflow:hidden;
 border-radius:10px;
-`;
+@media screen and (max-width:800px){
+  width:25vw;
+  height: 380px;
+}`;
 
 const FourthVerticalBlock = styled.div`
 position:absolute;
@@ -339,7 +412,9 @@ transition:0.8s;
 &:hover {
     transform: scale(1.1);
 }
-`;
+@media screen and (max-width:580px){
+  display:none;
+}`;
 
 const ParisTitle = styled.div`
 font-size:26px;
@@ -348,6 +423,9 @@ color:white;
 position:absolute;
 bottom:15px;
 right:15px;
+@media screen and (max-width:580px){
+  display:none;
+}
 `;
 
 const FifthVerticalBlock = styled.div`
@@ -356,6 +434,14 @@ height:430px;
 display:flex;
 flex-direction:column;
 gap:15px;
+@media screen and (max-width:800px){
+  width:35vw;
+  height: 380px;
+}
+@media screen and (max-width:580px){
+  width:45vw;
+  height:330px;
+}
 `;
 
 const MexicoWrapper = styled.div`
@@ -364,6 +450,12 @@ width:15vw;
 height:245px;
 overflow:hidden;
 border-radius:10px;
+@media screen and (max-width:800px){
+  width:35vw;
+}
+@media screen and (max-width:580px){
+  width:45vw;
+}
 `;
 
 const Mexico = styled.div`
@@ -398,6 +490,14 @@ width:15vw;
 height:185px;
 overflow:hidden;
 border-radius:10px;
+@media screen and (max-width:800px){
+  width:35vw;
+}
+@media screen and (max-width:580px){
+  width:45vw;
+  height:185px;
+
+}
 `;
 
 const Egypt = styled.div`
@@ -426,119 +526,121 @@ left:18px;
 `;
 
 function CityAreaInHomePage() {
-  console.log('我在CategoryPage');
   return (
     <CityAtHomeWrapper>
       <CityAtHomeWrapperTitle>城市探索</CityAtHomeWrapperTitle>
       <CityAtHomeBelowPart>
-        <FirstVerticalBlock>
-          <TainanWrapper>
-            <Link to="/city?lat=22.9948212&lng=120.1964522&city=中西區&option=all">
+        <SmallScreenCity>
+          <FirstVerticalBlock>
+            <TainanWrapper>
+              <Link to="/city?lat=22.9948212&lng=120.1964522&city=中西區&option=all">
 
-              <Tainan />
-              <TainanTitle>台南</TainanTitle>
-            </Link>
-
-          </TainanWrapper>
-
-          <FirstVerticalBlockBelowPart>
-            <BarcelonaWrapper>
-              <Link to="/city?lat=41.3873974&lng=2.168568&city=巴塞隆拿&option=all">
-                <Barcelona />
-                <BarcelonaTitle>巴賽隆納</BarcelonaTitle>
-              </Link>
-            </BarcelonaWrapper>
-
-            <ProvenceWrapper>
-              <Link to="/city?lat=43.529742&lng=5.447426999999999&city=普羅旺斯艾克斯&option=all">
-                <Provence />
-                <ProvenceTitle>普羅旺斯</ProvenceTitle>
-              </Link>
-            </ProvenceWrapper>
-
-          </FirstVerticalBlockBelowPart>
-
-        </FirstVerticalBlock>
-
-        <SecondVerticalBlcokWrapper>
-          <Link to="/city?lat=35.011564&lng=135.7681489&city=京都市&option=all">
-
-            <SecondVerticalBlcok />
-            <KyotoTitle>
-              京
-              <br />
-              都
-            </KyotoTitle>
-          </Link>
-
-        </SecondVerticalBlcokWrapper>
-
-        <ThridVerticalBlock>
-          <ThridVerticalBlockUpperPart>
-            <NewYorkWrapper>
-              <Link to="/city?lat=40.7127753&lng=-74.0059728&city=紐約&option=all">
-
-                <NewYork />
-                <NewYorkTitle>
-                  紐
-                  <br />
-                  約
-                </NewYorkTitle>
+                <Tainan />
+                <TainanTitle>台南</TainanTitle>
               </Link>
 
-            </NewYorkWrapper>
+            </TainanWrapper>
 
-            <CamBridgeWrapper>
-              <Link to="/city?lat=52.1950788&lng=0.1312729&city=劍橋&option=all">
+            <FirstVerticalBlockBelowPart>
+              <BarcelonaWrapper>
+                <Link to="/city?lat=41.3873974&lng=2.168568&city=巴塞隆拿&option=all">
+                  <Barcelona />
+                  <BarcelonaTitle>巴賽隆納</BarcelonaTitle>
+                </Link>
+              </BarcelonaWrapper>
 
-                <CamBridge />
-                <CamBridgeTitle>劍橋</CamBridgeTitle>
+              <ProvenceWrapper>
+                <Link to="/city?lat=43.529742&lng=5.447426999999999&city=普羅旺斯艾克斯&option=all">
+                  <Provence />
+                  <ProvenceTitle>普羅旺斯</ProvenceTitle>
+                </Link>
+              </ProvenceWrapper>
+
+            </FirstVerticalBlockBelowPart>
+
+          </FirstVerticalBlock>
+
+          <SecondVerticalBlcokWrapper>
+            <Link to="/city?lat=35.011564&lng=135.7681489&city=京都市&option=all">
+
+              <SecondVerticalBlcok />
+              <KyotoTitle>
+                京
+                <br />
+                都
+              </KyotoTitle>
+            </Link>
+          </SecondVerticalBlcokWrapper>
+        </SmallScreenCity>
+        <SmallScreenCity>
+
+          <ThridVerticalBlock>
+            <ThridVerticalBlockUpperPart>
+              <NewYorkWrapper>
+                <Link to="/city?lat=40.7127753&lng=-74.0059728&city=紐約&option=all">
+
+                  <NewYork />
+                  <NewYorkTitle>
+                    紐
+                    <br />
+                    約
+                  </NewYorkTitle>
+                </Link>
+
+              </NewYorkWrapper>
+
+              <CamBridgeWrapper>
+                <Link to="/city?lat=52.1950788&lng=0.1312729&city=劍橋&option=all">
+
+                  <CamBridge />
+                  <CamBridgeTitle>劍橋</CamBridgeTitle>
+                </Link>
+
+              </CamBridgeWrapper>
+
+            </ThridVerticalBlockUpperPart>
+
+            <AmsterdamWrapper>
+              <Link to="/city?lat=52.3675734&lng=4.9041389&city=阿姆斯特丹&option=all">
+
+                <Amsterdam />
+                <AmsterdamTitle>阿姆斯特丹</AmsterdamTitle>
               </Link>
 
-            </CamBridgeWrapper>
+            </AmsterdamWrapper>
 
-          </ThridVerticalBlockUpperPart>
+          </ThridVerticalBlock>
 
-          <AmsterdamWrapper>
-            <Link to="/city?lat=52.3675734&lng=4.9041389&city=阿姆斯特丹&option=all">
+          <FourthVerticalBlockWrapper>
+            <Link to="/city?lat=48.856614&lng=2.3522219&city=巴黎&option=all">
 
-              <Amsterdam />
-              <AmsterdamTitle>阿姆斯特丹</AmsterdamTitle>
+              <FourthVerticalBlock />
+              <ParisTitle>巴黎</ParisTitle>
             </Link>
 
-          </AmsterdamWrapper>
+          </FourthVerticalBlockWrapper>
 
-        </ThridVerticalBlock>
+          <FifthVerticalBlock>
+            <MexicoWrapper>
+              <Link to="/city?lat=19.4326077&lng=-99.133208&city=墨西哥城&option=all">
 
-        <FourthVerticalBlockWrapper>
-          <Link to="/city?lat=48.856614&lng=2.3522219&city=巴黎&option=all">
+                <Mexico />
+                <MexicoTitle>墨西哥城</MexicoTitle>
+              </Link>
 
-            <FourthVerticalBlock />
-            <ParisTitle>巴黎</ParisTitle>
-          </Link>
+            </MexicoWrapper>
 
-        </FourthVerticalBlockWrapper>
+            <EgyptWrapper>
+              <Link to="/city?lat=30.0444196&lng=31.2357116&city=開羅&option=all">
 
-        <FifthVerticalBlock>
-          <MexicoWrapper>
-            <Link to="/city?lat=19.4326077&lng=-99.133208&city=墨西哥城&option=all">
+                <Egypt />
+                <EgyptTitle>開羅</EgyptTitle>
+              </Link>
 
-              <Mexico />
-              <MexicoTitle>墨西哥城</MexicoTitle>
-            </Link>
+            </EgyptWrapper>
 
-          </MexicoWrapper>
-
-          <EgyptWrapper>
-            <Link to="/city?lat=30.0444196&lng=31.2357116&city=開羅&option=all">
-
-              <Egypt />
-              <EgyptTitle>開羅</EgyptTitle>
-            </Link>
-
-          </EgyptWrapper>
-
-        </FifthVerticalBlock>
+          </FifthVerticalBlock>
+        </SmallScreenCity>
       </CityAtHomeBelowPart>
     </CityAtHomeWrapper>
   );
