@@ -1,11 +1,10 @@
 import styled from 'styled-components/macro';
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import
 {
   collection, where, query, onSnapshot,
 } from 'firebase/firestore';
 import db from '../utils/firebase-init';
-import UserContext from './UserContextComponent';
 import {
   MyArticle, CoverPhotoInMyArticle,
   MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
@@ -78,10 +77,7 @@ cursor:pointer;
 `;
 
 function ArticlesInHome() {
-  const user = useContext(UserContext);
   const [articles, setArticles] = useState();
-  console.log(user);
-
   useEffect(() => {
     const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
     const unsubscribe = onSnapshot(pulishedArticlesRef, (querySnapshot) => {

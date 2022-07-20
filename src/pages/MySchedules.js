@@ -1016,15 +1016,13 @@ function MySchedules() {
                   <ExistedSchedules>
                     {schedules?.map((item, index) => (
                       <ExistedSchedule
-                        key={`${item?.schedule_id}and${item?.embark_date}+${item?.end_date}`}
+                        key={`${item?.schedule_id}`}
                         data-position={index}
                         isSelected={index === targetIndex}
                   >
                         <div
-                          key={`${item?.schedule_id}`}
                           className="modal-background">
                           <div
-                            key={`${item?.title}and${item?.schedule_id}+${item?.embark_date}`}
                             className="modal">
                             <DeleteModalTitle
                               key={`${item?.schedule_id}and${item?.title}`}

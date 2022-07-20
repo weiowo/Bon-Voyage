@@ -14,7 +14,7 @@ import React, {
 import styled from 'styled-components/macro';
 import HeaderComponent
   from '../components/Header';
-import CardsCarousel from './CardCarousel';
+import CardsCarousel from '../components/CardCarousel';
 import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 import ArticlesInHome from '../components/ArticlesInHome';
@@ -250,7 +250,7 @@ function SearchAtHomePage({ option, setOption }) {
 
 function Home({ currentLatLng, user }) {
   const [option, setOption] = useState('all');
-  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState();
+  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
   const [LatLng, setLatLng] = useState({ lat: 25.03746, lng: 121.564558 });
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,

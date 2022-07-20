@@ -12,31 +12,31 @@ import produce from 'immer';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import db from '../utils/firebase-init';
-import BckSrc from './images/paris.png';
-import ArrowToRightSrc from './images/arrow-right.png';
-import ArrowToLeftSrc from './images/arrow-left.png';
-import Default1 from './images/default1.png';
-import Default2 from './images/default2.png';
-import Default3 from './images/default3.png';
-import Default4 from './images/default4.png';
-import Default5 from './images/default5.png';
-import unfilledStar from './images/unfilled_star.jpg';
-import Travel from './images/travel-2.png';
-import Suitcase from './images/suitcase-2.png';
-import filledStar from './images/filled_star.jpg';
-import './animation.css';
+import BckSrc from '../pages/images/paris.png';
+import ArrowToRightSrc from '../pages/images/arrow-right.png';
+import ArrowToLeftSrc from '../pages/images/arrow-left.png';
+import Default1 from '../pages/images/default1.png';
+import Default2 from '../pages/images/default2.png';
+import Default3 from '../pages/images/default3.png';
+import Default4 from '../pages/images/default4.png';
+import Default5 from '../pages/images/default5.png';
+import unfilledStar from '../pages/images/unfilled_star.jpg';
+import Travel from '../pages/images/travel-2.png';
+import Suitcase from '../pages/images/suitcase-2.png';
+import filledStar from '../pages/images/filled_star.jpg';
+import '../pages/animation.css';
 import {
   ModalBackground, ModalBox, ModalImgArea, ModalImg, ModalLeftArea,
   AddToScheduleButton, CloseModalButton, LeftButton,
   ModalContentWrapper, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
   ScheduleChoiceTitle, ModalPlaceTitle, ModalPlaceAddress, ConfirmChooseDayButton,
   ButtonStarArea, AddFavoriteIcon, Loading,
-} from './City';
+} from '../pages/City';
 import {
   RemindWrapper, ClickAndAdd,
   RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
-} from './MySchedules';
-import UserContext from '../components/UserContextComponent';
+} from '../pages/MySchedules';
+import UserContext from './UserContextComponent';
 
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
@@ -229,6 +229,7 @@ const mapContainerStyle = {
 };
 
 function CardsCarousel({ currentNearbyAttraction }) {
+  console.log(currentNearbyAttraction);
   const user = useContext(UserContext);
   const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]);
   const [clickedScheduleIndex, setClickedScheduleIndex] = useState();
@@ -530,8 +531,9 @@ function CardsCarousel({ currentNearbyAttraction }) {
         </NearByPlaceLeftArea>
         <Arrow src={ArrowToLeftSrc} onClick={() => prevPhotos()} />
         <CardsWrapper>
-          {currentNearbyAttraction
-            ? currentNearbyAttraction.slice(currentIndex, currentIndex + 4).map((item, index) => (
+          {currentNearbyAttraction?.length === 0
+            ? <Loading />
+            : (currentNearbyAttraction.slice(currentIndex, currentIndex + 4).map((item, index) => (
               <Cards
                 key={item.place_id}
                 id={item.place_id}
@@ -553,50 +555,37 @@ function CardsCarousel({ currentNearbyAttraction }) {
                   {item.name}
                 </div>
               </Cards>
-            )) : (
-              <Loading />
-              // <div className="progress container">
-              //   <span />
-              //   <span />
-              //   <span />
-              //   <span />
-              //   <span />
-              //   <span />
-              //   <span />
-              //   <span />
-              // </div>
-            )}
-          {/* 為何字沒有跑出？ */}
+            )))}
         </CardsWrapper>
         <SmallScreenCardsWrapper>
           <SmallScreenArrow onClick={() => prevPhotos()} src={ArrowToLeftSrc} />
           <SmallScreenCards>
-            {currentNearbyAttraction
-              ? currentNearbyAttraction.slice(currentIndex, currentIndex + 3).map((item, index) => (
-                <Cards
-                  key={item.place_id}
-                  onClick={(e) => {
-                    ShowDetailNCheckLikedOrNot(
-                      e.target.id,
-                    );
-                    setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
-                    setClickedPlaceName(item?.name);
-                    setClickedPlaceAddress(item?.vicinity);
-                  }}
-                  id={item.place_id}
-                  className={index}
-                  style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
-                >
-                  <div
-                    key={`${item?.name}+${item?.place_id}`}
+            {currentNearbyAttraction?.length === 0
+              ? <Loading />
+              : (currentNearbyAttraction.slice(currentIndex, currentIndex + 3)
+                .map((item, index) => (
+                  <Cards
+                    key={item.place_id}
+                    onClick={(e) => {
+                      ShowDetailNCheckLikedOrNot(
+                        e.target.id,
+                      );
+                      setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
+                      setClickedPlaceName(item?.name);
+                      setClickedPlaceAddress(item?.vicinity);
+                    }}
                     id={item.place_id}
+                    className={index}
+                    style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
                   >
-                    {item.name}
-                  </div>
-                </Cards>
-              )) : (
-                <Loading />
-              )}
+                    <div
+                      key={`${item?.name}+${item?.place_id}`}
+                      id={item.place_id}
+                    >
+                      {item.name}
+                    </div>
+                  </Cards>
+                )))}
           </SmallScreenCards>
           <SmallScreenArrow onClick={() => nextPhotos()} src={ArrowToRightSrc} />
         </SmallScreenCardsWrapper>

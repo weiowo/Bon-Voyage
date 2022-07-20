@@ -18,12 +18,6 @@ import PurpleStar from './images/smile_star_purple.png';
 
 let service;
 
-const mapContainerStyle = {
-  height: 'calc( 100vh - 60px)',
-  width: '55vw',
-  position: 'absolute',
-};
-
 const options = {
   disableDefaultUI: true,
   zoomControl: true,
@@ -35,7 +29,7 @@ const center = {
 };
 
 function Map({
-  recommendList, setRecommendList,
+  setRecommendList, onClickClose,
   active, setSelected, selected, scheduleData, setDuration, setDistance, mapDisplay,
 }) {
   const { isLoaded } = useLoadScript({
@@ -43,6 +37,12 @@ function Map({
     libraries: ['places'],
   });
   const mapRef = useRef();
+
+  const mapContainerStyle = {
+    height: 'calc( 100vh - 60px)',
+    width: '55vw',
+    position: 'absolute',
+  };
 
   const smallScreenMapContainerStyle = {
     height: '100vh',
@@ -65,23 +65,19 @@ function Map({
       location: { lat, lng },
       radius: '500',
       type: ['tourist_attraction'],
-      fields: ['name', 'rating', 'formatted_phone_number', 'geometry'],
     };
 
     function callback(results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        const data = JSON.stringify(results);
-        window.localStorage.setItem('places', data);
         setRecommendList(results);
       } else {
         console.log('沒有成功');
       }
     }
+
     service = new google.maps.places.PlacesService(mapRef.current);
     service.nearbySearch(request, callback);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setRecommendList, recommendList]);
-  // eslint-disable-next-line no-unused-expressions
+  }, [setRecommendList]);
 
   useEffect(() => {
     if (!scheduleData) { return; }
@@ -162,12 +158,24 @@ function Map({
 
   return (
     <div>
-      <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
+      {isLoaded && (
+        <Search
+          panTo={panTo}
+          active={active}
+          setSelected={setSelected}
+          selected={selected}
+          onClickClose={onClickClose}
+        />
+      )}
       <div>
-        <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
+        {/* <Search
+          panTo={panTo}
+          active={active}
+          setSelected={setSelected}
+          selected={selected}
+        /> */}
         <GoogleMap
           id="map"
-        // style={{ opacity: mapDisplay ? '1' : '0' }}
           mapContainerStyle={window.innerWidth > 800
             ? mapContainerStyle : smallScreenMapContainerStyle}
           zoom={10}

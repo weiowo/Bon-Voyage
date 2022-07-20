@@ -1,15 +1,16 @@
-/* eslint-disable max-len */
-/* eslint-disable no-use-before-define */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from 'use-places-autocomplete';
 import styled from 'styled-components';
+import {
+  GoogleMap, useLoadScript,
+} from '@react-google-maps/api';
+import CloseIcon from './images/close_style.png';
 
 const SearchInput = styled.input`
 display:${(props) => (props.clicked ? 'flex' : 'none')};
@@ -26,8 +27,22 @@ outline:none;
   display:${(props) => (props.clicked ? 'flex' : 'none')};
 }`;
 
+const CloseSearchIcon = styled.img`
+display:${(props) => (props.clicked ? 'block' : 'none')};
+width:35px;
+height:35px;
+position:absolute;
+cursor:pointer;
+top:0px;
+left:calc( 45vw - 70px );
+// @media screen and (max-width:800px){
+//   position:fixed;
+//   top:20px;
+//   left:20px;
+}`;
+
 export default function Search({
-  panTo, setSelected, active,
+  panTo, active, setSelected, onClickClose,
 }) {
   const {
     ready,
@@ -44,11 +59,27 @@ export default function Search({
     setValue(e.target.value);
   };
 
-  const handleSelect = (selected_place) => () => {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    libraries: ['places'],
+  });
+  const mapRef = useRef();
+
+  const mapStyle = {
+    height: '0vh',
+    width: '0vw',
+    position: 'absolute',
+  };
+
+  const onMapLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
+  const handleSelect = (selectedPlace) => () => {
     setValue('');
-    setSelected(selected_place);
+    setSelected(selectedPlace);
     clearSuggestions();
-    getGeocode({ address: selected_place.description })
+    getGeocode({ address: selectedPlace.description })
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
         panTo({ lat, lng });
@@ -58,8 +89,6 @@ export default function Search({
       });
   };
 
-  console.log(active);
-
   const renderSuggestions = () => data.map((suggestion) => {
     const {
       place_id,
@@ -67,8 +96,8 @@ export default function Search({
     } = suggestion;
 
     return (
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events
       <li
+        role="presentation"
         style={{
           listStyleType: 'none',
           listStyle: 'none',
@@ -91,32 +120,46 @@ export default function Search({
         onClick={handleSelect(suggestion)}
       >
         <strong>{main_text}</strong>
-        {/* <br /> */}
-        {/* <small>{secondary_text}</small> */}
       </li>
     );
   });
 
+  if (!isLoaded) return <div>...</div>;
+
   return (
-    <div style={{
-      position: window.innerWidth > 800 ? 'absolute' : 'fixed',
-      left: '20px',
-      top: '80px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      height: 35,
-      zIndex: 30,
-    }}
-    >
-      <SearchInput
-        clicked={active}
-        value={value}
-        onChange={handleInput}
-        disabled={!ready}
-        placeholder="想去哪兒呢？"
+    <>
+      <div style={{
+        position: window.innerWidth > 800 ? 'absolute' : 'fixed',
+        left: '20px',
+        top: '80px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: 35,
+        zIndex: 30,
+      }}
+      >
+        <CloseSearchIcon
+          clicked={active}
+          onClick={() => { onClickClose(); clearSuggestions(); }}
+          src={CloseIcon}
+        />
+        <SearchInput
+          clicked={active}
+          value={value}
+          onChange={handleInput}
+          disabled={!ready}
+          placeholder="想去哪兒呢？"
+        />
+        {status === 'OK' && active && <div style={{ paddingLeft: 'none', width: '100%', zIndex: '24' }}>{renderSuggestions()}</div>}
+      </div>
+      <GoogleMap
+        id="map"
+        zoom={10}
+        onLoad={onMapLoad}
+        mapContainerStyle={mapStyle}
       />
-      {status === 'OK' && active && <div style={{ paddingLeft: 'none', width: '100%', zIndex: '24' }}>{renderSuggestions()}</div>}
-    </div>
+
+    </>
   );
 }
