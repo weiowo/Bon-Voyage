@@ -10,7 +10,7 @@ import Home from './pages/Home';
 import ChooseDate from './pages/ChooseDate';
 import MySchedules from './pages/MySchedules';
 import Map from './pages/Map';
-import SearchHome from './pages/SearchHome';
+// import SearchHome from './pages/SearchHome';
 import City from './pages/City';
 import CardsCarousel from './components/CardCarousel';
 import CityAreaInHomePage from './components/CityInHome';
@@ -74,7 +74,7 @@ function App() {
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/my-schedules" element={<MySchedules />} />
             <Route path="/map-new" element={<Map />} />
-            <Route path="/home-search" element={<SearchHome />} />
+            {/* <Route path="/home-search" element={<SearchHome />} /> */}
             <Route path="/city" element={<City />} />
             <Route path="/category-in-home" element={<CategoryAreaInHome currentLatLng={currentLatLng} />} />
             <Route path="/carousel" element={<CardsCarousel />} />

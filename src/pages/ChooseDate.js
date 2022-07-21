@@ -1,8 +1,6 @@
-/* eslint-disable no-unsafe-optional-chaining */
 import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-  // getDocs,
   collection, doc,
   setDoc, arrayUnion, updateDoc,
 } from 'firebase/firestore';
@@ -156,12 +154,8 @@ function ChooseDate() {
   const [newScheduleTitle, setNewScheduleTitle] = useState('');
   const navigate = useNavigate();
 
-  // 拿日期相減的天數
-
-  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-  const diffDays = Math.round(Math.abs((startDate - finishDate) / oneDay)); // 加一天
-
-  // 新行程
+  const oneDay = 24 * 60 * 60 * 1000;
+  const diffDays = Math.round(Math.abs((startDate - finishDate) / oneDay));
 
   const newSchedule = {
     schedule_creator_user_id: user.uid,

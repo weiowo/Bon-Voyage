@@ -252,6 +252,7 @@ function Home({ currentLatLng, user }) {
   const [option, setOption] = useState('all');
   const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
   const [LatLng, setLatLng] = useState({ lat: 25.03746, lng: 121.564558 });
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -259,6 +260,7 @@ function Home({ currentLatLng, user }) {
   const mapRef = useRef();
   const onMapLoad = useCallback((map) => {
     mapRef.current = map;
+    setIsMapLoaded(true);
   }, []);
 
   function getCurrentLatLng() {
@@ -292,13 +294,13 @@ function Home({ currentLatLng, user }) {
   }, [LatLng]);
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || !isMapLoaded) return;
     // if (!nearbyData) return;
     searchNearby();
     // setTimeout(() => {
     //   searchNearby();
     // }, 1000);
-  }, [searchNearby, isLoaded]);
+  }, [searchNearby, isLoaded, isMapLoaded]);
 
   if (!isLoaded) {
     return (

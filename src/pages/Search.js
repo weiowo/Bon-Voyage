@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-/* eslint-disable react/prop-types */
 
 import React, { useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -163,3 +163,10 @@ export default function Search({
     </>
   );
 }
+
+Search.propTypes = {
+  panTo: PropTypes.func.isRequired,
+  active: PropTypes.bool.isRequired,
+  setSelected: PropTypes.func.isRequired,
+  onClickClose: PropTypes.func.isRequired,
+};

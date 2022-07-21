@@ -49,8 +49,6 @@ import Footer from '../components/Footer';
 
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
-// modal
-
 const PlaceBoxesWrapper = styled.div`
 width:100vw;
 display:flex;

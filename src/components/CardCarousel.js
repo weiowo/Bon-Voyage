@@ -229,7 +229,6 @@ const mapContainerStyle = {
 };
 
 function CardsCarousel({ currentNearbyAttraction }) {
-  console.log(currentNearbyAttraction);
   const user = useContext(UserContext);
   const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]);
   const [clickedScheduleIndex, setClickedScheduleIndex] = useState();
@@ -325,12 +324,9 @@ function CardsCarousel({ currentNearbyAttraction }) {
     }
   }
 
-  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
-  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
-  // 按下哪一個行程後，用那個index去抓那天的細節
-
   useEffect(() => {
     async function getUserArrayList() {
+      if (!user.uid) return;
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       function getSchedulesFromList() {

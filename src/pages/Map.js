@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-new */
 /* global google */
 import React, {
@@ -7,7 +6,7 @@ import React, {
 import {
   GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Search from './Search';
 import PinkStar from './images/smile_star_pink.png';
 import OrangeStar from './images/smile_star_orange.png';
@@ -168,12 +167,6 @@ function Map({
         />
       )}
       <div>
-        {/* <Search
-          panTo={panTo}
-          active={active}
-          setSelected={setSelected}
-          selected={selected}
-        /> */}
         <GoogleMap
           id="map"
           mapContainerStyle={window.innerWidth > 800
@@ -188,9 +181,65 @@ function Map({
   );
 }
 
-// Map.propTypes = {
-//   recommendList: PropTypes.func.isRequired,
-//   setRecommendList: PropTypes.func.isRequired,
-// };
+Map.propTypes = {
+  setRecommendList: PropTypes.func,
+  onClickClose: PropTypes.func,
+  active: PropTypes.bool,
+  setSelected: PropTypes.func,
+  selected: PropTypes.shape(
+    {
+      description: PropTypes.string,
+      matched_substrings:
+      PropTypes.arrayOf(PropTypes.shape({ length: PropTypes.number, offset: PropTypes.number })),
+      place_id: PropTypes.string,
+      reference: PropTypes.string,
+      structured_formatting: PropTypes.shape({
+        main_text: PropTypes.string,
+        main_text_matched_substrings:
+      PropTypes.arrayOf(PropTypes.shape({ length: PropTypes.number, offset: PropTypes.number })),
+      }),
+      terms: PropTypes.arrayOf(PropTypes.shape({
+        offset: PropTypes.number,
+        value: PropTypes.string,
+      })),
+      types: PropTypes.arrayOf(PropTypes.string),
+    },
+  ),
+  scheduleData: PropTypes.shape(
+    {
+      deleted: PropTypes.bool,
+      embark_date: PropTypes.string,
+      end_date: PropTypes.string,
+      members: PropTypes.arrayOf(PropTypes.string),
+      schedule_creator_user_id: PropTypes.string,
+      schedule_id: PropTypes.string,
+      title: PropTypes.string,
+      trip_days: PropTypes.arrayOf(PropTypes.shape({
+        places:
+        PropTypes.arrayOf(PropTypes.shape({
+          place_title: PropTypes.string,
+          place_address:
+          PropTypes.string,
+          stay_time: PropTypes.number,
+        })),
+      })),
+    },
+  ),
+  setDuration: PropTypes.func,
+  setDistance: PropTypes.func,
+  mapDisplay: PropTypes.bool,
+};
+
+Map.defaultProps = {
+  setRecommendList: () => {},
+  onClickClose: () => {},
+  active: false,
+  setSelected: () => {},
+  selected: {},
+  scheduleData: {},
+  setDuration: () => {},
+  setDistance: () => {},
+  mapDisplay: false,
+};
 
 export default Map;
