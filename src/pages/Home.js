@@ -1,6 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-undef */
-/* eslint-disable camelcase */
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import usePlacesAutocomplete, {
@@ -175,14 +173,14 @@ function SearchAtHomePage({ option, setOption }) {
     setValue(e.target.value);
   };
 
-  const handleSelect = (selected_place_at_homePage) => () => {
-    setValue(selected_place_at_homePage.description, false);
+  const handleSelect = (selectedPlaceAtHomePage) => () => {
+    setValue(selectedPlaceAtHomePage.description, false);
     clearSuggestions();
-    getGeocode({ address: selected_place_at_homePage.description })
+    getGeocode({ address: selectedPlaceAtHomePage.description })
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
-        navigate({ pathname: '/city', search: `?lat=${lat}&lng=${lng}&city=${selected_place_at_homePage.structured_formatting.main_text}&option=${option}` });
-        searchNearby({ lat, lng });
+        navigate({ pathname: '/city', search: `?lat=${lat}&lng=${lng}&city=${selectedPlaceAtHomePage?.structured_formatting.main_text}&option=${option}` });
+        // searchNearby({ lat, lng });
       })
       .catch((error) => {
         console.log('Error: ', error);
@@ -190,6 +188,7 @@ function SearchAtHomePage({ option, setOption }) {
   };
 
   const renderSuggestions = () => data.map((suggestion) => {
+    console.log(suggestion);
     const {
       place_id,
       structured_formatting: { main_text, secondary_text },

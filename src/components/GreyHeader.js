@@ -17,7 +17,7 @@ import Plan from '../pages/images/suitcase.png';
 import {
   auth, Menu, SmallMenuCloseIcon, SmallScreenBackground, SmallScreenNavBar,
   HamburgerMenuLink, SmallLogOutButton, HamburgerProfileLink, SmallBarProfileBackground,
-  SmallProfilePhoto, SmallNavIcon, SmallProfileName, SmallNavText,
+  SmallProfilePhoto, SmallNavIcon, SmallProfileName, SmallNavText, CreateScheduleWrapper,
 } from './Header';
 import MyArticle from '../pages/images/article.png';
 import Attraction from '../pages/images/vacations.png';
@@ -118,6 +118,15 @@ function GreyHeaderComponent() {
     });
   }
 
+  function CheckLoginBeforeCreateSchedule() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else if (user.uid) {
+      navigate({ pathname: '/choose-date' });
+    }
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', () => { setHeaderBackground(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200); });
@@ -192,10 +201,10 @@ function GreyHeaderComponent() {
                 <SmallProfileName>{user.displayName || '您尚未登入唷'}</SmallProfileName>
               </HamburgerProfileLink>
             </SmallBarProfileBackground>
-            <HamburgerMenuLink to="/choose-date">
+            <CreateScheduleWrapper onClick={() => CheckLoginBeforeCreateSchedule()}>
               <SmallNavIcon src={Plan} />
               <SmallNavText>行程規劃</SmallNavText>
-            </HamburgerMenuLink>
+            </CreateScheduleWrapper>
             <HamburgerMenuLink to="/vr-page">
               <SmallNavIcon src={VRsrc} />
               <SmallNavText>VR 專區</SmallNavText>

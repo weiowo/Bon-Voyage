@@ -30,9 +30,9 @@ width:100vw;
 position:fixed;
 z-index:2000;
 top:0;
-height:${(props) => (props.actived ? '60px' : '65px')};
-background-color:${(props) => (props.actived ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
-box-shadow: ${(props) => (props.actived ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
+height:${(props) => (props.active ? '60px' : '65px')};
+background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
+box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
 @media screen and (max-width:800px){
 display:none;
 }`;
@@ -43,8 +43,8 @@ height:30px;
 font-weight:700;
 font-size:25px;
 margin-left:20px;
-color:${(props) => (props.actived ? 'black' : 'white')};
-margin-top:${(props) => (props.actived ? '15px' : '20px')};
+color:${(props) => (props.active ? 'black' : 'white')};
+margin-top:${(props) => (props.active ? '15px' : '20px')};
 @media screen and (max-width:800px){
   width:auto;
   height:auto;
@@ -61,9 +61,9 @@ align-items:center;
 gap:15px;
 width:500px;
 height:30px;
-color:${(props) => (props.actived ? 'black' : 'white')};
+color:${(props) => (props.active ? 'black' : 'white')};
 font-weight:600;
-margin-top:${(props) => (props.actived ? '15px' : '25px')};
+margin-top:${(props) => (props.active ? '15px' : '25px')};
 @media screen and (max-width:800px){
   display:none;
 }`;
@@ -72,7 +72,7 @@ const ProfilePageNav = styled.div`
 width:auto;
 padding:8px 10px;
 border-radius:10px;
-border:${(props) => (props.actived ? '1px solid black' : '1px solid white;')};
+border:${(props) => (props.active ? '1px solid black' : '1px solid white;')};
 cursor:pointer;
 `;
 
@@ -86,7 +86,7 @@ display:none;
   top:15px;
   right:15px;
   cursor:pointer;
-  display:${(props) => (props.actived ? 'none' : 'block')};
+  display:${(props) => (props.active ? 'none' : 'block')};
 }`;
 
 export const SmallMenuCloseIcon = styled.img`
@@ -99,7 +99,7 @@ display:none;
   right:18px;
   cursor:pointer;
   z-index:1000;
-  display:${(props) => (props.actived ? 'block' : 'none')};
+  display:${(props) => (props.active ? 'block' : 'none')};
 }`;
 
 export const SmallHeader = styled.div`
@@ -111,9 +111,9 @@ display:none;
   position:fixed;
   top:0;
   z-index:1000;
-  height:${(props) => (props.actived ? '60px' : '65px')};
-  background-color:${(props) => (props.actived ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
-  box-shadow: ${(props) => (props.actived ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
+  height:${(props) => (props.active ? '60px' : '65px')};
+  background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
+  box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
 }`;
 
 export const SmallScreenBackground = styled.div`
@@ -127,7 +127,7 @@ display:none;
   height:100vh;
   background-color: rgb(0, 0, 0, 0.5);
   z-index:1000;
-  display:${(props) => (props.actived ? 'flex' : 'none')};
+  display:${(props) => (props.active ? 'flex' : 'none')};
 }`;
 
 export const SmallScreenNavBar = styled.div`
@@ -145,7 +145,7 @@ display:none;
   z-index:500;
   background-color:white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  display:${(props) => (props.actived ? 'flex' : 'none')};
+  display:${(props) => (props.active ? 'flex' : 'none')};
 }
 @media screen and (max-width:500px){
   width:60vw;
@@ -155,32 +155,48 @@ display:none;
 const StyleNavLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
-color:${(props) => (props.$actived ? 'black' : 'white')};
+color:${(props) => (props.$active ? 'black' : 'white')};
 &:hover {
-  border-bottom:${(props) => (props.$actived ? '1.5px solid black' : '1.5px solid white')};
+  border-bottom:${(props) => (props.$active ? '1.5px solid black' : '1.5px solid white')};
 }
 @media screen and (max-width:800px){
   font-size:20px;
   margin-left:10px;
   width:150px;
   position:absolute;
-  margin-top:${(props) => (props.$actived ? '8px' : '0px')};
+  margin-top:${(props) => (props.$active ? '8px' : '0px')};
 }`;
 
 const ProfileNavLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
-color:${(props) => (props.$actived ? 'black' : 'white')};
+color:${(props) => (props.$active ? 'black' : 'white')};
 @media screen and (max-width:800px){
   font-size:20px;
   margin-left:10px;
   width:150px;
   position:absolute;
-  margin-top:${(props) => (props.$actived ? '8px' : '0px')};
+  margin-top:${(props) => (props.$active ? '8px' : '0px')};
 }`;
 
 export const HamburgerMenuLink = styled(Link)`
 text-decoration:none;
+display:flex;
+padding-left:30px;
+padding-right:20px;
+align-items:center;
+justify-content:left;
+width:100%;
+height:60px;
+gap:15px;
+color:black;
+&:hover {
+  background-color:#EBECF0;
+}`;
+
+export const CreateScheduleWrapper = styled.div`
+text-decoration:none;
+cursor:pointer;
 display:flex;
 padding-left:30px;
 padding-right:20px;
@@ -273,6 +289,12 @@ align-items:center;
 font-size:14px;
 `;
 
+// function getBorderBottomByPathname(pathname, headerBackground) {
+//   return pathname ===
+// '/all-articles' && headerBackground ?
+// '1.5px solid black' : pathname === '/all-articles' ? '1.5px solid white' : '';
+// }
+
 function HeaderComponent() {
   const user = useContext(UserContext);
   const [clicked, setClicked] = useState(false);
@@ -289,6 +311,15 @@ function HeaderComponent() {
     });
   }
 
+  function CheckLoginBeforeCreateSchedule() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else if (user.uid) {
+      navigate({ pathname: '/choose-date' });
+    }
+  }
+
   // debounce, return remove listener
 
   useEffect(() => {
@@ -299,21 +330,21 @@ function HeaderComponent() {
 
   return (
     <>
-      <Header actived={headerBackground}>
+      <Header active={headerBackground}>
         <ProfileNavLink to="/">
-          <Logo actived={headerBackground}>Bon Voyage</Logo>
+          <Logo active={headerBackground}>Bon Voyage</Logo>
         </ProfileNavLink>
-        <NavBar actived={headerBackground}>
+        <NavBar active={headerBackground}>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/vr-page' ? '1.5px solid white' : '' }}
-            $actived={headerBackground}
+            $active={headerBackground}
             to="/vr-page"
           >
             VR專區
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/city' ? '1.5px solid white' : '' }}
-            $actived={headerBackground}
+            $active={headerBackground}
             to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all"
           >
             熱門景點
@@ -322,51 +353,51 @@ function HeaderComponent() {
             style={{
               borderBottom: currentUrl.pathname === '/all-articles' && headerBackground ? '1.5px solid black' : currentUrl.pathname === '/all-articles' ? '1.5px solid white' : '',
             }}
-            $actived={headerBackground}
+            $active={headerBackground}
             to="/all-articles"
           >
             熱門遊記
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/category' ? '1.5px solid white' : '' }}
-            $actived={headerBackground}
+            $active={headerBackground}
             to="/category?lat=25.0498583&lng=121.5172606&category=food"
           >
             美食特搜
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/my-schedules' ? '1.5px solid white' : '' }}
-            $actived={headerBackground}
+            $active={headerBackground}
             to="/my-schedules"
           >
             行程規劃
           </StyleNavLink>
-          <ProfileNavLink $actived={headerBackground} to="/profile">
-            <ProfilePageNav actived={headerBackground}>個人頁面</ProfilePageNav>
+          <ProfileNavLink $active={headerBackground} to="/profile">
+            <ProfilePageNav active={headerBackground}>個人頁面</ProfilePageNav>
           </ProfileNavLink>
         </NavBar>
       </Header>
-      <SmallHeader $actived={headerBackground}>
+      <SmallHeader active={headerBackground}>
         <Menu
           src={headerBackground ? BlackMenuIcon : WhiteMenuIcon}
-          actived={clicked}
+          active={clicked}
           onClick={() => setClicked(true)}
         />
         <StyleNavLink $actived={headerBackground} to="/">
-          <Logo actived={headerBackground}>Bon Voyage</Logo>
+          <Logo active={headerBackground}>Bon Voyage</Logo>
         </StyleNavLink>
-        <SmallScreenBackground actived={clicked}>
-          <SmallScreenNavBar actived={clicked}>
+        <SmallScreenBackground active={clicked}>
+          <SmallScreenNavBar active={clicked}>
             <SmallBarProfileBackground>
               <HamburgerProfileLink to="/profile">
                 <SmallProfilePhoto src={user.photoURL || UserPhotoSrc} />
                 <SmallProfileName>{user.displayName || '您尚未登入唷'}</SmallProfileName>
               </HamburgerProfileLink>
             </SmallBarProfileBackground>
-            <HamburgerMenuLink to="/choose-date">
+            <CreateScheduleWrapper onClick={() => CheckLoginBeforeCreateSchedule()}>
               <SmallNavIcon src={Plan} />
               <SmallNavText>行程規劃</SmallNavText>
-            </HamburgerMenuLink>
+            </CreateScheduleWrapper>
             <HamburgerMenuLink to="/vr-page">
               <SmallNavIcon src={VRsrc} />
               <SmallNavText>VR 專區</SmallNavText>
@@ -404,7 +435,7 @@ function HeaderComponent() {
             </SmallLogOutButton>
             <SmallMenuCloseIcon
               src={CloseIcon}
-              actived={clicked}
+              active={clicked}
               onClick={() => setClicked(false)}
             />
           </SmallScreenNavBar>

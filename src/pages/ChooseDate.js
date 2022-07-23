@@ -187,8 +187,6 @@ function ChooseDate() {
     creator_user_id: user.uid,
   };
 
-  // user創建行程的時候就要把這個行程推進他的owned_schedules_list array中
-
   async function setNewScheduleToDb() {
     if (newScheduleTitle === '') {
       alert('請填寫旅程名稱哦！');

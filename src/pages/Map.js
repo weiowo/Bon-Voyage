@@ -1,5 +1,3 @@
-/* eslint-disable no-new */
-/* global google */
 import React, {
   useRef, useCallback, useEffect,
 } from 'react';
@@ -62,7 +60,7 @@ function Map({
 
     const request = {
       location: { lat, lng },
-      radius: '500',
+      radius: '1500',
       type: ['tourist_attraction'],
     };
 

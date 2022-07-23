@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React,
 {
   useCallback, useRef, useEffect, useState, useContext,
@@ -244,9 +243,9 @@ function Category({ currentLatLng }) {
   const { search } = useLocation();
   const user = useContext(UserContext);
   const categoryFromUrl = new URLSearchParams(search).get('category');
-  const [categoryPageScheduleData, setCategoryPageScheduleData] = useImmer([]); // 是這個人所有行程！不是單一!
-  const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
-  const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
+  const [categoryPageScheduleData, setCategoryPageScheduleData] = useImmer([]);
+  const [clickedScheduleIndex, setClickedScheduleIndex] = useState();
+  const [clickedScheduleId, setClickedScheduleId] = useState();
   const [dayIndex, setDayIndex] = useState();
   const [modalIsActive, setModalIsActive] = useState(false);
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
@@ -258,13 +257,9 @@ function Category({ currentLatLng }) {
   const [clickedPlaceName, setClickedPlaceName] = useState('');
   const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
 
-  // 關掉modal
-
   function handleModalClose() {
     setModalIsActive(false);
   }
-
-  // 按下加入行程時先判斷有否登入，有的話才能繼續
 
   function handleUserOrNot() {
     if (!user.uid) {
@@ -274,8 +269,6 @@ function Category({ currentLatLng }) {
       setModalIsActive(false); setChooseScheduleModalIsActive(true);
     }
   }
-
-  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
@@ -304,12 +297,9 @@ function Category({ currentLatLng }) {
     }
   }
 
-  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
-  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
-  // 按下哪一個行程後，用那個index去抓那天的細節
-
   useEffect(() => {
     async function getUserArrayList() {
+      if (!user.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       function getSchedulesFromList() {
@@ -330,8 +320,6 @@ function Category({ currentLatLng }) {
     getUserArrayList();
   }, [setCategoryPageScheduleData, user.uid]);
 
-  // 確認加入
-
   function ComfirmedAdded() {
     const newPlace = {
       place_title: modalDetail?.name,
@@ -348,8 +336,6 @@ function Category({ currentLatLng }) {
     }
     passAddedDataToFirestore();
   }
-
-  // 判斷現在是什麼種類的banner
 
   let BannerSrc;
 
@@ -373,8 +359,6 @@ function Category({ currentLatLng }) {
 
   const [categoryNearbyData, setCategoryNearbyData] = useState([]);
 
-  // 先loadmap
-
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
     libraries,
@@ -384,8 +368,6 @@ function Category({ currentLatLng }) {
   const onMapLoad = useCallback((map) => {
     mapRef.current = map;
   }, []);
-
-  // 拿到url上的種類、找附近此種類的景點
 
   const searchCategoryNearby = useCallback(() => {
     if (!isLoaded) return;
@@ -414,13 +396,11 @@ function Category({ currentLatLng }) {
         location: currentLatLng,
         radius: '10000',
         type: 'zoo',
-        // , 'zoo', 'park', 'aquarium'],
       },
       {
         location: currentLatLng,
         radius: '10000',
         type: 'amusement_park',
-        // , 'zoo', 'park', 'aquarium'],
       },
       ];
     } else if (categoryFromUrl === 'couple') {
@@ -452,7 +432,6 @@ function Category({ currentLatLng }) {
         radius: '3000',
         type: 'clothing_store',
       }];
-      // , 'home_goods_store', 'shopping_mall', 'department_store'],
     } else if (categoryFromUrl === 'nightlife') {
       requests = [{
         location: currentLatLng,
@@ -463,14 +442,12 @@ function Category({ currentLatLng }) {
         location: currentLatLng,
         radius: '10000',
         type: 'night_club',
-        // ', 'bar', 'casino'],
       }];
     } else if (categoryFromUrl === 'religion') {
       requests = [{
         location: currentLatLng,
         radius: '2000',
         type: 'hindu_temple',
-        // 'mosque',
       },
       {
         location: currentLatLng,
@@ -485,22 +462,41 @@ function Category({ currentLatLng }) {
       service.nearbySearch(request, (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           setCategoryNearbyData((preData) => ([...preData, ...results]));
-          // 這樣會變兩個array在一個array、如果包{}則會變成分開兩次
         }
       });
     });
   }, [categoryFromUrl, currentLatLng, isLoaded]);
 
+  // function callback(results, status) {
+  //   if (status === google.maps.places.PlacesServiceStatus.OK) {
+  //     for (let i = 0; i < results.length; i++) {
+  //       console.log(results[i]);
+  //       // createMarker(results[i]);
+  //     }
+  //   }
+  // }
+
+  // function searchTest() {
+  //   const request = {
+  //     location: currentLatLng,
+  //     radius: '5000',
+  //     query: '心理諮商',
+  //   };
+  //   const service = new google.maps.places.PlacesService(mapRef.current);
+  //   service.textSearch(request, callback);
+  // }
+
+  // searchTest();
+
   useEffect(() => {
     if (!isLoaded) return;
-    // if (!nearbyData) return;
-    // searchCategoryNearby();
     setTimeout(() => {
       searchCategoryNearby();
-    }, 2000);
+    }, 1000);
   }, [isLoaded, searchCategoryNearby]);
 
   async function checkLikeOrNot(placeId) {
+    if (!user.uid) { return; }
     const userArticlesArray = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userArticlesArray);
     if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
@@ -722,5 +718,5 @@ Category.propTypes = {
 };
 
 Category.defaultProps = {
-  currentLatLng: PropTypes.shape({ lat: 25.03746, lng: 121.564558 }),
+  currentLatLng: { lat: 25.03746, lng: 121.564558 },
 };

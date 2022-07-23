@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import React, { useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import usePlacesAutocomplete, {

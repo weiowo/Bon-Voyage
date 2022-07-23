@@ -16,7 +16,7 @@ import Plan from '../pages/images/suitcase.png';
 import {
   auth, Menu, SmallMenuCloseIcon, SmallHeader, SmallScreenBackground, SmallScreenNavBar,
   HamburgerMenuLink, SmallLogOutButton, HamburgerProfileLink, SmallBarProfileBackground,
-  SmallProfilePhoto, SmallNavIcon, SmallProfileName, SmallNavText,
+  SmallProfilePhoto, SmallNavIcon, SmallProfileName, SmallNavText, CreateScheduleWrapper,
 } from './Header';
 import MyArticle from '../pages/images/article.png';
 import Attraction from '../pages/images/vacations.png';
@@ -88,7 +88,7 @@ color:black;
   margin-left:10px;
   width:150px;
   position:absolute;
-  margin-top:${(props) => (props.active ? '8px' : '0px')};
+  margin-top:${(props) => (props.$active ? '8px' : '0px')};
 }`;
 
 const ProfileNavLink = styled(Link)`
@@ -100,7 +100,7 @@ color:black;
   margin-left:10px;
   width:150px;
   position:absolute;
-  margin-top:${(props) => (props.active ? '8px' : '0px')};
+  margin-top:${(props) => (props.$active ? '8px' : '0px')};
 }`;
 
 function BlackHeaderComponent() {
@@ -119,6 +119,15 @@ function BlackHeaderComponent() {
     });
   }
 
+  function CheckLoginBeforeCreateSchedule() {
+    if (!user.uid) {
+      alert('請先登入唷～');
+      navigate({ pathname: '/profile' });
+    } else if (user.uid) {
+      navigate({ pathname: '/choose-date' });
+    }
+  }
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', () => { setHeaderBackground(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200); });
@@ -134,40 +143,40 @@ function BlackHeaderComponent() {
         <NavBar active={headerBackground}>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/vr-page' ? '1.5px solid black' : '' }}
-            active={headerBackground}
+            $active={headerBackground}
             to="/vr-page"
           >
             VR專區
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/city' ? '1.5px solid black' : '' }}
-            active={headerBackground}
+            $active={headerBackground}
             to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all"
           >
             熱門景點
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/all-articles' ? '1.5px solid black' : '' }}
-            active={headerBackground}
+            $active={headerBackground}
             to="/all-articles"
           >
             熱門遊記
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/category' ? '1.5px solid black' : '' }}
-            active={headerBackground}
+            $active={headerBackground}
             to="/category?lat=25.0498583&lng=121.5172606&category=food"
           >
             美食特搜
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/my-schedules' ? '1.5px solid black' : '' }}
-            active={headerBackground}
+            $active={headerBackground}
             to="/my-schedules"
           >
             行程規劃
           </StyleNavLink>
-          <ProfileNavLink active={headerBackground} to="/profile">
+          <ProfileNavLink $active={headerBackground} to="/profile">
             <ProfilePageNav active={headerBackground}>個人頁面</ProfilePageNav>
           </ProfileNavLink>
         </NavBar>
@@ -178,7 +187,7 @@ function BlackHeaderComponent() {
           active={clicked}
           onClick={() => setClicked(true)}
         />
-        <StyleNavLink active={headerBackground} to="/">
+        <StyleNavLink $active={headerBackground} to="/">
           <Logo active={headerBackground}>Bon Voyage</Logo>
         </StyleNavLink>
         <SmallScreenBackground active={clicked}>
@@ -189,10 +198,10 @@ function BlackHeaderComponent() {
                 <SmallProfileName>{user.displayName || '您尚未登入唷'}</SmallProfileName>
               </HamburgerProfileLink>
             </SmallBarProfileBackground>
-            <HamburgerMenuLink to="/choose-date">
+            <CreateScheduleWrapper onClick={() => CheckLoginBeforeCreateSchedule()}>
               <SmallNavIcon src={Plan} />
               <SmallNavText>行程規劃</SmallNavText>
-            </HamburgerMenuLink>
+            </CreateScheduleWrapper>
             <HamburgerMenuLink to="/vr-page">
               <SmallNavIcon src={VRsrc} />
               <SmallNavText>VR 專區</SmallNavText>

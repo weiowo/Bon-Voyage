@@ -17,7 +17,7 @@ margin-top:50px;
 function Footer() {
   return (
     <FooterComponent>
-      Copyright © 2022-forever Weiwei 版權所有
+      Copyright © 2022-Forever Weiwei 版權所有
     </FooterComponent>
   );
 }

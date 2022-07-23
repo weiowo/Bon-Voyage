@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import styled from 'styled-components/macro';
 import React, {
   useEffect, useContext, useState, useRef, useCallback,
@@ -345,9 +344,7 @@ function MyLovedArticles() {
     const docSnap = await getDoc(userArticlesArray);
     if (docSnap.data().loved_attraction_ids.indexOf(placeId) > -1) {
       setLiked(true);
-      console.log('已經追蹤過嚕!');
     } else {
-      console.log('沒有哦');
       setLiked(false);
     }
   }
