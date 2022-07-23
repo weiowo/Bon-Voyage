@@ -46,6 +46,7 @@ background-position:center;
 
 function AllArticlePage() {
   const [allArticles, setAllArticles] = useState([]);
+  console.log(allArticles);
 
   useEffect(() => {
     const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));
@@ -67,16 +68,35 @@ function AllArticlePage() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <ArticlesBoxesContainer>
             {allArticles ? allArticles.map((item) => (
-              <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
-                <MyArticle>
-                  <CoverPhotoInMyArticle src={item?.cover_img
-                    ? item?.cover_img
-                    : defaultArticleCoverPhoto[Math.floor(Math.random()
+              <StyledLink
+                key={item?.article_id}
+                to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}
+              >
+                <MyArticle
+                  key={`${item?.article_id}+${item?.schedule_id}`}
+
+                >
+                  <CoverPhotoInMyArticle
+                    src={item?.cover_img
+                      ? item?.cover_img
+                      : defaultArticleCoverPhoto[Math.floor(Math.random()
                       * defaultArticleCoverPhoto.length)]}
+                    key={`${item?.cover_img}`}
+
                   />
-                  <MyArticleBelowArea>
-                    <MyArticleTitle>{item?.article_title}</MyArticleTitle>
-                    <MyArticleSummary>
+                  <MyArticleBelowArea
+                    key={`${item?.summary}+${item?.schedule_id}`}
+                  >
+                    <MyArticleTitle
+                      key={`${item?.summary}+${item?.article_title}`}
+
+                    >
+                      {item?.article_title}
+
+                    </MyArticleTitle>
+                    <MyArticleSummary
+                      key={`${item?.summary}+${item?.article_creator_user_id}`}
+                    >
                       {item?.summary?.slice(0, 15)}
                       .....
                     </MyArticleSummary>

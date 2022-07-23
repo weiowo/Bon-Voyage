@@ -297,10 +297,9 @@ flex-wrap:wrap;
 function ShowArticle() {
   const [shownArticle, updateShownArticle] = useImmer();
   const [liked, setLiked] = useState(false);
+  console.log(shownArticle);
   const user = useContext(UserContext);
   const navigate = useNavigate();
-
-  // 拿指定一個article_id的article資料
   const { search } = useLocation();
   const currentArticleId = new URLSearchParams(search).get('art_id');
 
@@ -316,13 +315,11 @@ function ShowArticle() {
     getCertainArticle();
   }, [currentArticleId, updateShownArticle]);
 
-  // 確認一下是否這個使用者有按過收藏，有的話星星是亮的
-
   useEffect(() => {
     async function checkLikeOrNot() {
       const userArticlesArray = doc(db, 'users', user.uid);
       const docSnap = await getDoc(userArticlesArray);
-      if (docSnap.data().loved_article_ids.indexOf(currentArticleId) > -1) {
+      if (docSnap?.data()?.loved_article_ids?.indexOf?.(currentArticleId) > -1) {
         setLiked(true);
       }
     }
@@ -379,52 +376,68 @@ function ShowArticle() {
               <Description>{shownArticle?.summary}</Description>
               {shownArticle ? shownArticle?.trip_days?.map((dayItem, dayIndex) => (
                 <>
-                  <DayTitle id={`day-${dayIndex + 1}`}>
+                  <DayTitle
+                    key={`day-${dayIndex + 1}`}
+                    id={`day-${dayIndex + 1}`}
+                  >
                     第
                     {dayIndex + 1}
                     天
                   </DayTitle>
-                  <div>
+                  <div key={`place-${dayIndex + 8}}`}>
                     {dayItem?.places.map((placeItem, placeIndex) => (
-                      <PlaceArea id={`place-${dayIndex + 1}-${placeIndex + 1}`}>
-                        <div style={{ display: 'flex' }}>
-                          <PlaceTitle>
-                            {placeItem.place_title}
+                      <PlaceArea key={`place-${dayIndex + 3}-${placeIndex + 1}`} id={`place-${dayIndex + 1}-${placeIndex + 1}`}>
+                        <div key={`place-${placeIndex + 1}-${placeItem?.place_description}`} style={{ display: 'flex' }}>
+                          <PlaceTitle key={placeItem?.place_title}>
+                            {placeItem?.place_title}
                           </PlaceTitle>
                         </div>
-                        <ImgDisplayArea>
+                        <ImgDisplayArea key={`place-${dayIndex + 6}-${placeIndex + 6}`}>
                           {shownArticle?.trip_days?.[dayIndex]
                             ?.places?.[placeIndex]?.place_imgs?.map((item) => (
-                              <div style={{ position: 'relative' }}>
-                                <PlaceImg src={item} alt="place-img" />
+                              <div key={`${item + 1}`} style={{ position: 'relative' }}>
+                                <PlaceImg key={`${shownArticle?.article_creator_user_id}`} src={item} alt="place-img" />
                               </div>
                             ))}
                         </ImgDisplayArea>
-                        <Description>{placeItem?.place_description}</Description>
+                        <Description key={`place-${placeIndex + 5}-${placeItem?.place_description}`}>
+                          {placeItem?.place_description}
+                        </Description>
                       </PlaceArea>
                     ))}
                   </div>
                 </>
               )) : ''}
             </EditingPart>
-            <ScheduleSummaryPart>
+            <ScheduleSummaryPart key={`article${shownArticle?.schedule_id}`}>
               {shownArticle ? shownArticle?.trip_days?.map((dayItem, dayIndex) => (
-                <ScheduleSummaryDayAndPlacePart>
-                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#day-${dayIndex + 1}`}>
-                    <ScheduleSummaryDayPart>
+                <ScheduleSummaryDayAndPlacePart key={`${dayIndex + 3}+${shownArticle?.schedule_id}`}>
+                  <HashLink key={`${shownArticle?.author}+${shownArticle?.status}`} style={{ textDecoration: 'none' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#day-${dayIndex + 1}`}>
+                    <ScheduleSummaryDayPart
+                      key={`${shownArticle?.cover_img}+${dayIndex + 1}`}
+                    >
                       第
                       {dayIndex + 1}
                       天
                     </ScheduleSummaryDayPart>
                   </HashLink>
-                  <div style={{
-                    height: '20px', width: '2px', backgroundColor: 'black', marginTop: '2px',
-                  }}
+                  <div
+                    key={`${shownArticle?.status}+${dayIndex + 5}`}
+                    style={{
+                      height: '20px', width: '2px', backgroundColor: 'black', marginTop: '2px',
+                    }}
                   />
-                  <ScheduleSummaryPlacePart>
+                  <ScheduleSummaryPlacePart key={`${shownArticle?.article_id}+${dayIndex + 7}`}>
                     {dayItem?.places ? dayItem?.places.map((placeItem, placeIndex) => (
-                      <HashLink style={{ textDecoration: 'none', color: 'black' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#place-${dayIndex + 1}-${placeIndex + 1}`}>
-                        <SummaryPlaceTitle>
+                      <HashLink
+                        key={`${placeItem?.place_title}`}
+                        style={{ textDecoration: 'none', color: 'black' }}
+                        smooth
+                        to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#place-${dayIndex + 1}-${placeIndex + 1}`}
+                      >
+                        <SummaryPlaceTitle
+                          key={`${placeItem?.place_description}+${placeItem?.title}`}
+                        >
                           {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
                         </SummaryPlaceTitle>
                       </HashLink>
@@ -441,51 +454,3 @@ function ShowArticle() {
 }
 
 export default ShowArticle;
-
-// <div>
-// <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
-// <GoogleMap
-//   id="map"
-//   // style={{ opacity: mapDisplay ? '1' : '0' }}
-//   mapContainerStyle={window.innerWidth > 800 ? mapContainerStyle : smallScreenMapContainerStyle}
-//   zoom={10}
-//   center={center}
-//   options={options}
-//   onLoad={onMapLoad}
-// />
-// </div>
-
-// const smallScreenMapContainerStyle = {
-//   height: '100vh',
-//   position: 'fixed',
-//   top: 0,
-//   bottom: 0,
-//   width: '100vw',
-//   display: mapDisplay ? 'block' : 'none',
-// };
-
-// let service;
-
-// const mapContainerStyle = {
-//   height: 'calc( 100vh - 60px)',
-//   width: '55vw',
-//   position: 'absolute',
-// };
-
-// const smallScreenMapContainerStyle = {
-//   height: '100vh',
-//   position: 'fixed',
-//   top: 0,
-//   bottom: 0,
-//   width: '100vw',
-//   display: mapDisplay ? 'block' : 'none',
-// };
-
-// const options = {
-//   disableDefaultUI: true,
-//   zoomControl: true,
-// };
-// const center = {
-//   lat: 25.105497,
-//   lng: 121.597366,
-// };

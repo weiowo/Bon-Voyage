@@ -49,8 +49,6 @@ import Footer from '../components/Footer';
 
 const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
-// modal
-
 const PlaceBoxesWrapper = styled.div`
 width:100vw;
 display:flex;
@@ -610,8 +608,9 @@ function Category({ currentLatLng }) {
                 </RemindWrapper>
               ) : categoryPageScheduleData.map((item, index) => (
                 <ScheduleChoicesBox
+                  key={`${item.schedule_id}+${index + 1}`}
                   onClick={() => {
-                    setClickedScheduleId(item.schedule_id);
+                    setClickedScheduleId(item?.schedule_id);
                     setClickedScheduleIndex(index);
                     setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
                   }}
@@ -647,6 +646,7 @@ function Category({ currentLatLng }) {
               {categoryPageScheduleData
                 ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
                   <ScheduleChoicesBox
+                    key={item?.schedule_id}
                     clicked={dayIndex === index}
                     onClick={() => {
                       setDayIndex(index);
@@ -677,6 +677,7 @@ function Category({ currentLatLng }) {
         {categoryNearbyData ? categoryNearbyData.map((item, index) => (
           <PlaceBoxWrapper
             id={item?.place_id}
+            key={item?.place_id}
             onClick={(e) => {
               ShowDetailNCheckLikedOrNot(e.target.id);
               setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());

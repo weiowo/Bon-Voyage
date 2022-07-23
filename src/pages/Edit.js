@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable react/jsx-props-no-spreading */
 import
 {
   doc, getDoc,
@@ -266,11 +264,6 @@ letter-spacing:2px;
   height:40px;
 }`;
 
-// const PlaceUploadImgArea = styled.input`
-// width:180px;
-// height:30px;
-// `;
-
 const PlaceImg = styled.img`
 width:100px;
 height:100px;
@@ -364,30 +357,26 @@ function EditPage() {
   const [article, updateArticle] = useImmer();
   const navigate = useNavigate();
 
-  // 按下上傳圖片！
-  async function uploadImg(dayIndex, placeIndex, placeImgaeData) {
-    if (placeImgaeData === null) return;
-    const imgRef = ref(storage, `images/${placeImgaeData.name}`);
-    const snap = await uploadBytes(imgRef, placeImgaeData);
-    const url = await getDownloadURL(ref(storage, `images/${placeImgaeData.name}`));
-    updateArticle((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].place_imgs.push(url);
-    });
-    console.log(snap);
-    console.log(url);
-  }
-
   // 上傳cover圖片！
   async function uploadCoverImg(imageData) {
     if (imageData === null) return;
     const imgRef = ref(storage, `images/${imageData.name}`);
-    const snap = await uploadBytes(imgRef, imageData);
+    await uploadBytes(imgRef, imageData);
     const url = await getDownloadURL(ref(storage, `images/${imageData.name}`));
     updateArticle((draft) => {
       draft.cover_img = url;
     });
-    console.log(snap);
-    console.log(url);
+  }
+
+  // 按下上傳圖片！
+  async function uploadImg(dayIndex, placeIndex, placeImgaeData) {
+    if (placeImgaeData === null) return;
+    const imgRef = ref(storage, `images/${placeImgaeData.name}`);
+    await uploadBytes(imgRef, placeImgaeData);
+    const url = await getDownloadURL(ref(storage, `images/${placeImgaeData.name}`));
+    updateArticle((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].place_imgs.push(url);
+    });
   }
 
   const { search } = useLocation();
@@ -450,6 +439,8 @@ function EditPage() {
     }
   }
 
+  // day-${dayIndex + 1}
+
   return (
     <>
       <HeaderComponent />
@@ -478,7 +469,6 @@ function EditPage() {
                   type="file"
                   id="photo"
                   onChange={(e) => {
-                    // setImage(e.target.files[0]);
                     uploadCoverImg(e.target.files[0]);
                   }}
                 />
@@ -490,8 +480,6 @@ function EditPage() {
                   />
                 )
                   : ''}
-                {/* <button type="button" onClick={() => updateArticleCoverPhoto()}>上傳</button> */}
-
               </ArticleCoverPhotoWrapper>
               <Description
                 placeholder="寫點關於這次行程的整體描述吧～"
@@ -539,25 +527,15 @@ function EditPage() {
                               onChange={(e) => {
                                 uploadImg(dayIndex, placeIndex, e.target.files[0]);
                               }}
-                              // onChange={(e) => {
-                              //   setImage(e.target.files[0]);
-                              // }}
                             />
                             上傳照片
                           </label>
-                          {/* <ConfirmedUploadButton
-                          type="button" onChange={(e) =>
-                          uploadImg(dayIndex, placeIndex,
-                           e.target.files[0])}>確認上傳</ConfirmedUploadButton> */}
                         </div>
-                        <ImgDisplayArea style={{
-                          display: 'flex', width: '55vw', height: 'auto',
-                        }}
-                        >
+                        <ImgDisplayArea>
                           {article?.trip_days?.[dayIndex]
                             ?.places?.[placeIndex]?.place_imgs?.map((item, photoIndex) => (
                               <div style={{ position: 'relative' }}>
-                                <PlaceImg style={{ width: 100, height: 100, position: 'relative' }} src={item} alt="place-img" />
+                                <PlaceImg src={item} alt="place-img" />
                                 <DeletePlaceImgButton
                                   type="button"
                                   onClick={() => deletePlaceImg(dayIndex, placeIndex, photoIndex)}

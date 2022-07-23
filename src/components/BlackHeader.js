@@ -127,59 +127,59 @@ function BlackHeaderComponent() {
 
   return (
     <>
-      <Header active={headerBackground?.toString()}>
+      <Header active={headerBackground}>
         <ProfileNavLink to="/">
-          <Logo active={headerBackground?.toString()}>Bon Voyage</Logo>
+          <Logo active={headerBackground}>Bon Voyage</Logo>
         </ProfileNavLink>
-        <NavBar active={headerBackground?.toString()}>
+        <NavBar active={headerBackground}>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/vr-page' ? '1.5px solid black' : '' }}
-            active={headerBackground?.toString()}
+            active={headerBackground}
             to="/vr-page"
           >
             VR專區
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/city' ? '1.5px solid black' : '' }}
-            active={headerBackground?.toString()}
+            active={headerBackground}
             to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all"
           >
             熱門景點
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/all-articles' ? '1.5px solid black' : '' }}
-            active={headerBackground?.toString()}
+            active={headerBackground}
             to="/all-articles"
           >
             熱門遊記
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/category' ? '1.5px solid black' : '' }}
-            active={headerBackground?.toString()}
+            active={headerBackground}
             to="/category?lat=25.0498583&lng=121.5172606&category=food"
           >
             美食特搜
           </StyleNavLink>
           <StyleNavLink
             style={{ borderBottom: currentUrl.pathname === '/my-schedules' ? '1.5px solid black' : '' }}
-            active={headerBackground?.toString()}
+            active={headerBackground}
             to="/my-schedules"
           >
             行程規劃
           </StyleNavLink>
-          <ProfileNavLink active={headerBackground?.toString()} to="/profile">
-            <ProfilePageNav active={headerBackground?.toString()}>個人頁面</ProfilePageNav>
+          <ProfileNavLink active={headerBackground} to="/profile">
+            <ProfilePageNav active={headerBackground}>個人頁面</ProfilePageNav>
           </ProfileNavLink>
         </NavBar>
       </Header>
-      <SmallHeader active={headerBackground?.toString()}>
+      <SmallHeader active={headerBackground}>
         <Menu
           src={BlackMenuIcon}
           active={clicked}
           onClick={() => setClicked(true)}
         />
-        <StyleNavLink active={headerBackground?.toString()} to="/">
-          <Logo active={headerBackground?.toString()}>Bon Voyage</Logo>
+        <StyleNavLink active={headerBackground} to="/">
+          <Logo active={headerBackground}>Bon Voyage</Logo>
         </StyleNavLink>
         <SmallScreenBackground active={clicked}>
           <SmallScreenNavBar active={clicked}>

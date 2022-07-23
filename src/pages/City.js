@@ -749,10 +749,6 @@ function City() {
     }, 1000);
   }, [searchNearby, isLoaded]);
 
-  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
-  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
-  // 按下哪一個行程後，用那個index去抓那天的細節
-
   useEffect(() => {
     async function getUserArrayList() {
       const docRef = doc(db, 'users', user.uid);
@@ -800,10 +796,6 @@ function City() {
       setModalIsActive(false); setChooseScheduleModalIsActive(true);
     }
   }
-
-  // 打開modal時先確認有沒有追蹤過
-  // 有的話就讓星星亮起，沒有的話就讓星星空的
-  // 有登入的話才判斷，沒登入的話就不亮，按下去會執行另一個叫他登入的function
 
   async function checkLikeOrNot(placeId) {
     const userArticlesArray = doc(db, 'users', user.uid);
@@ -931,6 +923,7 @@ function City() {
                 </RemindWrapper>
               ) : cityPageScheduleData.map((item, index) => (
                 <ScheduleChoicesBox
+                  key={item?.schedule_id}
                   onClick={() => {
                     setClickedScheduleId(item?.schedule_id);
                     setClickedScheduleIndex(index);
@@ -938,7 +931,9 @@ function City() {
                   }}
                   id={item?.schedule_id}
                 >
-                  <ScheduleChoiceTitle>
+                  <ScheduleChoiceTitle
+                    key={item?.title}
+                  >
                     {item?.title}
                   </ScheduleChoiceTitle>
                 </ScheduleChoicesBox>
@@ -968,6 +963,7 @@ function City() {
               {cityPageScheduleData
                 ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
                   <ScheduleChoicesBox
+                    key={item?.schedule_creator_user_id}
                     clicked={dayIndex === index}
                     onClick={() => {
                       setDayIndex(index);
@@ -1017,7 +1013,8 @@ function City() {
               {nearbyData.tourist_attraction
                 ? nearbyData.tourist_attraction.map((item, index) => (
                   <AttractionBox
-                    id={item.place_id}
+                    key={item?.place_id}
+                    id={item?.place_id}
                     onClick={(e) => {
                       ShowDetailNCheckLikedOrNot(e.target.id);
                       setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
@@ -1057,6 +1054,7 @@ function City() {
             <RestaurantWrapper>
               {nearbyData.restaurant ? nearbyData.restaurant.map((item, index) => (
                 <RestaurantBox
+                  key={item?.place_id}
                   onClick={(e) => {
                     ShowDetailNCheckLikedOrNot(e.target.id);
                     setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());
@@ -1096,6 +1094,7 @@ function City() {
             <AttractionWrapper>
               {nearbyData.lodging ? nearbyData?.lodging.map((item, index) => (
                 <AttractionBox
+                  key={item?.place_id}
                   onClick={(e) => {
                     ShowDetailNCheckLikedOrNot(e.target.id);
                     setClickedPlaceUrl(item?.photos?.[0]?.getUrl?.());

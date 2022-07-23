@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-new */
 /* global google */
 import React, {
@@ -7,7 +6,7 @@ import React, {
 import {
   GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import Search from './Search';
 import PinkStar from './images/smile_star_pink.png';
 import OrangeStar from './images/smile_star_orange.png';
@@ -17,12 +16,6 @@ import BlueStar from './images/smile_star_blue.png';
 import PurpleStar from './images/smile_star_purple.png';
 
 let service;
-
-const mapContainerStyle = {
-  height: 'calc( 100vh - 60px)',
-  width: '55vw',
-  position: 'absolute',
-};
 
 const options = {
   disableDefaultUI: true,
@@ -35,7 +28,7 @@ const center = {
 };
 
 function Map({
-  recommendList, setRecommendList,
+  setRecommendList, onClickClose,
   active, setSelected, selected, scheduleData, setDuration, setDistance, mapDisplay,
 }) {
   const { isLoaded } = useLoadScript({
@@ -43,6 +36,12 @@ function Map({
     libraries: ['places'],
   });
   const mapRef = useRef();
+
+  const mapContainerStyle = {
+    height: 'calc( 100vh - 60px)',
+    width: '55vw',
+    position: 'absolute',
+  };
 
   const smallScreenMapContainerStyle = {
     height: '100vh',
@@ -65,23 +64,19 @@ function Map({
       location: { lat, lng },
       radius: '500',
       type: ['tourist_attraction'],
-      fields: ['name', 'rating', 'formatted_phone_number', 'geometry'],
     };
 
     function callback(results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        const data = JSON.stringify(results);
-        window.localStorage.setItem('places', data);
         setRecommendList(results);
       } else {
         console.log('沒有成功');
       }
     }
+
     service = new google.maps.places.PlacesService(mapRef.current);
     service.nearbySearch(request, callback);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setRecommendList, recommendList]);
-  // eslint-disable-next-line no-unused-expressions
+  }, [setRecommendList]);
 
   useEffect(() => {
     if (!scheduleData) { return; }
@@ -162,12 +157,18 @@ function Map({
 
   return (
     <div>
-      <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
+      {isLoaded && (
+        <Search
+          panTo={panTo}
+          active={active}
+          setSelected={setSelected}
+          selected={selected}
+          onClickClose={onClickClose}
+        />
+      )}
       <div>
-        <Search panTo={panTo} active={active} setSelected={setSelected} selected={selected} />
         <GoogleMap
           id="map"
-        // style={{ opacity: mapDisplay ? '1' : '0' }}
           mapContainerStyle={window.innerWidth > 800
             ? mapContainerStyle : smallScreenMapContainerStyle}
           zoom={10}
@@ -180,9 +181,65 @@ function Map({
   );
 }
 
-// Map.propTypes = {
-//   recommendList: PropTypes.func.isRequired,
-//   setRecommendList: PropTypes.func.isRequired,
-// };
+Map.propTypes = {
+  setRecommendList: PropTypes.func,
+  onClickClose: PropTypes.func,
+  active: PropTypes.bool,
+  setSelected: PropTypes.func,
+  selected: PropTypes.shape(
+    {
+      description: PropTypes.string,
+      matched_substrings:
+      PropTypes.arrayOf(PropTypes.shape({ length: PropTypes.number, offset: PropTypes.number })),
+      place_id: PropTypes.string,
+      reference: PropTypes.string,
+      structured_formatting: PropTypes.shape({
+        main_text: PropTypes.string,
+        main_text_matched_substrings:
+      PropTypes.arrayOf(PropTypes.shape({ length: PropTypes.number, offset: PropTypes.number })),
+      }),
+      terms: PropTypes.arrayOf(PropTypes.shape({
+        offset: PropTypes.number,
+        value: PropTypes.string,
+      })),
+      types: PropTypes.arrayOf(PropTypes.string),
+    },
+  ),
+  scheduleData: PropTypes.shape(
+    {
+      deleted: PropTypes.bool,
+      embark_date: PropTypes.string,
+      end_date: PropTypes.string,
+      members: PropTypes.arrayOf(PropTypes.string),
+      schedule_creator_user_id: PropTypes.string,
+      schedule_id: PropTypes.string,
+      title: PropTypes.string,
+      trip_days: PropTypes.arrayOf(PropTypes.shape({
+        places:
+        PropTypes.arrayOf(PropTypes.shape({
+          place_title: PropTypes.string,
+          place_address:
+          PropTypes.string,
+          stay_time: PropTypes.number,
+        })),
+      })),
+    },
+  ),
+  setDuration: PropTypes.func,
+  setDistance: PropTypes.func,
+  mapDisplay: PropTypes.bool,
+};
+
+Map.defaultProps = {
+  setRecommendList: () => {},
+  onClickClose: () => {},
+  active: false,
+  setSelected: () => {},
+  selected: {},
+  scheduleData: {},
+  setDuration: () => {},
+  setDistance: () => {},
+  mapDisplay: false,
+};
 
 export default Map;

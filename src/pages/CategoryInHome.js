@@ -1,10 +1,6 @@
-// 在首頁按下種類的時候，會把種類跟使用者所在位置的經緯度紀錄
-// 接著到category頁面執行相關搜尋
-// 不同的種類上面的banner可以不一樣
 import React from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
-// import { useNavigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import CampSrc from './images/camp.png';
 import ArtSrc from './images/art-museum.png';

@@ -1,29 +1,23 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable max-len */
-/* eslint-disable array-callback-return */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
+import {
+  GoogleMap, useLoadScript,
+} from '@react-google-maps/api';
 import React, {
-  useEffect, useState, useContext, useRef,
+  useEffect, useState, useContext, useRef, useCallback,
 } from 'react';
 import {
   collection, doc, getDoc, getDocs,
   query, where,
-  setDoc, arrayUnion,
+  arrayUnion,
   updateDoc,
   onSnapshot,
 } from 'firebase/firestore';
-import usePlacesAutocomplete from 'use-places-autocomplete';
 import { useImmer } from 'use-immer';
 import { useLocation, Link } from 'react-router-dom';
 import UserContext from '../components/UserContextComponent';
 import SpeakIcon from './images/speak.png';
 import CloseChatIcon from './images/close-1.png';
-import PinkCloseIcon from './images/close_style.png';
 import db from '../utils/firebase-init';
 import Map from './Map';
 import GreyHeaderComponent from '../components/GreyHeader';
@@ -78,7 +72,7 @@ z-index:10;
 }
 @media screen and (max-width:800px){
   width:100vw;
-  display:${(props) => (props.display ? 'flex' : 'none')};
+  display:${(props) => (props.show ? 'flex' : 'none')};
 }
 `;
 
@@ -86,7 +80,7 @@ const RightContainer = styled.div`
 width:55vw;
 height:calc(100vh-60px);
 @media screen and (max-width:800px){
-  // display:${(props) => (props.display ? 'block' : 'none')};
+  // display:${(props) => (props.show ? 'block' : 'none')};
   display:block;
   width:0vw;
   height:0vh;
@@ -297,19 +291,6 @@ position:absolute;
 right:20px;
 cursor:pointer;
 `;
-
-const CloseSearchIcon = styled.img`
-width:35px;
-height:35px;
-position:absolute;
-cursor:pointer;
-top:20px;
-right:20px;
-// @media screen and (max-width:800px){
-//   position:fixed;
-//   top:20px;
-//   left:20px;
-}`;
 
 const ChatRoomTitle = styled.div`
 display:flex;
@@ -705,15 +686,26 @@ const placeInitialDnDState = {
 };
 
 function Schedule() {
-  const newChatRoom = {
-    chat_room_id: '',
-    schedule_id: '',
-    messages: [],
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    libraries: ['places'],
+  });
+  const mapRef = useRef();
+
+  const mapStyle = {
+    height: '0vh',
+    width: '0vw',
+    position: 'absolute',
   };
+
+  const onMapLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
   const [scheduleData, updateScheduleData] = useImmer();
-  const [chatBox, updateChatBox] = useImmer(newChatRoom);
+  const [chatBox, updateChatBox] = useImmer({});
   const [recommendList, setRecommendList] = useState([]);
-  const [inputMessage, setInputMessage] = useState(''); // 用state管理message的input
+  const [inputMessage, setInputMessage] = useState('');
   const [active, setActive] = useState(false);
   const [selected, setSelected] = useState({});
   const [clickedDayIndex, setClickedDayIndex] = useState('');
@@ -732,12 +724,210 @@ function Schedule() {
   const existScheduleId = new URLSearchParams(search).get('id');
   const messagesEndRef = useRef(null);
 
+  // 拿指定一個id的單一筆schedule資料與其chatroom資料
+
+  useEffect(() => {
+    if (!existScheduleId) return;
+    async function getCertainSchedule() {
+      const docRef = doc(db, 'schedules', existScheduleId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        updateScheduleData(docSnap.data());
+      } else {
+        console.log('No such document!');
+      }
+    }
+    async function getChatRoom() {
+      const chatRoomMessageIdRef = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
+      const chatroom = await getDocs(chatRoomMessageIdRef);
+      chatroom.forEach((doc) => {
+        updateChatBox(doc.data());
+      });
+    }
+    getCertainSchedule();
+    getChatRoom();
+  }, [updateScheduleData, existScheduleId, updateChatBox]);
+
+  // 新增天數
+
+  const newDay = {
+    places: [],
+  };
+
+  function addDayInSchedule() {
+    updateScheduleData((draft) => {
+      draft.trip_days.push(newDay);
+      const originalEndDateToMilliSecond = Date.parse(draft.end_date);
+      const MilliSecondsToDate = new Date(originalEndDateToMilliSecond + 86400000)
+        .toISOString();
+      const addedDateEndDate = MilliSecondsToDate.split('T')[0];
+      draft.end_date = addedDateEndDate;
+    });
+    setIsEditing(true);
+  }
+
+  // 新增景點
+
+  const newPlace = {
+    place_title: '',
+    place_address: '',
+    stay_time: 60,
+  };
+
+  function addPlaceInDay(dayIndex) {
+    updateScheduleData((draft) => {
+      draft?.trip_days[dayIndex]?.places.push(newPlace);
+    });
+    setIsEditing(true);
+  }
+
+  // 刪除天數
+
+  function deleteCertainDay(targetDeleteDayIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days = draft.trip_days.filter(
+        (item, index) => index !== targetDeleteDayIndex,
+      );
+    });
+    setIsEditing(true);
+  }
+
+  // 刪除景點
+
+  function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
+    updateScheduleData(((draft) => {
+      draft.trip_days[targetDeleteDayIndex]
+        .places = draft.trip_days[targetDeleteDayIndex]?.places.filter(
+          (item, index) => index !== targetDeletePlaceIndex,
+        );
+    }));
+    setIsEditing(true);
+  }
+
+  // 編輯後更新資料
+
+  function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].place_title = placeTitle;
+    });
+    setIsEditing(true);
+  }
+  function updatePlaceAddress(placeAddress, dayIndex, placeIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].place_address = placeAddress;
+    });
+    setIsEditing(true);
+  }
+  function updateStayTime(stayTime, dayIndex, placeIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
+    });
+    setIsEditing(true);
+  }
+  function updatePlaceTitleBySearch(placeTitle, clickedDayIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[clickedDayIndex]
+        .places[draft.trip_days[clickedDayIndex].places.length - 1].place_title = placeTitle;
+    });
+    setIsEditing(true);
+  }
+
+  function updatePlaceAddressBySearch(placeAddress, choosedDayIndex) {
+    updateScheduleData((draft) => {
+      draft.trip_days[choosedDayIndex]
+        .places[draft.trip_days[choosedDayIndex].places.length - 1].place_address = placeAddress;
+    });
+    setIsEditing(true);
+  }
+
+  // 編輯好後更新至DB
+
+  async function setCompletedScheduleToDb() {
+    if (existScheduleId) {
+      const scheduleRef = doc(db, 'schedules', existScheduleId);
+      await updateDoc(scheduleRef, scheduleData);
+      const chatRoomData = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
+      await updateDoc(chatRoomData, chatBox);
+    }
+  }
+
+  // 監聽是否有行程更新資料
+
+  useEffect(() => {
+    if (existScheduleId) {
+      const theScheduleBeingEdited = doc(db, 'schedules', existScheduleId);
+      onSnapshot(theScheduleBeingEdited, (querySnapshot) => {
+        updateScheduleData(querySnapshot.data());
+      });
+    }
+  }, [existScheduleId, updateScheduleData]);
+
+  // 訊息相關
+
+  const newMessage = {
+    user_id: user.uid,
+    user_name: user.displayName,
+    message: inputMessage,
+    sent_time: new Date(),
+    photo_url: user.photoURL,
+    unread: false,
+  };
+
+  async function addNewMessageToFirestoreFirst() {
+    const chatRoomMessageArray = doc(db, 'chat_rooms', chatBox.chat_room_id);
+    await updateDoc(chatRoomMessageArray, {
+      messages: arrayUnion(newMessage),
+    });
+  }
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
   useEffect(() => {
     scrollToBottom();
   }, [chatBox]);
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      setInputMessage(''); addNewMessageToFirestoreFirst();
+    }
+  };
+
+  // 監聽是否有訊息更新
+
+  useEffect(() => {
+    if (existScheduleId) {
+      const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
+      return onSnapshot(chatRoomMessageArray, (querySnapshot) => {
+        if (openChat === false) {
+          querySnapshot.forEach((doc) => {
+            updateChatBox(doc.data());
+            setUnreadMessage((prev) => prev + 1);
+          });
+        } else if (openChat === true) {
+          querySnapshot.forEach((doc) => {
+            updateChatBox(doc.data());
+            setUnreadMessage(0);
+          });
+        }
+      });
+    }
+    return undefined;
+  }, [existScheduleId, updateChatBox, openChat]);
+
+  const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+  if (!isLoaded) return <div>...</div>;
+
+  // const initialDnDState = {
+  //   draggedFrom: null,
+  //   draggedTo: null,
+  //   isDragging: false,
+  //   originalOrder: [],
+  //   updatedOrder: [],
+  // };
 
   const onDragStart = (event) => {
     const initialPosition = Number(event.currentTarget.dataset.position);
@@ -747,8 +937,8 @@ function Schedule() {
       isDragging: true,
       originalOrder: scheduleData?.trip_days,
     });
-    event.dataTransfer.setData('text/html', '');
   };
+
   const onDragOver = (event) => {
     event.preventDefault();
     let newList = dragAndDrop.originalOrder;
@@ -761,7 +951,6 @@ function Schedule() {
       itemDragged,
       ...remainingItems.slice(draggedTo),
     ];
-
     if (draggedTo !== dragAndDrop.draggedTo) {
       setDragAndDrop({
         ...dragAndDrop,
@@ -788,7 +977,6 @@ function Schedule() {
       draggedTo: null,
     });
   };
-  // // PLACE的dragAndDrop
 
   const onPlaceDragStart = (event) => {
     const initialPosition = Number(event.currentTarget.dataset.position);
@@ -798,7 +986,6 @@ function Schedule() {
       placeIsDragging: true,
       placeOriginalOrder: scheduleData?.trip_days[choosedDayIndex]?.places,
     });
-    event.dataTransfer.setData('text/html', '');
   };
   const onPlaceDragOver = (event) => {
     event.preventDefault();
@@ -823,7 +1010,6 @@ function Schedule() {
   };
 
   const onPlaceDrop = () => {
-    console.log('我在手機拖曳景點後放下drop~~');
     updateScheduleData((draft) => {
       draft.trip_days[choosedDayIndex].places = placeDragAndDrop?.placeUpdatedOrder;
     });
@@ -842,216 +1028,28 @@ function Schedule() {
     });
   };
 
-  // 拿指定一個id的單一筆schedule資料
-  useEffect(() => {
-    if (!existScheduleId) return;
-    async function getCertainSchedule() {
-      const docRef = doc(db, 'schedules', existScheduleId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        updateScheduleData(docSnap.data());
-        updateChatBox((draft) => {
-          draft.chat_room_id = docSnap.data().chat_room_id;
-        });
-      } else {
-        console.log('No such document!');
-      }
-    }
-    async function getChatRoom() {
-      const chatRoomMessageIdRef = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-      const chatroom = await getDocs(chatRoomMessageIdRef);
-      chatroom.forEach((doc) => {
-        updateChatBox((draft) => {
-          draft.chat_room_id = doc.data().chat_room_id;
-        });
-      });
-    }
-    getCertainSchedule();
-    getChatRoom();
-  }, [updateScheduleData, existScheduleId, updateChatBox]);
-
-  function deleteCertainDay(targetDeleteDayIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days = draft.trip_days.filter(
-        (item, index) => index !== targetDeleteDayIndex,
-      );
-    });
-    setIsEditing(true);
-  }
-  function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
-    updateScheduleData(((draft) => {
-      draft.trip_days[targetDeleteDayIndex].places = draft.trip_days[targetDeleteDayIndex]?.places.filter(
-        (item, index) => index !== targetDeletePlaceIndex,
-      );
-    }));
-    setIsEditing(true);
-  }
-  async function setCompletedScheduleToDb() {
-    if (existScheduleId) {
-      const scheduleRef = doc(db, 'schedules', existScheduleId);
-      await updateDoc(scheduleRef, scheduleData);
-    } else {
-      const createNewScheduleData = doc(collection(db, 'schedules'));
-      await setDoc(createNewScheduleData, ({ ...scheduleData, schedule_id: createNewScheduleData.id }));
-      const createNewChatRoomData = doc(collection(db, 'chat_rooms'));
-      await setDoc(createNewChatRoomData, ({ ...chatBox, schedule_id: createNewScheduleData.id, chat_room_id: createNewChatRoomData.id }));
-      updateChatBox((draft) => {
-        draft.chat_room_id = createNewChatRoomData.id;
-        draft.schedule_id = createNewScheduleData.id;
-      });
-    }
-  }
-  // 把state的訊息放進去object，然後推進整個messages array
-  const newMessage = {
-    user_id: user.uid, // 放user.id
-    user_name: user.displayName,
-    message: inputMessage,
-    sent_time: new Date(),
-    photo_url: user.photoURL,
-    unread: false,
-  };
-
-  async function addNewMessageToFirestoreFirst() {
-    const chatRoomMessageArray = doc(db, 'chat_rooms', chatBox.chat_room_id);
-    // Atomically add a new region to the "regions" array field.
-    await updateDoc(chatRoomMessageArray, {
-      messages: arrayUnion(newMessage),
-    });
-  }
-
-  useEffect(() => {
-    if (existScheduleId) {
-      const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
-      return onSnapshot(chatRoomMessageArray, (querySnapshot) => {
-        if (openChat === false) {
-          querySnapshot.forEach((doc) => {
-            updateChatBox(doc.data());
-            setUnreadMessage((prev) => prev + 1);
-          });
-        } else if (openChat === true) {
-          querySnapshot.forEach((doc) => {
-            updateChatBox(doc.data());
-            setUnreadMessage(0);
-          });
-        }
-      });
-    }
-    return undefined;
-  }, [existScheduleId, updateChatBox, openChat]);
-
-  // 有人編輯時要及時呈現
-
-  useEffect(() => {
-    if (existScheduleId) {
-      const theScheduleBeingEdited = doc(db, 'schedules', existScheduleId);
-      onSnapshot(theScheduleBeingEdited, (querySnapshot) => {
-        updateScheduleData(querySnapshot.data());
-      });
-    }
-  }, [existScheduleId, updateScheduleData]);
-
-  const newPlace = {
-    place_title: '',
-    place_address: '',
-    stay_time: 60,
-  };
-
-  // 新增景點在某一天
-
-  function addPlaceInDay(dayIndex) {
-    updateScheduleData((draft) => {
-      draft?.trip_days[dayIndex]?.places.push(newPlace);
-    });
-    setIsEditing(true);
-  }
-
-  // 新增天數
-
-  const newDay = {
-    places: [],
-  };
-
-  function addDayInSchedule() {
-    updateScheduleData((draft) => {
-      draft.trip_days.push(newDay);
-      const originalEndDateToMilliSecond = Date.parse(draft.end_date);
-      const MilliSecondsToDate = new Date(originalEndDateToMilliSecond + 86400000).toISOString(); // 加上一天的方式
-      const addedDateEndDate = MilliSecondsToDate.split('T')[0];
-      draft.end_date = addedDateEndDate;
-    });
-    setIsEditing(true);
-  }
-
-  // 拿一週的哪一天
-
-  const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-
-  // 手動更改行程內容！
-  function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].place_title = placeTitle;
-    });
-    setIsEditing(true);
-  }
-  function updatePlaceAddress(placeAddress, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].place_address = placeAddress;
-    });
-    setIsEditing(true);
-  }
-  function updateStayTime(stayTime, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
-    });
-    setIsEditing(true);
-  }
-  // 按下新增行程後，會出現空白的input field，同時導向搜尋區域，搜尋後按下加入行程，把搜尋到的結果放到最新的那個行程
-  function updatePlaceTitleBySearch(placeTitle, clickedDayIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[clickedDayIndex].places[draft.trip_days[clickedDayIndex].places.length - 1].place_title = placeTitle;
-    });
-    setIsEditing(true);
-  }
-
-  function updatePlaceAddressBySearch(placeAddress, choosedDayIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[choosedDayIndex].places[draft.trip_days[choosedDayIndex].places.length - 1].place_address = placeAddress;
-    });
-    setIsEditing(true);
-  }
-
-  const handleEnter = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      setInputMessage(''); addNewMessageToFirestoreFirst();
-    }
-  };
-
-  const {
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-    },
-    debounce: 300,
-  });
-
   return (
     <>
       <GreyHeaderComponent />
       <ScheduleWrapper>
         {/* <AddAndSearch recommendList={recommendList} setRecommendList={setRecommendList} /> */}
         <AddAndSearchBox active={active}>
-          <CloseSearchIcon
-            src={PinkCloseIcon}
-            onClick={() => { setScheduleDisplay(true); setActive(false); clearSuggestions(); }}
-          />
           <ResultsArea>
             <SearchedPlace>
               <SearchedPlaceTitle>
                 {selected.structured_formatting ? selected.structured_formatting.main_text : ''}
               </SearchedPlaceTitle>
               <AddToPlaceButton
-                onClick={() => { updatePlaceTitleBySearch(selected.structured_formatting.main_text, clickedDayIndex); updatePlaceAddressBySearch(selected.structured_formatting.secondary_text, clickedDayIndex); setActive(false); setScheduleDisplay(true); }}
+                onClick={() => {
+                  updatePlaceTitleBySearch(
+                    selected.structured_formatting.main_text,
+                    clickedDayIndex,
+                  );
+                  updatePlaceAddressBySearch(
+                    selected.structured_formatting.secondary_text,
+                    clickedDayIndex,
+                  ); setActive(false); setScheduleDisplay(true);
+                }}
               >
                 加入行程
               </AddToPlaceButton>
@@ -1059,7 +1057,9 @@ function Schedule() {
             <RecommendPlaces>
               周邊推薦景點：
               {recommendList?.map((place, index) => (
-                <RecommendPlace>
+                <RecommendPlace
+                  key={place?.name}
+                >
                   <RecommendPlaceLeftArea>
                     <RecommendPlaceTitle>
                       {place?.name}
@@ -1072,7 +1072,7 @@ function Schedule() {
             </RecommendPlaces>
           </ResultsArea>
         </AddAndSearchBox>
-        <LeftContainer active={active} display={schdeuleDisplay?.toString()}>
+        <LeftContainer active={active} show={schdeuleDisplay}>
           <ScheduleTitleAndCompleteButtonArea>
             <Link to="/my-schedules">
               <GoBackIcon src={GoBackSrc} />
@@ -1094,15 +1094,14 @@ function Schedule() {
             <AddDayButton type="button" onClick={() => addDayInSchedule()}>＋</AddDayButton>
           </DateContainer>
           <DayContainer>
-            {scheduleData ? scheduleData.trip_days
-              .map((dayItem, dayIndex) => (
+            {scheduleData ? scheduleData?.trip_days
+              ?.map((dayItem, dayIndex) => (
                 <DayContainerTitle
                   active={dayIndex === choosedDayIndex}
                   onClick={() => { setChoosedDayIndex(dayIndex); }}
-                  key={dayIndex}
+                  key={`${scheduleData?.schedule_id}+${dayIndex + 3}`}
                   data-position={dayIndex}
                   draggable
-                  style={{ touchAction: 'auto' }}
                   onDragStart={onDragStart}
                   onDragOver={onDragOver}
                   onDrop={onDrop}
@@ -1110,24 +1109,24 @@ function Schedule() {
                   className={dragAndDrop && dragAndDrop.draggedTo === Number(dayIndex) ? 'dropArea' : ''}
                 >
                   <DragIcon active={dayIndex === choosedDayIndex} src={dayIndex === choosedDayIndex ? whiteDragSrc : dragSrc} style={{ width: '15px', height: '15px', marginRight: '3px' }} />
-
-                  {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0].split('-')[1]}
+                  {new Date(Date.parse(scheduleData?.embark_date) + (dayIndex * 86400000))?.toISOString()?.split('T')?.[0]?.split('-')?.[1]}
                   /
-                  {new Date(Date.parse(scheduleData.embark_date) + (dayIndex * 86400000)).toISOString().split('T')[0].split('-')[2]}
+                  {new Date(Date.parse(scheduleData?.embark_date) + (dayIndex * 86400000))?.toISOString()?.split('T')?.[0]?.split('-')?.[2]}
                   <br />
-                  {weekday[(new Date(scheduleData.embark_date).getDay() + dayIndex) % 7]}
+                  {weekday[(new Date(scheduleData?.embark_date).getDay() + dayIndex) % 7]}
                   <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} active={dayIndex === choosedDayIndex} src={dayIndex === choosedDayIndex ? whiteTrashCan : greyTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
                 </DayContainerTitle>
               ))
               : ''}
           </DayContainer>
           {scheduleData ? scheduleData?.trip_days[choosedDayIndex]?.places
-            .map((placeItem, placeIndex) => (
+            ?.map((placeItem, placeIndex) => (
               <>
                 {(placeIndex !== 0
                   ? (
-                    <DurationDistanceArea>
-
+                    <DurationDistanceArea
+                      key={placeItem?.place_title}
+                    >
                       <>
                         <CarClockIconArea>
                           <CarClockIcon src={CarSrc} />
@@ -1142,11 +1141,9 @@ function Schedule() {
                   )
                   : '')}
                 <PlaceContainer
-                  key={placeIndex}
-                  // style={{ touchAction: 'none' }}
+                  key={placeItem?.place_address}
                   data-position={placeIndex}
                   draggable
-                  style={{ touchAction: 'auto' }}
                   onDragStart={onPlaceDragStart}
                   onDragOver={onPlaceDragOver}
                   onDrop={onPlaceDrop}
@@ -1181,7 +1178,10 @@ function Schedule() {
                       />
                     </InputBox>
                   </PlaceContainerInputArea>
-                  <DeleteIcon src={BlueTrashCanSrc} onClick={() => deleteCertainPlace(choosedDayIndex, placeIndex)} />
+                  <DeleteIcon
+                    src={BlueTrashCanSrc}
+                    onClick={() => deleteCertainPlace(choosedDayIndex, placeIndex)}
+                  />
                 </PlaceContainer>
               </>
             ))
@@ -1210,8 +1210,11 @@ function Schedule() {
             setDistance={setDistance}
             duration={duration}
             setDuration={setDuration}
-            clearSuggestions={clearSuggestions}
             mapDisplay={mapDisplay}
+            onClickClose={() => {
+              setScheduleDisplay(true);
+              setActive(false);
+            }}
           />
         </RightContainer>
         <ChatRoom openChat={openChat}>
@@ -1220,8 +1223,8 @@ function Schedule() {
             <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
           </ChatRoomTitle>
           <MessagesDisplayArea>
-            {chatBox ? chatBox?.messages.map((item) => (
-              <MessageBox ref={messagesEndRef}>
+            {chatBox ? chatBox?.messages?.map((item) => (
+              <MessageBox key={item?.meaa} ref={messagesEndRef}>
                 <UserPhoto src={item.photo_url} />
                 <NameMessage>
                   <Name>
@@ -1247,11 +1250,28 @@ function Schedule() {
         </ChatRoom>
         <div>
           {unreadMessage > 1 && openChat === false
-            ? <UnreadMessage active={unreadMessage > 1 && openChat === false}>{unreadMessage - 1 }</UnreadMessage>
+            ? (
+              <UnreadMessage
+                active={unreadMessage > 1 && openChat === false}
+              >
+                {unreadMessage - 1 }
+              </UnreadMessage>
+            )
             : ''}
-          <ChatIcon active={unreadMessage > 1 && openChat === false} src={SpeakIcon} openChat={openChat} onClick={() => setOpenChat(true)} />
+          <ChatIcon
+            active={unreadMessage > 1 && openChat === false}
+            src={SpeakIcon}
+            openChat={openChat}
+            onClick={() => setOpenChat(true)}
+          />
         </div>
       </ScheduleWrapper>
+      <GoogleMap
+        id="map"
+        zoom={10}
+        onLoad={onMapLoad}
+        mapContainerStyle={mapStyle}
+      />
     </>
   );
 }

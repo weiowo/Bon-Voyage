@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -1016,16 +1014,16 @@ function MySchedules() {
                   <ExistedSchedules>
                     {schedules?.map((item, index) => (
                       <ExistedSchedule
-                        key={`${item?.schedule_id}and${item?.embark_date}+${item?.end_date}`}
+                        key={`${item?.schedule_id}`}
                         data-position={index}
                         isSelected={index === targetIndex}
-                  >
+                      >
                         <div
-                          key={`${item?.schedule_id}`}
-                          className="modal-background">
+                          className="modal-background"
+                        >
                           <div
-                            key={`${item?.title}and${item?.schedule_id}+${item?.embark_date}`}
-                            className="modal">
+                            className="modal"
+                          >
                             <DeleteModalTitle
                               key={`${item?.schedule_id}and${item?.title}`}
 
@@ -1034,7 +1032,7 @@ function MySchedules() {
                             </DeleteModalTitle>
                             <DeleteAsk
                               key={`${item?.schedule_id}+${item?.title}+${item?.end_date}`}
-                              >
+                            >
                               確認要刪除嗎？
 
                             </DeleteAsk>
@@ -1044,13 +1042,18 @@ function MySchedules() {
                               <NoDeleteButton
                                 key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
                                 onClick={() => closeModal()}
-                                type="button">
+                                type="button"
+                              >
                                 取消
                               </NoDeleteButton>
                               <ConfirmDeleteButton
                                 key={`${item?.deleted}`}
-                                onClick={() => { deleteScheduleOfTheUser(index); closeModal(); deleteCertainSchedule(item.schedule_id); }}
-                                type="button">
+                                onClick={() => {
+                                  deleteScheduleOfTheUser(index);
+                                  closeModal(); deleteCertainSchedule(item.schedule_id);
+                                }}
+                                type="button"
+                              >
                                 確認
 
                               </ConfirmDeleteButton>
@@ -1059,19 +1062,21 @@ function MySchedules() {
                         </div>
                         <PhotoInExistedSchedule
                           key={`${item?.title}`}
-                          src={schedulePhotoArray[index % 5]} />
+                          src={schedulePhotoArray[index % 5]}
+                        />
                         <LargeScreenExistedScheduleRightPart
                           key={`${item?.embark_date}+${item?.end_date}`}
 
                         >
                           <ExistedScheuleTitle
                             key={`${item?.title}+${item?.deleted}`}
-                            id={item?.schedule_id}>
+                            id={item?.schedule_id}
+                          >
                             {item?.title}
                           </ExistedScheuleTitle>
                           <ButtonArea
                             key={`${item?.embark_date}and`}
-                                                    >
+                          >
                             <Button key={`${item?.schedule_id}+${item?.end_date}`} onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
                               選擇
                             </Button>
@@ -1084,7 +1089,8 @@ function MySchedules() {
                         <SmallScreenExistedScheduleRightPart>
                           <ExistedScheuleTitle
                             key={`${item?.title}+${item?.deleted}+${item?.end_date}`}
-                            id={item?.schedule_id}>
+                            id={item?.schedule_id}
+                          >
                             {item.title}
                           </ExistedScheuleTitle>
                           <ButtonArea
@@ -1092,16 +1098,21 @@ function MySchedules() {
                           >
                             <Button
                               key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
-                              onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }}
+                              onClick={() => {
+                                setTargetIndex(index);
+                                getSelectedSchedule(item?.schedule_id);
+                              }}
                               id={item?.schedule_id}
-                              type="button">
+                              type="button"
+                            >
                               選擇
                             </Button>
                             <Button
                               key={`${item?.schedule_id}+${item?.title}+${item?.end_date}+${item?.deleted}+${item?.embark_date}`}
                               onClick={() => toggleModal()}
                               id={item?.schedule_id}
-                              type="button">
+                              type="button"
+                            >
                               刪除
                             </Button>
                           </ButtonArea>
@@ -1142,18 +1153,32 @@ function MySchedules() {
                         <ScheduleMemberWord
                           key={item?.email}
                           hovered={showMemberWord}
-                          onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }}
-                          onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }}
-                          style={{ backgroundColor: `${colorArray[index % 5]}` }}>
+                          onMouseLeave={() => {
+                            setShowMemberPhoto(false);
+                            setShowMemberWord(false);
+                          }}
+                          onMouseEnter={() => {
+                            setShowMemberPhoto(true);
+                            setShowMemberWord(true);
+                          }}
+                          style={{ backgroundColor: `${colorArray[index % 5]}` }}
+                        >
                           {item.email[0].toUpperCase()}
                         </ScheduleMemberWord>
                         <ScheduleMemberPhoto
                           hovered={showMemberPhoto}
-                          onMouseLeave={() => { setShowMemberPhoto(false); setShowMemberWord(false); }}
-                          onMouseEnter={() => { setShowMemberPhoto(true); setShowMemberWord(true); }}
+                          onMouseLeave={() => {
+                            setShowMemberPhoto(false);
+                            setShowMemberWord(false);
+                          }}
+                          onMouseEnter={() => {
+                            setShowMemberPhoto(true);
+                            setShowMemberWord(true);
+                          }}
                           alt="member"
                           key={item?.photo_url}
-                          src={item.photo_url} />
+                          src={item.photo_url}
+                        />
                       </>
                     ))}
                   </ScheduleMemberContainer>
@@ -1188,14 +1213,16 @@ function MySchedules() {
                           type="text"
                           inputMode="text"
                           onChange={(e) => setSearchFriendValue(e.target.value)}
-                          placeholder="請輸入email....." />
+                          placeholder="請輸入email....."
+                        />
                         <ConfirmSearchButton
                           onClick={() => {
                             submitSearch();
                             setSearchInputIsActive(false);
                             setSearchResultIsActive(true);
                           }}
-                          type="button">
+                          type="button"
+                        >
                           確認搜尋
                         </ConfirmSearchButton>
                       </InviteFriendBelowArea>
@@ -1214,7 +1241,8 @@ function MySchedules() {
                                 setSearchResultIsActive(false);
                                 setSearchedFriendId(null);
                               }}
-                              type="button">
+                              type="button"
+                            >
                               確認加入
                             </ConfirmSearchButton>
                             <ConfirmSearchButton
@@ -1223,7 +1251,8 @@ function MySchedules() {
                                 setSearchResultIsActive(false);
                                 setSearchedFriendId(null);
                               }}
-                              type="button">
+                              type="button"
+                            >
                               回上一頁
                             </ConfirmSearchButton>
                           </DeleteButtonArea>
@@ -1241,7 +1270,8 @@ function MySchedules() {
                               setSearchResultIsActive(false);
                               setSearchedFriendId(null);
                             }}
-                            type="button">
+                            type="button"
+                          >
                             回上一頁
                           </ConfirmSearchButton>
                         </InviteFriendBelowArea>
