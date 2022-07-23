@@ -6,7 +6,6 @@ import {
   setPersistence, browserSessionPersistence, updateProfile,
 } from 'firebase/auth';
 import {
-  // getDocs,
   doc,
   setDoc,
 } from 'firebase/firestore';

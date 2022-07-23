@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
@@ -834,8 +833,8 @@ function MySchedules() {
       const q = query(usersRef, where('owned_schedule_ids', 'array-contains', selectedSchedule?.schedule_id));
       const userData = await getDocs(q);
       const members = [];
-      userData.forEach((doc) => {
-        members.push(doc.data());
+      userData.forEach((document) => {
+        members.push(document.data());
       });
     }
     getArray();
@@ -852,8 +851,6 @@ function MySchedules() {
 
   async function deleteCertainSchedule(id) {
     const docRef = doc(db, 'schedules', id);
-    // const docSnap = await getDoc(docRef);
-    // console.log(docSnap.data());
     await updateDoc(docRef, ({ deleted: true }));
   }
 
@@ -902,8 +899,8 @@ function MySchedules() {
     if (querySnapShot.size === 0) {
       console.log('查無此人！');
     } else {
-      querySnapShot.forEach((doc) => {
-        setSearchedFriendId(doc.id);
+      querySnapShot.forEach((document) => {
+        setSearchedFriendId(document.id);
       });
     }
   }

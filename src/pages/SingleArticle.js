@@ -1,10 +1,10 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable react/jsx-props-no-spreading */
 import
 {
   doc, getDoc, updateDoc, arrayRemove, arrayUnion,
 } from 'firebase/firestore';
-import React, { useEffect, useState, useContext } from 'react';
+import React, {
+  useEffect, useState, useContext, Fragment,
+} from 'react';
 import { useImmer } from 'use-immer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -297,7 +297,6 @@ flex-wrap:wrap;
 function ShowArticle() {
   const [shownArticle, updateShownArticle] = useImmer();
   const [liked, setLiked] = useState(false);
-  console.log(shownArticle);
   const user = useContext(UserContext);
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -316,6 +315,7 @@ function ShowArticle() {
   }, [currentArticleId, updateShownArticle]);
 
   useEffect(() => {
+    if (!user.uid) { return; }
     async function checkLikeOrNot() {
       const userArticlesArray = doc(db, 'users', user.uid);
       const docSnap = await getDoc(userArticlesArray);
@@ -375,7 +375,7 @@ function ShowArticle() {
               />
               <Description>{shownArticle?.summary}</Description>
               {shownArticle ? shownArticle?.trip_days?.map((dayItem, dayIndex) => (
-                <>
+                <Fragment key={`day-${dayIndex + 1}`}>
                   <DayTitle
                     key={`day-${dayIndex + 1}`}
                     id={`day-${dayIndex + 1}`}
@@ -384,50 +384,47 @@ function ShowArticle() {
                     {dayIndex + 1}
                     天
                   </DayTitle>
-                  <div key={`place-${dayIndex + 8}}`}>
-                    {dayItem?.places.map((placeItem, placeIndex) => (
-                      <PlaceArea key={`place-${dayIndex + 3}-${placeIndex + 1}`} id={`place-${dayIndex + 1}-${placeIndex + 1}`}>
-                        <div key={`place-${placeIndex + 1}-${placeItem?.place_description}`} style={{ display: 'flex' }}>
-                          <PlaceTitle key={placeItem?.place_title}>
+                  <div key={`day-${dayIndex + 5}`}>
+                    {dayItem?.places?.map((placeItem, placeIndex) => (
+                      <PlaceArea key={`place-${dayIndex + 1}-${placeItem?.place_title}`} id={`place-${dayIndex + 1}-${placeIndex + 1}`}>
+                        <div style={{ display: 'flex' }}>
+                          <PlaceTitle>
                             {placeItem?.place_title}
                           </PlaceTitle>
                         </div>
-                        <ImgDisplayArea key={`place-${dayIndex + 6}-${placeIndex + 6}`}>
+                        <ImgDisplayArea>
                           {shownArticle?.trip_days?.[dayIndex]
                             ?.places?.[placeIndex]?.place_imgs?.map((item) => (
-                              <div key={`${item + 1}`} style={{ position: 'relative' }}>
-                                <PlaceImg key={`${shownArticle?.article_creator_user_id}`} src={item} alt="place-img" />
+                              <div key={`day${dayIndex + 1}place${placeIndex + 1}+${item}`} style={{ position: 'relative' }}>
+                                <PlaceImg src={item} alt="place-img" />
                               </div>
                             ))}
                         </ImgDisplayArea>
-                        <Description key={`place-${placeIndex + 5}-${placeItem?.place_description}`}>
+                        <Description>
                           {placeItem?.place_description}
                         </Description>
                       </PlaceArea>
                     ))}
                   </div>
-                </>
+                </Fragment>
               )) : ''}
             </EditingPart>
-            <ScheduleSummaryPart key={`article${shownArticle?.schedule_id}`}>
+            <ScheduleSummaryPart>
               {shownArticle ? shownArticle?.trip_days?.map((dayItem, dayIndex) => (
-                <ScheduleSummaryDayAndPlacePart key={`${dayIndex + 3}+${shownArticle?.schedule_id}`}>
-                  <HashLink key={`${shownArticle?.author}+${shownArticle?.status}`} style={{ textDecoration: 'none' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#day-${dayIndex + 1}`}>
-                    <ScheduleSummaryDayPart
-                      key={`${shownArticle?.cover_img}+${dayIndex + 1}`}
-                    >
+                <ScheduleSummaryDayAndPlacePart key={`${dayIndex + 10}place`}>
+                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#day-${dayIndex + 1}`}>
+                    <ScheduleSummaryDayPart>
                       第
                       {dayIndex + 1}
                       天
                     </ScheduleSummaryDayPart>
                   </HashLink>
                   <div
-                    key={`${shownArticle?.status}+${dayIndex + 5}`}
                     style={{
                       height: '20px', width: '2px', backgroundColor: 'black', marginTop: '2px',
                     }}
                   />
-                  <ScheduleSummaryPlacePart key={`${shownArticle?.article_id}+${dayIndex + 7}`}>
+                  <ScheduleSummaryPlacePart>
                     {dayItem?.places ? dayItem?.places.map((placeItem, placeIndex) => (
                       <HashLink
                         key={`${placeItem?.place_title}`}
@@ -435,9 +432,7 @@ function ShowArticle() {
                         smooth
                         to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#place-${dayIndex + 1}-${placeIndex + 1}`}
                       >
-                        <SummaryPlaceTitle
-                          key={`${placeItem?.place_description}+${placeItem?.title}`}
-                        >
+                        <SummaryPlaceTitle>
                           {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
                         </SummaryPlaceTitle>
                       </HashLink>

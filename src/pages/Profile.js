@@ -238,8 +238,7 @@ function Profile() {
   async function uploadProfileImg(imageData) {
     if (imageData === null) return;
     const imgRef = ref(storage, `profileImages/${imageData.name}`);
-    const snap = await uploadBytes(imgRef, imageData);
-    console.log(snap);
+    await uploadBytes(imgRef, imageData);
     const url = await getDownloadURL(ref(storage, `profileImages/${imageData.name}`));
     const userRef = doc(db, 'users', user.uid);
     await updateDoc(userRef, { photo_url: url });

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React, {
   useState, useContext, useEffect, useRef, useCallback,
 } from 'react';
@@ -12,7 +11,6 @@ import produce from 'immer';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import db from '../utils/firebase-init';
-import BckSrc from '../pages/images/paris.png';
 import ArrowToRightSrc from '../pages/images/arrow-right.png';
 import ArrowToLeftSrc from '../pages/images/arrow-left.png';
 import Default1 from '../pages/images/default1.png';
@@ -166,7 +164,6 @@ position:relative;
 text-align:left;
 overflow:hidden;
 border-radius:10px;
-background-image: url(${BckSrc});
 cursor:pointer;
 background-size:cover;
 background-repeat: no-repeat;
@@ -542,7 +539,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
                   setClickedPlaceAddress(item?.vicinity);
                 }}
                 className={index}
-                style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? '哈哈'})` }}
+                style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
               >
                 <div
                   key={`${item?.name}+${item?.place_id}`}

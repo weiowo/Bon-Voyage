@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { Link, useLocation } from 'react-router-dom';
-// import UserPhotoSrc from '../pages/images/seal.png';
 import UserContext from './UserContextComponent';
 import db from '../utils/firebase-init';
 

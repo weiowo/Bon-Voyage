@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import styled from 'styled-components/macro';
 import {
   GoogleMap, useLoadScript,
@@ -740,8 +739,8 @@ function Schedule() {
     async function getChatRoom() {
       const chatRoomMessageIdRef = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
       const chatroom = await getDocs(chatRoomMessageIdRef);
-      chatroom.forEach((doc) => {
-        updateChatBox(doc.data());
+      chatroom.forEach((document) => {
+        updateChatBox(document.data());
       });
     }
     getCertainSchedule();
@@ -824,17 +823,17 @@ function Schedule() {
     });
     setIsEditing(true);
   }
-  function updatePlaceTitleBySearch(placeTitle, clickedDayIndex) {
+  function updatePlaceTitleBySearch(placeTitle, selectedDayIndex) {
     updateScheduleData((draft) => {
-      draft.trip_days[clickedDayIndex]
+      draft.trip_days[selectedDayIndex]
         .places[draft.trip_days[clickedDayIndex].places.length - 1].place_title = placeTitle;
     });
     setIsEditing(true);
   }
 
-  function updatePlaceAddressBySearch(placeAddress, choosedDayIndex) {
+  function updatePlaceAddressBySearch(placeAddress, selectedDayIndex) {
     updateScheduleData((draft) => {
-      draft.trip_days[choosedDayIndex]
+      draft.trip_days[selectedDayIndex]
         .places[draft.trip_days[choosedDayIndex].places.length - 1].place_address = placeAddress;
     });
     setIsEditing(true);
@@ -902,13 +901,13 @@ function Schedule() {
       const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
       return onSnapshot(chatRoomMessageArray, (querySnapshot) => {
         if (openChat === false) {
-          querySnapshot.forEach((doc) => {
-            updateChatBox(doc.data());
+          querySnapshot.forEach((document) => {
+            updateChatBox(document.data());
             setUnreadMessage((prev) => prev + 1);
           });
         } else if (openChat === true) {
-          querySnapshot.forEach((doc) => {
-            updateChatBox(doc.data());
+          querySnapshot.forEach((document) => {
+            updateChatBox(document.data());
             setUnreadMessage(0);
           });
         }
@@ -920,14 +919,6 @@ function Schedule() {
   const weekday = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
 
   if (!isLoaded) return <div>...</div>;
-
-  // const initialDnDState = {
-  //   draggedFrom: null,
-  //   draggedTo: null,
-  //   isDragging: false,
-  //   originalOrder: [],
-  //   updatedOrder: [],
-  // };
 
   const onDragStart = (event) => {
     const initialPosition = Number(event.currentTarget.dataset.position);
@@ -1032,7 +1023,6 @@ function Schedule() {
     <>
       <GreyHeaderComponent />
       <ScheduleWrapper>
-        {/* <AddAndSearch recommendList={recommendList} setRecommendList={setRecommendList} /> */}
         <AddAndSearchBox active={active}>
           <ResultsArea>
             <SearchedPlace>
@@ -1099,7 +1089,7 @@ function Schedule() {
                 <DayContainerTitle
                   active={dayIndex === choosedDayIndex}
                   onClick={() => { setChoosedDayIndex(dayIndex); }}
-                  key={`${scheduleData?.schedule_id}+${dayIndex + 3}`}
+                  key={`${dayIndex - 1}`}
                   data-position={dayIndex}
                   draggable
                   onDragStart={onDragStart}
@@ -1125,18 +1115,16 @@ function Schedule() {
                 {(placeIndex !== 0
                   ? (
                     <DurationDistanceArea
-                      key={placeItem?.place_title}
+                      key={`${placeItem?.stay_time}`}
                     >
-                      <>
-                        <CarClockIconArea>
-                          <CarClockIcon src={CarSrc} />
-                          {distance?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}
-                        </CarClockIconArea>
-                        <CarClockIconArea>
-                          <CarClockIcon src={ClockSrc} />
-                          {duration?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}
-                        </CarClockIconArea>
-                      </>
+                      <CarClockIconArea>
+                        <CarClockIcon src={CarSrc} />
+                        {distance?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}
+                      </CarClockIconArea>
+                      <CarClockIconArea>
+                        <CarClockIcon src={ClockSrc} />
+                        {duration?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}
+                      </CarClockIconArea>
                     </DurationDistanceArea>
                   )
                   : '')}
@@ -1224,7 +1212,7 @@ function Schedule() {
           </ChatRoomTitle>
           <MessagesDisplayArea>
             {chatBox ? chatBox?.messages?.map((item) => (
-              <MessageBox key={item?.meaa} ref={messagesEndRef}>
+              <MessageBox key={item.photo_url} ref={messagesEndRef}>
                 <UserPhoto src={item.photo_url} />
                 <NameMessage>
                   <Name>

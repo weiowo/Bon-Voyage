@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React, {
   useCallback, useEffect, useRef, useState, useContext,
 } from 'react';
@@ -418,8 +417,6 @@ margin-top:10px;
 cursor:pointer;
 `;
 
-// 餐廳區域
-
 const RestaurantAreaTitle = styled.div`
 width:100vw;
 height:auto;
@@ -669,9 +666,9 @@ function City() {
   const { search } = useLocation();
   const user = useContext(UserContext);
   const [nearbyData, setNearbyData] = useState();
-  const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]); // 是這個人所有的行程哦！不是單一筆行程!
-  const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
-  const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
+  const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]);
+  const [clickedScheduleIndex, setClickedScheduleIndex] = useState();
+  const [clickedScheduleId, setClickedScheduleId] = useState();
   const [dayIndex, setDayIndex] = useState();
   const [modalIsActive, setModalIsActive] = useState(false);
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
@@ -729,11 +726,9 @@ function City() {
       }];
     }
 
-    // eslint-disable-next-line no-undef
     const service = new google.maps.places.PlacesService(mapRef.current);
     requests.forEach((request) => {
       service.nearbySearch(request, (results, status) => {
-        // eslint-disable-next-line no-undef
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           setNearbyData((preData) => ({ ...preData, [request.type]: results }));
         }
@@ -743,7 +738,6 @@ function City() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    // if (!nearbyData) return;
     setTimeout(() => {
       searchNearby();
     }, 1000);
@@ -751,6 +745,7 @@ function City() {
 
   useEffect(() => {
     async function getUserArrayList() {
+      if (!user.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       function getSchedulesFromList() {
@@ -807,6 +802,8 @@ function City() {
     }
   }
 
+  // 確認是否收藏過了 // 打api拿detail
+
   function ShowDetailNCheckLikedOrNot(clickedPlaceId) {
     if (user.uid) {
       checkLikeOrNot(clickedPlaceId);
@@ -824,6 +821,8 @@ function City() {
       }
     });
   }
+
+  // 按下星星時更改狀態與user資料
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
