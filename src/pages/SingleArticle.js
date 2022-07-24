@@ -9,13 +9,12 @@ import { useImmer } from 'use-immer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import { HashLink } from 'react-router-hash-link';
-import HeaderComponent from '../components/Header';
+import HeaderComponent from '../components/Headers/Header';
 import ShareBanner2 from './images/share_banner2.jpeg';
 import db from '../utils/firebase-init';
 import defaultCover from './images/schedule_cover_rec3.jpg';
-import unfilledStar from './images/unfilled_star.jpg';
-import filledStar from './images/filled_star.jpg';
 import UserContext from '../components/UserContextComponent';
+import STAR from '../constants/stars';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -357,7 +356,7 @@ function ShowArticle() {
               {shownArticle?.article_title}
               <AddFavoriteIcon
                 onClick={() => handleFavorite()}
-                src={liked ? filledStar : unfilledStar}
+                src={liked ? STAR?.FULL_STAR : STAR?.EMPTY_STAR}
               />
             </ArticleTitle>
           </ArticleTitleButtonArea>

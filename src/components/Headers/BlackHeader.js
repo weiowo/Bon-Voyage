@@ -1,53 +1,31 @@
-import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   signOut,
 } from 'firebase/auth';
-import UserContext from './UserContextComponent';
-import WhiteMenuIcon from '../pages/images/menu_bar.jpg';
-import BlackMenuIcon from '../pages/images/menu_black.png';
-import CloseIcon from '../pages/images/close-1.png';
-import UserPhotoSrc from '../pages/images/seal.png';
-import Blog from '../pages/images/blog.png';
-import Dish from '../pages/images/dish.png';
-import Travel from '../pages/images/travel.png';
-import VRsrc from '../pages/images/virtual-reality.png';
-import Plan from '../pages/images/suitcase.png';
-import {
-  auth, Menu, SmallMenuCloseIcon, SmallScreenBackground, SmallScreenNavBar,
-  HamburgerMenuLink, SmallLogOutButton, HamburgerProfileLink, SmallBarProfileBackground,
-  SmallProfilePhoto, SmallNavIcon, SmallProfileName, SmallNavText, CreateScheduleWrapper,
-} from './Header';
-import MyArticle from '../pages/images/article.png';
-import Attraction from '../pages/images/vacations.png';
-import Favorite from '../pages/images/favorite.png';
+import UserContext from '../UserContextComponent';
+import RWD_ICON from './rwd.const';
+import SmallScreenNavBar, {
+  HamburgerMenuLink, CreateScheduleWrapper, SmallLogOutButton, HamburgerProfileLink,
+  ProfileBackground, SmallProfilePhoto, SmallNavIcon, SmallProfileName,
+  SmallNavText, Menu, CloseIcon, Background, SmallHeader,
+} from './RwdMenu';
+import { auth } from '../../utils/firebase-init';
 
 const Header = styled.header`
 position:absolute;
 display:flex;
 justify-content:space-between;
-align-items:center;
 width:100vw;
-height:60px;
-background-color:#a9a9a9;
+position:fixed;
+z-index:500;
+top:0;
+height:${(props) => (props.active ? '60px' : '65px')};
+background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
+box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
 @media screen and (max-width:800px){
-  display:none;
-}`;
-
-const SmallGreyHeader = styled.div`
 display:none;
-@media screen and (max-width:800px){
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  width:100vw;
-  position:fixed;
-  top:0;
-  z-index:1000;
-  height:${(props) => (props.active ? '60px' : '65px')};
-  background-color:#a9a9a9;
-  box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
 }`;
 
 const Logo = styled.div`
@@ -56,15 +34,16 @@ height:30px;
 font-weight:700;
 font-size:25px;
 margin-left:20px;
-color:white;
-margin-top:0px;
+color:black;
+margin-top:${(props) => (props.active ? '15px' : '20px')};
 @media screen and (max-width:800px){
   width:auto;
-  height:100%;
+  height:auto;
   font-size:20px;
+  margin-left:10px;
+  margin-top:10px;
   z-index:10;
   position:absolute;
-  top:20px;
 }`;
 
 const NavBar = styled.div`
@@ -75,7 +54,7 @@ width:500px;
 height:30px;
 color:${(props) => (props.active ? 'black' : 'white')};
 font-weight:600;
-margin-top:0px;
+margin-top:${(props) => (props.active ? '15px' : '25px')};
 @media screen and (max-width:800px){
   display:none;
 }`;
@@ -84,30 +63,43 @@ const ProfilePageNav = styled.div`
 width:auto;
 padding:8px 10px;
 border-radius:10px;
-border:1px solid white;
+border:1px solid black;
 cursor:pointer;
 `;
 
 const StyleNavLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
-color:white;
+color:black;
 &:hover {
-  border-bottom:1.5px solid white;
+  border-bottom:1.5px solid black;
 }
-`;
+@media screen and (max-width:800px){
+  font-size:20px;
+  margin-left:10px;
+  width:150px;
+  position:absolute;
+  margin-top:${(props) => (props.$active ? '8px' : '0px')};
+}`;
 
 const ProfileNavLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
-color:white;
-`;
+color:black;
+@media screen and (max-width:800px){
+  font-size:20px;
+  margin-left:10px;
+  width:150px;
+  position:absolute;
+  margin-top:${(props) => (props.$active ? '8px' : '0px')};
+}`;
 
-function GreyHeaderComponent() {
+function BlackHeaderComponent() {
   const user = useContext(UserContext);
   const [clicked, setClicked] = useState(false);
   const [headerBackground, setHeaderBackground] = useState(false);
   const navigate = useNavigate();
+  const currentUrl = useLocation();
 
   function signOutFunction() {
     signOut(auth).then(() => {
@@ -133,104 +125,100 @@ function GreyHeaderComponent() {
     }
   }, []);
 
-  const currentUrl = useLocation();
-
-  // const user = useContext(UserContext);
   return (
     <>
-      <Header active={headerBackground?.toString()}>
+      <Header active={headerBackground}>
         <ProfileNavLink to="/">
-          <Logo active={headerBackground?.toString()}>Bon Voyage</Logo>
+          <Logo active={headerBackground}>Bon Voyage</Logo>
         </ProfileNavLink>
-        <NavBar active={headerBackground?.toString()}>
+        <NavBar active={headerBackground}>
           <StyleNavLink
-            style={{ borderBottom: currentUrl.pathname === '/vr-page' ? '1.5px solid white' : '' }}
-            active={headerBackground?.toString()}
+            style={{ borderBottom: currentUrl.pathname === '/vr-page' ? '1.5px solid black' : '' }}
+            $active={headerBackground}
             to="/vr-page"
           >
             VR專區
           </StyleNavLink>
           <StyleNavLink
-            style={{ borderBottom: currentUrl.pathname === '/city' ? '1.5px solid white' : '' }}
-            active={headerBackground?.toString()}
+            style={{ borderBottom: currentUrl.pathname === '/city' ? '1.5px solid black' : '' }}
+            $active={headerBackground}
             to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all"
           >
             熱門景點
           </StyleNavLink>
           <StyleNavLink
-            style={{ borderBottom: currentUrl.pathname === '/all-articles' ? '1.5px solid white' : '' }}
-            active={headerBackground?.toString()}
+            style={{ borderBottom: currentUrl.pathname === '/all-articles' ? '1.5px solid black' : '' }}
+            $active={headerBackground}
             to="/all-articles"
           >
             熱門遊記
           </StyleNavLink>
           <StyleNavLink
-            style={{ borderBottom: currentUrl.pathname === '/category' ? '1.5px solid white' : '' }}
-            active={headerBackground?.toString()}
+            style={{ borderBottom: currentUrl.pathname === '/category' ? '1.5px solid black' : '' }}
+            $active={headerBackground}
             to="/category?lat=25.0498583&lng=121.5172606&category=food"
           >
             美食特搜
           </StyleNavLink>
           <StyleNavLink
-            style={{ borderBottom: currentUrl.pathname === '/my-schedules' ? '1.5px solid white' : '' }}
-            active={headerBackground?.toString()}
+            style={{ borderBottom: currentUrl.pathname === '/my-schedules' ? '1.5px solid black' : '' }}
+            $active={headerBackground}
             to="/my-schedules"
           >
             行程規劃
           </StyleNavLink>
-          <ProfileNavLink active={headerBackground?.toString()} to="/profile">
-            <ProfilePageNav active={headerBackground?.toString()}>個人頁面</ProfilePageNav>
+          <ProfileNavLink $active={headerBackground} to="/profile">
+            <ProfilePageNav active={headerBackground}>個人頁面</ProfilePageNav>
           </ProfileNavLink>
         </NavBar>
       </Header>
-      <SmallGreyHeader active={headerBackground}>
+      <SmallHeader active={headerBackground}>
         <Menu
-          style={{ top: 20 }}
-          src={headerBackground ? BlackMenuIcon : WhiteMenuIcon}
+          src={RWD_ICON?.BLACK_MENU_ICON}
           active={clicked}
           onClick={() => setClicked(true)}
         />
-        <StyleNavLink active={headerBackground?.toString()} to="/">
-          <Logo active={headerBackground?.toString()}>Bon Voyage</Logo>
+        <StyleNavLink $active={headerBackground} to="/">
+          <Logo active={headerBackground}>Bon Voyage</Logo>
         </StyleNavLink>
-        <SmallScreenBackground active={clicked}>
+        <Background active={clicked}>
           <SmallScreenNavBar active={clicked}>
-            <SmallBarProfileBackground>
+            <ProfileBackground>
               <HamburgerProfileLink to="/profile">
-                <SmallProfilePhoto src={user.photoURL || UserPhotoSrc} />
+                <SmallProfilePhoto src={user.photoURL || RWD_ICON?.USER_IMG} />
                 <SmallProfileName>{user.displayName || '您尚未登入唷'}</SmallProfileName>
               </HamburgerProfileLink>
-            </SmallBarProfileBackground>
+            </ProfileBackground>
             <CreateScheduleWrapper onClick={() => CheckLoginBeforeCreateSchedule()}>
-              <SmallNavIcon src={Plan} />
+              <SmallNavIcon src={RWD_ICON?.PLAN_ICON} />
               <SmallNavText>行程規劃</SmallNavText>
             </CreateScheduleWrapper>
             <HamburgerMenuLink to="/vr-page">
-              <SmallNavIcon src={VRsrc} />
+              <SmallNavIcon src={RWD_ICON?.VR_ICON} />
               <SmallNavText>VR 專區</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all">
-              <SmallNavIcon src={Attraction} />
+              <SmallNavIcon src={RWD_ICON?.ATTRACTION_ICON} />
               <SmallNavText>熱門景點</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/all-articles">
-              <SmallNavIcon src={Blog} />
+              <SmallNavIcon src={RWD_ICON?.BLOG_ICON} />
               <SmallNavText>熱門遊記</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/category?lat=25.0498583&lng=121.5172606&category=food">
-              <SmallNavIcon src={Dish} />
+              <SmallNavIcon src={RWD_ICON?.DISH_ICON} />
               <SmallNavText>美食特搜</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/my-schedules">
-              <SmallNavIcon src={Travel} />
+              <SmallNavIcon src={RWD_ICON?.TRIP_ICON} />
               <SmallNavText>我的行程</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/my-articles">
-              <SmallNavIcon src={MyArticle} />
+              <SmallNavIcon src={RWD_ICON?.ARTICLE_ICON} />
               <SmallNavText>我的文章</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/my-favorites">
-              <SmallNavIcon src={Favorite} />
+              <SmallNavIcon src={RWD_ICON?.FAVO_ICON} />
               <SmallNavText>我的收藏</SmallNavText>
             </HamburgerMenuLink>
             <SmallLogOutButton
@@ -240,16 +228,16 @@ function GreyHeaderComponent() {
             >
               登出
             </SmallLogOutButton>
-            <SmallMenuCloseIcon
+            <CloseIcon
               src={CloseIcon}
               active={clicked}
               onClick={() => setClicked(false)}
             />
           </SmallScreenNavBar>
-        </SmallScreenBackground>
-      </SmallGreyHeader>
+        </Background>
+      </SmallHeader>
     </>
   );
 }
 
-export default GreyHeaderComponent;
+export default BlackHeaderComponent;

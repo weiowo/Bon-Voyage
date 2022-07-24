@@ -9,7 +9,7 @@ import styled from 'styled-components/macro';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
 import 'react-datepicker/dist/react-datepicker.css';
-import TravelBgSrc from './images/travel2.jpg';
+import TRAVEL_BG from './images/travel2.jpg';
 
 const CloseModalButton = styled.button`
 display:flex;
@@ -108,7 +108,7 @@ position:fixed;
 display:flex;
 justify-content:center;
 align-items:center;
-background-image: url(${TravelBgSrc});
+background-image: url(${TRAVEL_BG});
 background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);

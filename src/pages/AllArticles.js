@@ -4,23 +4,15 @@ import
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
-import HeaderComponent from '../components/Header';
+import HeaderComponent from '../components/Headers/Header';
 import AllArticleBaner from './images/all_article_banner.png';
 import db from '../utils/firebase-init';
-import {
-  MyArticle, CoverPhotoInMyArticle,
-  MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
-} from './MyArticles';
+import MyArticle, {
+  CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
+} from '../components/Cards/Article';
 import { ArticlesBoxesContainer } from '../components/ArticlesInHome';
-import Cover1 from './images/schedule_cover_rec1.jpg';
-import Cover2 from './images/schedule_cover_rec5.jpg';
-import Cover3 from './images/schedule_cover_rec3.jpg';
-import Cover4 from './images/camping.jpg';
-import Cover5 from './images/schedule_cover_rec2.jpg';
-import Cover6 from './images/schedule_cover_rec4.jpg';
 import Footer from '../components/Footer';
-
-export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
+import ARTICLE_COVER from '../constants/article.cover';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -79,8 +71,8 @@ function AllArticlePage() {
                   <CoverPhotoInMyArticle
                     src={item?.cover_img
                       ? item?.cover_img
-                      : defaultArticleCoverPhoto[Math.floor(Math.random()
-                      * defaultArticleCoverPhoto.length)]}
+                      : ARTICLE_COVER[Math.floor(Math.random()
+                      * ARTICLE_COVER.length)]}
                     key={`${item?.cover_img}`}
 
                   />

@@ -12,7 +12,7 @@ import MySchedules from './pages/MySchedules';
 import Map from './pages/Map';
 // import SearchHome from './pages/SearchHome';
 import City from './pages/City';
-import CardsCarousel from './components/CardCarousel';
+import Carousel from './components/Carousel';
 import CityAreaInHomePage from './components/CityInHome';
 import CategoryAreaInHome from './pages/CategoryInHome';
 import Category from './pages/Category';
@@ -77,7 +77,7 @@ function App() {
             {/* <Route path="/home-search" element={<SearchHome />} /> */}
             <Route path="/city" element={<City />} />
             <Route path="/category-in-home" element={<CategoryAreaInHome currentLatLng={currentLatLng} />} />
-            <Route path="/carousel" element={<CardsCarousel />} />
+            <Route path="/carousel" element={<Carousel />} />
             <Route path="/city-home" element={<CityAreaInHomePage />} />
             <Route path="/category" element={<Category currentLatLng={currentLatLng} />} />
             <Route path="/signin" element={<SignIn />} />

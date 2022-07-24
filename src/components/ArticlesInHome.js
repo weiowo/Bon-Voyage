@@ -5,10 +5,9 @@ import
   collection, where, query, onSnapshot,
 } from 'firebase/firestore';
 import db from '../utils/firebase-init';
-import {
-  MyArticle, CoverPhotoInMyArticle,
-  MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
-} from '../pages/MyArticles';
+import MyArticle, {
+  CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
+} from './Cards/Article';
 import Cover1 from '../pages/images/schedule_cover_rec1.jpg';
 import Cover2 from '../pages/images/schedule_cover_rec5.jpg';
 import Cover3 from '../pages/images/schedule_cover_rec3.jpg';

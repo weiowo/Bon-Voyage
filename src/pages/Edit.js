@@ -13,7 +13,7 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import db, { storage } from '../utils/firebase-init';
-import HeaderComponent from '../components/Header';
+import HeaderComponent from '../components/Headers/Header';
 import ShareBanner2 from './images/share_banner2.jpeg';
 import CoverDefaultPhoto from './images/cover_photo_default.png';
 

@@ -6,12 +6,12 @@ import {
 } from '@react-google-maps/api';
 import PropTypes from 'prop-types';
 import Search from './Search';
-import PinkStar from './images/smile_star_pink.png';
-import OrangeStar from './images/smile_star_orange.png';
-import YellowStar from './images/smile_star_yellow.png';
-import GreenStar from './images/smile_star_green.png';
-import BlueStar from './images/smile_star_blue.png';
-import PurpleStar from './images/smile_star_purple.png';
+import PINK_STAR from './images/smile_star_pink.png';
+import ORANGE_STAR from './images/smile_star_orange.png';
+import YELLOW_STAR from './images/smile_star_yellow.png';
+import GREEN_STAR from './images/smile_star_green.png';
+import BLUE_STAR from './images/smile_star_blue.png';
+import PURPLE_STAR from './images/smile_star_purple.png';
 
 let service;
 
@@ -134,7 +134,7 @@ function Map({
       });
     }
 
-    const markerIcons = [PinkStar, OrangeStar, YellowStar, GreenStar, BlueStar, PurpleStar];
+    const markerIcons = [PINK_STAR, ORANGE_STAR, YELLOW_STAR, GREEN_STAR, BLUE_STAR, PURPLE_STAR];
     const lineColors = ['#FF82B8', '#FFB750', '#F4E64C', '#76DC66', '#83D6FD', '#E483F3'];
 
     scheduleData?.trip_days?.forEach((dayItem, dayIndex) => {
