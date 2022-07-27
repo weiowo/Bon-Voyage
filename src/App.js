@@ -28,11 +28,11 @@ import VR from './pages/VrPage';
 import MyLovedArticles from './pages/MyFavorites';
 import PageNotFound from './pages/PageNotFound';
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
     }
-  `;
+`;
 
 function App() {
   const [currentLatLng, setCurrentLatLng] = useState({});

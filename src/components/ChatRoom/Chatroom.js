@@ -175,7 +175,6 @@ overflow-wrap: break-word;
 export const EnterMessageButton = styled.button`
 width:auto;
 height:20px;
-// border: green 2px solid;
 border-radius:2px;
 cursor:pointer;
 border:none;

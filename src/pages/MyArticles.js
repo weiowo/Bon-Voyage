@@ -31,7 +31,8 @@ import WriteArticleRemind, {
   WriteArticleImg, WriteRightArea, WriteText, WriteButton,
 } from '../components/Reminder/CreateArticle';
 import MyArticle, {
-  CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
+  CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary,
+  StyledLink, ArticleTitleAndDeleteIcon,
 } from '../components/Cards/Article';
 
 const ConfirmWritingButton = styled.button`
@@ -190,13 +191,6 @@ cursor:pointer;
   top:115px;
   right:20px;
 }
-`;
-
-const ArticleTitleAndDeleteIcon = styled.div`
-width:100%;
-height:auto;
-display:flex;
-justify-content:space-between;
 `;
 
 function MyArticles() {

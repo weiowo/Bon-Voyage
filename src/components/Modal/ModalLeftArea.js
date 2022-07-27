@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import styled from 'styled-components/macro';
 
-const ModalLeftAreaTest = styled.div`
+const ModalLeftArea = styled.div`
 width:25vw;
 height:28vw;
 display:flex;
@@ -30,4 +30,4 @@ position:relative;
 
 `;
 
-export default ModalLeftAreaTest;
+export default ModalLeftArea;

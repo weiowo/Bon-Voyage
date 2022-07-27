@@ -352,7 +352,7 @@ function HeaderComponent() {
               登出
             </SmallLogOutButton>
             <CloseIcon
-              src={CloseIcon}
+              src={RWD_ICON?.CLOSE_ICON}
               active={clicked}
               onClick={() => setClicked(false)}
             />

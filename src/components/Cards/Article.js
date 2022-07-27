@@ -61,4 +61,11 @@ color:black;
 border:none;
 `;
 
+export const ArticleTitleAndDeleteIcon = styled.div`
+width:100%;
+height:auto;
+display:flex;
+justify-content:space-between;
+`;
+
 export default MyArticle;

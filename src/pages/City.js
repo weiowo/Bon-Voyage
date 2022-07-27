@@ -75,8 +75,6 @@ top:130px;
 }
 `;
 
-// 景點區域
-
 const ContentArea = styled.div`
 width:100vw;
 height:400px;

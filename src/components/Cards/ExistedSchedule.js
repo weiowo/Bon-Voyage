@@ -93,6 +93,7 @@ display:none;
 export const ButtonArea = styled.div`
 display:flex;
 flex-direction:column;
+align-items:center;
 gap:15px;
 @media screen and (max-width:900px){
   flex-direction:row;
