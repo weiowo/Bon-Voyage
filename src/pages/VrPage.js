@@ -19,9 +19,8 @@ import './style.css';
 import leftArrow from './images/left-arrow.jpg';
 import vrPlaces from './vr-place-data';
 import rightArrow from './images/up-arrow.png';
-import BlackHeaderComponent from '../components/BlackHeader';
-import unfilledStar from './images/unfilled_star.jpg';
-import filledStar from './images/filled_star.jpg';
+import BlackHeaderComponent from '../components/Headers/BlackHeader';
+import STAR from '../constants/stars';
 
 const PageTitle = styled.div`
 width:100%;
@@ -619,7 +618,7 @@ function VR() {
                     </ModalPlaceTitle>
                     <AddFavoriteIcon
                       onClick={() => { handleFavorite(vrPlaces?.[modalIndex]?.place_id); }}
-                      src={liked ? filledStar : unfilledStar}
+                      src={liked ? STAR?.FULL_STAR : STAR?.EMPTY_STAR}
                     />
                   </TitleStarArea>
                   <ModalPlaceSubtitle>{vrPlaces?.[modalIndex]?.place_subtitle}</ModalPlaceSubtitle>

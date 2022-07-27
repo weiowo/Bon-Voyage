@@ -1,12 +1,12 @@
-import angkorWat from './images/Angkor_Wat.jpeg';
-import bacelona from './images/bacelona.jpeg';
-import japan from './images/japan.jpeg';
-import machuPichu from './images/Machu_Picchu.jpeg';
-import mountRushmore from './images/Mount_Rushmore.jpeg';
-import paris from './images/paris.jpeg';
-import pyramid from './images/pyramid.jpeg';
-import rio from './images/rio.jpeg';
-import rome from './images/rome.jpeg';
+import ANKORWAT from './images/Angkor_Wat.jpeg';
+import BARCELONA from './images/bacelona.jpeg';
+import JAPAN from './images/japan.jpeg';
+import MACHUPICHU from './images/Machu_Picchu.jpeg';
+import MOUNT_RUSHMORE from './images/Mount_Rushmore.jpeg';
+import PARIS from './images/paris.jpeg';
+import PYRAMID from './images/pyramid.jpeg';
+import RIO from './images/rio.jpeg';
+import ROME from './images/rome.jpeg';
 
 const vrPlaces = [
   {
@@ -14,7 +14,7 @@ const vrPlaces = [
     place_english_title: 'Machu Pichu',
     place_country_title: 'Peru',
     place_id: 'ChIJVVVViV-abZERJxqgpA43EDo',
-    cover_photo: machuPichu,
+    cover_photo: MACHUPICHU,
     place_address: 'Aguas Calientes, 秘魯',
     place_subtitle: '草泥馬相伴，穿梭千年印加神話國度',
     place_description: '馬丘比丘的建築為古典印加風格，並以拋光的砌石墻作為柱體結構。城鎮保存完整的三個設施則為拴日石（Intihuatana）、太陽神殿和三窗廟。為了讓遊客更好地了解城市最初的樣子，大部分建築都經過了復原重建。到1976年，馬丘比丘約有30%的區域已經恢復，直到至今依然進行恢復工程。1983年，馬丘比丘古神廟被聯合國教科文組織定為世界遺產，且為文化與自然雙重遺產。2007 年，馬丘比丘被評為世界新七大奇蹟之一。',
@@ -26,7 +26,7 @@ const vrPlaces = [
     place_english_title: 'Angkor Wat',
     place_country_title: 'Cambodia',
     place_id: 'ChIJLSea6ooWEDERjUGwVxGoqz4',
-    cover_photo: angkorWat,
+    cover_photo: ANKORWAT,
     place_address: 'ក្រុងសៀមរាប',
     place_subtitle: '遺世而獨立，撼動人心的東方奇蹟',
     place_description: '吳哥窟(小吳哥Angkor Wat)，世界規模最大的古宗教寺院，於西元1113年、由繼位的蘇耶跋摩二世建造，據稱當時石工約3000人、雕刻工約1500人、建築工約4000人、石材搬運工約15000人，費時約34年建造而成。小吳哥是吳哥遺址群中唯一面向西方的寺廟，這裡最大的魅力就是建築牆壁上的美麗浮雕、塔門的屋頂、以及露台，吳哥窟是吳哥王朝寺院建設最高峰作品。1992年，聯合國將吳哥古蹟列入世界文化遺產。',
@@ -38,7 +38,7 @@ const vrPlaces = [
     place_english_title: 'La Sagrada Familia',
     place_country_title: 'Spain',
     place_id: 'ChIJk_s92NyipBIRUMnDG8Kq2Js',
-    cover_photo: bacelona,
+    cover_photo: BARCELONA,
     place_address: 'C/ de Mallorca, 401, 08013 Barcelona, 西班牙',
     place_subtitle: '建築大師高第神作，睽違百年即將完工',
     place_description: '聖家堂從1882年開始修建，因為是贖罪教堂，資金的來源主要靠個人捐款，捐款的多少直接影響到工程進度的快慢，是世界上唯一尚未完工就被列為世界遺產的建築物。教宗本篤十六世於2010年11月7日造訪此教堂時將其冊封為宗座聖殿。高第一生中43年心血都花在這個教堂的設計與建造上，1925年後還乾脆搬到教堂的工地去住，全心全意設計教堂。其高聳與獨特的建築設計，使得該教堂成為巴塞隆納最為人所知的觀光景點。',
@@ -50,7 +50,7 @@ const vrPlaces = [
     place_english_title: 'Fushimi-Inari Taisha',
     place_country_title: 'Japan',
     place_id: 'ChIJIW0uPRUPAWAR6eI6dRzKGns',
-    cover_photo: japan,
+    cover_photo: JAPAN,
     place_address: '〒612-0882 京都府京都市伏見区深草藪之内町68',
     place_subtitle: '狐狸坐鎮守護，神秘壯觀的千本鳥居',
     place_description: '伏見稻荷大社位於稻荷山的山麓，在傳統上整個稻荷山的範圍都被視為是神域的範圍。伏見稻荷大社主要是祀奉以宇迦之御魂大神為首的諸位稻荷神，自古以來就是農業與商業的神明。該神社成為京都地區香火最盛的神社之一。另外，起源於江戶時代的習俗，前來此地許願的人們往往會捐款在神社境內豎立一座鳥居來表達對神明的敬意，使得伏見稻荷大社的範圍內豎有數量驚人的大小鳥居，而以「千本鳥居」之名聞名日本全國乃至於海外。',
@@ -62,7 +62,7 @@ const vrPlaces = [
     place_english_title: 'Mount Rushmore',
     place_country_title: 'USA',
     place_id: 'ChIJ39Y-tdg1fYcRQcZcBb499do',
-    cover_photo: mountRushmore,
+    cover_photo: MOUNT_RUSHMORE,
     place_address: '13000 SD-244, Keystone, SD 57751美國',
     place_subtitle: '瞻仰聖賢總統，鑿入花崗岩的永恆歷史',
     place_description: '拉什莫爾山國家紀念公園（Mount Rushmore National Memorial），是坐落於美國南達科他州基斯通附近的美國總統紀念設施。公園內有四座高達18公尺的美國歷史上著名的前總統頭像，分別是華盛頓、傑佛遜、老羅斯福和林肯，這四位總統被認為是美國最偉大的總統，代表了美國建國130年來的歷史。整個公園占地面積5.17平方公里，最高處海拔為1745公尺。約四百名工人花了整整14年時間完成，也被正式列入國家史跡名錄',
@@ -74,7 +74,7 @@ const vrPlaces = [
     place_english_title: 'Eiffel Tower',
     place_country_title: 'Paris',
     place_id: 'ChIJLU7jZClu5kcR4PcOOO6p3I0',
-    cover_photo: paris,
+    cover_photo: PARIS,
     place_address: 'Champ de Mars, 5 Av. Anatole France, 75007 Paris, 法國',
     place_subtitle: '法國標誌建築，閃耀塞納河畔的浪漫',
     place_description: '艾菲爾鐵塔建成於1889年，初名為「三百米塔」，後得名自其設計師居斯塔夫·艾菲爾。鐵塔是世界建築史上的技術傑作，也是世界上最多人付費參觀的名勝古跡，這個為了世界博覽會而落成的金屬建築，是法國參觀人數第二多的文化景點。1986年美國土木工程師協會將該建築列入國際土木工程歷史古蹟，1991年，艾菲爾鐵塔連同巴黎塞納河沿岸整座被列入世界遺產。艾菲爾鐵塔以312米的高度，占據世界最高人造建築的位置長達四十年',
@@ -86,7 +86,7 @@ const vrPlaces = [
     place_english_title: 'Cristo Redentor',
     place_country_title: 'Brazil',
     place_id: 'ChIJP6FKmNV_mQAR3gKVAdeEyZ0',
-    cover_photo: rio,
+    cover_photo: RIO,
     place_address: 'Parque Nacional da Tijuca - Alto da Boa Vista, Rio de Janeiro - RJ, 巴西',
     place_subtitle: '俯瞰里約之美，氣勢宏偉的救世基督',
     place_description: '救世基督像（Cristo Redentor）是一座裝飾藝術風格的大型耶穌基督雕像，位於巴西的里約熱內盧，是該市的標誌，也是世界最聞名的紀念雕塑之一，2007年入選世界新七大奇蹟。這座紀念雕像由法國紀念碑雕刻家保羅·蘭多斯基設計，以鋼筋混凝土代替鋼材，以便更適合十字架形狀的雕像。而且能夠抵抗惡劣的天氣。里約熱內盧還特意建造了科科瓦多山的上山鐵路，以便將打造雕像所需的大塊石料運到山頂。',
@@ -98,7 +98,7 @@ const vrPlaces = [
     place_english_title: 'Great Sphinx of Giza',
     place_country_title: 'Egypt',
     place_id: 'gyyHSAc1ygMeWsAdh4KH5APF74q2',
-    cover_photo: pyramid,
+    cover_photo: PYRAMID,
     place_address: 'Al Haram, Giza Governorate 3512201埃及',
     place_subtitle: '亙古流傳的謎語，蘊藏神秘的埃及文明',
     place_description: '獅身人面像（Great Sphinx of Giza）是一座位於在卡夫拉金字塔旁的雕像，外型是一個獅子的身軀和人的頭。獅身人面像長約73.5公尺，寬約19.3公尺，高約20.22公尺。獅身人面像是現今已知最古老的紀念雕像，一般相信是在法老卡夫拉統治期內建成。由於獅身人面像無論是年代、外型，甚至是建造者是誰都充滿爭議，所以這些問題被世人稱作「獅身人面像之謎」，成了現代的史芬克斯之謎。',
@@ -110,7 +110,7 @@ const vrPlaces = [
     place_english_title: 'Colosseo',
     place_country_title: 'Italy',
     place_id: 'ChIJrRMgU7ZhLxMRxAOFkC7I8Sg',
-    cover_photo: rome,
+    cover_photo: ROME,
     place_address: 'Piazza del Colosseo, 1, 00184 Roma RM, 義大利',
     place_subtitle: '揭開古城千年面紗，神聖的古羅馬競技場',
     place_description: '羅馬競技場(Colosseo)位於義大利拉齊奧羅馬市中心，建於西元72年是古羅馬帝國時期規模最大的橢圓形博鬥場，是維斯帕先皇帝當時為取悅凱旋歸來的士兵與讚美偉大的古羅馬帝國下令所建造，1794年被列為宗教聖地並對此進行保護，至今羅馬競技場已成為羅馬文明的象徵；羅馬競技場是義大利羅馬的標誌性建築，2007年7月7日被全球民眾票選為「世界新七大奇景」是義大利羅馬的著名旅遊景點。',

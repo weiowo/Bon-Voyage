@@ -9,9 +9,9 @@ import {
 } from 'firebase/storage';
 import { updateDoc, doc, onSnapshot } from 'firebase/firestore';
 import db, { app, storage } from '../utils/firebase-init';
-import GreyHeaderComponent from '../components/GreyHeader';
+import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
-import { Line } from './MySchedules';
+import Line from '../components/Line';
 import UserContext from '../components/UserContextComponent';
 import SignIn from '../components/SignIn';
 import { UpperLine, MyPageTitle } from './MyArticles';

@@ -4,46 +4,38 @@ import {
   getDoc, doc, updateDoc, arrayRemove, deleteDoc,
   collection, arrayUnion, setDoc,
 } from 'firebase/firestore';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
-import GreyHeaderComponent from '../components/GreyHeader';
+import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
-import {
-  Line, DeleteModalTitle, DeleteAsk, DeleteButtonArea,
-  NoDeleteButton, ConfirmDeleteButton, RemindWrapper, ClickAndAdd,
-  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
-} from './MySchedules';
+import DeleteAsk, {
+  DeleteButtonArea, ConfirmDeleteButton, NoDeleteButton, DeleteModalTitle,
+} from '../components/DeleteSchModal/DeleteSchModal';
+import RemindWrapper, {
+  ClickAndAdd, RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from '../components/Reminder/CreateTrip';
+import Line from '../components/Line';
 import Travel from './images/travel-2.png';
 import Suitcase from './images/suitcase-2.png';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
-import Cover1 from './images/schedule_cover_rec1.jpg';
-import Cover2 from './images/schedule_cover_rec5.jpg';
-import Cover3 from './images/schedule_cover_rec3.jpg';
-import Cover4 from './images/camping.jpg';
-import Cover5 from './images/schedule_cover_rec2.jpg';
-import Cover6 from './images/schedule_cover_rec4.jpg';
 import greyTrashCanSrc from './images/bin.png';
 import WriteRemindIcon from './images/picture.png';
-import {
-  ModalBackground, ModalBox, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper,
-  ScheduleChoicesBox, ScheduleChoiceTitle, CloseModalButton, ModalContentWrapper,
-} from './City';
+import SchedulesWrapper, {
+  CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
+} from '../components/Modal/ScheduleChoice';
+import Modal from '../components/Modal/Modal';
+import CloseModalButton from '../components/Modal/CloseButton';
+import ARTICLE_COVER from '../constants/article.cover';
+import WriteArticleRemind, {
+  WriteArticleImg, WriteRightArea, WriteText, WriteButton,
+} from '../components/Reminder/CreateArticle';
+import MyArticle, {
+  CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary,
+  StyledLink, ArticleTitleAndDeleteIcon,
+} from '../components/Cards/Article';
 
-export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
-
-export const WriteArticleRemind = styled.div`
-  width:50%;
-  height:150px;
-  display:flex;
-  margin-top:20px;
-  gap:15px;
-@media screen and (max-width:800px){
-  width:100%;
-  justify-content:center;
-}`;
-
-export const ConfirmWritingButton = styled.button`
+const ConfirmWritingButton = styled.button`
   width:80px;
   height:35px;
   background-color:#598BAF;
@@ -53,41 +45,6 @@ export const ConfirmWritingButton = styled.button`
   flex-shrink:0;
   cursor:pointer;
   font-weight:600;
-`;
-
-export const WriteArticleImg = styled.img`
-width:150px;
-height:150px;
-`;
-
-export const WriteRightArea = styled.div`
-  width:auto;
-  height:150px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:20px;
-@media screen and (max-width:800px){
-  width:auto;
-}`;
-
-export const WriteText = styled.div`
-  font-size:15px;
-  font-weight:600;
-  text-align:left;
-`;
-
-export const WriteButton = styled.button`
-width:100px;
-height:40px;
-border-radius:10px;
-background-color:#598BAF;
-color:white;
-font-weight:600;
-border:none;
-font-size:15px;
-cursor:pointer;
 `;
 
 const PageWrapper = styled.div`
@@ -193,66 +150,6 @@ width:90%;
 }
 `;
 
-export const MyArticle = styled.div`
-cursor:pointer;
-width:190px;
-height:250px;
-flex-shrink:0;
-border-radius:10px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-@media screen and (max-width:1200px){
-  width:160px;
-  height:200px;
-}
-@media screen and (max-width:450px){
-  width:160px;
-  height:200px;
-}
-`;
-
-export const CoverPhotoInMyArticle = styled.img`
-width:100%;
-height:50%;
-border-top-right-radius:10px;
-border-top-left-radius:10px;
-object-fit: cover;
-`;
-
-export const MyArticleBelowArea = styled.div`
-width:80%;
-height:auto;
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-left:15px;
-margin-top:10px;
-margin-right:15px;
-`;
-
-export const MyArticleTitle = styled.div`
-width:100%;
-height:30px;
-font-weight:550;
-font-size:16px;
-text-align:left;
-`;
-
-export const MyArticleSummary = styled.div`
-width:100%;
-height:30px;
-font-size:13px;
-text-align:left;
-font-weight:500;
-color:grey;
-`;
-
-export const StyledLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:black;
-border:none;
-`;
-
 const ArticlePreviewAndDeleteWrapper = styled.div`
 position:relative;
 width:190px;
@@ -294,13 +191,6 @@ cursor:pointer;
   top:115px;
   right:20px;
 }
-`;
-
-const ArticleTitleAndDeleteIcon = styled.div`
-width:100%;
-height:auto;
-display:flex;
-justify-content:space-between;
 `;
 
 function MyArticles() {
@@ -481,52 +371,50 @@ function MyArticles() {
             </Tab>
           </Tabs>
           <UpperLine />
-          <ModalBackground active={modalIsActive}>
-            <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-              <ModalContentWrapper>
-                <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
-                <ScheduleChoicesBoxWrapper>
-                  {myArtPageScheduleData.length === 0 ? (
-                    <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
-                      <RemindIcon src={Travel} />
-                      <RemindRightPart style={{ width: 'auto' }}>
-                        <RemindText>
-                          沒有可編輯行程～
-                          <br />
-                          是時候創建行程囉！
-                        </RemindText>
-                        <StyledBlackLink to="/choose-date">
-                          <ClickAndAdd>點我創建</ClickAndAdd>
-                        </StyledBlackLink>
-                        <SuitcaseIcon src={Suitcase} />
-                      </RemindRightPart>
-                    </RemindWrapper>
-                  )
-                    : myArtPageScheduleData.map((item, index) => (
-                      <ScheduleChoicesBox
-                        clicked={index === selectedScheduleIndex}
-                        onClick={() => {
-                          setSelectedSchedule(item);
-                          setSelectedScheduleIndex(index);
-                        }}
-                        id={item.schedule_id}
-                      >
-                        <ScheduleChoiceTitle>
-                          {item.title}
-                        </ScheduleChoiceTitle>
-                      </ScheduleChoicesBox>
-                    ))}
-                </ScheduleChoicesBoxWrapper>
-                {myArtPageScheduleData.length === 0 ? '' : <ConfirmWritingButton type="button" onClick={() => setNewArticleToDb()}>確認</ConfirmWritingButton>}
-              </ModalContentWrapper>
-              <CloseModalButton
-                type="button"
-                onClick={() => setModalIsActive(false)}
-              >
-                X
-              </CloseModalButton>
-            </ModalBox>
-          </ModalBackground>
+          <Modal active={modalIsActive} flexDirection="column">
+            <SchedulesWrapper>
+              <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+              <ScheduleBoxWrapper>
+                {myArtPageScheduleData.length === 0 ? (
+                  <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                    <RemindIcon src={Travel} />
+                    <RemindRightPart style={{ width: 'auto' }}>
+                      <RemindText>
+                        沒有可編輯行程～
+                        <br />
+                        是時候創建行程囉！
+                      </RemindText>
+                      <StyledBlackLink to="/choose-date">
+                        <ClickAndAdd>點我創建</ClickAndAdd>
+                      </StyledBlackLink>
+                      <SuitcaseIcon src={Suitcase} />
+                    </RemindRightPart>
+                  </RemindWrapper>
+                )
+                  : myArtPageScheduleData.map((item, index) => (
+                    <ScheduleBox
+                      clicked={index === selectedScheduleIndex}
+                      onClick={() => {
+                        setSelectedSchedule(item);
+                        setSelectedScheduleIndex(index);
+                      }}
+                      id={item.schedule_id}
+                    >
+                      <ScheduleTitle>
+                        {item.title}
+                      </ScheduleTitle>
+                    </ScheduleBox>
+                  ))}
+              </ScheduleBoxWrapper>
+              {myArtPageScheduleData.length === 0 ? '' : <ConfirmWritingButton type="button" onClick={() => setNewArticleToDb()}>確認</ConfirmWritingButton>}
+            </SchedulesWrapper>
+            <CloseModalButton
+              type="button"
+              onClick={() => setModalIsActive(false)}
+            >
+              X
+            </CloseModalButton>
+          </Modal>
           <MyArticlesContainer isClicked={publishIsClicked}>
             {myPublishedArticles.length === 0
               ? (
@@ -549,8 +437,8 @@ function MyArticles() {
                     <MyArticle>
                       <CoverPhotoInMyArticle
                         src={item?.cover_img ? item?.cover_img
-                          : defaultArticleCoverPhoto[Math.floor(Math.random()
-                        * defaultArticleCoverPhoto.length)]}
+                          : ARTICLE_COVER[Math.floor(Math.random()
+                        * ARTICLE_COVER.length)]}
                       />
                       <MyArticleBelowArea>
                         <ArticleTitleAndDeleteIcon>
@@ -597,8 +485,8 @@ function MyArticles() {
                     <MyArticle>
                       <CoverPhotoInMyArticle
                         src={item?.cover_img ? item?.cover_img
-                          : defaultArticleCoverPhoto[Math.floor(Math.random()
-                        * defaultArticleCoverPhoto.length)]}
+                          : ARTICLE_COVER[Math.floor(Math.random()
+                        * ARTICLE_COVER.length)]}
                       />
                       <MyArticleBelowArea>
                         <ArticleTitleAndDeleteIcon>

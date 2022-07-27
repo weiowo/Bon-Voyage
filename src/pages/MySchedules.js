@@ -9,121 +9,31 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { useImmer } from 'use-immer';
 import db from '../utils/firebase-init';
-import GreyHeaderComponent from '../components/GreyHeader';
+import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import UserContext from '../components/UserContextComponent';
-import SquareCover1 from './images/schedule_cover_square1.jpg';
-import SquareCover2 from './images/schedule_cover_square2.jpg';
-import SquareCover3 from './images/schedule_cover_square3.jpg';
-import SquareCover4 from './images/schedule_cover_square4.jpg';
-import SquareCover5 from './images/schedule_cover_square5.jpg';
-import SquareCover6 from './images/schedule_cover_square6.jpg';
 import RecCover3 from './images/schedule_cover_rec3.jpg';
-import Travel from './images/travel-2.png';
-import Suitcase from './images/suitcase-2.png';
+import REMINDER_ICONS from '../constants/reminder.icon';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import SignIn from '../components/SignIn';
 import './animation.css';
 import Add from './images/invite.png';
 import CloseSearchIcon from './images/close-1.png';
+import SQUARE_COVER from '../constants/schedule.square.cover';
+import ExistedSchedule, {
+  ExistedScheuleTitle, PhotoArea, ScheduleRightPart, SmallScheduleRightPart, ButtonArea, Button,
+} from '../components/Cards/ExistedSchedule';
+import RemindWrapper, {
+  ClickAndAdd, RemindText, RemindIcon, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from '../components/Reminder/CreateTrip';
+import DeleteAsk, {
+  DeleteButtonArea, ConfirmDeleteButton, NoDeleteButton, DeleteModalTitle,
+} from '../components/DeleteSchModal/DeleteSchModal';
+import AddFriendButton, {
+  FoundAsk, CloseSearch, InviteFriendInput, InviteFriendBelowArea, ConfirmSearchButton,
+} from '../components/InviteFriendModal/InviteFriendModal';
+import Line from '../components/Line';
 
-export const RemindWrapper = styled.div`
-width:26vw;
-height:180px;
-display:flex;
-gap:20px;
-@media screen and (max-width:1180px){
-  width:100%;
-  height:150px;
-}
-@media screen and (max-width:1000px){
-  width:100%;
-}
-@media screen and (max-width:748px){
-  justify-content:center;
-  width:100%;
-}
-@media screen and (max-width:480px){
-  height:130px;
-}`;
-
-export const ClickAndAdd = styled.div`
-width:80px;
-height:auto;
-font-size:15px;
-background-color:white;
-position:absolute;
-bottom:35px;
-font-weight:600;
-left:10px;
-border: 1.5px solid black;
-border-radius:5px;
-cursor:pointer;
-@media screen and (max-width:400px){
-  font-size:13px;
-  left:5px;
-}`;
-
-export const RemindText = styled.div`
-width:100%;
-font-weight:550;
-font-size:15px;
-text-align:left;
-@media screen and (max-width:1180px){
-  font-size:13px;
-}
-@media screen and (max-width:400px){
-  font-size:13px;
-}`;
-
-export const RemindIcon = styled.img`
-width:180px;
-height:180px;
-@media screen and (max-width:1180px){
-  width:150px;
-  height:150px;
-}
-@media screen and (max-width:1000px){
-  width:140px;
-  height:140px;
-}
-@media screen and (max-width:480px){
-  width:130px;
-  height:130px;
-}`;
-
-export const SuitcaseIcon = styled.img`
-width: 100px;
-height:100px;
-@media screen and (max-width:1000px){
-  width:95px;
-  height:95px;
-}
-@media screen and (max-width:480px){
-  height:90px;
-  width:90px;
-}`;
-
-export const RemindRightPart = styled.div`
-width:70%;
-height:180px;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-position:relative;
-@media screen and (max-width:1180px){
-  height:150px;
-}
-@media screen and (max-width:1000px){
-  height:140px;
-}
-@media screen and (max-width:1000px){
-  width:auto;
-}
-@media screen and (max-width:480px){
-  height:130px;
-}`;
-
-export const PageWrapper = styled.div`
+const PageWrapper = styled.div`
 width:100vw;
 height:calc(100vh-60px);
 display:flex;
@@ -136,17 +46,6 @@ justify-content:center;
   flex-direction:column;
   flex-shrink:0;
   height:calc(100vh-60px);
-}`;
-
-export const Line = styled.div`
-display:flex;
-width:1.8px;
-height:85vh;
-background-color:#D3D3D3;
-align-items:center;
-margin-top:20px;
-@media screen and (max-width:800px){
-  display:none;
 }`;
 
 const SmallScreenLine = styled.div`
@@ -201,7 +100,7 @@ padding-bottom:5px;
   margin-bottom:0px;
 }`;
 
-const MySchedulesTitleAndCreateNewScheduleArea = styled.div`
+const TitleAndCreateArea = styled.div`
 display:flex;
 width:26vw;
 height:auto;
@@ -233,20 +132,6 @@ gap:15px;
   padding-top:0px;
   padding-bottom:0px;
   flex-shrink:0;
-  // &::-webkit-scrollbar-track {
-  //   -webkit-box-shadow: transparent;
-  //   border-radius: 10px;
-  //   background-color:transparent;
-  // }
-  // &::-webkit-scrollbar {
-  //   width: 3px;
-  //   background-color:transparent;
-  // }
-  // &::-webkit-scrollbar-thumb {
-  //   border-radius: 10px;
-  //   -webkit-box-shadow: transparent;
-  //   background-color:#D3D3D3;
-  // }
 }`;
 
 const SchedulePreview = styled.div`
@@ -264,15 +149,6 @@ margin-bottom:15px;
   width:100%;
   margin-top:10px;
 }`;
-
-// const CalendarInviteWrapper = styled.div`
-// display:flex;
-// flex-direction:row;
-// gap:35px;
-// @media screen and (max-width:900px){
-// flex-direction:column;
-// }
-// `;
 
 const MyScheduleTitle = styled.div`
 font-weight:700;
@@ -321,176 +197,6 @@ cursor:pointer;
   height:20px;
   flex-shrink:0;
 }
-`;
-
-const SmallScreenExistedScheduleRightPart = styled.div`
-display:none;
-@media screen and (max-width:900px){
-  display:flex;
-  flex-direction:column;
-  margin-right:10px;
-}
-@media screen and (max-width:700px){
-  width:100%;
-  font-size:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin-right:0px;
-  gap:10px;
-}
-`;
-
-const LargeScreenExistedScheduleRightPart = styled.div`
-display:flex;
-flex-direction:row;
-width:70%;
-@media screen and (max-width:900px){
-  display:none;
-}
-`;
-
-const PhotoInExistedSchedule = styled.img`
-width:100px;
-height:100px;
-border-radius:20px;
-@media screen and (max-width:900px){
-  width:80px;
-  height:80px;
-}
-@media screen and (max-width:700px){
-display:none;
-}
-`;
-
-const ExistedSchedule = styled.div`
-display:flex;
-align-items:center;
-justify-content:space-between;
-width:26vw;
-height:140px;
-gap:20px;
-padding-left:10px;
-padding-right:10px;
-padding-top:10px;
-padding-bottom:10px;
-border-radius:16px;
-flex-shrink:0;
-background-color:${(props) => (props.isSelected ? '#E6D1F2' : '#e7f5fe')};
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-@media screen and (max-width:800px){
-  width:29vw;
-  gap:10px;
-  justify-content:left;
-  flex-shrink:0;
-}
-@media screen and (max-width:748px){
-  width:30vw;
-  gap:8px;
-  justify-content:left;
-  flex-shrink:0;
-  box-shadow:none;
-  padding-top:0px;
-  padding-bottom:0px;
-  height:140px;
-}`;
-
-export const DeleteAsk = styled.div`
-width:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:600;
-font-size:20px;
-margin-top:30px;
-`;
-
-const FoundAsk = styled.div`
-width:100%;
-font-weight:600;
-font-size:18px;
-`;
-
-export const DeleteButtonArea = styled.div`
-width:100%;
-display:flex;
-justify-content:center;
-allign-items:center;
-gap:20px;
-`;
-
-const CloseSearch = styled.img`
-position:absolute;
-right:20px;
-width:18px;
-height:18px;
-cursor:pointer;
-`;
-
-export const ConfirmDeleteButton = styled.button`
-width:30%;
-height:30px;
-background-color:#e7f5fe;
-font-weight:550;
-border:none;
-border-radius:10px;
-cursor:pointer;
-font-size:16px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
-
-export const NoDeleteButton = styled.button`
-width:30%;
-height:30px;
-background-color:#E6D1F2;
-font-weight:550;
-border:none;
-border-radius:10px;
-font-size:16px;
-cursor:pointer;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
-
-const ExistedScheuleTitle = styled.div`
-width:95%;
-height:20%;
-text-align:left;
-font-weight:550;
-@media screen and (max-width:900px){
-  width:100%;
-  margin-bottom:10px;
-}
-@media screen and (max-width:700px){
-  width:90%;
-  font-size:13px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-`;
-
-const ButtonArea = styled.div`
-display:flex;
-flex-direction:column;
-gap:15px;
-@media screen and (max-width:900px){
-  flex-direction:row;
-  width:85%;
-  gap:10px;
-}
-@media screen and (max-width:700px){
-  flex-direction:column;
-  align-items:center;
-}`;
-
-const Button = styled.button`
-height:25px;
-width:50px;
-border:1px solid #296D98;
-color:#296D98;
-border-radius:15px;
-font-weight:500;
-cursor:pointer;
 `;
 
 const SelectedScheduleWrapper = styled.div`
@@ -554,8 +260,6 @@ align-items:center;
 width:35.7vw;
 height:80px;
 gap:15px;
-// padding-top:8px;
-// padding-bottom:8px;
 overflow:scroll;
 @media screen and (max-width:800px){
   width:85%;
@@ -597,7 +301,6 @@ const ScheduleMemberPhoto = styled.img`
 width:50px;
 height:50px;
 border-radius:50%;
-// border:1px solid grey;
 text-align:center;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 display:${(props) => (props.hovered ? 'none' : 'block')};
@@ -618,13 +321,6 @@ const StyledLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
 color:white;
-border:none;
-`;
-
-export const StyledBlackLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:black;
 border:none;
 `;
 
@@ -671,117 +367,6 @@ align-items:center;
 justify-content:center;
 @media screen and (max-width:748px){
   font-size:23px;
-}
-`;
-
-// const InviteFriendBox = styled.div`
-// width:15vw;
-// height:267px;
-// border-radius:5px;
-// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-// `;
-
-// const InviteFriendTitle = styled.div`
-// width:100%;
-// height:60px;
-// border-top-right-radius:5px;
-// border-top-left-radius:5px;
-// background-color: #618CAC;
-// color:white;
-// display:flex;
-// align-items:center;
-// justify-content:center;
-// font-weight:600;
-// `;
-
-// const CalendarStyle = styled.div`
-// border:none;
-// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
-// `;
-
-const InviteFriendInput = styled.input`
-border:none;
-font-size:16px;
-padding-left:3px;
-width:80%;
-border-bottom:1px solid black;
-outline:none;
-margin-top:20px;
-`;
-
-const InviteFriendBelowArea = styled.div`
-display:${(props) => (props.active ? 'flex' : 'none')};
-flex-direction:column;
-align-items:center;
-gap:30px;
-justify-content:center;
-width:100%;
-margin-top:20px;
-`;
-
-const ConfirmSearchButton = styled.button`
-width:30%;
-height:35px;
-border-radius:8px;
-color:white;
-font-weight:550;
-font-size:16px;
-border:none;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-text-shadow:1px 1px 2px black;
-background: linear-gradient(
-  312deg,
-  rgb(178, 228, 238) 0%,
-  rgb(161, 176, 246) 100%
-);
-@media screen and (max-width:800px){
-  width:50%;
-}
-`;
-
-export const DeleteModalTitle = styled.div`
-display: flex;
-align-items:center;
-justify-content:center;
-font-size:20px;
-position:absolute;
-color:white;
-text-shadow:1px 1px 2px black;
-top:0;
-font-weight:500;
-width:100%;
-height:40px;
-border-top-right-radius:inherit;
-border-top-left-radius:inherit;
-background: rgb(167, 176, 215);
-background: linear-gradient(
-  312deg,
-  rgb(178, 228, 238) 0%,
-  rgb(161, 176, 246) 100%
-);
-`;
-
-// const MemberAreaTitle = styled.div`
-// width:35vw;
-// font-size:25px;
-// font-weight:600;
-// `;
-
-const AddFriendButton = styled.img`
-width:55px;
-height:55px;
-cursor:pointer;
-@media screen and (max-width:800px){
-  width:35px;
-  height:35px;
-}
-@media screen and (max-width:748px){
-  width:55px;
-  height:55px;
 }
 `;
 
@@ -940,9 +525,6 @@ function MySchedules() {
     return () => {};
   }, [selectedSchedule?.schedule_id, setSelectedMembers]);
 
-  const schedulePhotoArray = [SquareCover1,
-    SquareCover2, SquareCover3, SquareCover4, SquareCover5, SquareCover6];
-
   const modal = document.querySelector('.modal');
   const modalBackground = document.querySelector('.modal-background');
 
@@ -982,18 +564,18 @@ function MySchedules() {
             <ProfileSideBarElement />
             <Line />
             <ChoicesWrapper>
-              <MySchedulesTitleAndCreateNewScheduleArea>
+              <TitleAndCreateArea>
                 <MyScheduleTitle>我的行程</MyScheduleTitle>
                 <CreateNewScheduleButton type="button">
                   <StyledLink to="/choose-date">
                     + 新的行程
                   </StyledLink>
                 </CreateNewScheduleButton>
-              </MySchedulesTitleAndCreateNewScheduleArea>
+              </TitleAndCreateArea>
               {schedules.length === 0
                 ? (
                   <RemindWrapper>
-                    <RemindIcon src={Travel} />
+                    <RemindIcon src={REMINDER_ICONS?.CAR_ICON} />
                     <RemindRightPart>
                       <RemindText>
                         還沒有行程捏～
@@ -1003,7 +585,7 @@ function MySchedules() {
                       <StyledBlackLink to="/choose-date">
                         <ClickAndAdd>點我創建</ClickAndAdd>
                       </StyledBlackLink>
-                      <SuitcaseIcon src={Suitcase} />
+                      <SuitcaseIcon src={REMINDER_ICONS?.SUITCASE_ICON} />
                     </RemindRightPart>
                   </RemindWrapper>
                 )
@@ -1057,11 +639,11 @@ function MySchedules() {
                             </DeleteButtonArea>
                           </div>
                         </div>
-                        <PhotoInExistedSchedule
+                        <PhotoArea
                           key={`${item?.title}`}
-                          src={schedulePhotoArray[index % 5]}
+                          src={SQUARE_COVER[index % 5]}
                         />
-                        <LargeScreenExistedScheduleRightPart
+                        <ScheduleRightPart
                           key={`${item?.embark_date}+${item?.end_date}`}
 
                         >
@@ -1081,9 +663,9 @@ function MySchedules() {
                               刪除
                             </Button>
                           </ButtonArea>
-                        </LargeScreenExistedScheduleRightPart>
+                        </ScheduleRightPart>
 
-                        <SmallScreenExistedScheduleRightPart>
+                        <SmallScheduleRightPart>
                           <ExistedScheuleTitle
                             key={`${item?.title}+${item?.deleted}+${item?.end_date}`}
                             id={item?.schedule_id}
@@ -1113,7 +695,7 @@ function MySchedules() {
                               刪除
                             </Button>
                           </ButtonArea>
-                        </SmallScreenExistedScheduleRightPart>
+                        </SmallScheduleRightPart>
                       </ExistedSchedule>
                     ))}
                   </ExistedSchedules>
@@ -1146,9 +728,8 @@ function MySchedules() {
                   <ScheduleMemberContainer>
                     <AddFriendButton onClick={() => toggleFriendModal()} src={Add} />
                     {selectedMembers?.map((item, index) => (
-                      <>
+                      <div key={item?.email}>
                         <ScheduleMemberWord
-                          key={item?.email}
                           hovered={showMemberWord}
                           onMouseLeave={() => {
                             setShowMemberPhoto(false);
@@ -1176,7 +757,7 @@ function MySchedules() {
                           key={item?.photo_url}
                           src={item.photo_url}
                         />
-                      </>
+                      </div>
                     ))}
                   </ScheduleMemberContainer>
                   <CalendarBox>
@@ -1186,18 +767,7 @@ function MySchedules() {
                       ～
                       {selectedSchedule?.end_date.split('-').join('/')}
                     </DateArea>
-                    {/* <DateArea>{selectedSchedule?.end_date}</div> */}
                   </CalendarBox>
-                  {/* <CalendarInviteWrapper> */}
-                  {/* <DatePicker
-                      style={{ height: '100px' }}
-                      selected=""
-                      startDate={new Date(selectedSchedule?.embark_date)}
-                      endDate={new Date(selectedSchedule?.end_date)}
-                      calendarContainer={CalendarStyle}
-                      disabled
-                      Range
-                      inline /> */}
                   <div className="search-friend-modal-background">
                     <div className="search-friend-modal">
                       <DeleteModalTitle>

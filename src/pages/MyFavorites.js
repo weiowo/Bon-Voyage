@@ -9,39 +9,32 @@ import { Link, useNavigate } from 'react-router-dom';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
-import GreyHeaderComponent from '../components/GreyHeader';
+import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
-import { Line } from './MySchedules';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
-import Cover1 from './images/schedule_cover_rec1.jpg';
-import Cover2 from './images/schedule_cover_rec5.jpg';
-import Cover3 from './images/schedule_cover_rec3.jpg';
-import Cover4 from './images/camping.jpg';
-import Cover5 from './images/schedule_cover_rec2.jpg';
-import Cover6 from './images/schedule_cover_rec4.jpg';
-import unfilledStar from './images/unfilled_star.jpg';
-import filledStar from './images/filled_star.jpg';
-import Default1 from './images/default1.png';
-import Default2 from './images/default2.png';
-import Default3 from './images/default3.png';
-import Default4 from './images/default4.png';
-import Default5 from './images/default5.png';
-import FavoriteIcon from './images/favorite.png';
-import {
-  ModalBackground, ModalBox, ModalImgArea, ModalImg,
-  ModalLeftArea, ModalPlaceTitle, ModalPlaceAddress, AddToScheduleButton, CloseModalButton,
-  LeftButton, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
-  ScheduleChoiceTitle, ModalContentWrapper, Loading, ConfirmChooseDayButton,
-  ButtonStarArea, AddFavoriteIcon,
-} from './City';
-import {
-  WriteArticleRemind, WriteArticleImg, WriteRightArea, WriteText,
-  WriteButton,
-} from './MyArticles';
-
-export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
-const defaultArray = [Default1, Default2, Default3, Default4, Default5];
+import REMINDER_ICONS from '../constants/reminder.icon';
+import Loading from '../components/Loading';
+import SchedulesWrapper, {
+  ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
+} from '../components/Modal/ScheduleChoice';
+import LeftButton from '../components/Modal/GoBackButton';
+import WriteArticleRemind, {
+  WriteArticleImg, WriteRightArea, WriteText, WriteButton,
+} from '../components/Reminder/CreateArticle';
+import Modal from '../components/Modal/Modal';
+import ModalLeftArea from '../components/Modal/ModalLeftArea';
+import ModalImgArea, { ModalImg } from '../components/Modal/ModalImgArea';
+import CloseModalButton from '../components/Modal/CloseButton';
+import ButtonStarArea, { AddToScheduleButton, AddFavoriteIcon } from '../components/Modal/ButtonStar';
+import ModalPlaceTitle, { ModalPlaceAddress } from '../components/Modal/ModalText';
+import PLACE_PHOTO from '../constants/place.photo';
+import ARTICLE_COVER from '../constants/article.cover';
+import STAR from '../constants/stars';
+import Line from '../components/Line';
+import MyArticle, {
+  CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary,
+} from '../components/Cards/Article';
 
 const PageWrapper = styled.div`
 width:100vw;
@@ -69,7 +62,7 @@ margin-top:30px;
 }
 `;
 
-export const MyPageTitle = styled.div`
+const MyPageTitle = styled.div`
 width:90%;
 height:auto;
 font-size:28px;
@@ -136,7 +129,7 @@ overflow:auto;
   gap:5px;
 }`;
 
-export const UpperLine = styled.div`
+const UpperLine = styled.div`
 height:1px;
 flex-shrink:0;
 background-color:grey;
@@ -146,61 +139,7 @@ width:90%;
 }
 `;
 
-export const MyArticle = styled.div`
-cursor:pointer;
-width:190px;
-height:250px;
-flex-shrink:0;
-border-radius:10px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-@media screen and (max-width:1200px){
-  width:160px;
-  height:200px;
-}
-@media screen and (max-width:450px){
-  width:160px;
-  height:200px;
-}
-`;
-
-export const CoverPhotoInMyArticle = styled.img`
-width:100%;
-height:50%;
-border-top-right-radius:10px;
-border-top-left-radius:10px;
-object-fit: cover;
-`;
-
-export const MyArticleBelowArea = styled.div`
-width:80%;
-height:auto;
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-left:15px;
-margin-top:10px;
-margin-right:15px;
-`;
-
-export const MyArticleTitle = styled.div`
-width:100%;
-height:30px;
-font-weight:550;
-font-size:16px;
-text-align:left;
-color:black;
-`;
-
-export const MyArticleSummary = styled.div`
-width:100%;
-height:30px;
-font-size:13px;
-text-align:left;
-font-weight:500;
-color:grey;
-`;
-
-export const StyledLink = styled(Link)`
+const StyledLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
 color:white;
@@ -241,9 +180,6 @@ function MyLovedArticles() {
     mapRef.current = map;
   }, []);
 
-  // 先拿到某個使用者的資料，拿到收藏的article array跟attraction array後
-  // 去articles跟places資料庫搜出來
-
   useEffect(() => {
     async function getUser() {
       const docRef = doc(db, 'users', user.uid);
@@ -280,10 +216,6 @@ function MyLovedArticles() {
     }
     getUser();
   }, [setMyLovedArticles, setMyLovedAttractions, user.uid]);
-
-  // 當使用者按下modal中的「加入行程」時，拿出此使用者的所有行程給他選
-  // 先把行程拿回來存在immer裡面，等使用者按的時候再render modal
-  // 按下哪一個行程後，用那個index去抓那天的細節
 
   useEffect(() => {
     async function getUserArrayList() {
@@ -369,13 +301,9 @@ function MyLovedArticles() {
     });
   }
 
-  // 關掉modal
-
   function handleModalClose() {
     setModalIsActive(false);
   }
-
-  // 按下星星後把此景點加入收藏清單，也會先確認是否有登入～
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
@@ -427,7 +355,7 @@ function MyLovedArticles() {
           <MyArticlesContainer isClicked={publishIsClicked}>
             {myLovedArticles.length === 0 ? (
               <WriteArticleRemind>
-                <WriteArticleImg src={FavoriteIcon} />
+                <WriteArticleImg src={REMINDER_ICONS?.ADD_FAVO_ICON} />
                 <WriteRightArea>
                   <WriteText>
                     還沒有收藏唷～
@@ -448,8 +376,8 @@ function MyLovedArticles() {
                 <MyArticle>
                   <CoverPhotoInMyArticle
                     src={item?.cover_img ? item?.cover_img
-                      : defaultArticleCoverPhoto[Math.floor(Math.random()
-                        * defaultArticleCoverPhoto.length)]}
+                      : ARTICLE_COVER[Math.floor(Math.random()
+                        * ARTICLE_COVER.length)]}
                   />
                   <MyArticleBelowArea>
                     <MyArticleTitle>{item?.article_title}</MyArticleTitle>
@@ -465,7 +393,7 @@ function MyLovedArticles() {
           <MyArticlesContainer isClicked={saveIsClicked}>
             {myLovedAttractions.length === 0 ? (
               <WriteArticleRemind>
-                <WriteArticleImg src={FavoriteIcon} />
+                <WriteArticleImg src={REMINDER_ICONS?.ADD_FAVO_ICON} />
                 <WriteRightArea>
                   <WriteText>
                     還沒有收藏唷～
@@ -489,8 +417,8 @@ function MyLovedArticles() {
               >
                 <CoverPhotoInMyArticle
                   src={item?.place_url ? item?.place_url
-                    : defaultArticleCoverPhoto[Math.floor(Math.random()
-                        * defaultArticleCoverPhoto.length)]}
+                    : ARTICLE_COVER[Math.floor(Math.random()
+                        * ARTICLE_COVER.length)]}
                 />
                 <MyArticleBelowArea>
                   <MyArticleTitle>{item?.place_title?.slice(0, 10)}</MyArticleTitle>
@@ -503,118 +431,112 @@ function MyLovedArticles() {
           </MyArticlesContainer>
         </MyArticlesArea>
       </PageWrapper>
-      <ModalBackground active={modalIsActive}>
-        <ModalBox>
-          {modalDetail
-            ? (
-              <>
-                <ModalLeftArea>
-                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                  <ButtonStarArea>
-                    <AddToScheduleButton
-                      onClick={() => { handleUserOrNot(); }}
-                    >
-                      加入行程
-                    </AddToScheduleButton>
-                    <AddFavoriteIcon
-                      onClick={() => { handleFavorite(modalDetail.place_id); }}
-                      src={liked ? filledStar : unfilledStar}
-                    />
-                  </ButtonStarArea>
-                </ModalLeftArea>
-                <ModalImgArea>
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
-                </ModalImgArea>
-                <CloseModalButton
-                  type="button"
-                  onClick={() => { handleModalClose(); }}
-                >
-                  X
-                </CloseModalButton>
-              </>
-            )
-            : <Loading />}
-        </ModalBox>
-      </ModalBackground>
-      <ModalBackground active={chooseScheduleModalIsActive}>
-        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <LeftButton
-            type="button"
-            onClick={() => {
-              setModalIsActive(true);
-              setChooseScheduleModalIsActive(false);
-            }}
-          />
-          <ModalContentWrapper>
-            <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
-            <ScheduleChoicesBoxWrapper>
-              {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
-                <ScheduleChoicesBox
-                  onClick={() => {
-                    setClickedScheduleId(item.schedule_id);
-                    setClickedScheduleIndex(index);
-                    setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
-                  }}
-                  id={item.schedule_id}
-                >
-                  <ScheduleChoiceTitle>
-                    {item.title}
-                  </ScheduleChoiceTitle>
-                </ScheduleChoicesBox>
-              )) : ''}
-            </ScheduleChoicesBoxWrapper>
-          </ModalContentWrapper>
-          <CloseModalButton
-            type="button"
-            onClick={() => setChooseScheduleModalIsActive(false)}
-          >
-            X
-          </CloseModalButton>
-        </ModalBox>
-      </ModalBackground>
-      <ModalBackground active={chooseDayModalIsActive}>
-        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <LeftButton
-            type="button"
-            onClick={() => {
-              setChooseDayModalIsActive(false);
-              setChooseScheduleModalIsActive(true);
-            }}
-          />
-          <ModalContentWrapper>
-            <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
-            <ScheduleChoicesBoxWrapper>
-              {categoryPageScheduleData
-                ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
-                  <ScheduleChoicesBox
-                    clicked={dayIndex === index}
-                    onClick={() => {
-                      setDayIndex(index);
-                    }}
-                    style={{ display: 'flex' }}
+      <Modal active={modalIsActive} flexDirection="row">
+        {modalDetail
+          ? (
+            <>
+              <ModalLeftArea>
+                <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                <ButtonStarArea>
+                  <AddToScheduleButton
+                    onClick={() => { handleUserOrNot(); }}
                   >
-                    <ScheduleChoiceTitle>
-                      第
-                      {index + 1}
-                      天
-                    </ScheduleChoiceTitle>
-                  </ScheduleChoicesBox>
-                )) : ''}
-            </ScheduleChoicesBoxWrapper>
-            <ConfirmChooseDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmChooseDayButton>
-          </ModalContentWrapper>
-          <CloseModalButton
-            type="button"
-            onClick={() => setChooseDayModalIsActive(false)}
-          >
-            X
-          </CloseModalButton>
-        </ModalBox>
-      </ModalBackground>
+                    加入行程
+                  </AddToScheduleButton>
+                  <AddFavoriteIcon
+                    onClick={() => { handleFavorite(modalDetail.place_id); }}
+                    src={liked ? STAR?.FULL_STAR : STAR?.EMPTY_STAR}
+                  />
+                </ButtonStarArea>
+              </ModalLeftArea>
+              <ModalImgArea>
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : PLACE_PHOTO[0]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : PLACE_PHOTO[1]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : PLACE_PHOTO[2]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : PLACE_PHOTO[3]} />
+              </ModalImgArea>
+              <CloseModalButton
+                type="button"
+                onClick={() => { handleModalClose(); }}
+              >
+                X
+              </CloseModalButton>
+            </>
+          )
+          : <Loading />}
+      </Modal>
+      <Modal active={chooseScheduleModalIsActive} flexDirection="column">
+        <LeftButton
+          type="button"
+          onClick={() => {
+            setModalIsActive(true);
+            setChooseScheduleModalIsActive(false);
+          }}
+        />
+        <SchedulesWrapper>
+          <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+          <ScheduleBoxWrapper>
+            {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
+              <ScheduleBox
+                onClick={() => {
+                  setClickedScheduleId(item.schedule_id);
+                  setClickedScheduleIndex(index);
+                  setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                }}
+                id={item.schedule_id}
+              >
+                <ScheduleTitle>
+                  {item.title}
+                </ScheduleTitle>
+              </ScheduleBox>
+            )) : ''}
+          </ScheduleBoxWrapper>
+        </SchedulesWrapper>
+        <CloseModalButton
+          type="button"
+          onClick={() => setChooseScheduleModalIsActive(false)}
+        >
+          X
+        </CloseModalButton>
+      </Modal>
+      <Modal active={chooseDayModalIsActive} flexDirection="column">
+        <LeftButton
+          type="button"
+          onClick={() => {
+            setChooseDayModalIsActive(false);
+            setChooseScheduleModalIsActive(true);
+          }}
+        />
+        <SchedulesWrapper>
+          <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
+          <ScheduleBoxWrapper>
+            {categoryPageScheduleData
+              ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                <ScheduleBox
+                  clicked={dayIndex === index}
+                  onClick={() => {
+                    setDayIndex(index);
+                  }}
+                  style={{ display: 'flex' }}
+                >
+                  <ScheduleTitle>
+                    第
+                    {index + 1}
+                    天
+                  </ScheduleTitle>
+                </ScheduleBox>
+              )) : ''}
+          </ScheduleBoxWrapper>
+          <ConfirmDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmDayButton>
+        </SchedulesWrapper>
+        <CloseModalButton
+          type="button"
+          onClick={() => setChooseDayModalIsActive(false)}
+        >
+          X
+        </CloseModalButton>
+      </Modal>
     </>
   );
 }

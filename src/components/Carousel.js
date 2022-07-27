@@ -13,30 +13,27 @@ import PropTypes from 'prop-types';
 import db from '../utils/firebase-init';
 import ArrowToRightSrc from '../pages/images/arrow-right.png';
 import ArrowToLeftSrc from '../pages/images/arrow-left.png';
-import Default1 from '../pages/images/default1.png';
-import Default2 from '../pages/images/default2.png';
-import Default3 from '../pages/images/default3.png';
-import Default4 from '../pages/images/default4.png';
-import Default5 from '../pages/images/default5.png';
 import unfilledStar from '../pages/images/unfilled_star.jpg';
 import Travel from '../pages/images/travel-2.png';
 import Suitcase from '../pages/images/suitcase-2.png';
 import filledStar from '../pages/images/filled_star.jpg';
 import '../pages/animation.css';
-import {
-  ModalBackground, ModalBox, ModalImgArea, ModalImg, ModalLeftArea,
-  AddToScheduleButton, CloseModalButton, LeftButton,
-  ModalContentWrapper, CurrentSchedulesTitle, ScheduleChoicesBoxWrapper, ScheduleChoicesBox,
-  ScheduleChoiceTitle, ModalPlaceTitle, ModalPlaceAddress, ConfirmChooseDayButton,
-  ButtonStarArea, AddFavoriteIcon, Loading,
-} from '../pages/City';
-import {
-  RemindWrapper, ClickAndAdd,
-  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
-} from '../pages/MySchedules';
+import SchedulesWrapper, {
+  ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
+} from './Modal/ScheduleChoice';
+import LeftButton from './Modal/GoBackButton';
 import UserContext from './UserContextComponent';
-
-const defaultArray = [Default1, Default2, Default3, Default4, Default5];
+import Loading from './Loading';
+import ModalImgArea, { ModalImg } from './Modal/ModalImgArea';
+import Modal from './Modal/Modal';
+import ModalLeftArea from './Modal/ModalLeftArea';
+import CloseModalButton from './Modal/CloseButton';
+import ButtonStarArea, { AddToScheduleButton, AddFavoriteIcon } from './Modal/ButtonStar';
+import ModalPlaceTitle, { ModalPlaceAddress } from './Modal/ModalText';
+import PLACE_PHOTO from '../constants/place.photo';
+import RemindWrapper, {
+  ClickAndAdd, RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from './Reminder/CreateTrip';
 
 const NearByPlaceWrapper = styled.div`
 width:100vw;
@@ -225,7 +222,7 @@ const mapContainerStyle = {
   width: '0vw',
 };
 
-function CardsCarousel({ currentNearbyAttraction }) {
+function Carousel({ currentNearbyAttraction }) {
   const user = useContext(UserContext);
   const [cityPageScheduleData, setCityPageScheduleData] = useImmer([]);
   const [clickedScheduleIndex, setClickedScheduleIndex] = useState();
@@ -383,135 +380,136 @@ function CardsCarousel({ currentNearbyAttraction }) {
         mapContainerStyle={mapContainerStyle}
         onLoad={onMapLoad}
       />
-      <ModalBackground active={modalIsActive}>
-        <ModalBox>
-          {modalDetail
-            ? (
-              <>
-                <ModalLeftArea>
-                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                  <ButtonStarArea>
-                    <AddToScheduleButton
-                      onClick={() => { handleUserOrNot(); }}
-                    >
-                      加入行程
-                    </AddToScheduleButton>
-                    <AddFavoriteIcon
-                      onClick={() => { handleFavorite(modalDetail.place_id); }}
-                      src={liked ? filledStar : unfilledStar}
-                    />
-                  </ButtonStarArea>
-                </ModalLeftArea>
-                <ModalImgArea>
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : defaultArray[0]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : defaultArray[1]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : defaultArray[2]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : defaultArray[3]} />
-                </ModalImgArea>
-                <CloseModalButton
-                  type="button"
-                  onClick={() => { handleModalClose(); }}
-                >
-                  X
-                </CloseModalButton>
-              </>
-            )
-            : <Loading />}
-        </ModalBox>
-      </ModalBackground>
-      <ModalBackground active={chooseScheduleModalIsActive}>
-        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <LeftButton
-            type="button"
-            onClick={() => {
-              setModalIsActive(true);
-              setChooseScheduleModalIsActive(false);
-            }}
-          />
-          <ModalContentWrapper>
-            <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
-            <ScheduleChoicesBoxWrapper>
-              {cityPageScheduleData.length === 0 ? (
-                <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
-                  <RemindIcon src={Travel} />
-                  <RemindRightPart style={{ width: 'auto' }}>
-                    <RemindText>
-                      還沒有行程捏～
-                      <br />
-                      是時候創建行程囉！
-                    </RemindText>
-                    <StyledBlackLink to="/choose-date">
-                      <ClickAndAdd>點我創建</ClickAndAdd>
-                    </StyledBlackLink>
-                    <SuitcaseIcon src={Suitcase} />
-                  </RemindRightPart>
-                </RemindWrapper>
-              ) : cityPageScheduleData.map((item, index) => (
-                <ScheduleChoicesBox
-                  key={item?.schedule_id}
-                  onClick={() => {
-                    setClickedScheduleId(item?.schedule_id);
-                    setClickedScheduleIndex(index);
-                    setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
-                  }}
-                  id={item.schedule_id}
-                >
-                  <ScheduleChoiceTitle key={item?.title}>
-                    {item.title}
-                  </ScheduleChoiceTitle>
-                </ScheduleChoicesBox>
-              ))}
-            </ScheduleChoicesBoxWrapper>
-          </ModalContentWrapper>
-          <CloseModalButton
-            type="button"
-            onClick={() => setChooseScheduleModalIsActive(false)}
-          >
-            X
-          </CloseModalButton>
-        </ModalBox>
-      </ModalBackground>
-      <ModalBackground active={chooseDayModalIsActive}>
-        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <LeftButton
-            type="button"
-            onClick={() => {
-              setChooseDayModalIsActive(false);
-              setChooseScheduleModalIsActive(true);
-            }}
-          />
-          <ModalContentWrapper>
-            <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
-            <ScheduleChoicesBoxWrapper>
-              {cityPageScheduleData
-                ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
-                  <ScheduleChoicesBox
-                    key={item?.schedule_id}
-                    clicked={dayIndex === index}
-                    onClick={() => {
-                      setDayIndex(index);
-                    }}
-                    style={{ display: 'flex' }}
+      <Modal active={modalIsActive} flexDirection="row">
+        {modalDetail
+          ? (
+            <>
+              <ModalLeftArea>
+                <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                <ButtonStarArea>
+                  <AddToScheduleButton
+                    onClick={() => { handleUserOrNot(); }}
                   >
-                    <ScheduleChoiceTitle key={`${item?.schedule_id}day${item?.title}`}>
-                      第
-                      {index + 1}
-                      天
-                    </ScheduleChoiceTitle>
-                  </ScheduleChoicesBox>
-                )) : ''}
-            </ScheduleChoicesBoxWrapper>
-            <ConfirmChooseDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmChooseDayButton>
-          </ModalContentWrapper>
-          <CloseModalButton
-            type="button"
-            onClick={() => setChooseDayModalIsActive(false)}
-          >
-            X
-          </CloseModalButton>
-        </ModalBox>
-      </ModalBackground>
+                    加入行程
+                  </AddToScheduleButton>
+                  <AddFavoriteIcon
+                    onClick={() => { handleFavorite(modalDetail.place_id); }}
+                    src={liked ? filledStar : unfilledStar}
+                  />
+                </ButtonStarArea>
+              </ModalLeftArea>
+              <ModalImgArea>
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : PLACE_PHOTO[0]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : PLACE_PHOTO[1]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : PLACE_PHOTO[2]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : PLACE_PHOTO[3]} />
+              </ModalImgArea>
+              <CloseModalButton
+                type="button"
+                onClick={() => { handleModalClose(); }}
+              >
+                X
+              </CloseModalButton>
+            </>
+          )
+          : <Loading />}
+      </Modal>
+      <Modal
+        active={chooseScheduleModalIsActive}
+        flexDirection="column"
+      >
+        <LeftButton
+          type="button"
+          onClick={() => {
+            setModalIsActive(true);
+            setChooseScheduleModalIsActive(false);
+          }}
+        />
+        <SchedulesWrapper>
+          <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+          <ScheduleBoxWrapper>
+            {cityPageScheduleData.length === 0 ? (
+              <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                <RemindIcon src={Travel} />
+                <RemindRightPart style={{ width: 'auto' }}>
+                  <RemindText>
+                    還沒有行程捏～
+                    <br />
+                    是時候創建行程囉！
+                  </RemindText>
+                  <StyledBlackLink to="/choose-date">
+                    <ClickAndAdd>點我創建</ClickAndAdd>
+                  </StyledBlackLink>
+                  <SuitcaseIcon src={Suitcase} />
+                </RemindRightPart>
+              </RemindWrapper>
+            ) : cityPageScheduleData.map((item, index) => (
+              <ScheduleBox
+                key={item?.schedule_id}
+                onClick={() => {
+                  setClickedScheduleId(item?.schedule_id);
+                  setClickedScheduleIndex(index);
+                  setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                }}
+                id={item.schedule_id}
+              >
+                <ScheduleTitle key={item?.title}>
+                  {item.title}
+                </ScheduleTitle>
+              </ScheduleBox>
+            ))}
+          </ScheduleBoxWrapper>
+        </SchedulesWrapper>
+        <CloseModalButton
+          type="button"
+          onClick={() => setChooseScheduleModalIsActive(false)}
+        >
+          X
+        </CloseModalButton>
+      </Modal>
+      <Modal
+        active={chooseDayModalIsActive}
+        flexDirection="column"
+      >
+        {' '}
+        <LeftButton
+          type="button"
+          onClick={() => {
+            setChooseDayModalIsActive(false);
+            setChooseScheduleModalIsActive(true);
+          }}
+        />
+        <SchedulesWrapper>
+          <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
+          <ScheduleBoxWrapper>
+            {cityPageScheduleData
+              ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                <ScheduleBox
+                  key={item?.schedule_id}
+                  clicked={dayIndex === index}
+                  onClick={() => {
+                    setDayIndex(index);
+                  }}
+                  style={{ display: 'flex' }}
+                >
+                  <ScheduleTitle key={`${item?.schedule_id}day${item?.title}`}>
+                    第
+                    {index + 1}
+                    天
+                  </ScheduleTitle>
+                </ScheduleBox>
+              )) : ''}
+          </ScheduleBoxWrapper>
+          <ConfirmDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmDayButton>
+        </SchedulesWrapper>
+        <CloseModalButton
+          type="button"
+          onClick={() => setChooseDayModalIsActive(false)}
+        >
+          X
+        </CloseModalButton>
+      </Modal>
       <NearByPlaceWrapper>
         <NearByPlaceLeftArea>
           <NearbyPlaceTitle>周邊景點</NearbyPlaceTitle>
@@ -539,7 +537,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
                   setClickedPlaceAddress(item?.vicinity);
                 }}
                 className={index}
-                style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
+                style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? PLACE_PHOTO[index % 5]})` }}
               >
                 <div
                   key={`${item?.name}+${item?.place_id}`}
@@ -569,7 +567,7 @@ function CardsCarousel({ currentNearbyAttraction }) {
                     }}
                     id={item.place_id}
                     className={index}
-                    style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]})` }}
+                    style={{ backgroundImage: `url(${item.photos?.[0]?.getUrl?.() ?? PLACE_PHOTO[index % 5]})` }}
                   >
                     <div
                       key={`${item?.name}+${item?.place_id}`}
@@ -588,13 +586,13 @@ function CardsCarousel({ currentNearbyAttraction }) {
   );
 }
 
-CardsCarousel.propTypes = {
-  // eslint-disable-next-line max-len
-  currentNearbyAttraction: PropTypes.arrayOf(PropTypes.shape({ place_id: PropTypes.string }).isRequired),
+Carousel.propTypes = {
+  currentNearbyAttraction: PropTypes
+    .arrayOf(PropTypes.shape({ place_id: PropTypes.string }).isRequired),
 };
 
-CardsCarousel.defaultProps = {
+Carousel.defaultProps = {
   currentNearbyAttraction: [],
 };
 
-export default CardsCarousel;
+export default Carousel;

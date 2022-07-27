@@ -1,26 +1,17 @@
-/* eslint-disable no-nested-ternary */
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import {
-  signOut, getAuth,
+  signOut,
 } from 'firebase/auth';
-import { app } from '../utils/firebase-init';
-import UserContext from './UserContextComponent';
-import WhiteMenuIcon from '../pages/images/menu_bar.jpg';
-import BlackMenuIcon from '../pages/images/menu_black.png';
-import CloseIcon from '../pages/images/close-1.png';
-import UserPhotoSrc from '../pages/images/seal.png';
-import Blog from '../pages/images/blog.png';
-import Dish from '../pages/images/dish.png';
-import Travel from '../pages/images/travel.png';
-import VRsrc from '../pages/images/virtual-reality.png';
-import Plan from '../pages/images/suitcase.png';
-import MyArticle from '../pages/images/article.png';
-import Attraction from '../pages/images/vacations.png';
-import Favorite from '../pages/images/favorite.png';
-
-export const auth = getAuth(app);
+import UserContext from '../UserContextComponent';
+import { auth } from '../../utils/firebase-init';
+import RWD_ICON from './rwd.const';
+import SmallScreenNavBar, {
+  HamburgerMenuLink, CreateScheduleWrapper, SmallLogOutButton, HamburgerProfileLink,
+  ProfileBackground, SmallProfilePhoto, SmallNavIcon, SmallProfileName,
+  SmallNavText, Menu, CloseIcon, SmallHeader, Background,
+} from './RwdMenu';
 
 const Header = styled.header`
 position:absolute;
@@ -76,82 +67,6 @@ border:${(props) => (props.active ? '1px solid black' : '1px solid white;')};
 cursor:pointer;
 `;
 
-export const Menu = styled.img`
-display:none;
-@media screen and (max-width:800px){
-  display:block;
-  width:23px;
-  height:23px;
-  position:fixed;
-  top:15px;
-  right:15px;
-  cursor:pointer;
-  display:${(props) => (props.active ? 'none' : 'block')};
-}`;
-
-export const SmallMenuCloseIcon = styled.img`
-display:none;
-@media screen and (max-width:800px){
-  width:15px;
-  height:15px;
-  position:absolute;
-  top:18px;
-  right:18px;
-  cursor:pointer;
-  z-index:1000;
-  display:${(props) => (props.active ? 'block' : 'none')};
-}`;
-
-export const SmallHeader = styled.div`
-display:none;
-@media screen and (max-width:800px){
-  display:flex;
-  justify-content:space-between;
-  width:100vw;
-  position:fixed;
-  top:0;
-  z-index:1000;
-  height:${(props) => (props.active ? '60px' : '65px')};
-  background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
-  box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
-}`;
-
-export const SmallScreenBackground = styled.div`
-display:none;
-@media screen and (max-width:800px){
-  position:fixed;
-  top:0px;
-  display:flex;
-  justify-content:right;
-  width:100vw;
-  height:100vh;
-  background-color: rgb(0, 0, 0, 0.5);
-  z-index:1000;
-  display:${(props) => (props.active ? 'flex' : 'none')};
-}`;
-
-export const SmallScreenNavBar = styled.div`
-display:none;
-@media screen and (max-width:800px){
-  position:fixed;
-  top:0px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:45vw;
-  height:100vh;
-  gap:6px;
-  right:0;
-  z-index:500;
-  background-color:white;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  display:${(props) => (props.active ? 'flex' : 'none')};
-}
-@media screen and (max-width:500px){
-  width:60vw;
-}
-`;
-
 const StyleNavLink = styled(Link)`
 cursor:pointer;
 text-decoration:none;
@@ -179,121 +94,124 @@ color:${(props) => (props.$active ? 'black' : 'white')};
   margin-top:${(props) => (props.$active ? '8px' : '0px')};
 }`;
 
-export const HamburgerMenuLink = styled(Link)`
-text-decoration:none;
-display:flex;
-padding-left:30px;
-padding-right:20px;
-align-items:center;
-justify-content:left;
-width:100%;
-height:60px;
-gap:15px;
-color:black;
-&:hover {
-  background-color:#EBECF0;
-}`;
+// export const HamburgerMenuLink = styled(Link)`
+// text-decoration:none;
+// display:flex;
+// padding-left:30px;
+// padding-right:20px;
+// align-items:center;
+// justify-content:left;
+// width:100%;
+// height:60px;
+// gap:15px;
+// color:black;
+// &:hover {
+//   background-color:#EBECF0;
+// }`;
 
-export const CreateScheduleWrapper = styled.div`
-text-decoration:none;
-cursor:pointer;
-display:flex;
-padding-left:30px;
-padding-right:20px;
-align-items:center;
-justify-content:left;
-width:100%;
-height:60px;
-gap:15px;
-color:black;
-&:hover {
-  background-color:#EBECF0;
-}`;
+// export const CreateScheduleWrapper = styled.div`
+// text-decoration:none;
+// cursor:pointer;
+// display:flex;
+// padding-left:30px;
+// padding-right:20px;
+// align-items:center;
+// justify-content:left;
+// width:100%;
+// height:60px;
+// gap:15px;
+// color:black;
+// &:hover {
+//   background-color:#EBECF0;
+// }`;
 
-export const SmallLogOutButton = styled.div`
-width:90%;
-height:40px;
-margin-bottom:10px;
-border:1.5px solid grey;
-color:black;
-border-radius:10px;
-font-weight:600;
-display:flex;
-font-size:14px;
-justify-content:center;
-align-items:center;
-position:absolute;
-cursor:pointer;
-bottom:0;
-&:hover {
-  background-color:#EBECF0;
-}`;
+// export const SmallLogOutButton = styled.div`
+// width:90%;
+// height:40px;
+// margin-bottom:10px;
+// border:1.5px solid grey;
+// color:black;
+// border-radius:10px;
+// font-weight:600;
+// display:flex;
+// font-size:14px;
+// justify-content:center;
+// align-items:center;
+// position:absolute;
+// cursor:pointer;
+// bottom:0;
+// &:hover {
+//   background-color:#EBECF0;
+// }`;
 
-export const HamburgerProfileLink = styled(Link)`
-text-decoration:none;
-display:flex;
-padding-left:30px;
-padding-right:20px;
-align-items:center;
-justify-content:left;
-width:100%;
-height:60px;
-gap:15px;
-color:black;
-`;
+// export const HamburgerProfileLink = styled(Link)`
+// text-decoration:none;
+// display:flex;
+// padding-left:30px;
+// padding-right:20px;
+// align-items:center;
+// justify-content:left;
+// width:100%;
+// height:60px;
+// gap:15px;
+// color:black;
+// `;
 
-export const SmallBarProfileBackground = styled.div`
-height:90px;
-width:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:10px;
-background: linear-gradient(
-  312deg,
-  rgb(178, 228, 238) 0%,
-  rgb(161, 176, 246) 100%
-);
-`;
+// export const SmallBarProfileBackground = styled.div`
+// height:90px;
+// width:100%;
+// display:flex;
+// align-items:center;
+// justify-content:center;
+// gap:10px;
+// background: linear-gradient(
+//   312deg,
+//   rgb(178, 228, 238) 0%,
+//   rgb(161, 176, 246) 100%
+// );
+// `;
 
-export const SmallProfilePhoto = styled.img`
-width:42px;
-height:42px;
-border-radius:50%;
-object-fit:cover;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
+// export const SmallProfilePhoto = styled.img`
+// width:42px;
+// height:42px;
+// border-radius:50%;
+// object-fit:cover;
+// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+// `;
 
-export const SmallNavIcon = styled.img`
-width:30px;
-height:30px;
-object-fit:cover;
-`;
+// export const SmallNavIcon = styled.img`
+// width:30px;
+// height:30px;
+// object-fit:cover;
+// `;
 
-export const SmallProfileName = styled.div`
-width:100%;
-height:30px;
-display:flex;
-font-weight:600;
-justify-content:left;
-align-items:center;
-`;
+// export const SmallProfileName = styled.div`
+// width:100%;
+// height:30px;
+// display:flex;
+// font-weight:600;
+// justify-content:left;
+// align-items:center;
+// `;
 
-export const SmallNavText = styled.div`
-width:100%;
-height:30px;
-display:flex;
-font-weight:500;
-justify-content:left;
-align-items:center;
-font-size:14px;
-`;
+// export const SmallNavText = styled.div`
+// width:100%;
+// height:30px;
+// display:flex;
+// font-weight:500;
+// justify-content:left;
+// align-items:center;
+// font-size:14px;
+// `;
 
-// function getBorderBottomByPathname(pathname, headerBackground) {
-//   return pathname ===
-// '/all-articles' && headerBackground ?
-// '1.5px solid black' : pathname === '/all-articles' ? '1.5px solid white' : '';
-// }
+function getBorderBottomByPathname(pathname, headerBackground) {
+  if (pathname === '/all-articles' && headerBackground) {
+    return '1.5px solid black';
+  } if (pathname === '/all-articles') {
+    return '1.5px solid white';
+  }
+  return undefined;
+}
 
 function HeaderComponent() {
   const user = useContext(UserContext);
@@ -351,7 +269,7 @@ function HeaderComponent() {
           </StyleNavLink>
           <StyleNavLink
             style={{
-              borderBottom: currentUrl.pathname === '/all-articles' && headerBackground ? '1.5px solid black' : currentUrl.pathname === '/all-articles' ? '1.5px solid white' : '',
+              borderBottom: getBorderBottomByPathname(currentUrl.pathname, headerBackground),
             }}
             $active={headerBackground}
             to="/all-articles"
@@ -379,51 +297,51 @@ function HeaderComponent() {
       </Header>
       <SmallHeader active={headerBackground}>
         <Menu
-          src={headerBackground ? BlackMenuIcon : WhiteMenuIcon}
+          src={headerBackground ? RWD_ICON?.BLACK_MENU_ICON : RWD_ICON?.WHITE_MENU_ICON}
           active={clicked}
           onClick={() => setClicked(true)}
         />
         <StyleNavLink $actived={headerBackground} to="/">
           <Logo active={headerBackground}>Bon Voyage</Logo>
         </StyleNavLink>
-        <SmallScreenBackground active={clicked}>
+        <Background active={clicked}>
           <SmallScreenNavBar active={clicked}>
-            <SmallBarProfileBackground>
+            <ProfileBackground>
               <HamburgerProfileLink to="/profile">
-                <SmallProfilePhoto src={user.photoURL || UserPhotoSrc} />
+                <SmallProfilePhoto src={user.photoURL || RWD_ICON?.USER_IMG} />
                 <SmallProfileName>{user.displayName || '您尚未登入唷'}</SmallProfileName>
               </HamburgerProfileLink>
-            </SmallBarProfileBackground>
+            </ProfileBackground>
             <CreateScheduleWrapper onClick={() => CheckLoginBeforeCreateSchedule()}>
-              <SmallNavIcon src={Plan} />
+              <SmallNavIcon src={RWD_ICON?.PLAN_ICON} />
               <SmallNavText>行程規劃</SmallNavText>
             </CreateScheduleWrapper>
             <HamburgerMenuLink to="/vr-page">
-              <SmallNavIcon src={VRsrc} />
+              <SmallNavIcon src={RWD_ICON?.VR_ICON} />
               <SmallNavText>VR 專區</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/city?lat=25.0329694&lng=121.5654177&city=台北&option=all">
-              <SmallNavIcon src={Attraction} />
+              <SmallNavIcon src={RWD_ICON?.ATTRACTION_ICON} />
               <SmallNavText>熱門景點</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/all-articles">
-              <SmallNavIcon src={Blog} />
+              <SmallNavIcon src={RWD_ICON?.BLOG_ICON} />
               <SmallNavText>熱門遊記</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/category?lat=25.0498583&lng=121.5172606&category=food">
-              <SmallNavIcon src={Dish} />
+              <SmallNavIcon src={RWD_ICON?.DISH_ICON} />
               <SmallNavText>美食特搜</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/my-schedules">
-              <SmallNavIcon src={Travel} />
+              <SmallNavIcon src={RWD_ICON?.TRIP_ICON} />
               <SmallNavText>我的行程</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/my-articles">
-              <SmallNavIcon src={MyArticle} />
+              <SmallNavIcon src={RWD_ICON?.ARTICLE_ICON} />
               <SmallNavText>我的文章</SmallNavText>
             </HamburgerMenuLink>
             <HamburgerMenuLink to="/my-favorites">
-              <SmallNavIcon src={Favorite} />
+              <SmallNavIcon src={RWD_ICON?.FAVO_ICON} />
               <SmallNavText>我的收藏</SmallNavText>
             </HamburgerMenuLink>
             <SmallLogOutButton
@@ -433,13 +351,13 @@ function HeaderComponent() {
             >
               登出
             </SmallLogOutButton>
-            <SmallMenuCloseIcon
-              src={CloseIcon}
+            <CloseIcon
+              src={RWD_ICON?.CLOSE_ICON}
               active={clicked}
               onClick={() => setClicked(false)}
             />
           </SmallScreenNavBar>
-        </SmallScreenBackground>
+        </Background>
       </SmallHeader>
     </>
   );

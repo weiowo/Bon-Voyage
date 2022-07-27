@@ -11,8 +11,8 @@ import React, {
 } from 'react';
 import styled from 'styled-components/macro';
 import HeaderComponent
-  from '../components/Header';
-import CardsCarousel from '../components/CardCarousel';
+  from '../components/Headers/Header';
+import Carousel from '../components/Carousel';
 import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 import ArticlesInHome from '../components/ArticlesInHome';
@@ -29,7 +29,6 @@ align-items:center;
 position:relative;
 background-size:cover;
 background-repeat: no-repeat;
-// background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
 @media screen and (max-width:800px){
   height:70vw;
@@ -330,7 +329,7 @@ function Home({ currentLatLng, user }) {
         options={options}
         onLoad={onMapLoad}
       />
-      <CardsCarousel currentNearbyAttraction={currentNearbyAttraction} />
+      <Carousel currentNearbyAttraction={currentNearbyAttraction} />
       <CategoryAreaInHome currentLatLng={currentLatLng} />
       <CityAreaInHomePage />
       <ArticlesInHome />

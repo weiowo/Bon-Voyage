@@ -3,39 +3,33 @@ import {
   GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
 import React, {
-  useEffect, useState, useContext, useRef, useCallback,
+  useEffect, useState, useContext, useRef, useCallback, Fragment,
 } from 'react';
 import {
-  collection, doc, getDoc, getDocs,
-  query, where,
-  arrayUnion,
-  updateDoc,
-  onSnapshot,
+  collection, doc, getDoc, getDocs, query, where, arrayUnion, updateDoc, onSnapshot,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import { useLocation, Link } from 'react-router-dom';
 import UserContext from '../components/UserContextComponent';
-import SpeakIcon from './images/speak.png';
-import CloseChatIcon from './images/close-1.png';
 import db from '../utils/firebase-init';
 import Map from './Map';
-import GreyHeaderComponent from '../components/GreyHeader';
-import BlueTrashCanSrc from './images/trash_blue.png';
-import greyTrashCanSrc from './images/bin.png';
-import GoBackSrc from './images/arrow-left.png';
-import ClockSrc from './images/clockBlue.png';
-import CarSrc from './images/sports-car.png';
-import dragSrc from './images/drag-and-drop.png';
-import whiteTrashCan from './images/white-bin.png';
-import whiteDragSrc from './images/drag.png';
-import plusIcon from './images/plus.png';
-import Default1 from './images/default1.png';
-import Default2 from './images/default2.png';
-import Default3 from './images/default3.png';
-import Default4 from './images/default4.png';
-import Default5 from './images/default5.png';
-
-const defaultArray = [Default1, Default2, Default3, Default4, Default5];
+import GreyHeaderComponent from '../components/Headers/GreyHeader';
+import ChatRoom, {
+  ChatIcon, CloseIcon, ChatRoomTitle, MessagesDisplayArea, MessageBox, NameMessage,
+  Name, Message, UserPhoto, EnterArea, MessageInput, EnterMessageButton, UnreadMessage,
+} from '../components/ChatRoom/Chatroom';
+import ResultsArea, {
+  SearchedPlace, RecommendPlaces, RecommendPlace, RecommendPlaceLeftArea,
+  RecommendPlaceTitle, SearchedPlaceTitle, RecommendPlcePhoto,
+} from '../components/Schedule/SearchBox';
+import PlaceContainer, {
+  PlaceContainerInputArea, InputBox, DeleteIcon, StyledInput,
+  AddNewScheduleButton, AddNewScheduleIcon,
+} from '../components/Schedule/PlaceContainer';
+import DayContainer, { DayContainerTitle, DayContainerBoxes, DragIcon } from '../components/Schedule/DayContainer';
+import DurationDistanceArea, { CarClockIcon, CarClockIconArea } from '../components/Schedule/DurationDistance';
+import PLACE_PHOTO from '../constants/place.photo';
+import ICONS from '../constants/schedule.page.icon';
 
 const ScheduleWrapper = styled.div`
     display:flex;
@@ -79,7 +73,6 @@ const RightContainer = styled.div`
 width:55vw;
 height:calc(100vh-60px);
 @media screen and (max-width:800px){
-  // display:${(props) => (props.show ? 'block' : 'none')};
   display:block;
   width:0vw;
   height:0vh;
@@ -101,105 +94,6 @@ justify-content:center;
 align-items:center;
 cursor:pointer;
 `;
-
-const DayContainer = styled.div`
-height:60px;
-display:flex;
-width:100%;
-justify-content:left;
-box-shadow: 3px 4px 8px 0px rgba(0, 0, 0, 0.2);
-gap:5px;
-z-index:15;
-overflow:scroll;
-flex-shrink:0;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  display:none;
-}
-&::-webkit-scrollbar {
-  width: 3px;
-  display:none;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  display:none;
-}
-`;
-
-const DayContainerTitle = styled.div`
-display:flex;
-align-items:center;
-font-size:12px;
-justify-content:center;
-width:100px;
-height:60px;
-color:#616161;
-flex-shrink:0;
-// cursor:pointer;
-cursor:move;
-border: 0.5px solid #616161;
-font-weight:600;
-letter-spacing:1.5px;
-background-color:${(props) => (props.active ? '#63B5DC' : 'white')};
-color:${(props) => (props.active ? 'white' : '#616161')};
-// border-bottom:${(props) => (props.active ? '5px solid #63B5DC' : 'none')};
-`;
-
-const DayContainerBoxes = styled.div`
-display:flex;
-flex-direction:column;
-gap:20px;
-height: 75vh;
-overflow:auto;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar {
-  width: 3px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  background-color:#D3D3D3;
-}
-`;
-
-const PlaceContainer = styled.div`
-cursor:move;
-display:flex;
-justify-content:space-around;
-align-items:center;
-width:100%;
-height:260px;
-padding-right:20px;
-padding-top:10px;
-padding-bottom:10px;
-background-color:#e7f5fe;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
-
-const PlaceContainerInputArea = styled.div`
-width:auto;
-height:auto;
-@media screen and (max-width:800px){
-  width:68%;
-}`;
-
-const InputBox = styled.div`
-display:flex;
-align-items:center;
-justify-content:space-between;
-width:28vw;
-height:30px;
-@media screen and (max-width:800px){
-  width:100%;
-  flex-shrink:0;
-}`;
 
 const ScheduleTitleAndCompleteButtonArea = styled.div`
 width:40vw;
@@ -247,171 +141,6 @@ color:${(props) => (props.isEditing ? 'white' : '#226788')};
 animation:${(props) => (props.isEditing ? 'hithere 1.1s ease 3' : 'none')};
 `;
 
-const ChatRoom = styled.div`
-z-index:100;
-display:flex;
-flex-direction:column;
-align-items:center;
-width:300px;
-height:300px;
-border-top-right-radius:10px;
-border-top-left-radius:10px;
-border-bottom:none;
-position: fixed;
-bottom: 0px;
-right:50px;
-background-color:white;
-display:${(props) => (props.openChat ? 'flex' : 'none')};
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-@media screen and (max-width:800px){
-  right:30px;
-}
-`;
-
-const ChatIcon = styled.img`
-position: fixed;
-bottom: 50px;
-right:80px;
-z-index:100;
-width:50px;
-height:50px;
-cursor:pointer;
-display:${(props) => (props.openChat ? 'none' : 'block')};
-animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
-@media screen and (max-width:800px){
-  bottom:40px;
-  right:40px;
-}`;
-
-const CloseIcon = styled.img`
-width:15px;
-height:15px;
-position:absolute;
-right:20px;
-cursor:pointer;
-`;
-
-const ChatRoomTitle = styled.div`
-display:flex;
-align-items:center;
-justify-content:center;
-height:40px;
-// background-color:#add8e6;
-// background: rgb(167, 176, 265);
-background: linear-gradient(
-  312deg,
-  rgb(178, 228, 238) 0%,
-  rgb(161, 176, 255) 100%
-);
-
-// background: linear-gradient(-45deg, #fbebd0, #ffbdbd);
-color:black;
-width:100%;
-font-size:15px;
-position:relative;
-border-top-right-radius:10px;
-border-top-left-radius:10px;
-font-weight:500;
-letter-spacing:5px;
-`;
-
-const MessagesDisplayArea = styled.div`
-display:flex;
-flex-direction:column;
-overflow-y:scroll;
-overflow-wrap: break-word;
-height:250px;
-width:100%;
-gap:15px;
-padding-left:1px;
-padding-right:3px;
-padding-top:10px;
-padding-bottom:15px;
-`;
-
-const MessageBox = styled.div`
-padding-left:10px;
-display:flex;
-width:auto;
-height:35px;
-border-radius:3px;
-align-items:center;
-align-self:flex-start;
-flex-shrink:0;
-`;
-
-const NameMessage = styled.div`
-width:100%;
-display:flex;
-flex-direction:column;
-`;
-
-const Name = styled.div`
-width:100%;
-font-size:12px;
-font-weight:500;
-color:#616161;
-margin-left:5px;
-text-align:left;
-`;
-
-const Message = styled.div`
-margin-left:5px;
-padding-left:10px;
-padding-right:10px;
-border-radius:3px;
-height:25px;
-display:flex;
-align-items:center;
-overflow-wrap: break-word;
-word-wrap: break-word;
-background-color:#D6ECF3;
-font-size:14px;
-`;
-
-const UserPhoto = styled.img`
-width:30px;
-height:30px;
-// background-color:orange;
-border-radius:50%;
-object-fit: cover;
-`;
-
-const EnterArea = styled.div`
-width:100%;
-height:50px;
-display:flex;
-align-items:center;
-gap:10px;
-justify-content:space-between;
-// border-top:1px black solid;
-padding-left:10px;
-padding-right:10px;
-background-color:#D3D3D3;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
-
-const MessageInput = styled.input`
-width:80%;
-height:22px;
-border-radius:3px;
-border: black 1px solid;
-border:none;
-padding-left:5px;
-font-size:15px;
-outline:none;
-overflow-wrap: break-word;
-`;
-
-const EnterMessageButton = styled.button`
-width:auto;
-height:20px;
-// border: green 2px solid;
-border-radius:2px;
-cursor:pointer;
-border:none;
-`;
-
 const AddAndSearchBox = styled.div`
 width:45vw;
 height:calc(100vh - 60px);
@@ -422,120 +151,6 @@ z-index:10;
 @media screen and (max-width:800px){
   width:100vw;
 }
-`;
-
-const ResultsArea = styled.div`
-display:flex;
-flex-direction:column;
-align-items:center;
-// margin-top:50px;
-height:85%;
-position:fixed;
-bottom:0;
-@media screen and (max-width:800px){
-  width:100%;
-}
-`;
-
-const SearchedPlace = styled.div`
-width:45vw;
-height:80px;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:30px;
-margin-bottom:5px;
-margin-top:20px;
-@media screen and (max-width:800px){
-  width:100%;
-}
-`;
-
-const RecommendPlaces = styled.div`
-display:flex;
-flex-direction:column;
-align-items:center;
-height:90vh;
-width:45vw;
-overflow:scroll;
-background-color:#e7f5fe;
-border-top:1px solid black;
-padding-top:20px;
-gap:10px;
-font-size:16px;
-font-weight:450;
-@media screen and (max-width:800px){
-  width:100%;
-}
-`;
-
-const RecommendPlace = styled.div`
-gap:30px;
-display:flex;
-justify-content:space-between;
-width:90%;
-height:300px;
-border:1.5px #226788 solid;
-border-radius:15px;
-padding-top:20px;
-padding-bottom:20px;
-background-color:white;
-@media screen and (max-width:800px){
-  width:90%;
-}
-`;
-
-const RecommendPlaceLeftArea = styled.div`
-display:flex;
-width:50%;
-flex-direction:column;
-justify-content:center;
-margin-left:30px;
-gap:10px;
-@media screen and (max-width:800px){
-  width:100%;
-}
-`;
-
-const StyledInput = styled.input`
-font-size:15px;
-height:20px;
-width:350px;
-border:none;
-outline:none;
-background-color:transparent;
-text-align:left;
-border-bottom: 1px solid grey;
-@media screen and (max-width:800px){
-  width:100%;
-  flex-shrink:0;
-  font-size:14px;
-}`;
-
-const RecommendPlaceTitle = styled.div`
-font-weight:600;
-font-size:15px;
-text-align:left;
-width:270px;
-color:#226788;
-@media screen and (max-width:800px){
-  width:100%;
-}
-`;
-
-const SearchedPlaceTitle = styled.div`
-font-weight:600;
-font-size:25px;
-text-align:left;
-width:auto;
-color:#226788;
-`;
-
-const RecommendPlcePhoto = styled.img`
-width:70px;
-height:70px;
-border-radius:15px;
-margin-right:30px;
 `;
 
 const AddToPlaceButton = styled.button`
@@ -549,81 +164,10 @@ color:white;
 cursor:pointer;
 `;
 
-const DeleteIcon = styled.img`
-width:24px;
-height:24px;
-cursor:pointer;
-`;
-
 const GoBackIcon = styled.img`
 width:32px;
 height:32px;
 `;
-
-const CarClockIcon = styled.img`
-width:25px;
-height:25px;
-`;
-
-const DurationDistanceArea = styled.div`
-display: flex;
-margin-top: 15px;
-margin-bottom: 15px;
-height: 60px;
-gap:10px;
-`;
-
-const UnreadMessage = styled.div`
-display:flex;
-align-items:center;
-justify-content:center;
-width:20px;
-height:20px;
-border-radius:50%;
-background-color:red;
-color:white;
-font-size:12px;
-font-weight:500;
-position:fixed;
-bottom:85px;
-right:120px;
-z-index:300;
-animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
-@media screen and (max-width:800px){
-  bottom:75px;
-  right:80px;
-}`;
-
-const CarClockIconArea = styled.div`
-display: flex;
-align-items: center;
-gap: 7px;
-`;
-
-const DragIcon = styled.img`
-width:20px;
-height:20px;
-`;
-
-const AddNewScheduleButton = styled.button`
-display:flex;
-align-items:center;
-justify-content:center;
-gap:10px;
-font-size:15px;
-font-weight:600;
-color:white;
-width:100%;
-height:50px;
-border:none;
-background-color: #63B5DC;
-padding-bottom:10px;
-padding-top:10px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-cursor:pointer;
-@media screen and (max-width:800px){
-margin-bottom:50px;
-}`;
 
 const ChooseShowMapOrSchedule = styled.div`
 display:none;
@@ -641,7 +185,6 @@ display:none;
   background-color: #226788;
   padding-bottom:10px;
   padding-top:10px;
-  // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   cursor:pointer;
   position:fixed;
   bottom:0;
@@ -652,11 +195,6 @@ const SeperateLine = styled.div`
 height:90%;
 width:1.2px;
 background-color:white;
-`;
-
-const AddNewScheduleIcon = styled.img`
-width:22px;
-height:22px;
 `;
 
 const SchdeuleMapButton = styled.button`
@@ -723,8 +261,6 @@ function Schedule() {
   const existScheduleId = new URLSearchParams(search).get('id');
   const messagesEndRef = useRef(null);
 
-  // 拿指定一個id的單一筆schedule資料與其chatroom資料
-
   useEffect(() => {
     if (!existScheduleId) return;
     async function getCertainSchedule() {
@@ -747,8 +283,6 @@ function Schedule() {
     getChatRoom();
   }, [updateScheduleData, existScheduleId, updateChatBox]);
 
-  // 新增天數
-
   const newDay = {
     places: [],
   };
@@ -765,8 +299,6 @@ function Schedule() {
     setIsEditing(true);
   }
 
-  // 新增景點
-
   const newPlace = {
     place_title: '',
     place_address: '',
@@ -780,8 +312,6 @@ function Schedule() {
     setIsEditing(true);
   }
 
-  // 刪除天數
-
   function deleteCertainDay(targetDeleteDayIndex) {
     updateScheduleData((draft) => {
       draft.trip_days = draft.trip_days.filter(
@@ -790,8 +320,6 @@ function Schedule() {
     });
     setIsEditing(true);
   }
-
-  // 刪除景點
 
   function deleteCertainPlace(targetDeleteDayIndex, targetDeletePlaceIndex) {
     updateScheduleData(((draft) => {
@@ -802,8 +330,6 @@ function Schedule() {
     }));
     setIsEditing(true);
   }
-
-  // 編輯後更新資料
 
   function updatePlaceTitle(placeTitle, dayIndex, placeIndex) {
     updateScheduleData((draft) => {
@@ -839,8 +365,6 @@ function Schedule() {
     setIsEditing(true);
   }
 
-  // 編輯好後更新至DB
-
   async function setCompletedScheduleToDb() {
     if (existScheduleId) {
       const scheduleRef = doc(db, 'schedules', existScheduleId);
@@ -850,8 +374,6 @@ function Schedule() {
     }
   }
 
-  // 監聽是否有行程更新資料
-
   useEffect(() => {
     if (existScheduleId) {
       const theScheduleBeingEdited = doc(db, 'schedules', existScheduleId);
@@ -860,8 +382,6 @@ function Schedule() {
       });
     }
   }, [existScheduleId, updateScheduleData]);
-
-  // 訊息相關
 
   const newMessage = {
     user_id: user.uid,
@@ -1056,7 +576,7 @@ function Schedule() {
                     </RecommendPlaceTitle>
                     <AddToPlaceButton onClick={() => { updatePlaceTitleBySearch(place?.name, clickedDayIndex); updatePlaceAddressBySearch(place?.vicinity, clickedDayIndex); setActive(false); setScheduleDisplay(true); }} type="button">加入行程</AddToPlaceButton>
                   </RecommendPlaceLeftArea>
-                  <RecommendPlcePhoto alt="place" src={place?.photos?.[0]?.getUrl?.() ?? defaultArray[index % 5]} />
+                  <RecommendPlcePhoto alt="place" src={place?.photos?.[0]?.getUrl?.() ?? PLACE_PHOTO[index % 5]} />
                 </RecommendPlace>
               ))}
             </RecommendPlaces>
@@ -1065,7 +585,7 @@ function Schedule() {
         <LeftContainer active={active} show={schdeuleDisplay}>
           <ScheduleTitleAndCompleteButtonArea>
             <Link to="/my-schedules">
-              <GoBackIcon src={GoBackSrc} />
+              <GoBackIcon src={ICONS?.GO_BACK_ICON} />
             </Link>
             <ScheduleTitle>
               行程：
@@ -1098,31 +618,29 @@ function Schedule() {
                   onDragLeave={onDragLeave}
                   className={dragAndDrop && dragAndDrop.draggedTo === Number(dayIndex) ? 'dropArea' : ''}
                 >
-                  <DragIcon active={dayIndex === choosedDayIndex} src={dayIndex === choosedDayIndex ? whiteDragSrc : dragSrc} style={{ width: '15px', height: '15px', marginRight: '3px' }} />
+                  <DragIcon active={dayIndex === choosedDayIndex} src={dayIndex === choosedDayIndex ? ICONS?.WHITE_DRAG_ICON : ICONS?.DRAG_ICON} style={{ width: '15px', height: '15px', marginRight: '3px' }} />
                   {new Date(Date.parse(scheduleData?.embark_date) + (dayIndex * 86400000))?.toISOString()?.split('T')?.[0]?.split('-')?.[1]}
                   /
                   {new Date(Date.parse(scheduleData?.embark_date) + (dayIndex * 86400000))?.toISOString()?.split('T')?.[0]?.split('-')?.[2]}
                   <br />
                   {weekday[(new Date(scheduleData?.embark_date).getDay() + dayIndex) % 7]}
-                  <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} active={dayIndex === choosedDayIndex} src={dayIndex === choosedDayIndex ? whiteTrashCan : greyTrashCanSrc} onClick={() => deleteCertainDay(dayIndex)} />
+                  <DeleteIcon style={{ width: '18px', height: '18px', marginLeft: '5px' }} active={dayIndex === choosedDayIndex} src={dayIndex === choosedDayIndex ? ICONS?.WHITE_BIN_ICON : ICONS?.GREY_BIN_ICON} onClick={() => deleteCertainDay(dayIndex)} />
                 </DayContainerTitle>
               ))
               : ''}
           </DayContainer>
           {scheduleData ? scheduleData?.trip_days[choosedDayIndex]?.places
             ?.map((placeItem, placeIndex) => (
-              <>
+              <Fragment key={`${placeItem?.place_address}`}>
                 {(placeIndex !== 0
                   ? (
-                    <DurationDistanceArea
-                      key={`${placeItem?.stay_time}`}
-                    >
+                    <DurationDistanceArea>
                       <CarClockIconArea>
-                        <CarClockIcon src={CarSrc} />
+                        <CarClockIcon src={ICONS?.CAR_ICON} />
                         {distance?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}
                       </CarClockIconArea>
                       <CarClockIconArea>
-                        <CarClockIcon src={ClockSrc} />
+                        <CarClockIcon src={ICONS?.CLOCK_ICON} />
                         {duration?.[choosedDayIndex]?.[placeIndex - 1] ?? ''}
                       </CarClockIconArea>
                     </DurationDistanceArea>
@@ -1137,7 +655,7 @@ function Schedule() {
                   onDrop={onPlaceDrop}
                   onDragLeave={onPlaceDragLeave}
                 >
-                  <DragIcon src={dragSrc} />
+                  <DragIcon src={ICONS?.DRAG_ICON} />
                   <PlaceContainerInputArea>
                     <InputBox style={{ width: '50px' }}>
                       <StyledInput
@@ -1167,17 +685,17 @@ function Schedule() {
                     </InputBox>
                   </PlaceContainerInputArea>
                   <DeleteIcon
-                    src={BlueTrashCanSrc}
+                    src={ICONS?.BLUE_BIN_ICON}
                     onClick={() => deleteCertainPlace(choosedDayIndex, placeIndex)}
                   />
                 </PlaceContainer>
-              </>
+              </Fragment>
             ))
             : ''}
           <DayContainerBoxes />
           <AddNewScheduleButton type="button" onClick={() => { setActive(true); setScheduleDisplay(false); addPlaceInDay(choosedDayIndex); setClickedDayIndex(choosedDayIndex); }}>
             新增行程
-            <AddNewScheduleIcon alt="add-new-schedule" src={plusIcon} />
+            <AddNewScheduleIcon alt="add-new-schedule" src={ICONS?.PLUS_ICON} />
           </AddNewScheduleButton>
         </LeftContainer>
         <ChooseShowMapOrSchedule>
@@ -1208,12 +726,12 @@ function Schedule() {
         <ChatRoom openChat={openChat}>
           <ChatRoomTitle>
             聊天室
-            <CloseIcon src={CloseChatIcon} onClick={() => setOpenChat(false)} />
+            <CloseIcon src={ICONS?.CLOSE_CHAT_ICON} onClick={() => setOpenChat(false)} />
           </ChatRoomTitle>
           <MessagesDisplayArea>
             {chatBox ? chatBox?.messages?.map((item) => (
-              <MessageBox key={item.photo_url} ref={messagesEndRef}>
-                <UserPhoto src={item.photo_url} />
+              <MessageBox key={item?.photo_url} ref={messagesEndRef}>
+                <UserPhoto src={item?.photo_url} />
                 <NameMessage>
                   <Name>
                     {item?.user_name}
@@ -1248,7 +766,7 @@ function Schedule() {
             : ''}
           <ChatIcon
             active={unreadMessage > 1 && openChat === false}
-            src={SpeakIcon}
+            src={ICONS?.SPEAK_ICON}
             openChat={openChat}
             onClick={() => setOpenChat(true)}
           />

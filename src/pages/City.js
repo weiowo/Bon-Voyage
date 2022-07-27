@@ -10,249 +10,40 @@ import {
 import { useImmer } from 'use-immer';
 import produce from 'immer';
 import db from '../utils/firebase-init';
-import CitySrc from './images/city.png';
-import BlackHeaderComponent from '../components/BlackHeader';
+import CITY_BG from './images/city.png';
+import BlackHeaderComponent from '../components/Headers/BlackHeader';
 import UserContext from '../components/UserContextComponent';
-import leftArrow from './images/left-arrow.jpg';
-import Default1 from './images/default1.png';
-import Default2 from './images/default2.png';
-import Default3 from './images/default3.png';
-import Default4 from './images/default4.png';
-import Default5 from './images/default5.png';
-import unfilledStar from './images/unfilled_star.jpg';
-import filledStar from './images/filled_star.jpg';
 import Footer from '../components/Footer';
-import Travel from './images/travel-2.png';
-import Suitcase from './images/suitcase-2.png';
-import {
-  RemindWrapper, ClickAndAdd,
-  RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
-} from './MySchedules';
-
-export const ButtonStarArea = styled.div`
-width:100%;
-height:auto;
-display:flex;
-align-items:center;
-justify-content:center;
-`;
-
-export const AddFavoriteIcon = styled.img`
-width:25px;
-height:25px;
-cursor:pointer;
-position:absolute;
-right:15%;
-justify-self:right;
-`;
-
-export const ModalBackground = styled.div`
-width:100vw;
-height:100vh;
-position:fixed;
-top:0;
-bottom:0;
-left:0;
-right:0;
-background-color:rgba(0, 0, 0, 0.7);
-display:flex;
-justify-content:center;
-align-items:center;
-display:${(props) => (props.active ? 'flex' : 'none')};
-z-index:100;
-`;
-
-export const ModalBox = styled.div`
-display:flex;
-width:50vw;
-height:30vw;
-flex-direction:row;
-background-color:white;
-z-index:10;
-border-radius:20px;
-z-index:200;
-position: relative;
-align-items:center;
-@media screen and (max-width:1200px){
-width:600px;
-height:370px;
-}
-@media screen and (max-width:630px){
-  width:80vw;
-  height:90vw;
-  flex-direction:column;
-}
-@media screen and (max-width:575px){
-  width:80vw;
-  height:110vw;
-}
-@media screen and (max-width:430px){
-  height:120vw;
-}`;
-
-export const ModalImgArea = styled.div`
-width:25vw;
-height:22vw;
-display:flex;
-flex-wrap:wrap;
-align-items:center;
-gap:10px;
-@media screen and (max-width:1200px){
-  width:50%;
-  height:70%;
-}
-@media screen and (max-width:630px){
-  width:100%;
-  height:60%;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:20px;
-  padding-bottom:40px;
-}
-@media screen and (max-width:575px){
-  width:90%;
-  height:60%;
-  padding-bottom:30px;
-}
-@media screen and (max-width:430px){
-  height:50%;
-  gap:8px;
-}
-`;
-
-export const ModalImg = styled.img`
-width:10vw;
-height:10vw;
-border-radius:10px;
-object-fit: cover;
-@media screen and (max-width:1200px){
-  width:120px;
-  height:120px;
-}
-@media screen and (max-width:630px){
-  width:170px;
-  height:130px;
-  flex-shrink:0;
-}
-@media screen and (max-width:575px){
-  width:140px;
-  height:115px;
-}
-@media screen and (max-width:480px){
-  width:120px;
-  height:100px;
-}
-@media screen and (max-width:430px){
-  width:110px;
-  height:100px;
-}
-@media screen and (max-width:390px){
-  width:120px;
-  height:100px;
-}
-`;
-
-export const ModalLeftArea = styled.div`
-width:25vw;
-height:28vw;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:10px;
-position:relative;
-@media screen and (max-width:1200px){
-  width:50%;
-  height:80%;
-}
-@media screen and (max-width:630px){
-  width:90%;
-  height:50%;
-  gap:20px;
-}
-@media screen and (max-width:570px){
-  width:90%;
-  height:45%;
-  gap:20px;
-}
-@media screen and (max-width:430px){
-  height:50%;
-}
-
-`;
-
-export const ModalPlaceTitle = styled.div`
-font-size:26px;
-font-weight:600;
-width:80%;
-@media screen and (max-width:480px){
-  font-size:20px;
-  width:90%;
-}`;
-
-export const ModalPlaceAddress = styled.div`
-width:80%;
-color:#696969;
-`;
-
-export const AddToScheduleButton = styled.button`
-width:10vw;
-height:30px;
-border-radius:5px;
-background-color:grey;
-font-weight:500;
-border:none;
-color:white;
-cursor:pointer;
-@media screen and (max-width:1200px){
-  width:110px;
-}`;
-
-export const CloseModalButton = styled.button`
-display:flex;
-align-items:center;
-justify-content:center;
-height:25px;
-width:25px;
-position:absolute;
-right:20px;
-top:20px;
-text-align:center;
-border:none;
-border-radius:50%;
-background-color:black;
-color:white;
-cursor:pointer;
-@media screen and (max-width:400px){
-  right:15px;
-  top:15px;
-}`;
-
-export const LeftButton = styled.button`
-height:25px;
-width:25px;
-position:absolute;
-background-image: url(${leftArrow});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-left:20px;
-top:20px;
-text-align:center;
-border:none;
-border-radius:50%;
-color:white;
-cursor:pointer;
-@media screen and (max-width:400px){
-  left:15px;
-  top:15px;
-}`;
+import RemindWrapper, {
+  ClickAndAdd, RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
+} from '../components/Reminder/CreateTrip';
+import Loading from '../components/Loading';
+import ModalImgArea, { ModalImg } from '../components/Modal/ModalImgArea';
+import Modal from '../components/Modal/Modal';
+import ModalLeftArea from '../components/Modal/ModalLeftArea';
+import CloseModalButton from '../components/Modal/CloseButton';
+import ButtonStarArea, { AddToScheduleButton, AddFavoriteIcon } from '../components/Modal/ButtonStar';
+import ModalPlaceTitle, { ModalPlaceAddress } from '../components/Modal/ModalText';
+import RestaurantBox, {
+  RestaurantPhoto, RestaurantBoxRightContent, RestaurantTitle,
+  RestaurantDescription, RestaurantSeeMoreButton,
+} from '../components/Cards/Restaurant';
+import AttractionBox, {
+  AttractionPhotoContainer, AttractionPhoto, AttractionTitle,
+  AttractionDescription, AttractionSeeMoreButton,
+} from '../components/Cards/Attraction';
+import SchedulesWrapper, {
+  ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
+} from '../components/Modal/ScheduleChoice';
+import LeftButton from '../components/Modal/GoBackButton';
+import STAR from '../constants/stars';
+import PLACE_PHOTO from '../constants/place.photo';
+import REMINDER_ICONS from '../constants/reminder.icon';
 
 const Banner = styled.div`
 width:100vw;
 height:50vw;
-background-image: url(${CitySrc});
+background-image: url(${CITY_BG});
 background-size:cover;
 background-repeat: no-repeat;
 background-blend-mode: multiply;
@@ -283,8 +74,6 @@ top:130px;
   font-size:20px;
 }
 `;
-
-// 景點區域
 
 const ContentArea = styled.div`
 width:100vw;
@@ -324,99 +113,6 @@ margin-top:0px;
 }
 `;
 
-const AttractionBox = styled.div`
-display:flex;
-flex-direction:column;
-align-items:center;
-width:250px;
-height:auto;
-margin-top:30px;
-cursor:pointer;
-@media screen and (max-width:1000px){
-  width:200px;
-}
-@media screen and (max-width:890px){
-  width:180px;
-}
-@media screen and (max-width:777px){
-  width:250px;
-}
-@media screen and (max-width:513px){
-  width:170px;
-}
-`;
-
-const AttractionPhotoContainer = styled.div`
-border-radius:20px;
-display: inline-block;
-width:200px;
-height:240px;
-overflow: hidden;
-@media screen and (max-width:1000px){
-  width:200px;
-}
-@media screen and (max-width:890px){
-  width:180px;
-}
-@media screen and (max-width:777px){
-  width:200px;
-  height:240px;
-}
-@media screen and (max-width:513px){
-  width:170px;
-}
-`;
-
-const AttractionPhoto = styled.img`
-border-radius:20px;
-display: block;
-width:200px;
-height:240px;
-object-fit: cover;
-transition: 0.5s all ease-in-out;
-&:hover {
-    transform: scale(1.2);
-}
-@media screen and (max-width:1000px){
-  width:200px;
-}
-@media screen and (max-width:890px){
-  width:180px;
-}
-@media screen and (max-width:777px){
-  width:200px;
-  height:240px;
-}
-@media screen and (max-width:513px){
-  width:170px;
-}
-`;
-
-const AttractionTitle = styled.div`
-font-size:14px;
-margin-top:10px;
-font-weight:500;
-font-color:#AAAAA;
-`;
-
-const AttractionDescription = styled.div`
-font-size:10px;
-margin-top:5px;
-`;
-
-const AttractionSeeMoreButton = styled.button`
-font-size:14px;
-background-color:#63666A;
-color:white;
-border-radius:3px;
-font-size:10px;
-box-style:none;
-border:none;
-outline:none;
-margin-top:10px;
-cursor:pointer;
-`;
-
 const RestaurantAreaTitle = styled.div`
 width:100vw;
 height:auto;
@@ -443,208 +139,6 @@ gap:30px;
 }
 `;
 
-const RestaurantBox = styled.div`
-display:flex;
-align-items:center;
-width:350px;
-height:160px;
-margin-top:20px;
-cursor:pointer;
-background-color:#FAFAFA;
-padding-left:38px;
-border-radius:15px;
-border: #3f3f3f solid 1px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-@media screen and (max-width:777px){
-  margin-top:15px;
-  width:330px;
-  padding-left:25px;
-}
-@media screen and (max-width:513px){
-  margin-top:15px;
-  width:330px;
-  padding-left:25px;
-}
-`;
-
-const RestaurantPhoto = styled.img`
-border-radius:20px;
-width:105px;
-height:105px;
-margin-right:20px;
-object-fit: cover;
-`;
-
-const RestaurantBoxRightContent = styled.div`
-width:auto;
-display:flex;
-flex-direction:column;
-align-items:flex-start;
-`;
-
-const RestaurantTitle = styled.div`
-font-size:16px;
-margin-top:10px;
-font-weight:600;
-align-self:left;
-justify-content:left;
-text-align:left;
-width:160px;
-`;
-
-export const ConfirmChooseDayButton = styled.button`
-width:20%;
-height:35px;
-background: linear-gradient(
-  312deg,
-  rgb(178, 228, 238) 0%,
-  rgb(161, 176, 246) 100%
-);
-border-radius:25px;
-border:none;
-color:black;
-font-weight:600;
-font-size:16px;
-cursor:pointer;
-`;
-
-const RestaurantDescription = styled.div`
-font-size:10px;
-margin-top:5px;
-color:#949494;
-`;
-
-const RestaurantSeeMoreButton = styled.button`
-width:80px;
-background-color:#63666A;
-color:white;
-border-radius:3px;
-font-size:10px;
-box-style:none;
-border:none;
-outline:none;
-margin-top:10px;
-cursor:pointer;
-`;
-
-export const CurrentSchedulesTitle = styled.div`
-width:100%;
-height:30px;
-font-size:17px;
-font-weight:600;
-margin-top:20px;
-margin-bottom:10px;
-`;
-
-export const ScheduleChoicesBoxWrapper = styled.div`
-display:flex;
-flex-flow:wrap;
-height:auto;
-width:auto;
-align-items:center;
-justify-content:center;
-gap:15px;
-padding-top:10px;
-padding-bottom:20px;
-padding-left:2px;
-&:after {
-  content: "";
-  width:220px;
-}
-overflow:auto;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar {
-  width: 6px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  background-color:#D3D3D3;
-}
-`;
-
-export const Loading = styled.div`
-  margin: auto;
-  margin-top:50px;
-  border: 10px solid #EAF0F6;
-  border-radius: 50%;
-  border-top: 10px solid #E6D1F2;
-  width: 70px;
-  height: 70px;
-  animation: spinner 3s linear infinite;
-`;
-
-export const ScheduleChoicesBox = styled.div`
-display:flex;
-align-items:center;
-width:220px;
-height:60px;
-border-radius:10px;
-background-color:#e7f5fe;
-cursor:pointer;
-background-color:${(props) => (props.clicked ? '#E6D1F2' : '#e7f5fe')};
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-&:hover {
-  background-color:#E6D1F2;
-}`;
-
-export const ScheduleChoiceTitle = styled.div`
-width:170px;
-text-align:left;
-height:auto;
-font-weight:500;
-font-size:15px;
-margin-left:20px;
-`;
-
-export const ChooseButton = styled.button`
-display:flex;
-align-items:center;
-justify-content:center;
-width:60px;
-height:25px;
-border-radius:10px;
-border:1px solid #296D98;
-font-size:13px;
-font-weight:550;
-margin-right:10px;
-cursor:pointer;
-background-color:${(props) => (props.clicked ? 'grey' : 'white')};
-color:${(props) => (props.clicked ? 'white' : 'black')};
-// &:hover {
-//   background-color:#296D98;
-//   color:white;
-// }
-`;
-
-export const ModalContentWrapper = styled.div`
-width:95%;
-height:95%;
-display:flex;
-flex-direction:column;
-align-items:center;
-overflow:auto;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar {
-  width: 6px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  background-color:#D3D3D3;
-}
-`;
-
 const libraries = ['places'];
 
 const mapContainerStyle = {
@@ -659,8 +153,6 @@ const center = {
   lat: 43.6532,
   lng: -79.3832,
 };
-
-export const defaultArray = [Default1, Default2, Default3, Default4, Default5];
 
 function City() {
   const { search } = useLocation();
@@ -856,138 +348,137 @@ function City() {
   return (
     <>
       <BlackHeaderComponent />
-      <ModalBackground active={modalIsActive}>
-        <ModalBox>
-          {modalDetail
-            ? (
-              <>
-                <ModalLeftArea>
-                  <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-                  <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                  <ButtonStarArea>
-                    <AddToScheduleButton
-                      onClick={() => { handleUserOrNot(); }}
-                    >
-                      加入行程
-                    </AddToScheduleButton>
-                    <AddFavoriteIcon
-                      onClick={() => { handleFavorite(modalDetail?.place_id); }}
-                      src={liked ? filledStar : unfilledStar}
-                    />
-                  </ButtonStarArea>
-                </ModalLeftArea>
-                <ModalImgArea>
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() || defaultArray[0]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() || defaultArray[1]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() || defaultArray[2]} />
-                  <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() || defaultArray[3]} />
-                </ModalImgArea>
-                <CloseModalButton
-                  type="button"
-                  onClick={() => { handleModalClose(); }}
+      <Modal active={modalIsActive} flexDirection="row">
+        {modalDetail
+          ? (
+            <>
+              <ModalLeftArea>
+                <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
+                <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
+                <ButtonStarArea>
+                  <AddToScheduleButton
+                    onClick={() => { handleUserOrNot(); }}
+                  >
+                    加入行程
+                  </AddToScheduleButton>
+                  <AddFavoriteIcon
+                    onClick={() => { handleFavorite(modalDetail?.place_id); }}
+                    src={liked ? STAR?.FULL_STAR : STAR?.EMPTY_STAR}
+                  />
+                </ButtonStarArea>
+              </ModalLeftArea>
+              <ModalImgArea>
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() || PLACE_PHOTO[0]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() || PLACE_PHOTO[1]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() || PLACE_PHOTO[2]} />
+                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() || PLACE_PHOTO[3]} />
+              </ModalImgArea>
+              <CloseModalButton
+                type="button"
+                onClick={() => { handleModalClose(); }}
+              >
+                X
+              </CloseModalButton>
+            </>
+          )
+          : <Loading />}
+      </Modal>
+      <Modal
+        active={chooseScheduleModalIsActive}
+        flexDirection="column"
+      >
+        <LeftButton
+          type="button"
+          onClick={() => {
+            setModalIsActive(true);
+            setChooseScheduleModalIsActive(false);
+          }}
+        />
+        <SchedulesWrapper>
+          <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
+          <ScheduleBoxWrapper>
+            {cityPageScheduleData.length === 0 ? (
+              <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
+                <RemindIcon src={REMINDER_ICONS?.CAR_ICON} />
+                <RemindRightPart style={{ width: 'auto' }}>
+                  <RemindText>
+                    還沒有行程捏～
+                    <br />
+                    是時候創建行程囉！
+                  </RemindText>
+                  <StyledBlackLink to="/choose-date">
+                    <ClickAndAdd>點我創建</ClickAndAdd>
+                  </StyledBlackLink>
+                  <SuitcaseIcon src={REMINDER_ICONS?.SUITCASE_ICON} />
+                </RemindRightPart>
+              </RemindWrapper>
+            ) : cityPageScheduleData.map((item, index) => (
+              <ScheduleBox
+                key={item?.schedule_id}
+                onClick={() => {
+                  setClickedScheduleId(item?.schedule_id);
+                  setClickedScheduleIndex(index);
+                  setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                }}
+                id={item?.schedule_id}
+              >
+                <ScheduleTitle
+                  key={item?.title}
                 >
-                  X
-                </CloseModalButton>
-              </>
-            )
-            : <Loading />}
-        </ModalBox>
-      </ModalBackground>
-      <ModalBackground active={chooseScheduleModalIsActive}>
-        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <LeftButton
-            type="button"
-            onClick={() => {
-              setModalIsActive(true);
-              setChooseScheduleModalIsActive(false);
-            }}
-          />
-          <ModalContentWrapper>
-            <CurrentSchedulesTitle>您的現有行程</CurrentSchedulesTitle>
-            <ScheduleChoicesBoxWrapper>
-              {cityPageScheduleData.length === 0 ? (
-                <RemindWrapper style={{ width: '100%', justifyContent: 'center' }}>
-                  <RemindIcon src={Travel} />
-                  <RemindRightPart style={{ width: 'auto' }}>
-                    <RemindText>
-                      還沒有行程捏～
-                      <br />
-                      是時候創建行程囉！
-                    </RemindText>
-                    <StyledBlackLink to="/choose-date">
-                      <ClickAndAdd>點我創建</ClickAndAdd>
-                    </StyledBlackLink>
-                    <SuitcaseIcon src={Suitcase} />
-                  </RemindRightPart>
-                </RemindWrapper>
-              ) : cityPageScheduleData.map((item, index) => (
-                <ScheduleChoicesBox
-                  key={item?.schedule_id}
+                  {item?.title}
+                </ScheduleTitle>
+              </ScheduleBox>
+            ))}
+          </ScheduleBoxWrapper>
+        </SchedulesWrapper>
+        <CloseModalButton
+          type="button"
+          onClick={() => setChooseScheduleModalIsActive(false)}
+        >
+          X
+        </CloseModalButton>
+      </Modal>
+      <Modal
+        active={chooseDayModalIsActive}
+        flexDirection="column"
+      >
+        <LeftButton
+          type="button"
+          onClick={() => {
+            setChooseDayModalIsActive(false);
+            setChooseScheduleModalIsActive(true);
+          }}
+        />
+        <SchedulesWrapper>
+          <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
+          <ScheduleBoxWrapper>
+            {cityPageScheduleData
+              ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
+                <ScheduleBox
+                  key={item?.schedule_creator_user_id}
+                  clicked={dayIndex === index}
                   onClick={() => {
-                    setClickedScheduleId(item?.schedule_id);
-                    setClickedScheduleIndex(index);
-                    setChooseDayModalIsActive(true); setChooseScheduleModalIsActive(false);
+                    setDayIndex(index);
                   }}
-                  id={item?.schedule_id}
+                  style={{ display: 'flex' }}
                 >
-                  <ScheduleChoiceTitle
-                    key={item?.title}
-                  >
-                    {item?.title}
-                  </ScheduleChoiceTitle>
-                </ScheduleChoicesBox>
-              ))}
-            </ScheduleChoicesBoxWrapper>
-          </ModalContentWrapper>
-          <CloseModalButton
-            type="button"
-            onClick={() => setChooseScheduleModalIsActive(false)}
-          >
-            X
-          </CloseModalButton>
-        </ModalBox>
-      </ModalBackground>
-      <ModalBackground active={chooseDayModalIsActive}>
-        <ModalBox style={{ display: 'flex', flexDirection: 'column' }}>
-          <LeftButton
-            type="button"
-            onClick={() => {
-              setChooseDayModalIsActive(false);
-              setChooseScheduleModalIsActive(true);
-            }}
-          />
-          <ModalContentWrapper>
-            <CurrentSchedulesTitle>請選擇天數</CurrentSchedulesTitle>
-            <ScheduleChoicesBoxWrapper>
-              {cityPageScheduleData
-                ? cityPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
-                  <ScheduleChoicesBox
-                    key={item?.schedule_creator_user_id}
-                    clicked={dayIndex === index}
-                    onClick={() => {
-                      setDayIndex(index);
-                    }}
-                    style={{ display: 'flex' }}
-                  >
-                    <ScheduleChoiceTitle>
-                      第
-                      {index + 1}
-                      天
-                    </ScheduleChoiceTitle>
-                  </ScheduleChoicesBox>
-                )) : ''}
-            </ScheduleChoicesBoxWrapper>
-            <ConfirmChooseDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmChooseDayButton>
-          </ModalContentWrapper>
-          <CloseModalButton
-            type="button"
-            onClick={() => setChooseDayModalIsActive(false)}
-          >
-            X
-          </CloseModalButton>
-        </ModalBox>
-      </ModalBackground>
-
+                  <ScheduleTitle>
+                    第
+                    {index + 1}
+                    天
+                  </ScheduleTitle>
+                </ScheduleBox>
+              )) : ''}
+          </ScheduleBoxWrapper>
+          <ConfirmDayButton type="button" onClick={() => { ComfirmedAdded(); setChooseDayModalIsActive(false); }}>完成選擇</ConfirmDayButton>
+        </SchedulesWrapper>
+        <CloseModalButton
+          type="button"
+          onClick={() => setChooseDayModalIsActive(false)}
+        >
+          X
+        </CloseModalButton>
+      </Modal>
       <Banner />
       <CityTitle>
         哈囉，
@@ -1028,7 +519,7 @@ function City() {
                         id={item.place_id}
                         alt="attraction-photo"
                         src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
-                          : defaultArray[index % 5]}
+                          : PLACE_PHOTO[index % 5]}
                       />
                     </AttractionPhotoContainer>
                     <AttractionTitle
@@ -1066,7 +557,7 @@ function City() {
                     id={item.place_id}
                     alt="attraction-photo"
                     src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
-                      : defaultArray[index % 5]}
+                      : PLACE_PHOTO[index % 5]}
                   />
                   <RestaurantBoxRightContent>
                     <RestaurantTitle
@@ -1107,7 +598,7 @@ function City() {
                       id={item.place_id}
                       alt="attraction-photo"
                       src={item.photos?.[0]?.getUrl?.() ? item.photos?.[0]?.getUrl?.()
-                        : defaultArray[index % 5]}
+                        : PLACE_PHOTO[index % 5]}
                     />
                   </AttractionPhotoContainer>
                   <AttractionTitle
