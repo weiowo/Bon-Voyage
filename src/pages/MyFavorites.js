@@ -380,7 +380,7 @@ function MyLovedArticles() {
                         * ARTICLE_COVER.length)]}
                   />
                   <MyArticleBelowArea>
-                    <MyArticleTitle>{item?.article_title}</MyArticleTitle>
+                    <MyArticleTitle style={{ color: 'black' }}>{item?.article_title}</MyArticleTitle>
                     <MyArticleSummary>
                       {item?.summary?.slice(0, 16)}
                       ...

@@ -34,18 +34,18 @@ import AddFriendButton, {
 import Line from '../components/Line';
 
 const PageWrapper = styled.div`
-width:100vw;
-height:calc(100vh-60px);
-display:flex;
-flex-direction:row;
-padding-top:60px;
-@media screen and (max-width:800px){
-justify-content:center;
-}
-@media screen and (max-width:748px){
-  flex-direction:column;
-  flex-shrink:0;
+  width:100vw;
   height:calc(100vh-60px);
+  display:flex;
+  flex-direction:row;
+  padding-top:60px;
+  @media screen and (max-width:800px){
+  justify-content:center;
+  }
+  @media screen and (max-width:748px){
+    flex-direction:column;
+    flex-shrink:0;
+    height:calc(100vh-60px);
 }`;
 
 const SmallScreenLine = styled.div`
@@ -59,6 +59,7 @@ align-items:center;
 margin-top:20px;
 @media screen and (max-width:748px){
   display:none;
+}
 }`;
 
 const ChoicesWrapper = styled.div` 
@@ -381,6 +382,8 @@ function MySchedules() {
   const [showMemberPhoto, setShowMemberPhoto] = useState(false);
   const [searchInputIsActive, setSearchInputIsActive] = useState(true);
   const [searchResultIsActive, setSearchResultIsActive] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+  // const [deleteIndex, setDeleteIndex] = useState('');
   const navigate = useNavigate();
   const [targetIndex, setTargetIndex] = useState(null);
 
@@ -405,9 +408,9 @@ function MySchedules() {
     return undefined;
   }, [user.uid, setSchedules]);
 
-  function deleteScheduleOfTheUser(targetDeleteIndex) {
+  function deleteScheduleOfTheUser() {
     setSchedules(schedules?.filter(
-      (item, index) => index !== targetDeleteIndex,
+      (item) => item.schedule_id !== deleteId,
     ));
   }
 
@@ -593,73 +596,23 @@ function MySchedules() {
                   <ExistedSchedules>
                     {schedules?.map((item, index) => (
                       <ExistedSchedule
-                        key={`${item?.schedule_id}`}
-                        data-position={index}
+                        key={item?.schedule_id}
                         isSelected={index === targetIndex}
                       >
-                        <div
-                          className="modal-background"
-                        >
-                          <div
-                            className="modal"
-                          >
-                            <DeleteModalTitle
-                              key={`${item?.schedule_id}and${item?.title}`}
-
-                            >
-                              Delete
-                            </DeleteModalTitle>
-                            <DeleteAsk
-                              key={`${item?.schedule_id}+${item?.title}+${item?.end_date}`}
-                            >
-                              確認要刪除嗎？
-
-                            </DeleteAsk>
-                            <DeleteButtonArea
-                              key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.end_date}`}
-                            >
-                              <NoDeleteButton
-                                key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
-                                onClick={() => closeModal()}
-                                type="button"
-                              >
-                                取消
-                              </NoDeleteButton>
-                              <ConfirmDeleteButton
-                                key={`${item?.deleted}`}
-                                onClick={() => {
-                                  deleteScheduleOfTheUser(index);
-                                  closeModal(); deleteCertainSchedule(item.schedule_id);
-                                }}
-                                type="button"
-                              >
-                                確認
-
-                              </ConfirmDeleteButton>
-                            </DeleteButtonArea>
-                          </div>
-                        </div>
                         <PhotoArea
-                          key={`${item?.title}`}
                           src={SQUARE_COVER[index % 5]}
                         />
-                        <ScheduleRightPart
-                          key={`${item?.embark_date}+${item?.end_date}`}
-
-                        >
+                        <ScheduleRightPart>
                           <ExistedScheuleTitle
-                            key={`${item?.title}+${item?.deleted}`}
                             id={item?.schedule_id}
                           >
                             {item?.title}
                           </ExistedScheuleTitle>
-                          <ButtonArea
-                            key={`${item?.embark_date}and`}
-                          >
-                            <Button key={`${item?.schedule_id}+${item?.end_date}`} onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
+                          <ButtonArea>
+                            <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
                               選擇
                             </Button>
-                            <Button key={`${item?.title}+${item?.end_date}`} className="button" onClick={() => { toggleModal(); }} id={item?.schedule_id} type="button">
+                            <Button className="button" onClick={() => { toggleModal(); setDeleteId(item?.schedule_id); }} id={item?.schedule_id} type="button">
                               刪除
                             </Button>
                           </ButtonArea>
@@ -667,16 +620,12 @@ function MySchedules() {
 
                         <SmallScheduleRightPart>
                           <ExistedScheuleTitle
-                            key={`${item?.title}+${item?.deleted}+${item?.end_date}`}
                             id={item?.schedule_id}
                           >
                             {item.title}
                           </ExistedScheuleTitle>
-                          <ButtonArea
-                            key={`${item?.schedule_id}+${item?.title}+${item?.deleted}+${item?.end_date}`}
-                          >
+                          <ButtonArea>
                             <Button
-                              key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
                               onClick={() => {
                                 setTargetIndex(index);
                                 getSelectedSchedule(item?.schedule_id);
@@ -687,7 +636,6 @@ function MySchedules() {
                               選擇
                             </Button>
                             <Button
-                              key={`${item?.schedule_id}+${item?.title}+${item?.end_date}+${item?.deleted}+${item?.embark_date}`}
                               onClick={() => toggleModal()}
                               id={item?.schedule_id}
                               type="button"
@@ -698,7 +646,43 @@ function MySchedules() {
                         </SmallScheduleRightPart>
                       </ExistedSchedule>
                     ))}
+                    <div
+                      className="modal-background"
+                    >
+                      <div
+                        className="modal"
+                      >
+                        <DeleteModalTitle>
+                          Delete
+                        </DeleteModalTitle>
+                        <DeleteAsk>
+                          確認要刪除嗎？
+
+                        </DeleteAsk>
+                        <DeleteButtonArea>
+                          <NoDeleteButton
+                            onClick={() => closeModal()}
+                            type="button"
+                          >
+                            取消
+                          </NoDeleteButton>
+                          <ConfirmDeleteButton
+                            onClick={() => {
+                              console.log('indexxxx', deleteId);
+                              deleteScheduleOfTheUser(deleteId);
+                              closeModal();
+                              deleteCertainSchedule(deleteId);
+                            }}
+                            type="button"
+                          >
+                            確認
+
+                          </ConfirmDeleteButton>
+                        </DeleteButtonArea>
+                      </div>
+                    </div>
                   </ExistedSchedules>
+
                 )}
             </ChoicesWrapper>
             <Line />
