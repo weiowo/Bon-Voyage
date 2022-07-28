@@ -1,7 +1,3 @@
-<!-- <div align="left">
-<img width="40px" src="./public/suitcase-2.png"/>
-</div> -->
-
 # Bon Voyage <img align="center" width="35px" src="./public/suitcase-2.png"/>
 
 
@@ -9,11 +5,9 @@
 >
 > <img align="center" width="25px" src="./src/pages/images/travel.png"/>  Fun fact: `"Bon Voyage!"` means "Have a nice trip!" in French.
 
-<!-- - [Bon Voyage <img align="center" width="35px" src="./public/suitcase-2.png"/>](#bon-voyage-) -->
   - [Motivation](#motivation)
   - [Embark Now!](#embark-now)
-        - [<em>Reminder: For a more thorough user experience, please allow location access and sign up.</em>](#reminder-for-a-more-thorough-user-experience-please-allow-location-access-and-sign-up)
-  - [Developed with <img align="center" width="24px" src="./src/pages/images/heart.png"/> and](#developed-with--and)
+  - [Development skills and utilized tools](#developed-with--and)
   - [Features](#features)
       - [`Create your travel schedules`<br/>](#create-your-travel-schedules)
       - [`Add friends to schedules and chat with them.`](#add-friends-to-schedules-and-chat-with-them)
@@ -73,40 +67,45 @@ Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)
 ## Features
 
 #### `Create your travel schedules`<br/>
-Create new schedules and edit instantly with friends.<br/>
-![Create your travel schedule and edit instantly with friends](./readme_assets/create_new_schedule.gif)<br/>
+Create new schedules and edit instantly with friends.
+<br/>
+<img src="https://i.imgur.com/3UUfZMm.gif" height="100%" alt="Create travel schedules" >
 
 #### `Add friends to schedules and chat with them.`
-
-![Add friends to schedules and chat with them.](./readme_assets/add_friend_chatroom.gif)<br/>
+<img src="https://i.imgur.com/dUQVuTc.gif" height="100%" alt="Add friends to schedules" >
 
 #### `Adjust schedule detail`
-Drag and drop to to change order, get direction, distance and driving time right after adding new places.<br/>
-
-![Search tourist-attractions/restaurants/hotels of the world](./readme_assets/drag_and_drop.gif)<br/>
+Drag and drop to to change order, get direction, distance and driving time right after adding new places.
+<br/>
+<img src="https://i.imgur.com/2zIm45l.gif" height="100%" alt="Adjust schedule detail" >
 
 #### `Search travel destinations`
-Search tourist-attractions / restaurants / hotels and add to existed schedules.<br/>
-![Search tourist-attractions/restaurants/hotels of the world](./readme_assets/search_by_city_add_schedule.gif)<br/>
+Search tourist-attractions / restaurants / hotels and add to existed schedules.
+<br/>
+<img src="https://i.imgur.com/xhCdVis.gif" height="100%" alt="Search travel destinations" >
 
 #### `Search places by different categories`
-![Search places by different categories](./readme_assets/search_place_by_category.gif)<br/>
+<img src="https://i.imgur.com/5a74dDJ.gif" height="100%" alt="Search places by categories" >
 
 #### `Edit & publish travel blogs`
-Based on existed schedules, write contents and add images to share with  others.<br/>
-![Write travel blogs with images based on existed schedules.](./readme_assets/export_schedule_write.gif)<br/>
+Based on existed schedules, write contents and add images to share with  others.
+<br/>
+<img src="https://i.imgur.com/RNk7xOA.gif" height="100%" alt="Edit & publish travel blogs">
 
 #### `Discover travel blogs written by others`
-Read travel blogs and scroll to specified area on clicking titles.<br/>
-![Read travel blogs and scroll to specified area on clicking titles](./readme_assets/read_articles.gif)<br/>
+Read travel blogs and scroll to specified area on clicking titles.
+<br/>
+<img src="https://i.imgur.com/Ci6gOTv.gif" height="100%" alt="travel blogs" >
 
 #### `Virtual Reality`
-Experience VR in 360 degree just like being at the place in person.<br/>
-![Experience Virtual Reality just like at the place in person](./readme_assets/virtual_reality.gif)<br/>
+Experience VR in 360 degree just like being at the place in person.
+<br/>
+<img src="https://i.imgur.com/dLHIuhg.gif" height="100%" alt="Virtual Reality" >
 
 #### `Add to favorite`
-Add places and articles to my-favorite area.<br/>
-![Experience Virtual Reality just like at the place in person](./readme_assets/add_to_favorite.gif)<br/>
+Add places and articles to my-favorite area.
+<br/>
+<img src="https://i.imgur.com/fb0xyNf.gif" height="100%" alt="Add friends to schedules" >
 
 ## Contact
 
