@@ -145,6 +145,7 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.2);
 background-blend-mode: multiply;
+transition:0.8s;
 &:hover {
     transform: scale(1.2);
 }
@@ -182,6 +183,7 @@ background-size:cover;
 background-repeat: no-repeat;
 background-color: rgb(0, 0, 0, 0.1);
 background-blend-mode: multiply;
+transition:0.8s;
 &:hover {
     transform: scale(1.2);
 }

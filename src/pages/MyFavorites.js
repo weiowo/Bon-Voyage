@@ -182,6 +182,7 @@ function MyLovedArticles() {
 
   useEffect(() => {
     async function getUser() {
+      if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -219,6 +220,7 @@ function MyLovedArticles() {
 
   useEffect(() => {
     async function getUserArrayList() {
+      if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -372,7 +374,7 @@ function MyLovedArticles() {
                 </WriteRightArea>
               </WriteArticleRemind>
             ) : myLovedArticles?.map((item) => (
-              <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
+              <StyledLink key={item?.schedule_id} to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                 <MyArticle>
                   <CoverPhotoInMyArticle
                     src={item?.cover_img ? item?.cover_img
@@ -411,6 +413,7 @@ function MyLovedArticles() {
               </WriteArticleRemind>
             ) : myLovedAttractions?.map((item) => (
               <MyArticle
+                key={item?.place_id}
                 onClick={() => {
                   ShowDetailNCheckLikedOrNot(item.place_id);
                 }}
@@ -479,6 +482,7 @@ function MyLovedArticles() {
           <ScheduleBoxWrapper>
             {categoryPageScheduleData ? categoryPageScheduleData.map((item, index) => (
               <ScheduleBox
+                key={item?.schedule_id}
                 onClick={() => {
                   setClickedScheduleId(item.schedule_id);
                   setClickedScheduleIndex(index);
@@ -514,6 +518,7 @@ function MyLovedArticles() {
             {categoryPageScheduleData
               ? categoryPageScheduleData[clickedScheduleIndex]?.trip_days.map((item, index) => (
                 <ScheduleBox
+                  key={`${index + 1}day`}
                   clicked={dayIndex === index}
                   onClick={() => {
                     setDayIndex(index);

@@ -209,6 +209,7 @@ function MyArticles() {
 
   useEffect(() => {
     async function getUserArrayList() {
+      if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -290,6 +291,7 @@ function MyArticles() {
 
   useEffect(() => {
     async function getUserArticleArrayList() {
+      if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -393,6 +395,7 @@ function MyArticles() {
                 )
                   : myArtPageScheduleData.map((item, index) => (
                     <ScheduleBox
+                      key={item?.schedule_id}
                       clicked={index === selectedScheduleIndex}
                       onClick={() => {
                         setSelectedSchedule(item);
@@ -432,7 +435,7 @@ function MyArticles() {
                   </WriteRightArea>
                 </WriteArticleRemind>
               ) : myPublishedArticles?.map((item) => (
-                <ArticlePreviewAndDeleteWrapper>
+                <ArticlePreviewAndDeleteWrapper key={item?.article_id}>
                   <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                     <MyArticle>
                       <CoverPhotoInMyArticle
@@ -480,7 +483,7 @@ function MyArticles() {
                   </WriteRightArea>
                 </WriteArticleRemind>
               ) : myDraftArticles?.map((item) => (
-                <ArticlePreviewAndDeleteWrapper>
+                <ArticlePreviewAndDeleteWrapper key={item?.article_id}>
                   <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                     <MyArticle>
                       <CoverPhotoInMyArticle

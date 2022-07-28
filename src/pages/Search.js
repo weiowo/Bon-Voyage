@@ -37,7 +37,7 @@ left:calc( 45vw - 70px );
 //   position:fixed;
 //   top:20px;
 //   left:20px;
-}`;
+`;
 
 export default function Search({
   panTo, active, setSelected, onClickClose,

@@ -647,7 +647,6 @@ function Schedule() {
                   )
                   : '')}
                 <PlaceContainer
-                  key={placeItem?.place_address}
                   data-position={placeIndex}
                   draggable
                   onDragStart={onPlaceDragStart}
@@ -730,7 +729,7 @@ function Schedule() {
           </ChatRoomTitle>
           <MessagesDisplayArea>
             {chatBox ? chatBox?.messages?.map((item) => (
-              <MessageBox key={item?.photo_url} ref={messagesEndRef}>
+              <MessageBox key={item?.message} ref={messagesEndRef}>
                 <UserPhoto src={item?.photo_url} />
                 <NameMessage>
                   <Name>

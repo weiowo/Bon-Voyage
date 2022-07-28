@@ -49,7 +49,7 @@ gap:30px;
 display:flex;
 justify-content:space-between;
 width:90%;
-height:300px;
+/* height:120px; */
 border:1.5px #226788 solid;
 border-radius:15px;
 padding-top:20px;
@@ -92,8 +92,8 @@ color:#226788;
 `;
 
 export const RecommendPlcePhoto = styled.img`
-width:70px;
-height:70px;
+width:90px;
+height:90px;
 border-radius:15px;
 margin-right:30px;
 `;
