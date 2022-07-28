@@ -69,46 +69,56 @@ Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)
 #### `Create your travel schedules`<br/>
 Create new schedules and edit instantly with friends.
 <br/>
-<img src="https://i.imgur.com/L1sFhtR.gif" height="100%" alt="Create travel schedules" >
+![Create your travel schedules](./readme_assets/create_schedule.gif)
+<!-- <img src="https://i.imgur.com/L1sFhtR.gif" height="100%" alt="Create travel schedules" > -->
 
 #### `Add friends to schedules and chat with them.`
-<img src="https://i.imgur.com/HgpXe2G.gif" height="100%" alt="Add friends to schedules" >
+![Add friends to schedules](./readme_assets/add_friend_chat.gif)
+<!-- <img src="https://i.imgur.com/HgpXe2G.gif" height="100%" alt="Add friends to schedules" > -->
 
 #### `Adjust schedule detail`
 Drag and drop to to change order, get direction, distance and driving time right after adding new places.
 <br/>
-<img src="https://i.imgur.com/mrAkH6b.gif" height="100%" alt="Adjust schedule detail" >
+![Adjust schedule detail](./readme_assets/drag.gif)
+<!-- <img src="https://i.imgur.com/mrAkH6b.gif" height="100%" alt="Adjust schedule detail" > -->
 
 #### `Search travel destinations`
 Search tourist-attractions / restaurants / hotels and add to existed schedules.
 <br/>
-<img src="https://i.imgur.com/kIpVwkK.gif" height="100%" alt="Search travel destinations" >
+![Search travel destinations](./readme_assets/paris.gif)
+<!-- <img src="https://i.imgur.com/kIpVwkK.gif" height="100%" alt="Search travel destinations" > -->
 
 #### `Search places by different categories`
-<img src="https://i.imgur.com/WujiZbL.gif" height="100%" alt="Search places by categories" >
+![Search places by different categories](./readme_assets/category_search.gif)
+<!-- <img src="https://i.imgur.com/WujiZbL.gif" height="100%" alt="Search places by categories" > -->
 
 #### `Edit & publish travel blogs`
 Based on existed schedules, write contents and add images to share with  others.
 <br/>
-<img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="Edit & publish travel blogs">
+![Edit & publish travel blogs](./readme_assets/export_write_article.gif)
+<!-- <img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="Edit & publish travel blogs"> -->
 
 #### `Discover travel blogs written by others`
 Read travel blogs and scroll to specified area on clicking titles.
 <br/>
-<img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="travel blogs" >
+![Discover travel blogs](./readme_assets/read_article.gif)
+<!-- <img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="travel blogs" > -->
 
 #### `Virtual Reality`
 Experience VR in 360 degree just like being at the place in person.
 <br/>
-<img src="https://i.imgur.com/tKFsYPZ.gif" height="100%" alt="Virtual Reality" >
+![Virtual Reality](./readme_assets/vr.gif)
+<!-- <img src="https://i.imgur.com/tKFsYPZ.gif" height="100%" alt="Virtual Reality" > -->
 
 #### `Add to favorite`
 Add places and articles to my-favorite area.
 <br/>
-<img src="https://i.imgur.com/xT2Gc1v.gif" height="100%" alt="Add friends to schedules" >
+![Virtual Reality](./readme_assets/add_favo.gif)
+<!-- <img src="https://i.imgur.com/xT2Gc1v.gif" height="100%" alt="Add friends to schedules" > -->
 
 ## Contact
 
 Feel free to contact if you have any suggestions!
+<br/>
 Weiwei WANG / wutamy77@gmail.com
 
