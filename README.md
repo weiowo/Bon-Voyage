@@ -105,7 +105,7 @@ Experience VR in 360 degree just like being at the place in person.
 #### `Add to favorite`
 Add places and articles to my-favorite area.
 <br/>
-<img src="https://i.imgur.com/fb0xyNf.gif" height="100%" alt="Add friends to schedules" >
+<img src="https://i.imgur.com/a2HiM7C.gif" height="100%" alt="Add friends to schedules" >
 
 ## Contact
 
