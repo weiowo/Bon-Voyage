@@ -24,15 +24,6 @@
 
 "Life is a journey, not a destination", so goes the saying. Scheduling a new trip from tourist-attraction searching to arrange travel itineary is always pretty time-consuming. Not to mention writing travel blogs on recalling places been to. "Bon Voyage" aims to integrate all these features and give users a wonderful user experiences before and after a trip!
 
-<!-- ## Intro
-
-- Obtain user's current location and list out cafes nearby(Taiwan).
-- Search cafes by keyword, features or city.
-- Allow user to bookmark cafes and create their own cafe maps.
-- Publish cafe blog to share the experience.
-- Leave a comment to connect with the community. -->
-
-
 ## Embark Now!
 
 Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)**
@@ -67,54 +58,58 @@ Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)
 ## Features
 
 #### `Create your travel schedules`<br/>
-Create new schedules and edit instantly with friends.
+Create new schedules and add places by searching.
 <br/>
+
 ![Create your travel schedules](./readme_assets/create_schedule.gif)
-<!-- <img src="https://i.imgur.com/L1sFhtR.gif" height="100%" alt="Create travel schedules" > -->
 
 #### `Add friends to schedules and chat with them.`
-![Add friends to schedules](./readme_assets/add_friend_chat.gif)
-<!-- <img src="https://i.imgur.com/HgpXe2G.gif" height="100%" alt="Add friends to schedules" > -->
-
-#### `Adjust schedule detail`
-Drag and drop to to change order, get direction, distance and driving time right after adding new places.
+- Invite friends to join schedules.
+- Chat with friends and get instant messages from them.
 <br/>
+
+![Add friends to schedules](./readme_assets/add_friend_chat.gif)
+#### `Adjust schedule detail`
+- Real-time update when other members edit.
+- Drag and drop function to to change order.
+- Get direction, distance and driving time right after adding new places.
+- Mark routes and place in different days with different colors.
+<br/>
+
 ![Adjust schedule detail](./readme_assets/drag.gif)
-<!-- <img src="https://i.imgur.com/mrAkH6b.gif" height="100%" alt="Adjust schedule detail" > -->
 
 #### `Search travel destinations`
 Search tourist-attractions / restaurants / hotels and add to existed schedules.
 <br/>
+
 ![Search travel destinations](./readme_assets/paris.gif)
-<!-- <img src="https://i.imgur.com/kIpVwkK.gif" height="100%" alt="Search travel destinations" > -->
+
 
 #### `Search places by different categories`
 ![Search places by different categories](./readme_assets/category_search.gif)
-<!-- <img src="https://i.imgur.com/WujiZbL.gif" height="100%" alt="Search places by categories" > -->
+
 
 #### `Edit & publish travel blogs`
-Based on existed schedules, write contents and add images to share with  others.
+Based on existed schedules, write contents and add images to share with others.
 <br/>
 ![Edit & publish travel blogs](./readme_assets/export_write_article.gif)
-<!-- <img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="Edit & publish travel blogs"> -->
+
+
 
 #### `Discover travel blogs written by others`
-Read travel blogs and scroll to specified area on clicking titles.
+Read travel blogs written by other users and scroll to specified area on clicking titles.
 <br/>
 ![Discover travel blogs](./readme_assets/read_article.gif)
-<!-- <img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="travel blogs" > -->
 
 #### `Virtual Reality`
-Experience VR in 360 degree just like being at the place in person.
+Experience VR in 360 degree photo, get closer to the monuments, just like being at the place in person.
 <br/>
 ![Virtual Reality](./readme_assets/vr.gif)
-<!-- <img src="https://i.imgur.com/tKFsYPZ.gif" height="100%" alt="Virtual Reality" > -->
 
 #### `Add to favorite`
-Add places and articles to my-favorite area.
+Click star and add favorite places and articles to my-favorite area.
 <br/>
-![Virtual Reality](./readme_assets/add_favo.gif)
-<!-- <img src="https://i.imgur.com/xT2Gc1v.gif" height="100%" alt="Add friends to schedules" > -->
+![Add to favorite](./readme_assets/add_favo.gif)
 
 ## Contact
 
