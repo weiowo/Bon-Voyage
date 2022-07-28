@@ -69,43 +69,43 @@ Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)
 #### `Create your travel schedules`<br/>
 Create new schedules and edit instantly with friends.
 <br/>
-<img src="https://i.imgur.com/qBEEE7l.gif" height="100%" alt="Create travel schedules" >
+<img src="https://i.imgur.com/L1sFhtR.gif" height="100%" alt="Create travel schedules" >
 
 #### `Add friends to schedules and chat with them.`
-<img src="https://i.imgur.com/nwCQSur.gif" height="100%" alt="Add friends to schedules" >
+<img src="https://i.imgur.com/HgpXe2G.gif" height="100%" alt="Add friends to schedules" >
 
 #### `Adjust schedule detail`
 Drag and drop to to change order, get direction, distance and driving time right after adding new places.
 <br/>
-<img src="https://i.imgur.com/P8G3cas.gif" height="100%" alt="Adjust schedule detail" >
+<img src="https://i.imgur.com/mrAkH6b.gif" height="100%" alt="Adjust schedule detail" >
 
 #### `Search travel destinations`
 Search tourist-attractions / restaurants / hotels and add to existed schedules.
 <br/>
-<img src="https://i.imgur.com/a2HiM7C.gif" height="100%" alt="Search travel destinations" >
+<img src="https://i.imgur.com/kIpVwkK.gif" height="100%" alt="Search travel destinations" >
 
 #### `Search places by different categories`
-<img src="https://i.imgur.com/TRoI8Bx.gif" height="100%" alt="Search places by categories" >
+<img src="https://i.imgur.com/WujiZbL.gif" height="100%" alt="Search places by categories" >
 
 #### `Edit & publish travel blogs`
 Based on existed schedules, write contents and add images to share with  others.
 <br/>
-<img src="https://i.imgur.com/useqjwA.gif" height="100%" alt="Edit & publish travel blogs">
+<img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="Edit & publish travel blogs">
 
 #### `Discover travel blogs written by others`
 Read travel blogs and scroll to specified area on clicking titles.
 <br/>
-<img src="https://i.imgur.com/y8NiSIh.gif" height="100%" alt="travel blogs" >
+<img src="https://i.imgur.com/Ci6gOTv.gif" height="100%" alt="travel blogs" >
 
 #### `Virtual Reality`
 Experience VR in 360 degree just like being at the place in person.
 <br/>
-<img src="https://i.imgur.com/SROVVs8.gif" height="100%" alt="Virtual Reality" >
+<img src="https://i.imgur.com/tKFsYPZ.gif" height="100%" alt="Virtual Reality" >
 
 #### `Add to favorite`
 Add places and articles to my-favorite area.
 <br/>
-<img src="https://i.imgur.com/a2HiM7C.gif" height="100%" alt="Add friends to schedules" >
+<img src="https://i.imgur.com/xT2Gc1v.gif" height="100%" alt="Add friends to schedules" >
 
 ## Contact
 
