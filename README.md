@@ -95,7 +95,7 @@ Based on existed schedules, write contents and add images to share with  others.
 #### `Discover travel blogs written by others`
 Read travel blogs and scroll to specified area on clicking titles.
 <br/>
-<img src="https://i.imgur.com/Ci6gOTv.gif" height="100%" alt="travel blogs" >
+<img src="https://i.imgur.com/P5yasj9.gif" height="100%" alt="travel blogs" >
 
 #### `Virtual Reality`
 Experience VR in 360 degree just like being at the place in person.
