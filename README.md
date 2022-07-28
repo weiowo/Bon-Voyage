@@ -86,12 +86,16 @@ Search tourist-attractions / restaurants / hotels and add to existed schedules.
 
 
 #### `Search places by different categories`
+Search places by categories such as Food / Camping / Nightlife / Family /Couple / Shopping / Religion / Artistic.
+<br/>
+
 ![Search places by different categories](./readme_assets/category_search.gif)
 
 
 #### `Edit & publish travel blogs`
 Based on existed schedules, write contents and add images to share with others.
 <br/>
+
 ![Edit & publish travel blogs](./readme_assets/export_write_article.gif)
 
 
@@ -99,16 +103,19 @@ Based on existed schedules, write contents and add images to share with others.
 #### `Discover travel blogs written by others`
 Read travel blogs written by other users and scroll to specified area on clicking titles.
 <br/>
+
 ![Discover travel blogs](./readme_assets/read_article.gif)
 
 #### `Virtual Reality`
 Experience VR in 360 degree photo, get closer to the monuments, just like being at the place in person.
 <br/>
+
 ![Virtual Reality](./readme_assets/vr.gif)
 
 #### `Add to favorite`
 Click star and add favorite places and articles to my-favorite area.
 <br/>
+
 ![Add to favorite](./readme_assets/add_favo.gif)
 
 ## Contact
