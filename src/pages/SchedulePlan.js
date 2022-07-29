@@ -695,7 +695,7 @@ function Schedule() {
             : ''}
           <DayContainerBoxes />
           <AddNewScheduleButton type="button" onClick={() => { setActive(true); setScheduleDisplay(false); addPlaceInDay(choosedDayIndex); setClickedDayIndex(choosedDayIndex); }}>
-            新增行程
+            新增景點
             <AddNewScheduleIcon alt="add-new-schedule" src={ICONS?.PLUS_ICON} />
           </AddNewScheduleButton>
         </LeftContainer>
