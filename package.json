@@ -21,6 +21,8 @@
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.5",
+    "sweetalert2": "^11.4.24",
+    "sweetalert2-react-content": "^5.0.2",
     "swiper": "^6.8.4",
     "use-immer": "^0.7.0",
     "use-places-autocomplete": "^4.0.0",

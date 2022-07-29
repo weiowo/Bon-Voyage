@@ -8,6 +8,7 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import { updateDoc, doc, onSnapshot } from 'firebase/firestore';
+import Swal from 'sweetalert2';
 import db, { app, storage } from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
@@ -195,9 +196,13 @@ const auth = getAuth(app);
 
 export function signOutFunction() {
   signOut(auth).then(() => {
-    alert('您已登出囉～');
+    console.log('使用者已登出');
   }).catch((error) => {
-    console.log(error);
+    Swal.fire({
+      title: '遇到了一些問題！',
+      text: error,
+      icon: 'warning',
+    });
   });
 }
 

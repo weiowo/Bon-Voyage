@@ -5,6 +5,7 @@ import
 import React, {
   useEffect, useState, useContext, Fragment,
 } from 'react';
+import Swal from 'sweetalert2';
 import { useImmer } from 'use-immer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -321,7 +322,11 @@ function ShowArticle() {
 
   async function handleFavorite() {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else {
       const userArticlesArray = doc(db, 'users', user.uid);

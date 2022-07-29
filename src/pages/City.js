@@ -1,6 +1,7 @@
 import React, {
   useCallback, useEffect, useRef, useState, useContext,
 } from 'react';
+import Swal from 'sweetalert2';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
 import styled from 'styled-components/macro';
@@ -277,7 +278,11 @@ function City() {
 
   function handleUserOrNot() {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else {
       setModalIsActive(false); setChooseScheduleModalIsActive(true);
@@ -293,8 +298,6 @@ function City() {
       setLiked(false);
     }
   }
-
-  // 確認是否收藏過了 // 打api拿detail
 
   function ShowDetailNCheckLikedOrNot(clickedPlaceId) {
     if (user.uid) {
@@ -318,7 +321,11 @@ function City() {
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else {
       const userArticlesArray = doc(db, 'users', user.uid);
