@@ -12,139 +12,145 @@ import 'react-datepicker/dist/react-datepicker.css';
 import TRAVEL_BG from './images/travel2.jpg';
 
 const CloseModalButton = styled.button`
-display:flex;
-align-items:center;
-justify-content:center;
-height:25px;
-width:25px;
-position:absolute;
-right:20px;
-top:20px;
-text-align:center;
-border:none;
-border-radius:50%;
-background-color:black;
-color:white;
-cursor:pointer;
-@media screen and (max-width:400px){
-  right:15px;
-  top:15px;
-}`;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:25px;
+  width:25px;
+  position:absolute;
+  right:20px;
+  top:20px;
+  text-align:center;
+  border:none;
+  border-radius:50%;
+  background-color:black;
+  color:white;
+  cursor:pointer;
+  @media screen and (max-width:400px){
+    right:15px;
+    top:15px;
+  }
+`;
 
 const ModelBox = styled.div`
-width:700px;
-height:500px;
-background-color:white;
-position:relative;
-z-index:10;
-border-radius:20px;
-align-items:center;
-display:flex;
-flex-direction:column;
-justify-content:center;
-gap:20px;
-@media screen and (max-width:800px){
-  width:300px;
-  height:350px;
-}`;
+  width:700px;
+  height:500px;
+  background-color:white;
+  position:relative;
+  z-index:10;
+  border-radius:20px;
+  align-items:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:20px;
+  @media screen and (max-width:800px){
+    width:300px;
+    height:350px;
+  }
+`;
 
 const TripTitleAndInputArea = styled.div`
-width:80%;
-height:50px;
-display:flex;
-align-items:center;
-justify-content:center;
-@media screen and (max-width:800px){
-height:auto;
-}`;
+  width:80%;
+  height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  @media screen and (max-width:800px){
+  height:auto;
+  }
+`;
 
 const DatePickerWrapper = styled.div`
-width:100%;
-height:auto;
-display:flex;
-gap:20px;
-justify-content:center;
-@media screen and (max-width:800px){
-  display:none;
-}`;
+  width:100%;
+  height:auto;
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  @media screen and (max-width:800px){
+    display:none;
+  }
+`;
 
 const TripTitleInput = styled.input`
-width: 70%;
-height:22px;
-font-weight:500;
-font-size:18px;
-border:none;
-background-color:transparent;
-border-bottom:1px solid black;
-outline:none;
-padding-left:10px;
-padding-left:5px;
-@media screen and (max-width:800px){
-  font-size:16px;
-}`;
+  width: 70%;
+  height:22px;
+  font-weight:500;
+  font-size:18px;
+  border:none;
+  background-color:transparent;
+  border-bottom:1px solid black;
+  outline:none;
+  padding-left:10px;
+  padding-left:5px;
+  @media screen and (max-width:800px){
+    font-size:16px;
+  }
+`;
 
 const EmbarkDateWrpper = styled.div`
-display:flex;
-flex-direction:column;
-width:35%;
-height:auto;
-gap:10px;
+  display:flex;
+  flex-direction:column;
+  width:35%;
+  height:auto;
+  gap:10px;
 `;
 
 const EmbarkEndDateTitle = styled.div`
-width:100%;
-font-weight:550;
-font-size:16px;
-color:grey;
-@media screen and (max-width:800px){
-  font-size:15px;
-}`;
+  width:100%;
+  font-weight:550;
+  font-size:16px;
+  color:grey;
+  @media screen and (max-width:800px){
+    font-size:15px;
+  }
+`;
 
 const ModalBackgroud = styled.div`
-width:100vw;
-height:100vh;
-position:fixed;
-// background-color:rgba(0, 0, 0, 0.7);
-display:flex;
-justify-content:center;
-align-items:center;
-background-image: url(${TRAVEL_BG});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-background-position:center;
+  width:100vw;
+  height:100vh;
+  position:fixed;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background-image: url(${TRAVEL_BG});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  background-position:center;
 `;
 
 const ConfirmedButton = styled.button`
-width:80px;
-height:30px;
-background-color:#296D98;
-color:white;
-font-size:14px;
-font-weight:600;
-border:none;
-border-radius:5px;
-cursor:pointer;
+  width:80px;
+  height:30px;
+  background-color:#296D98;
+  color:white;
+  font-size:14px;
+  font-weight:600;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
 `;
 
 const SmallCalendarWrapper = styled.div`
-display:none;
-@media screen and (max-width:800px){
-  display:flex;
-  width:80%;
-  height:50%;
-  flex-direction:column;
-  gap:10px;
-  align-items:center;
-  justify-content:center;
-}`;
+  display:none;
+  @media screen and (max-width:800px){
+    display:flex;
+    width:80%;
+    height:50%;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+    justify-content:center;
+  }
+`;
 
 const SmallCalendarStyle = styled.div`
-border-radius:10px;
-height:50px;
-width:200px;
-background-color:red;
+  border-radius:10px;
+  height:50px;
+  width:200px;
+  background-color:red;
 `;
 
 function ChooseDate() {

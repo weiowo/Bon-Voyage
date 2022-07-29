@@ -41,102 +41,102 @@ import PLACE_PHOTO from '../constants/place.photo';
 import REMINDER_ICONS from '../constants/reminder.icon';
 
 const Banner = styled.div`
-width:100vw;
-height:50vw;
-background-image: url(${CITY_BG});
-background-size:cover;
-background-repeat: no-repeat;
-background-blend-mode: multiply;
+  width:100vw;
+  height:50vw;
+  background-image: url(${CITY_BG});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
 `;
 
 const CityTitle = styled.div`
-width:100vw;
-height:auto;
-z-index:10;
-font-size:35px;
-font-weight:600;
-position:absolute;
-top:130px;
-@media screen and (max-width:1000px){
-  top:100px;
-  font-size:30px;
-}
-@media screen and (max-width:800px){
-  top:70px;
-  font-size:30px;
-}
-@media screen and (max-width:520px){
-  top:60px;
-  font-size:20px;
-}
-@media screen and (max-width:400px){
-  top:50px;
-  font-size:20px;
-}
+  width:100vw;
+  height:auto;
+  z-index:10;
+  font-size:35px;
+  font-weight:600;
+  position:absolute;
+  top:130px;
+  @media screen and (max-width:1000px){
+    top:100px;
+    font-size:30px;
+  }
+  @media screen and (max-width:800px){
+    top:70px;
+    font-size:30px;
+  }
+  @media screen and (max-width:520px){
+    top:60px;
+    font-size:20px;
+  }
+  @media screen and (max-width:400px){
+    top:50px;
+    font-size:20px;
+  }
 `;
 
 const ContentArea = styled.div`
-width:100vw;
-height:400px;
-display:flex;
-flex-direction:column;
+  width:100vw;
+  height:400px;
+  display:flex;
+  flex-direction:column;
 `;
 
 const AttractionAreaTitle = styled.div`
-width:100vw;
-height:auto;
-font-size:26px;
-display:flex;
-justify-content:center;
-margin-top:50px;
-font-weight:600;
+  width:100vw;
+  height:auto;
+  font-size:26px;
+  display:flex;
+  justify-content:center;
+  margin-top:50px;
+  font-weight:600;
 `;
 
 const AttractionWrapper = styled.div`
-display:flex;
-width:100vw;
-height:auto;
-flex-wrap:wrap;
-justify-content:center;
-margin-top:0px;
-@media screen and (max-width:1000px){
-  gap:20px;
-}
-@media screen and (max-width:890px){
-  gap:10px;
-}
-@media screen and (max-width:777px){
-  gap:10px;
-}
-@media screen and (max-width:513px){
-  gap:10px;
-}
+  display:flex;
+  width:100vw;
+  height:auto;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:0px;
+  @media screen and (max-width:1000px){
+    gap:20px;
+  }
+  @media screen and (max-width:890px){
+    gap:10px;
+  }
+  @media screen and (max-width:777px){
+    gap:10px;
+  }
+  @media screen and (max-width:513px){
+    gap:10px;
+  }
 `;
 
 const RestaurantAreaTitle = styled.div`
-width:100vw;
-height:auto;
-font-size:26px;
-display:flex;
-justify-content:center;
-margin-top:50px;
-font-weight:600;
+  width:100vw;
+  height:auto;
+  font-size:26px;
+  display:flex;
+  justify-content:center;
+  margin-top:50px;
+  font-weight:600;
 `;
 
 const RestaurantWrapper = styled.div`
-display:flex;
-width:100vw;
-height:auto;
-flex-wrap:wrap;
-justify-content:center;
-margin-top:0px;
-gap:30px;
-@media screen and (max-width:777px){
-  gap:10px;
-}
-@media screen and (max-width:513px){
-  gap:10px;
-}
+  display:flex;
+  width:100vw;
+  height:auto;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-top:0px;
+  gap:30px;
+  @media screen and (max-width:777px){
+    gap:10px;
+  }
+  @media screen and (max-width:513px){
+    gap:10px;
+  }
 `;
 
 const libraries = ['places'];

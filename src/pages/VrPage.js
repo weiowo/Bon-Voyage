@@ -23,409 +23,408 @@ import BlackHeaderComponent from '../components/Headers/BlackHeader';
 import STAR from '../constants/stars';
 
 const PageTitle = styled.div`
-width:100%;
-height:30px;
-font-size:30px;
-color:white;
-text-shadow:2px 2px 3px black;
-font-weight:600;
-@media screen and (max-width:768px){
-  width:85%;
-  font-size:23px;
-}
+  width:100%;
+  height:30px;
+  font-size:30px;
+  color:white;
+  text-shadow:2px 2px 3px black;
+  font-weight:600;
+  @media screen and (max-width:768px){
+    width:85%;
+    font-size:23px;
+  }
 `;
 
 const TitleStarArea = styled.div`
-width:100%;
-height:auto;
-display:flex;
-align-items:center;
-justify-content:center;
+  width:100%;
+  height:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 `;
 
 const ConfirmChooseDayButton = styled.button`
-width:20%;
-height:35px;
-background: linear-gradient(
-  312deg,
-  rgb(178, 228, 238) 0%,
-  rgb(161, 176, 246) 100%
-);
-border-radius:25px;
-border:none;
-color:black;
-font-weight:600;
-font-size:16px;
-cursor:pointer;
+  width:20%;
+  height:35px;
+  background: linear-gradient(
+    312deg,
+    rgb(178, 228, 238) 0%,
+    rgb(161, 176, 246) 100%
+  );
+  border-radius:25px;
+  border:none;
+  color:black;
+  font-weight:600;
+  font-size:16px;
+  cursor:pointer;
 `;
 
 const PlaceBox = styled.div`
-width:100%;
-height:100%;
-border-radius:5px;
-cursor:pointer;
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.15);
-background-blend-mode: multiply;
-background-position:center;
+  width:100%;
+  height:100%;
+  border-radius:5px;
+  cursor:pointer;
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.15);
+  background-blend-mode: multiply;
+  background-position:center;
 `;
 
 const PlaceTitle = styled.div`
-position:absolute;
-left:15px;
-top:12px;
-font-size:20px;
-font-weight:600;
-color:white;
-text-shadow:1px 1px 2px black;
+  position:absolute;
+  left:15px;
+  top:12px;
+  font-size:20px;
+  font-weight:600;
+  color:white;
+  text-shadow:1px 1px 2px black;
 `;
 
 const AddFavoriteIcon = styled.img`
-width:25px;
-height:25px;
-cursor:pointer;
-position:absolute;
-right:15%;
-justify-self:right;
+  width:25px;
+  height:25px;
+  cursor:pointer;
+  position:absolute;
+  right:15%;
+  justify-self:right;
 `;
 
 const PlaceCountryTitle = styled.div`
-@import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
-font-family: "Pangolin", sans-serif;
-position:absolute;
-right:15px;
-bottom:12px;
-font-size:26px;
-font-weight:600;
-color:#CEE8F0;
-text-shadow:1px 1px 2px black;
+  @import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
+  font-family: "Pangolin", sans-serif;
+  position:absolute;
+  right:15px;
+  bottom:12px;
+  font-size:26px;
+  font-weight:600;
+  color:#CEE8F0;
+  text-shadow:1px 1px 2px black;
 `;
 
 const PlaceEngishTitle = styled.div`
-position:absolute;
-left:15px;
-top:40px;
-font-size:16px;
-font-weight:600;
-color:#F4E6D3;
-text-shadow:1px 1px 2px black;
+  position:absolute;
+  left:15px;
+  top:40px;
+  font-size:16px;
+  font-weight:600;
+  color:#F4E6D3;
+  text-shadow:1px 1px 2px black;
 `;
 
 const RemindArrow = styled.img`
-width:50px;
-height:auto;
-position:absolute;
-bottom:20px;
-right:20px;
-animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
-@media screen and (max-width:882px){
-  display:none;
-  }
+  width:50px;
+  height:auto;
+  position:absolute;
+  bottom:20px;
+  right:20px;
+  animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  @media screen and (max-width:882px){
+    display:none;
+    }
 `;
 
 const RemindText = styled.div`
-width:60px;
-height:auto;
-position:absolute;
-bottom:-10px;
-right:20px;
-font-weight:550;
-font-size:12px;
-border-radius:3px;
-border:1px solid black;
-// animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
-@media screen and (max-width:882px){
+  width:60px;
+  height:auto;
+  position:absolute;
+  bottom:-10px;
+  right:20px;
+  font-weight:550;
+  font-size:12px;
+  border-radius:3px;
+  border:1px solid black;
+  @media screen and (max-width:882px){
+    display:none;
+    }
+`;
+
+const VRModalBackground = styled.div`
+  width:100vw;
+  height:100vh;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background-color:rgba(0, 0, 0, 0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  display:${(props) => (props.active ? 'flex' : 'none')};
+  z-index:500;
+`;
+
+const ModalBox = styled.div`
+  display:flex;
+  width:80vw;
+  height:40vw;
+  background-color:white;
+  border-radius:10px;
+  position: relative;
+  align-items:center;
+  z-index:1500;
+  flex-direction:row;
+  @media screen and (max-width:1344px){
+    height:80vh;
+  }
+  @media screen and (max-width:1133px){
+    height:85vh;
+    width:90vw;
+  }
+  @media screen and (max-width:882px){
+    height:80vh;
+    width:90vw;
+    flex-direction:column;
+  }
+`;
+
+const ModalImgArea = styled.div`
+  width:60%;
+  height:100%;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  @media screen and (max-width:882px){
+    width:100%;
+    justify-content:center;
+  }
+`;
+
+const ModalLeftArea = styled.div`
+  width:40%;
+  height:85%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:left;
+  gap:15px;
+  position:relative;
+  @media screen and (max-width:945px){
+    height:90%;
+  }
+  @media screen and (max-width:882px){
+    margin-top:20px;
+    width:100%;
+    height:50%;
+    gap:5px;
+  }
+`;
+
+const IFrame = styled.iframe`
+  width:90%;
+  height:90%;
+  border:0;
+  border-radius:13px;
+  cursor:pointer;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  @media screen and (max-width:882px){
+    width:90%;
+    height:95%;
+  }
+`;
+
+const ModalPlaceTitle = styled.div`
+  font-size:30px;
+  font-weight:600;
+  width:75%;
+  @media screen and (max-width:882px){
+    font-size:25px;
+  }
+`;
+
+const ModalPlaceSubtitle = styled.div`
+  font-size:18px;
+  font-weight:550;
+  width:75%;
+  color:grey;
+  @media screen and (max-width:1344px){
+    font-size:16px;
+  }
+  @media screen and (max-width:1133px){
+    font-size:15px;
+  }
+  @media screen and (max-width:945px){
+    font-size:14px;
+  }
+  @media screen and (max-width:882px){
   display:none;
   }
 `;
 
-const VRModalBackground = styled.div`
-width:100vw;
-height:100vh;
-position:fixed;
-top:0;
-bottom:0;
-left:0;
-right:0;
-background-color:rgba(0, 0, 0, 0.7);
-display:flex;
-justify-content:center;
-align-items:center;
-display:${(props) => (props.active ? 'flex' : 'none')};
-z-index:500;
-`;
-
-const ModalBox = styled.div`
-display:flex;
-width:80vw;
-height:40vw;
-background-color:white;
-border-radius:10px;
-position: relative;
-align-items:center;
-z-index:1500;
-flex-direction:row;
-@media screen and (max-width:1344px){
-  height:80vh;
-}
-@media screen and (max-width:1133px){
-  height:85vh;
-  width:90vw;
-}
-@media screen and (max-width:882px){
-  height:80vh;
-  width:90vw;
-  flex-direction:column;
-}
-`;
-
-const ModalImgArea = styled.div`
-width:60%;
-height:100%;
-display:flex;
-flex-wrap:wrap;
-align-items:center;
-gap:10px;
-@media screen and (max-width:882px){
-  width:100%;
-  justify-content:center;
-}
-`;
-
-const ModalLeftArea = styled.div`
-width:40%;
-height:85%;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:left;
-gap:15px;
-position:relative;
-@media screen and (max-width:945px){
-  height:90%;
-}
-@media screen and (max-width:882px){
-  margin-top:20px;
-  width:100%;
-  height:50%;
-  gap:5px;
-}
-`;
-
-const IFrame = styled.iframe`
-width:90%;
-height:90%;
-border:0;
-border-radius:13px;
-cursor:pointer;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-@media screen and (max-width:882px){
-  width:90%;
-  height:95%;
-}
-`;
-
-const ModalPlaceTitle = styled.div`
-font-size:30px;
-font-weight:600;
-width:75%;
-@media screen and (max-width:882px){
-  font-size:25px;
-}
-`;
-
-const ModalPlaceSubtitle = styled.div`
-font-size:18px;
-font-weight:550;
-width:75%;
-color:grey;
-@media screen and (max-width:1344px){
-  font-size:16px;
-}
-@media screen and (max-width:1133px){
-  font-size:15px;
-}
-@media screen and (max-width:945px){
-  font-size:14px;
-}
-@media screen and (max-width:882px){
-display:none;
-}
-`;
-
 const ModalPlaceDescription = styled.div`
-font-size:15px;
-width:75%;
-text-align: justify;
-height:auto;
-@media screen and (max-width:882px){
-  width:85%;
-}
+  font-size:15px;
+  width:75%;
+  text-align: justify;
+  height:auto;
+  @media screen and (max-width:882px){
+    width:85%;
+  }
 `;
 
 const SeperateLine = styled.div`
-width:75%;
-height:1.5px;
-margin-top:10px;
-margin-bottom:10px;
-background-color:black;
-flex-shrink:0;
-@media screen and (max-width:882px){
-  width:85%;
-  margin-top:5px;
-  margin-bottom:5px;
-}
+  width:75%;
+  height:1.5px;
+  margin-top:10px;
+  margin-bottom:10px;
+  background-color:black;
+  flex-shrink:0;
+  @media screen and (max-width:882px){
+    width:85%;
+    margin-top:5px;
+    margin-bottom:5px;
+  }
 `;
 
 const ModalPlaceAddress = styled.div`
-width:75%;
-color:#696969;
-font-size:13px;
-display:flex;
-flex-direction:column;
-align-items:flex-start;
-gap:10px;
-text-align:justify;
-@media screen and (max-width:882px){
-  display:none;
+  width:75%;
+  color:#696969;
+  font-size:13px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+  text-align:justify;
+  @media screen and (max-width:882px){
+    display:none;
   }
   `;
 
 const ModalPlaceCountry = styled.div`
-width:20%;
-display:flex;
-align-items:center;
-justify-content:center;
-height:20px;
-background-color:black;
-padding:5px 5px 5px 5px;
-border-radius:3px;
-color:white;
-font-weight:500;
+  width:20%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:20px;
+  background-color:black;
+  padding:5px 5px 5px 5px;
+  border-radius:3px;
+  color:white;
+  font-weight:500;
 `;
 
 const AddToScheduleButton = styled.button`
-width:20%;
-height:40px;
-border-radius:5px;
-background-color:grey;
-font-weight:500;
-border:none;
-color:white;
-cursor:pointer;
-font-size:15px;
-@media screen and (max-width:1133px){
-  width:35%;
-}
-@media screen and (max-width:882px){
-  display:none;
-  }
-`;
-
-const SmallScreenAddButton = styled.button`
-display:none;
-@media screen and (max-width:882px){
-  display:block;
-  width:200px;
+  width:20%;
   height:40px;
-  flex-shrink:0;
-  border-radius:25px;
+  border-radius:5px;
   background-color:grey;
   font-weight:500;
   border:none;
   color:white;
   cursor:pointer;
-  font-size:17px;
-  margin-bottom:30px;
-  margin-top:10px;
+  font-size:15px;
+  @media screen and (max-width:1133px){
+    width:35%;
+  }
+  @media screen and (max-width:882px){
+    display:none;
+  }
+`;
+
+const SmallScreenAddButton = styled.button`
+  display:none;
+  @media screen and (max-width:882px){
+    display:block;
+    width:200px;
+    height:40px;
+    flex-shrink:0;
+    border-radius:25px;
+    background-color:grey;
+    font-weight:500;
+    border:none;
+    color:white;
+    cursor:pointer;
+    font-size:17px;
+    margin-bottom:30px;
+    margin-top:10px;
   }
 `;
 
 const CloseModalButton = styled.button`
-height:25px;
-width:25px;
-position:absolute;
-display:flex;
-align-items:center;
-justify-content:center;
-right:20px;
-top:20px;
-text-align:center;
-border:none;
-border-radius:50%;
-background-color:black;
-color:white;
-cursor:pointer;
+  height:25px;
+  width:25px;
+  position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  right:20px;
+  top:20px;
+  text-align:center;
+  border:none;
+  border-radius:50%;
+  background-color:black;
+  color:white;
+  cursor:pointer;
 `;
 
 const LeftButton = styled.button`
-height:25px;
-width:25px;
-position:absolute;
-background-image: url(${leftArrow});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-left:20px;
-top:20px;
-text-align:center;
-border:none;
-border-radius:50%;
-color:white;
-cursor:pointer;
+  height:25px;
+  width:25px;
+  position:absolute;
+  background-image: url(${leftArrow});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  left:20px;
+  top:20px;
+  text-align:center;
+  border:none;
+  border-radius:50%;
+  color:white;
+  cursor:pointer;
 `;
 
 const TransparentBackground = styled.div`
-width:100vw;
-height:450px;
-background-color:white;
-opacity:0.4;
-z-index:100;
-position:absolute;
-top:30%
+  width:100vw;
+  height:450px;
+  background-color:white;
+  opacity:0.4;
+  z-index:100;
+  position:absolute;
+  top:30%;
 `;
 
 const CurrentSchedulesTitle = styled.div`
-width:100%;
-height:30px;
-font-size:17px;
-font-weight:600;
-margin-top:20px;
-margin-bottom:10px;
+  width:100%;
+  height:30px;
+  font-size:17px;
+  font-weight:600;
+  margin-top:20px;
+  margin-bottom:10px;
 `;
 
 const ScheduleChoicesBoxWrapper = styled.div`
-display:flex;
-flex-flow:wrap;
-height:auto;
-width:80%;
-align-items:center;
-justify-content:center;
-gap:15px;
-padding-top:10px;
-padding-bottom:20px;
-padding-left:2px;
-&:after {
-  content: "";
-  width:455px;
-}
-overflow:auto;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar {
-  width: 5px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  background-color:#D3D3D3;
-}
+  display:flex;
+  flex-flow:wrap;
+  height:auto;
+  width:80%;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  padding-top:10px;
+  padding-bottom:20px;
+  padding-left:2px;
+  &:after {
+    content: "";
+    width:455px;
+  }
+  overflow:auto;
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: transparent;
+    border-radius: 10px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 5px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: transparent;
+    background-color:#D3D3D3;
+  }
 `;
 
 const Loading = styled.div`
@@ -439,49 +438,50 @@ const Loading = styled.div`
 `;
 
 const ScheduleChoicesBox = styled.div`
-display:flex;
-align-items:center;
-width:220px;
-height:60px;
-border-radius:10px;
-cursor:pointer;
-background-color:${(props) => (props.clicked ? '#E6D1F2' : '#e7f5fe')};
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-&:hover {
-  background-color:#E6D1F2;
-}`;
+  display:flex;
+  align-items:center;
+  width:220px;
+  height:60px;
+  border-radius:10px;
+  cursor:pointer;
+  background-color:${(props) => (props.clicked ? '#E6D1F2' : '#e7f5fe')};
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  &:hover {
+    background-color:#E6D1F2;
+  }
+`;
 
 const ScheduleChoiceTitle = styled.div`
-width:170px;
-text-align:left;
-height:auto;
-font-weight:500;
-font-size:15px;
-margin-left:20px;
+  width:170px;
+  text-align:left;
+  height:auto;
+  font-weight:500;
+  font-size:15px;
+  margin-left:20px;
 `;
 
 const ModalContentWrapper = styled.div`
-width:80%;
-height:80%;
-display:flex;
-flex-direction:column;
-align-items:center;
-z-index:500;
-overflow:auto;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar {
-  width: 5px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  background-color:#D3D3D3;
-}
+  width:80%;
+  height:80%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  z-index:500;
+  overflow:auto;
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: transparent;
+    border-radius: 10px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 5px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: transparent;
+    background-color:#D3D3D3;
+  }
 `;
 
 SwiperCore.use([EffectCoverflow, Navigation]);
@@ -491,9 +491,9 @@ function VR() {
   const [modalIsActive, setModalIsActive] = useState(false);
   const [chooseScheduleModalIsActive, setChooseScheduleModalIsActive] = useState(false);
   const [chooseDayModalIsActive, setChooseDayModalIsActive] = useState(false);
-  const [vrPageScheduleData, setVrPageScheduleData] = useImmer([]); // 是這個人所有的行程哦！不是單一筆行程!
-  const [clickedScheduleIndex, setClickedScheduleIndex] = useState(); // 點到的那個行程的index!
-  const [clickedScheduleId, setClickedScheduleId] = useState(); // 點到的那個行程的ID!
+  const [vrPageScheduleData, setVrPageScheduleData] = useImmer([]);
+  const [clickedScheduleIndex, setClickedScheduleIndex] = useState();
+  const [clickedScheduleId, setClickedScheduleId] = useState();
   const [modalIndex, setModalIndex] = useState(0);
   const user = useContext(UserContext);
   const navigate = useNavigate();
@@ -501,8 +501,6 @@ function VR() {
   const [clickedPlaceUrl, setClickedPlaceUrl] = useState('');
   const [clickedPlaceName, setClickedPlaceName] = useState('');
   const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
-
-  // 按下加入行程時先判斷有否登入，有的話才能繼續
 
   function handleUserOrNot() {
     if (!user.uid) {
@@ -750,11 +748,9 @@ function VR() {
         </ModalBox>
       </VRModalBackground>
       <div className="vr-container">
-        {/* <div className="title_wrapper"> */}
         <PageTitle>
           With VR, The world is just in front of you.
         </PageTitle>
-        {/* </div> */}
         <TransparentBackground />
         <Swiper
           navigation
@@ -769,9 +765,6 @@ function VR() {
             modifier: 1,
             slideShadows: true,
           }}
-          // pagination={{
-          //   clickable: true,
-          // }}
           className="mySwiper"
         >
           {vrPlaces?.map((item, index) => (

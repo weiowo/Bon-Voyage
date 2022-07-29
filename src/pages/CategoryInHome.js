@@ -12,136 +12,139 @@ import RELIGION_ICON from './images/religion.png';
 import NIGHT_ICON from './images/nightlife.png';
 
 const CategoryWrapper = styled.div`
-align-self:center;
-margin-top:20px;
-width:100vw;
-height:280px;
-display:flex;
-flex-direction:column;
-align-items:center;
-@media screen and (max-width:800px){
+  align-self:center;
+  margin-top:20px;
   width:100vw;
-  margin-top:30px;
-  height:300px;
-}
-@media screen and (max-width:750px){
-  height:480px;
-}
-@media screen and (max-width:500px){
-  width:100%;
-  height:450px;
-  margin-left:0px;
-}`;
+  height:280px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  @media screen and (max-width:800px){
+    width:100vw;
+    margin-top:30px;
+    height:300px;
+  }
+  @media screen and (max-width:750px){
+    height:480px;
+  }
+  @media screen and (max-width:500px){
+    width:100%;
+    height:450px;
+    margin-left:0px;
+  }
+`;
 
 const CategoryWrapperTitle = styled.div`
-width:100vw;
-height:30px;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:24px;
-font-weight:600;
-color:#1F456E;
-margin-bottom:30px;
-@media screen and (max-width:800px){
+  width:100vw;
+  height:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   font-size:24px;
-  margin-bottom:20px;
-}`;
+  font-weight:600;
+  color:#1F456E;
+  margin-bottom:30px;
+  @media screen and (max-width:800px){
+    font-size:24px;
+    margin-bottom:20px;
+  }
+`;
 
 const CategoryBoxesContainer = styled.div`
-margin-left:80px;
-margin-top:10px;
-display:flex;
-justify-content:center;
-align-items:center;
-width:80vw;
-flex-wrap:wrap;
-height:auto;
-@media screen and (max-width:1249px){
-  margin-left:30px;
-  width:85vw;
-  gap:15px;
-}
-@media screen and (max-width:800px){
-  margin-left:30px;
-  width:85vw;
-  gap:10px;
-}
-@media screen and (max-width:750px){
-  margin-left:0px;
-  margin-top:0px;
-}
-@media screen and (max-width:630px){
-  width:100%;
-  margin-top:0px;
-  margin-left:0px;
-}
-@media screen and (max-width:500px){
-  width:100%;
-  height:89s0px;
-  margin-top:20px;
-  margin-left:0px;
-  gap:10px;
-}`;
+  margin-left:80px;
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:80vw;
+  flex-wrap:wrap;
+  height:auto;
+  @media screen and (max-width:1249px){
+    margin-left:30px;
+    width:85vw;
+    gap:15px;
+  }
+  @media screen and (max-width:800px){
+    margin-left:30px;
+    width:85vw;
+    gap:10px;
+  }
+  @media screen and (max-width:750px){
+    margin-left:0px;
+    margin-top:0px;
+  }
+  @media screen and (max-width:630px){
+    width:100%;
+    margin-top:0px;
+    margin-left:0px;
+  }
+  @media screen and (max-width:500px){
+    width:100%;
+    height:89s0px;
+    margin-top:20px;
+    margin-left:0px;
+    gap:10px;
+  }
+`;
 
 const CategoryBox = styled.div`
-width:250px;
-height:100px;
-display:flex;
-align-items:center;
-gap:20px;
-@media screen and (max-width:1249px){
-  width:200px;
-}
-@media screen and (max-width:1000px){
-  width:180px;
-  gap:0px;
-}
-@media screen and (max-width:900px){
-  width:170px;
-  gap:0px;
-}
-@media screen and (max-width:850px){
-  width:150px;
-}
-@media screen and (max-width:750px){
-  width:230px;
-  justify-content:center;
-}
-@media screen and (max-width:500px){
-  width:40%;
-  justify-content:center;
-  gap:10px;
-  height:80px;
-}
+  width:250px;
+  height:100px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  @media screen and (max-width:1249px){
+    width:200px;
+  }
+  @media screen and (max-width:1000px){
+    width:180px;
+    gap:0px;
+  }
+  @media screen and (max-width:900px){
+    width:170px;
+    gap:0px;
+  }
+  @media screen and (max-width:850px){
+    width:150px;
+  }
+  @media screen and (max-width:750px){
+    width:230px;
+    justify-content:center;
+  }
+  @media screen and (max-width:500px){
+    width:40%;
+    justify-content:center;
+    gap:10px;
+    height:80px;
+  }
 `;
 
 const CategoryIcon = styled.img`
-width:70px;
-height:70px;
-cursor:pointer;
+  width:70px;
+  height:70px;
+  cursor:pointer;
 `;
 
 const CategoryRightArea = styled.div`
-width:80px;
-height:80px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-cursor:pointer;
+  width:80px;
+  height:80px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
 `;
 
 const CategoryBoxTitle = styled.div`
-font-weight:600;
-font-size:15px;
-color:black;
+  font-weight:600;
+  font-size:15px;
+  color:black;
 `;
 
 const CategoryBoxDescription = styled.div`
-font-weight:600;
-font-size:15px;
-color:grey;
+  font-weight:600;
+  font-size:15px;
+  color:grey;
 `;
 
 function CategoryAreaInHome({ currentLatLng }) {

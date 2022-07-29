@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import ChatRoom, {
   CloseIcon, ChatRoomTitle, MessagesDisplayArea,
   MessageBox, NameMessage, Name, Message, UserPhoto, EnterArea, MessageInput, EnterMessageButton,
