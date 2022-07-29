@@ -10,6 +10,7 @@ import { useImmer } from 'use-immer';
 import produce from 'immer';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
+import Swal from 'sweetalert2';
 import db from '../utils/firebase-init';
 import ArrowToRightSrc from '../pages/images/arrow-right.png';
 import ArrowToLeftSrc from '../pages/images/arrow-left.png';
@@ -304,7 +305,11 @@ function Carousel({ currentNearbyAttraction }) {
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else {
       const userArticlesArray = doc(db, 'users', user.uid);
@@ -375,7 +380,11 @@ function Carousel({ currentNearbyAttraction }) {
 
   function handleUserOrNot() {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else {
       setModalIsActive(false); setChooseScheduleModalIsActive(true);

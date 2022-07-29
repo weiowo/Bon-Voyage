@@ -6,6 +6,7 @@ import styled from 'styled-components/macro';
 import {
   doc, updateDoc, getDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
+import Swal from 'sweetalert2';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
 import { GoogleMap, useLoadScript } from '@react-google-maps/api';
@@ -129,7 +130,11 @@ function Category({ currentLatLng }) {
 
   function handleUserOrNot() {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else {
       setModalIsActive(false); setChooseScheduleModalIsActive(true);
@@ -138,7 +143,11 @@ function Category({ currentLatLng }) {
 
   async function handleFavorite(placeId) {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else {
       const userArticlesArray = doc(db, 'users', user.uid);
