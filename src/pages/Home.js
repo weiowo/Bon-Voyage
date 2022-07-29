@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import usePlacesAutocomplete, {
@@ -20,86 +19,90 @@ import './animation.css';
 import Footer from '../components/Footer';
 
 const HomeTopAreaWrapper = styled.div`
-width:100vw;
-height:100vh;
-display:flex;
-flex-direction:column;
-background-image: url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9);
-align-items:center;
-position:relative;
-background-size:cover;
-background-repeat: no-repeat;
-background-blend-mode: multiply;
-@media screen and (max-width:800px){
-  height:70vw;
-}
+  width:100vw;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background-image: url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9);
+  align-items:center;
+  position:relative;
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+  @media screen and (max-width:800px){
+    height:70vw;
+  }
 `;
 
 const SearchBarBackground = styled.div`
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-width:73vw;
-height:90px;
-border-radius:15px;
-position:absolute;
-bottom:30px;
-background-color:rgba(255, 255, 255, 0.4);
-@media screen and (max-width:600px){
-  width:86vw;
-  height:73px;
-}`;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  width:73vw;
+  height:90px;
+  border-radius:15px;
+  position:absolute;
+  bottom:30px;
+  background-color:rgba(255, 255, 255, 0.4);
+  @media screen and (max-width:600px){
+    width:86vw;
+    height:73px;
+  }
+`;
 
 const SearchBarLittleWrapper = styled.div`
-border-radius:10px;
-display:flex;
-align-items:center;
-width:70vw;
-justify-content:space-between;
-height:50px;
-background-color:white;
-padding-left:20px;
-padding-right:20px;
-position:absolute;
-@media screen and (max-width:600px){
-  width:80vw;
-}`;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  width:70vw;
+  justify-content:space-between;
+  height:50px;
+  background-color:white;
+  padding-left:20px;
+  padding-right:20px;
+  position:absolute;
+  @media screen and (max-width:600px){
+    width:80vw;
+  }
+`;
 
 const SearchInput = styled.input`
-display:flex;
-flex-direction:column;
-width:70vw;
-height:30px;
-border:none;
-height:50px;
-cursor:pointer;
-font-size:17px;
-box-sizing:border-box;
-padding-left:10px;
-outline: none;
-@media screen and (max-width:600px){
-  width:80%;
-}`;
+  display:flex;
+  flex-direction:column;
+  width:70vw;
+  height:30px;
+  border:none;
+  height:50px;
+  cursor:pointer;
+  font-size:17px;
+  box-sizing:border-box;
+  padding-left:10px;
+  outline: none;
+  @media screen and (max-width:600px){
+    width:80%;
+  }
+`;
 
 const Ulist = styled.ul`
-display:flex;
-flex-direction:column;
-align-items:center;
-width:70vw;
-height:auto;
-z-index:10;
-position:absolute;
-top:60px;
-background-color:white;
-padding-left:0px;
-border:1px grey solid;
-margin-top:15px;
-margin-bottom:0px;
-border-radius:15px;
-@media screen and (max-width:600px){
-  width:80vw;
-}`;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:70vw;
+  height:auto;
+  z-index:10;
+  position:absolute;
+  top:60px;
+  background-color:white;
+  padding-left:0px;
+  border:1px grey solid;
+  margin-top:15px;
+  margin-bottom:0px;
+  border-radius:15px;
+  @media screen and (max-width:600px){
+    width:80vw;
+  }
+`;
 
 const List = styled.li`
 width:69vw;
@@ -111,7 +114,6 @@ border-radius:10px;
 display:flex;
 justify-content:center;
 align-items:center;
-postition:absolute;
 cursor:pointer;
 &:hover {
   color:white;
@@ -179,7 +181,6 @@ function SearchAtHomePage({ option, setOption }) {
       .then((results) => getLatLng(results[0]))
       .then(({ lat, lng }) => {
         navigate({ pathname: '/city', search: `?lat=${lat}&lng=${lng}&city=${selectedPlaceAtHomePage?.structured_formatting.main_text}&option=${option}` });
-        // searchNearby({ lat, lng });
       })
       .catch((error) => {
         console.log('Error: ', error);
@@ -207,7 +208,7 @@ function SearchAtHomePage({ option, setOption }) {
     <SearchBarBackground>
       <SearchBarLittleWrapper>
         <OptionForm htmlFor="temp-id" className="search-options-form">
-          <label htmlFor="temp-id" className="search-options-title" />
+          <label className="search-options-title" />
           <OptionSelect
             id="temp-id"
             className="search-options"
@@ -216,16 +217,16 @@ function SearchAtHomePage({ option, setOption }) {
               setOption(event.target.value);
             }}
           >
-            <option id="temp-id" className="search-option-all" value="all">
+            <option id="all" className="search-option-all" value="all">
               全部
             </option>
-            <option id="temp-id" className="search-option-lodging" value="lodging">
+            <option id="lodging" className="search-option-lodging" value="lodging">
               飯店
             </option>
-            <option id="temp-id" className="search-option-restaurant" value="restaurant">
+            <option id="restaurant" className="search-option-restaurant" value="restaurant">
               餐廳
             </option>
-            <option id="temp-id" className="search-option-landmark" value="tourist_attraction">
+            <option id="tourist_attraction" className="search-option-landmark" value="tourist_attraction">
               景點
             </option>
           </OptionSelect>

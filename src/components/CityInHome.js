@@ -13,419 +13,435 @@ import NewYorkSrc from '../pages/images/newyork.png';
 import MexicoSrc from '../pages/images/mexico.png';
 
 const CityAtHomeWrapper = styled.div`
-margin-top:45px;
-width:100vw;
-height:520px;
-display:flex;
-flex-direction:column;
-align-items:center;
-@media screen and (max-width:800px){
-  height:850px;
-}
-@media screen and (max-width:580px){
-  height:740px;
-}`;
+  margin-top:45px;
+  width:100vw;
+  height:520px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  @media screen and (max-width:800px){
+    height:850px;
+  }
+  @media screen and (max-width:580px){
+    height:740px;
+  }
+`;
 
 const CityAtHomeWrapperTitle = styled.div`
-width:100vw;
-height:30px;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:24px;
-font-weight:600;
-color:#1F456E;
-margin-bottom:60px;
-@media screen and (max-width:800px){
-  font-size:25px;
-  margin-bottom:30px;
-}`;
+  width:100vw;
+  height:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:24px;
+  font-weight:600;
+  color:#1F456E;
+  margin-bottom:60px;
+  @media screen and (max-width:800px){
+    font-size:25px;
+    margin-bottom:30px;
+  }
+`;
 
 const CityAtHomeBelowPart = styled.div`
-width:100vw;
-height:auto;
-display:flex;
-flex-direction:row;
-justify-content:center;
-gap:10px;
-@media screen and (max-width:800px){
-  flex-direction:column;
-  gap:15px;
-}`;
+  width:100vw;
+  height:auto;
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  gap:10px;
+  @media screen and (max-width:800px){
+    flex-direction:column;
+    gap:15px;
+  }
+`;
 
 const SmallScreenCity = styled.div`
-width:50%;
-display:flex;
-gap:15px;
-@media screen and (max-width:800px){
-  width:100vw;
-display:flex;
-justify-content:center;
-gap:15px;
-}`;
+  width:50%;
+  display:flex;
+  gap:15px;
+  @media screen and (max-width:800px){
+    width:100vw;
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  }
+`;
 
 const FirstVerticalBlock = styled.div`
-width:33.5vw;
-height:430px;
-display:flex;
-flex-direction:column;
-gap:15px;
-@media screen and (max-width:800px){
-  width:60vw;
-  height: 380px;
-}
-@media screen and (max-width:580px){
-  height: 330px;
-}`;
+  width:33.5vw;
+  height:430px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  @media screen and (max-width:800px){
+    width:60vw;
+    height: 380px;
+  }
+  @media screen and (max-width:580px){
+    height: 330px;
+  }
+`;
 
 const TainanWrapper = styled.div`
-position:relative;
-width:33.5vw;
-height:290px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:60vw;
-}`;
+  position:relative;
+  width:33.5vw;
+  height:290px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:60vw;
+  }
+`;
 
 const Tainan = styled.div`
-position:absolute;
-background-position: center;
-border-radius:10px;
-width:100%;
-height:100%;
-background-image: url(${TainanSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.25);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.2);
-}
-// background: linear-gradient(#3204fdba, #9907facc), url(${TainanSrc}) no-repeat cover;
+  position:absolute;
+  background-position: center;
+  border-radius:10px;
+  width:100%;
+  height:100%;
+  background-image: url(${TainanSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.25);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
 `;
 
 const TainanTitle = styled.div`
-font-size:30px;
-font-weight:700;
-color:white;
-position:absolute;
-bottom:20px;
-left:20px;
+  font-size:30px;
+  font-weight:700;
+  color:white;
+  position:absolute;
+  bottom:20px;
+  left:20px;
 `;
 
 const FirstVerticalBlockBelowPart = styled.div`
-width:33.5vw;
-height:140px;
-display:flex;
-gap:15px;
-@media screen and (max-width:800px){
-  width:60vw;
-}`;
+  width:33.5vw;
+  height:140px;
+  display:flex;
+  gap:15px;
+  @media screen and (max-width:800px){
+    width:60vw;
+  }
+`;
 
 const BarcelonaWrapper = styled.div`
-position:relative;
-width:13vw;
-height:140px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:20vw;
-}`;
+  position:relative;
+  width:13vw;
+  height:140px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:20vw;
+  }
+`;
 
 const Barcelona = styled.div`
-position:relative;
-border-radius:10px;
-background-position: center;
-width:100%;
-height:100%;
-background-image: url(${BarcelonaSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-&:hover {
-    transform: scale(1.2);
-}
-@media screen and (max-width:800px){
-  width:20vw;
-}`;
+  position:relative;
+  border-radius:10px;
+  background-position: center;
+  width:100%;
+  height:100%;
+  background-image: url(${BarcelonaSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
+  @media screen and (max-width:800px){
+    width:20vw;
+  }
+`;
 
 const BarcelonaTitle = styled.div`
-font-size:18px;
-font-weight:600;
-color:white;
-position:absolute;
-top:12px;
-left:12px;
+  font-size:18px;
+  font-weight:600;
+  color:white;
+  position:absolute;
+  top:12px;
+  left:12px;
 `;
 
 const ProvenceWrapper = styled.div`
-position:relative;
-width:20vw;
-height:140px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:40vw;
-}`;
+  position:relative;
+  width:20vw;
+  height:140px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:40vw;
+  }
+`;
 
 const Provence = styled.div`
-position:relative;
-border-radius:10px;
-background-position: center;
-width:20vw;
-height:140px;
-background-image: url(${ProvenceSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.1);
-background-blend-mode: multiply;
-&:hover {
-    transform: scale(1.2);
-}
-@media screen and (max-width:800px){
-  width:40vw;
-}`;
+  position:relative;
+  border-radius:10px;
+  background-position: center;
+  width:20vw;
+  height:140px;
+  background-image: url(${ProvenceSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.1);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
+  @media screen and (max-width:800px){
+    width:40vw;
+  }
+`;
 
 const ProvenceTitle = styled.div`
-font-size:18px;
-font-weight:600;
-color:white;
-position:absolute;
-bottom:12px;
-right:12px;
+  font-size:18px;
+  font-weight:600;
+  color:white;
+  position:absolute;
+  bottom:12px;
+  right:12px;
 `;
 
 const SecondVerticalBlcokWrapper = styled.div`
-position:relative;
-width:14.5vw;
-height:430px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:40vw;
-  height: 380px;
-}
-@media screen and (max-width:580px){
-  height: 330px;
-}`;
+  position:relative;
+  width:14.5vw;
+  height:430px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:40vw;
+    height: 380px;
+  }
+  @media screen and (max-width:580px){
+    height: 330px;
+  }
+`;
 
 const SecondVerticalBlcok = styled.div`
-position:absolute;
-border-radius:10px;
-background-position: center;
-width:100%;
-height:100%;
-background-image: url(${KyotoSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.1);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.2);
-}
+  position:absolute;
+  border-radius:10px;
+  background-position: center;
+  width:100%;
+  height:100%;
+  background-image: url(${KyotoSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.1);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
 `;
 
 const KyotoTitle = styled.div`
-font-size:24px;
-font-weight:600;
-color:white;
-position:absolute;
-top:20px;
-left:20px;
+  font-size:24px;
+  font-weight:600;
+  color:white;
+  position:absolute;
+  top:20px;
+  left:20px;
 `;
 
 const ThridVerticalBlock = styled.div`
-width:19vw;
-height:430px;
-display:flex;
-flex-direction:column;
-gap:15px;
-@media screen and (max-width:800px){
-  width:40vw;
-  height: 380px;
-}
-@media screen and (max-width:580px){
-  height: 330px;
-}`;
+  width:19vw;
+  height:430px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  @media screen and (max-width:800px){
+    width:40vw;
+    height: 380px;
+  }
+  @media screen and (max-width:580px){
+    height: 330px;
+  }
+`;
 
 const ThridVerticalBlockUpperPart = styled.div`
-width:19vw;
-height:172px;
-display:flex;
-gap:15px;
-@media screen and (max-width:800px){
-  width:40vw;
-}
-@media screen and (max-width:580px){
-  width:52vw;
-}
+  width:19vw;
+  height:172px;
+  display:flex;
+  gap:15px;
+  @media screen and (max-width:800px){
+    width:40vw;
+  }
+  @media screen and (max-width:580px){
+    width:52vw;
+  }
 `;
 
 const NewYorkWrapper = styled.div`
-position:relative;
-width:7.7vw;
-height:172px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:15vw;
-}
-@media screen and (max-width:800px){
-  width:21vw;
-}
+  position:relative;
+  width:7.7vw;
+  height:172px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:15vw;
+  }
+  @media screen and (max-width:800px){
+    width:21vw;
+  }
 `;
 
 const NewYork = styled.div`
-position:absolute;
-border-radius:10px;
-background-position: center;
-width:100%;
-height:100%;
-background-image: url(${NewYorkSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.2);
-}
+  position:absolute;
+  border-radius:10px;
+  background-position: center;
+  width:100%;
+  height:100%;
+  background-image: url(${NewYorkSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
 `;
 
 const NewYorkTitle = styled.div`
-font-size:13px;
-font-weight:600;
-color:white;
-position:absolute;
-top:10px;
-right:12px;
+  font-size:13px;
+  font-weight:600;
+  color:white;
+  position:absolute;
+  top:10px;
+  right:12px;
 `;
 
 const CamBridgeWrapper = styled.div`
-position:relative;
-width:11.3vw;
-height:172px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:25vw;
-}
-@media screen and (max-width:580px){
-  width:31vw;
-}
+  position:relative;
+  width:11.3vw;
+  height:172px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:25vw;
+  }
+  @media screen and (max-width:580px){
+    width:31vw;
+  }
 `;
 
 const CamBridge = styled.div`
-position:absolute;
-border-radius:10px;
-background-position: center;
-width:100%;
-height:100%;
-background-image: url(${CamBridgeSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.2);
-}
+  position:absolute;
+  border-radius:10px;
+  background-position: center;
+  width:100%;
+  height:100%;
+  background-image: url(${CamBridgeSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
 `;
 
 const CamBridgeTitle = styled.div`
-font-size:16px;
-font-weight:600;
-color:white;
-position:absolute;
-bottom:10px;
-left:10px;
+  font-size:16px;
+  font-weight:600;
+  color:white;
+  position:absolute;
+  bottom:10px;
+  left:10px;
 `;
 
 const AmsterdamWrapper = styled.div`
-position:relative;
-width:19vw;
-height:258px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:40vw;
-}
-@media screen and (max-width:580px){
-  width:52vw;
-}
+  position:relative;
+  width:19vw;
+  height:258px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:40vw;
+  }
+  @media screen and (max-width:580px){
+    width:52vw;
+  }
 `;
 
 const Amsterdam = styled.div`
-position:absolute;
-border-radius:10px;
-background-position: center;
-width:100%;
-height:100%;
-background-image: url(${AmsterdamSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.25);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.2);
-}
+  position:absolute;
+  border-radius:10px;
+  background-position: center;
+  width:100%;
+  height:100%;
+  background-image: url(${AmsterdamSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.25);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
 `;
 
 const AmsterdamTitle = styled.div`
-position:absolute;
-font-size:22px;
-font-weight:600;
-color:white;
-position:absolute;
-bottom:15px;
-left:15px;
+  position:absolute;
+  font-size:22px;
+  font-weight:600;
+  color:white;
+  position:absolute;
+  bottom:15px;
+  left:15px;
 `;
 
 const FourthVerticalBlockWrapper = styled.div`
-position:relative;
-width:18vw;
-height:430px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:25vw;
-  height: 380px;
-}`;
+  position:relative;
+  width:18vw;
+  height:430px;
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:25vw;
+    height: 380px;
+  }
+`;
 
 const FourthVerticalBlock = styled.div`
-position:absolute;
-border-radius:10px;
-width:100%;
-height:100%;
-background-position: center;
-background-image: url(${ParisSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.1);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.1);
-}
-@media screen and (max-width:580px){
-  display:none;
-}`;
+  position:absolute;
+  border-radius:10px;
+  width:100%;
+  height:100%;
+  background-position: center;
+  background-image: url(${ParisSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.1);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.1);
+  }
+  @media screen and (max-width:580px){
+    display:none;
+  }
+`;
 
 const ParisTitle = styled.div`
-font-size:26px;
-font-weight:600;
-color:white;
-position:absolute;
-bottom:15px;
-right:15px;
-@media screen and (max-width:580px){
-  display:none;
-}
+  font-size:26px;
+  font-weight:600;
+  color:white;
+  position:absolute;
+  bottom:15px;
+  right:15px;
+  @media screen and (max-width:580px){
+    display:none;
+  }
 `;
 
 const FifthVerticalBlock = styled.div`
@@ -459,70 +475,70 @@ border-radius:10px;
 `;
 
 const Mexico = styled.div`
-position:absolute;
-border-radius:10px;
-width:100%;
-height:100%;
-background-position: center;
-background-image: url(${MexicoSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.1);
-}
+  position:absolute;
+  border-radius:10px;
+  width:100%;
+  height:100%;
+  background-position: center;
+  background-image: url(${MexicoSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.1);
+  }
 `;
 
 const MexicoTitle = styled.div`
-font-size:18px;
-font-weight:550;
-color:white;
-position:absolute;
-top:12px;
-left:12px;
+  font-size:18px;
+  font-weight:550;
+  color:white;
+  position:absolute;
+  top:12px;
+  left:12px;
 `;
 
 const EgyptWrapper = styled.div`
-position:relative;
-width:15vw;
-height:185px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:35vw;
-}
-@media screen and (max-width:580px){
-  width:45vw;
+  position:relative;
+  width:15vw;
   height:185px;
-
-}
+  overflow:hidden;
+  border-radius:10px;
+  @media screen and (max-width:800px){
+    width:35vw;
+  }
+  @media screen and (max-width:580px){
+    width:45vw;
+    height:185px;
+  }
 `;
 
 const Egypt = styled.div`
-position:absolute;
-border-radius:10px;
-width:100%;
-height:100%;
-background-position: center;
-background-image: url(${EgyptSrc});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.15);
-background-blend-mode: multiply;
-transition:0.8s;
-&:hover {
-    transform: scale(1.2);
-}`;
+  position:absolute;
+  border-radius:10px;
+  width:100%;
+  height:100%;
+  background-position: center;
+  background-image: url(${EgyptSrc});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.15);
+  background-blend-mode: multiply;
+  transition:0.8s;
+  &:hover {
+      transform: scale(1.2);
+  }
+`;
 
 const EgyptTitle = styled.div`
-font-size:16px;
-font-weight:550;
-color:white;
-position:absolute;
-bottom:12px;
-left:18px;
+  font-size:16px;
+  font-weight:550;
+  color:white;
+  position:absolute;
+  bottom:12px;
+  left:18px;
 `;
 
 function CityAreaInHomePage() {
@@ -636,9 +652,7 @@ function CityAreaInHomePage() {
                 <Egypt />
                 <EgyptTitle>開羅</EgyptTitle>
               </Link>
-
             </EgyptWrapper>
-
           </FifthVerticalBlock>
         </SmallScreenCity>
       </CityAtHomeBelowPart>

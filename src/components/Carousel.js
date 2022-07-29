@@ -36,98 +36,81 @@ import RemindWrapper, {
 } from './Reminder/CreateTrip';
 
 const NearByPlaceWrapper = styled.div`
-width:100vw;
-height:340px;
-display:flex;
-flex-direction:row;
-align-items:center;
-justify-content:center;
-gap:10px;
-@media screen and (max-width:1180px){
-  height:280px;
+  width:100vw;
+  height:340px;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   margin-top:20px;
-}
-@media screen and (max-width:900px){
-  flex-direction:column;
-  margin-top:30px;
-  height:370px;
-}`;
+  @media screen and (max-width:1180px){
+    height:280px;
+    margin-top:20px;
+  }
+  @media screen and (max-width:900px){
+    flex-direction:column;
+    margin-top:30px;
+    height:370px;
+  }
+`;
 
 const NearByPlaceLeftArea = styled.div`
-width:15vw;
-height:350px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-@media screen and (max-width:900px){
-  width:80vw;
-  height:100px;
-  margin-right:0px;
-}
+  width:15vw;
+  height:350px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  @media screen and (max-width:900px){
+    width:80vw;
+    height:100px;
+    margin-right:0px;
+  }
 `;
 
 const NearbyPlaceTitle = styled.div`
-font-size:25px;
-color:#1F456E;
-font-weight:600;
-margin-bottom:15px;
-@media screen and (max-width:900px){
-  margin-bottom:5px;
-  font-size:24px;
+  font-size:25px;
+  color:#1F456E;
+  font-weight:600;
   margin-bottom:15px;
-}`;
+  @media screen and (max-width:900px){
+    margin-bottom:5px;
+    font-size:24px;
+    margin-bottom:15px;
+  }
+`;
 
 const NearByPlaceDescription = styled.div`
-font-size:12px;
-color:grey;
-font-weight:600;
-margin-bottom:15px;
-@media screen and (max-width:900px){
-  font-size:16px;
-  margin-bottom:25px;
-}`;
+  font-size:12px;
+  color:grey;
+  font-weight:600;
+  margin-bottom:15px;
+  @media screen and (max-width:900px){
+    font-size:16px;
+    margin-bottom:25px;
+  }
+`;
 
 const NearByViewMoreButton = styled.button`
-display:none;
-width:130px;
-height:40px;
-color:white;
-border:none;
-background-color:#0492c2;
-border-radius:5px;
-color:white;
-font-weight:600;
-letter-spacing:3px;
-@media screen and (max-width:900px){
   display:none;
-}`;
+  width:130px;
+  height:40px;
+  color:white;
+  border:none;
+  background-color:#0492c2;
+  border-radius:5px;
+  color:white;
+  font-weight:600;
+  letter-spacing:3px;
+  @media screen and (max-width:900px){
+    display:none;
+  }
+`;
 
 const CardsWrapper = styled.div`
-width:800px;
-height:290px;
-display:flex; 
-flex-direction:column;
-align-items:center;
-justify-content:center;
-flex-wrap:wrap;
-position:relative;
-overflow:hidden;
-z-index:1;
-gap:20px;
-@media screen and (max-width:1180px){
-  width:650px;
-  margin-right:0px;
-}
-@media screen and (max-width:900px){
-display:none;
-}`;
-
-const SmallScreenCards = styled.div`
-display:none;
-@media screen and (max-width:900px){
-  width:95%;
-  height:200px;
+  width:800px;
+  height:290px;
   display:flex; 
   flex-direction:column;
   align-items:center;
@@ -136,84 +119,112 @@ display:none;
   position:relative;
   overflow:hidden;
   z-index:1;
-}
-@media screen and (max-width:900px){
-  width:100%;
-}
-@media screen and (max-width:500px){
-  height:160px;
-  overflow:auto;
-  width:100%;
-}`;
+  gap:20px;
+  @media screen and (max-width:1180px){
+    width:650px;
+    margin-right:0px;
+  }
+  @media screen and (max-width:900px){
+  display:none;
+  }
+`;
+
+const SmallScreenCards = styled.div`
+  display:none;
+  @media screen and (max-width:900px){
+    width:95%;
+    height:200px;
+    display:flex; 
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    position:relative;
+    overflow:hidden;
+    z-index:1;
+  }
+  @media screen and (max-width:900px){
+    width:100%;
+  }
+  @media screen and (max-width:500px){
+    height:160px;
+    overflow:auto;
+    width:100%;
+  }
+`;
 
 const Cards = styled.div`
-display:flex;
-padding-left:15px;
-padding-bottom:10px;
-opacity:1;
-flex-direction:column;
-justify-content:flex-end;
-width:180px;
-height:240px;
-color:white;
-font-weight:600;
-position:relative;
-text-align:left;
-overflow:hidden;
-border-radius:10px;
-cursor:pointer;
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-@media screen and (max-width:1180px){
-  width:140px;
-  height:180px;
-}
-@media screen and (max-width:900px){
-  width:30%;
-  height:280px;
-  font-size:13px;
-}
-@media screen and (max-width:500px){
-  width:30%;
-  height:180px;
-}
-@media screen and (max-width:500px){
-  height:150px;
-}`;
+  display:flex;
+  padding-left:15px;
+  padding-bottom:10px;
+  opacity:1;
+  flex-direction:column;
+  justify-content:flex-end;
+  width:180px;
+  height:240px;
+  color:white;
+  font-weight:600;
+  position:relative;
+  text-align:left;
+  overflow:hidden;
+  border-radius:10px;
+  cursor:pointer;
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  @media screen and (max-width:1180px){
+    width:140px;
+    height:180px;
+  }
+  @media screen and (max-width:900px){
+    width:30%;
+    height:280px;
+    font-size:13px;
+  }
+  @media screen and (max-width:500px){
+    width:30%;
+    height:180px;
+  }
+  @media screen and (max-width:500px){
+    height:150px;
+  }
+`;
 
 const SmallScreenCardsWrapper = styled.div`
-display:none;
-@media screen and (max-width:900px){
-  display:flex;
-  width:90%;
-  align-items:center;
-  gap:10px;
-}
-@media screen and (max-width:500px){
-  width:100%;
-  gap:0px;
-  padding-right:3px;
-  padding-left:3px;
-}`;
+  display:none;
+  @media screen and (max-width:900px){
+    display:flex;
+    width:90%;
+    align-items:center;
+    gap:10px;
+  }
+  @media screen and (max-width:500px){
+    width:100%;
+    gap:0px;
+    padding-right:3px;
+    padding-left:3px;
+  }
+`;
 
 const Arrow = styled.img`
-width:40px;
-height:40px;
-cursor:pointer;
-@media screen and (max-width:900px){
-display:none;
-}`;
+  width:40px;
+  height:40px;
+  cursor:pointer;
+  @media screen and (max-width:900px){
+  display:none;
+  }
+`;
 
 const SmallScreenArrow = styled.img`
-display:none;
-@media screen and (max-width:900px){
-  display:block;
-  width:25px;
-  height:25px;
-  cursor:pointer;
-}`;
+  display:none;
+  @media screen and (max-width:900px){
+    display:block;
+    width:25px;
+    height:25px;
+    cursor:pointer;
+  }
+`;
 
 const libraries = ['places'];
 

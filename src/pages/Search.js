@@ -11,33 +11,30 @@ import {
 import CloseIcon from './images/close_style.png';
 
 const SearchInput = styled.input`
-display:${(props) => (props.clicked ? 'flex' : 'none')};
-width: calc( 45vw - 85px );
-height: 35px;
-border:1px solid grey;
-border-radius:5px;
-font-size:15px;
-z-index:20;
-padding-left:10px;
-outline:none;
-@media screen and (max-width:800px){
-  width:calc( 100vw - 85px );
   display:${(props) => (props.clicked ? 'flex' : 'none')};
-}`;
+  width: calc( 45vw - 85px );
+  height: 35px;
+  border:1px solid grey;
+  border-radius:5px;
+  font-size:15px;
+  z-index:20;
+  padding-left:10px;
+  outline:none;
+  @media screen and (max-width:800px){
+    width:calc( 100vw - 85px );
+    display:${(props) => (props.clicked ? 'flex' : 'none')};
+  }
+`;
 
 const CloseSearchIcon = styled.img`
-display:${(props) => (props.clicked ? 'block' : 'none')};
-width:35px;
-height:35px;
-position:absolute;
-cursor:pointer;
-top:0px;
-left:calc( 45vw - 70px );
-// @media screen and (max-width:800px){
-//   position:fixed;
-//   top:20px;
-//   left:20px;
-}`;
+  display:${(props) => (props.clicked ? 'block' : 'none')};
+  width:35px;
+  height:35px;
+  position:absolute;
+  cursor:pointer;
+  top:0px;
+  left:calc( 45vw - 70px );
+`;
 
 export default function Search({
   panTo, active, setSelected, onClickClose,

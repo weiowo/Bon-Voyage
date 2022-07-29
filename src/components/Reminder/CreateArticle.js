@@ -12,8 +12,8 @@ const WriteArticleRemind = styled.div`
 }`;
 
 export const WriteArticleImg = styled.img`
-width:150px;
-height:150px;
+  width:150px;
+  height:150px;
 `;
 
 export const WriteRightArea = styled.div`
@@ -24,8 +24,8 @@ export const WriteRightArea = styled.div`
   align-items:center;
   justify-content:center;
   gap:20px;
-@media screen and (max-width:800px){
-  width:auto;
+  @media screen and (max-width:800px){
+    width:auto;
 }`;
 
 export const WriteText = styled.div`
@@ -35,15 +35,15 @@ export const WriteText = styled.div`
 `;
 
 export const WriteButton = styled.button`
-width:100px;
-height:40px;
-border-radius:10px;
-background-color:#598BAF;
-color:white;
-font-weight:600;
-border:none;
-font-size:15px;
-cursor:pointer;
+  width:100px;
+  height:40px;
+  border-radius:10px;
+  background-color:#598BAF;
+  color:white;
+  font-weight:600;
+  border:none;
+  font-size:15px;
+  cursor:pointer;
 `;
 
 export default WriteArticleRemind;

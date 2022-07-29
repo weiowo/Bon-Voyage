@@ -18,61 +18,62 @@ import Cover6 from '../pages/images/schedule_cover_rec4.jpg';
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
 const ArticlesAreaWrapper = styled.div`
-margin-top:20px;
-width:100vw;
-height:auto;
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-bottom:60px;
+  margin-top:20px;
+  width:100vw;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:60px;
 `;
 
 const ArticlesWrapperTitle = styled.div`
-margin-top:20px;
-width:100vw;
-height:30px;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:24px;
-font-weight:600;
-color:#1F456E;
-margin-bottom:30px;
-margin-top:30px;
-@media screen and (max-width:800px){
-  font-size:25px;
-  margin-bottom:10px;
-margin-top:20px;
-}`;
+  margin-top:20px;
+  width:100vw;
+  height:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:24px;
+  font-weight:600;
+  color:#1F456E;
+  margin-bottom:30px;
+  margin-top:30px;
+  @media screen and (max-width:800px){
+    font-size:25px;
+    margin-bottom:10px;
+  margin-top:20px;
+  }
+`;
 
 export const ArticlesBoxesContainer = styled.div`
-margin-top:30px;
-display:flex;
-justify-content:center;
-align-items:center;
-width:85vw;
-height:auto;
-display:flex;
-margin-bottom:20px;
-gap:30px;
-flex-wrap:wrap;
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:85vw;
+  height:auto;
+  display:flex;
+  margin-bottom:20px;
+  gap:30px;
+  flex-wrap:wrap;
 
-@media screen and (max-width:800px){
-  width:92vw;
-  gap:20px;
-}
+  @media screen and (max-width:800px){
+    width:92vw;
+    gap:20px;
+  }
 `;
 
 const CheckMoreButton = styled.button`
-width:100px;
-height:40px;
-background-color:#0492c2;
-color:white;
-border:none;
-border-radius:8px;
-margin-top:20px;
-font-weight:550;
-cursor:pointer;
+  width:100px;
+  height:40px;
+  background-color:#0492c2;
+  color:white;
+  border:none;
+  border-radius:8px;
+  margin-top:20px;
+  font-weight:550;
+  cursor:pointer;
 `;
 
 function ArticlesInHome() {

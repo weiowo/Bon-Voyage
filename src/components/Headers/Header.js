@@ -14,195 +14,85 @@ import SmallScreenNavBar, {
 } from './RwdMenu';
 
 const Header = styled.header`
-position:absolute;
-display:flex;
-justify-content:space-between;
-width:100vw;
-position:fixed;
-z-index:2000;
-top:0;
-height:${(props) => (props.active ? '60px' : '65px')};
-background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
-box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
-@media screen and (max-width:800px){
-display:none;
-}`;
-
-const Logo = styled.div`
-width:150px;
-height:30px;
-font-weight:700;
-font-size:25px;
-margin-left:20px;
-color:${(props) => (props.active ? 'black' : 'white')};
-margin-top:${(props) => (props.active ? '15px' : '20px')};
-@media screen and (max-width:800px){
-  width:auto;
-  height:auto;
-  font-size:20px;
-  margin-left:10px;
-  margin-top:10px;
-  z-index:10;
   position:absolute;
-}`;
-
-const NavBar = styled.div`
-display:flex;
-align-items:center;
-gap:15px;
-width:500px;
-height:30px;
-color:${(props) => (props.active ? 'black' : 'white')};
-font-weight:600;
-margin-top:${(props) => (props.active ? '15px' : '25px')};
-@media screen and (max-width:800px){
+  display:flex;
+  justify-content:space-between;
+  width:100vw;
+  position:fixed;
+  z-index:2000;
+  top:0;
+  height:${(props) => (props.active ? '60px' : '65px')};
+  background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
+  box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
+  @media screen and (max-width:800px){
   display:none;
 }`;
 
+const Logo = styled.div`
+  width:150px;
+  height:30px;
+  font-weight:700;
+  font-size:25px;
+  margin-left:20px;
+  color:${(props) => (props.active ? 'black' : 'white')};
+  margin-top:${(props) => (props.active ? '15px' : '20px')};
+  @media screen and (max-width:800px){
+    width:auto;
+    height:auto;
+    font-size:20px;
+    margin-left:10px;
+    margin-top:10px;
+    z-index:10;
+    position:absolute;
+}`;
+
+const NavBar = styled.div`
+  display:flex;
+  align-items:center;
+  gap:15px;
+  width:500px;
+  height:30px;
+  color:${(props) => (props.active ? 'black' : 'white')};
+  font-weight:600;
+  margin-top:${(props) => (props.active ? '15px' : '25px')};
+  @media screen and (max-width:800px){
+    display:none;
+}`;
+
 const ProfilePageNav = styled.div`
-width:auto;
-padding:8px 10px;
-border-radius:10px;
-border:${(props) => (props.active ? '1px solid black' : '1px solid white;')};
-cursor:pointer;
+  width:auto;
+  padding:8px 10px;
+  border-radius:10px;
+  border:${(props) => (props.active ? '1px solid black' : '1px solid white;')};
+  cursor:pointer;
 `;
 
 const StyleNavLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:${(props) => (props.$active ? 'black' : 'white')};
-&:hover {
-  border-bottom:${(props) => (props.$active ? '1.5px solid black' : '1.5px solid white')};
-}
-@media screen and (max-width:800px){
-  font-size:20px;
-  margin-left:10px;
-  width:150px;
-  position:absolute;
-  margin-top:${(props) => (props.$active ? '8px' : '0px')};
+  cursor:pointer;
+  text-decoration:none;
+  color:${(props) => (props.$active ? 'black' : 'white')};
+  &:hover {
+    border-bottom:${(props) => (props.$active ? '1.5px solid black' : '1.5px solid white')};
+  }
+  @media screen and (max-width:800px){
+    font-size:20px;
+    margin-left:10px;
+    width:150px;
+    position:absolute;
+    margin-top:${(props) => (props.$active ? '8px' : '0px')};
 }`;
 
 const ProfileNavLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:${(props) => (props.$active ? 'black' : 'white')};
-@media screen and (max-width:800px){
-  font-size:20px;
-  margin-left:10px;
-  width:150px;
-  position:absolute;
-  margin-top:${(props) => (props.$active ? '8px' : '0px')};
+  cursor:pointer;
+  text-decoration:none;
+  color:${(props) => (props.$active ? 'black' : 'white')};
+  @media screen and (max-width:800px){
+    font-size:20px;
+    margin-left:10px;
+    width:150px;
+    position:absolute;
+    margin-top:${(props) => (props.$active ? '8px' : '0px')};
 }`;
-
-// export const HamburgerMenuLink = styled(Link)`
-// text-decoration:none;
-// display:flex;
-// padding-left:30px;
-// padding-right:20px;
-// align-items:center;
-// justify-content:left;
-// width:100%;
-// height:60px;
-// gap:15px;
-// color:black;
-// &:hover {
-//   background-color:#EBECF0;
-// }`;
-
-// export const CreateScheduleWrapper = styled.div`
-// text-decoration:none;
-// cursor:pointer;
-// display:flex;
-// padding-left:30px;
-// padding-right:20px;
-// align-items:center;
-// justify-content:left;
-// width:100%;
-// height:60px;
-// gap:15px;
-// color:black;
-// &:hover {
-//   background-color:#EBECF0;
-// }`;
-
-// export const SmallLogOutButton = styled.div`
-// width:90%;
-// height:40px;
-// margin-bottom:10px;
-// border:1.5px solid grey;
-// color:black;
-// border-radius:10px;
-// font-weight:600;
-// display:flex;
-// font-size:14px;
-// justify-content:center;
-// align-items:center;
-// position:absolute;
-// cursor:pointer;
-// bottom:0;
-// &:hover {
-//   background-color:#EBECF0;
-// }`;
-
-// export const HamburgerProfileLink = styled(Link)`
-// text-decoration:none;
-// display:flex;
-// padding-left:30px;
-// padding-right:20px;
-// align-items:center;
-// justify-content:left;
-// width:100%;
-// height:60px;
-// gap:15px;
-// color:black;
-// `;
-
-// export const SmallBarProfileBackground = styled.div`
-// height:90px;
-// width:100%;
-// display:flex;
-// align-items:center;
-// justify-content:center;
-// gap:10px;
-// background: linear-gradient(
-//   312deg,
-//   rgb(178, 228, 238) 0%,
-//   rgb(161, 176, 246) 100%
-// );
-// `;
-
-// export const SmallProfilePhoto = styled.img`
-// width:42px;
-// height:42px;
-// border-radius:50%;
-// object-fit:cover;
-// box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-// `;
-
-// export const SmallNavIcon = styled.img`
-// width:30px;
-// height:30px;
-// object-fit:cover;
-// `;
-
-// export const SmallProfileName = styled.div`
-// width:100%;
-// height:30px;
-// display:flex;
-// font-weight:600;
-// justify-content:left;
-// align-items:center;
-// `;
-
-// export const SmallNavText = styled.div`
-// width:100%;
-// height:30px;
-// display:flex;
-// font-weight:500;
-// justify-content:left;
-// align-items:center;
-// font-size:14px;
-// `;
 
 function getBorderBottomByPathname(pathname, headerBackground) {
   if (pathname === '/all-articles' && headerBackground) {

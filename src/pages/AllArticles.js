@@ -15,30 +15,29 @@ import Footer from '../components/Footer';
 import ARTICLE_COVER from '../constants/article.cover';
 
 const PageWrapper = styled.div`
-width:100vw;
-height:100vh;
+  width:100vw;
+  height:100vh;
 `;
 
 const ArticleCoverImage = styled.div`
-width:100vw;
-height:500px;
-align-items:center;
-justify-content:center;
-background-image: url(${AllArticleBaner});
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-position:relative;
-background-position:center;
-@media screen and (max-width:800px){
-  height:280px
-}
+  width:100vw;
+  height:500px;
+  align-items:center;
+  justify-content:center;
+  background-image: url(${AllArticleBaner});
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  position:relative;
+  background-position:center;
+  @media screen and (max-width:800px){
+    height:280px
+  }
 `;
 
 function AllArticlePage() {
   const [allArticles, setAllArticles] = useState([]);
-  console.log(allArticles);
 
   useEffect(() => {
     const pulishedArticlesRef = query(collection(db, 'articles'), where('status', '==', 'published'));

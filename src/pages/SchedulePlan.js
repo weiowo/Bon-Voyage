@@ -32,178 +32,180 @@ import PLACE_PHOTO from '../constants/place.photo';
 import ICONS from '../constants/schedule.page.icon';
 
 const ScheduleWrapper = styled.div`
-    display:flex;
-    width:100vw;
-    height:100vh;
-    gap:0px;
-    padding-top:60px;
-    `;
+  display:flex;
+  width:100vw;
+  height:100vh;
+  gap:0px;
+  padding-top:60px;
+`;
 
 const LeftContainer = styled.div`
-overflow:scroll;
-display:flex;
-flex-direction:column;
-align-items:center;
-width:45vw;
-overflow:scroll;
-height:calc( 100vh - 60px );
-display:${(props) => (props.active ? 'none' : 'flex')};
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-z-index:10;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-}
-&::-webkit-scrollbar {
-  width: 3px;
-  display:none;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  display:none;
-}
-@media screen and (max-width:800px){
-  width:100vw;
-  display:${(props) => (props.show ? 'flex' : 'none')};
-}
+  overflow:scroll;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:45vw;
+  overflow:scroll;
+  height:calc( 100vh - 60px );
+  display:${(props) => (props.active ? 'none' : 'flex')};
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index:10;
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: transparent;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar {
+    width: 3px;
+    display:none;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: transparent;
+    display:none;
+  }
+  @media screen and (max-width:800px){
+    width:100vw;
+    display:${(props) => (props.show ? 'flex' : 'none')};
+  }
 `;
 
 const RightContainer = styled.div`
-width:55vw;
-height:calc(100vh-60px);
-@media screen and (max-width:800px){
-  display:block;
-  width:0vw;
-  height:0vh;
-}
+  width:55vw;
+  height:calc(100vh-60px);
+  @media screen and (max-width:800px){
+    display:block;
+    width:0vw;
+    height:0vh;
+  }
 `;
 
 const AddDayButton = styled.button`
-width:26px;
-height:26px;
-background-color:#C1C1C1;
-border-radius:50%;
-margin-bottom:0px;
-border:none;
-color:white;
-font-weight:800;
-font-size:16px;
-display:flex;
-justify-content:center;
-align-items:center;
-cursor:pointer;
+  width:26px;
+  height:26px;
+  background-color:#C1C1C1;
+  border-radius:50%;
+  margin-bottom:0px;
+  border:none;
+  color:white;
+  font-weight:800;
+  font-size:16px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
 `;
 
 const ScheduleTitleAndCompleteButtonArea = styled.div`
-width:40vw;
-justify-content:space-between;
-height:auto;
-display:flex;
-align-items:center;
-margin-top:20px;
-gap:20px;
-@media screen and (max-width:800px){
-  width:100%;
-  padding-right:20px;
-  padding-left:20px;
-}`;
+  width:40vw;
+  justify-content:space-between;
+  height:auto;
+  display:flex;
+  align-items:center;
+  margin-top:20px;
+  gap:20px;
+  @media screen and (max-width:800px){
+    width:100%;
+    padding-right:20px;
+    padding-left:20px;
+  }
+`;
 
 const ScheduleTitle = styled.div`
-color:#226788;
-font-weight:800;
-font-size:17px;
+  color:#226788;
+  font-weight:800;
+  font-size:17px;
 `;
 
 const DateContainer = styled.div`
-display:flex;
-justify-content:center;
-align-items:center;
-width:40vw;
-gap:15px;
-font-weight:600;
-@media screen and (max-width:800px){
-  width:100%;
-}
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:40vw;
+  gap:15px;
+  font-weight:600;
+  @media screen and (max-width:800px){
+    width:100%;
+  }
 `;
 
 const CompleteButton = styled.button`
-width:50px;
-height:30px;
-border-radius:10px;
-border: solid #226788 2px;
-font-weight:600;
-cursor:pointer;
-justify-self:end;
-justify-self:right;
-background-color:${(props) => (props.isEditing ? '#226788' : 'white')};
-color:${(props) => (props.isEditing ? 'white' : '#226788')};
-animation:${(props) => (props.isEditing ? 'hithere 1.1s ease 3' : 'none')};
+  width:50px;
+  height:30px;
+  border-radius:10px;
+  border: solid #226788 2px;
+  font-weight:600;
+  cursor:pointer;
+  justify-self:end;
+  justify-self:right;
+  background-color:${(props) => (props.isEditing ? '#226788' : 'white')};
+  color:${(props) => (props.isEditing ? 'white' : '#226788')};
+  animation:${(props) => (props.isEditing ? 'hithere 1.1s ease 3' : 'none')};
 `;
 
 const AddAndSearchBox = styled.div`
-width:45vw;
-height:calc(100vh - 60px);
-position:relative;
-display:${(props) => (props.active ? 'block' : 'none')};
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-z-index:10;
-@media screen and (max-width:800px){
-  width:100vw;
-}
+  width:45vw;
+  height:calc(100vh - 60px);
+  position:relative;
+  display:${(props) => (props.active ? 'block' : 'none')};
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index:10;
+  @media screen and (max-width:800px){
+    width:100vw;
+  }
 `;
 
 const AddToPlaceButton = styled.button`
-height:30px;
-width:100px;
-background-color:#63B5DC;
-border-radius:8px;
-border:none;
-font-weight:600;
-color:white;
-cursor:pointer;
+  height:30px;
+  width:100px;
+  background-color:#63B5DC;
+  border-radius:8px;
+  border:none;
+  font-weight:600;
+  color:white;
+  cursor:pointer;
 `;
 
 const GoBackIcon = styled.img`
-width:32px;
-height:32px;
+  width:32px;
+  height:32px;
 `;
 
 const ChooseShowMapOrSchedule = styled.div`
-display:none;
-@media screen and (max-width:800px){
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  font-size:15px;
-  font-weight:600;
-  color:white;
-  width:100%;
-  height:50px;
-  border:none;
-  background-color: #226788;
-  padding-bottom:10px;
-  padding-top:10px;
-  cursor:pointer;
-  position:fixed;
-  bottom:0;
-  z-index:50;
-}`;
+  display:none;
+  @media screen and (max-width:800px){
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font-size:15px;
+    font-weight:600;
+    color:white;
+    width:100%;
+    height:50px;
+    border:none;
+    background-color: #226788;
+    padding-bottom:10px;
+    padding-top:10px;
+    cursor:pointer;
+    position:fixed;
+    bottom:0;
+    z-index:50;
+  }
+`;
 
 const SeperateLine = styled.div`
-height:90%;
-width:1.2px;
-background-color:white;
+  height:90%;
+  width:1.2px;
+  background-color:white;
 `;
 
 const SchdeuleMapButton = styled.button`
-background-color:transparent;
-font-weight:600;
-width:100%;
-color:white;
-border:none;
-cursor:pointer;
+  background-color:transparent;
+  font-weight:600;
+  width:100%;
+  color:white;
+  border:none;
+  cursor:pointer;
 `;
 
 const initialDnDState = {
@@ -647,7 +649,6 @@ function Schedule() {
                   )
                   : '')}
                 <PlaceContainer
-                  key={placeItem?.place_address}
                   data-position={placeIndex}
                   draggable
                   onDragStart={onPlaceDragStart}
@@ -730,7 +731,7 @@ function Schedule() {
           </ChatRoomTitle>
           <MessagesDisplayArea>
             {chatBox ? chatBox?.messages?.map((item) => (
-              <MessageBox key={item?.photo_url} ref={messagesEndRef}>
+              <MessageBox key={item?.message} ref={messagesEndRef}>
                 <UserPhoto src={item?.photo_url} />
                 <NameMessage>
                   <Name>

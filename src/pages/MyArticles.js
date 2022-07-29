@@ -48,149 +48,153 @@ const ConfirmWritingButton = styled.button`
 `;
 
 const PageWrapper = styled.div`
-width:100vw;
-height:calc(100vh-60px);
-display:flex;
-flex-direction:row;
-padding-top:60px;
-@media screen and (max-width:800px){
-justify-content:center;
-}
+  width:100vw;
+  height:calc(100vh-60px);
+  display:flex;
+  flex-direction:row;
+  padding-top:60px;
+  @media screen and (max-width:800px){
+  justify-content:center;
+  }
 `;
 
 const MyArticlesArea = styled.div`
-width:80vw;
-height:85vh;
-display:flex;
-flex-direction:column;
-padding-left:50px;
-margin-top:30px;
-@media screen and (max-width:800px){
-  padding-left:0px;
-}
-@media screen and (max-width:800px){
-  width:93vw;
-}
+  width:80vw;
+  height:85vh;
+  display:flex;
+  flex-direction:column;
+  padding-left:50px;
+  margin-top:30px;
+  @media screen and (max-width:800px){
+    padding-left:0px;
+  }
+  @media screen and (max-width:800px){
+    width:93vw;
+  }
 `;
 
 export const MyPageTitle = styled.div`
-width:90%;
-height:auto;
-font-size:28px;
-font-weight:600;
-text-align:left;
-@media screen and (max-width:800px){
-  text-align:center;
-  font-size:25px;
-  width:100%;
-}`;
+  width:90%;
+  height:auto;
+  font-size:28px;
+  font-weight:600;
+  text-align:left;
+  @media screen and (max-width:800px){
+    text-align:center;
+    font-size:25px;
+    width:100%;
+  }
+`;
 
 const Tabs = styled.div`
-display:flex;
-width:90%;
-height:auto;
-gap:20px;
-margin-top:10px;
-@media screen and (max-width:800px){
-  width:100%;
-}`;
+  display:flex;
+  width:90%;
+  height:auto;
+  gap:20px;
+  margin-top:10px;
+  @media screen and (max-width:800px){
+    width:100%;
+  }
+`;
 
 const Tab = styled.div`
-width:50px;
-height:30px;
-font-size:15px;
-font-weight:500;
-display:flex;
-align-items:center;
-justify-content:center;
-background-color:${(props) => (props.isClicked ? '#E6D1F2' : '')};
-color:${(props) => (props.isClicked ? 'black' : 'grey')};
-cursor:pointer;
+  width:50px;
+  height:30px;
+  font-size:15px;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background-color:${(props) => (props.isClicked ? '#E6D1F2' : '')};
+  color:${(props) => (props.isClicked ? 'black' : 'grey')};
+  cursor:pointer;
 `;
 
 const MyArticlesContainer = styled.div`
-width:90%;
-flex-wrap:wrap;
-gap:15px;
-margin-top:10px;
-padding-bottom:10px;
-padding-left:5px;
-display:${(props) => (props.isClicked ? 'flex' : 'none')};
-overflow:auto;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar {
-  width: 6px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  background-color:#D3D3D3;
-}
-@media screen and (max-width:800px){
-  width:100%;
-  justify-content:center;
-  padding-left:0px;
-}
-@media screen and (max-width:380px){
-  gap:5px;
-}`;
+  width:90%;
+  flex-wrap:wrap;
+  gap:15px;
+  margin-top:10px;
+  padding-bottom:10px;
+  padding-left:5px;
+  display:${(props) => (props.isClicked ? 'flex' : 'none')};
+  overflow:auto;
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: transparent;
+    border-radius: 10px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: transparent;
+    background-color:#D3D3D3;
+  }
+  @media screen and (max-width:800px){
+    width:100%;
+    justify-content:center;
+    padding-left:0px;
+  }
+  @media screen and (max-width:380px){
+    gap:5px;
+  }
+`;
 
 export const UpperLine = styled.div`
-height:1px;
-flex-shrink:0;
-background-color:grey;
-width:90%;
-@media screen and (max-width:800px){
-  width:100%;
-}
+  height:1px;
+  flex-shrink:0;
+  background-color:grey;
+  width:90%;
+  @media screen and (max-width:800px){
+    width:100%;
+  }
 `;
 
 const ArticlePreviewAndDeleteWrapper = styled.div`
-position:relative;
-width:190px;
-height:250px;
-@media screen and (max-width:1200px){
-  width:160px;
-  height:200px;
-}
+  position:relative;
+  width:190px;
+  height:250px;
+  @media screen and (max-width:1200px){
+    width:160px;
+    height:200px;
+  }
 `;
 
 const DeletePublishedArticleIcon = styled.img`
-width:20px;
-height:20px;
-position:absolute;
-top:140px;
-right:20px;
-cursor:pointer;
-z-index:200;
-@media screen and (max-width:1200px){
-  top:115px;
+  width:20px;
+  height:20px;
+  position:absolute;
+  top:140px;
   right:20px;
-}
-@media screen and (max-width:380px){
-  top:115px;
-  right:30px;
-  width:18px;
-  height:18px;
-}`;
+  cursor:pointer;
+  z-index:200;
+  @media screen and (max-width:1200px){
+    top:115px;
+    right:20px;
+  }
+  @media screen and (max-width:380px){
+    top:115px;
+    right:30px;
+    width:18px;
+    height:18px;
+  }
+`;
 
 const DeleteDraftArticleIcon = styled.img`
-width:20px;
-height:20px;
-z-index:300;
-position:absolute;
-top:140px;
-right:20px;
-cursor:pointer;
-@media screen and (max-width:1200px){
-  top:115px;
+  width:20px;
+  height:20px;
+  z-index:300;
+  position:absolute;
+  top:140px;
   right:20px;
-}
+  cursor:pointer;
+  @media screen and (max-width:1200px){
+    top:115px;
+    right:20px;
+  }
 `;
 
 function MyArticles() {
@@ -209,6 +213,7 @@ function MyArticles() {
 
   useEffect(() => {
     async function getUserArrayList() {
+      if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -272,7 +277,6 @@ function MyArticles() {
     });
   }
 
-  // 彈出刪除視窗動畫
   const modal = document.querySelector('.modal');
   const modalBackground = document.querySelector('.modal-background');
 
@@ -290,6 +294,7 @@ function MyArticles() {
 
   useEffect(() => {
     async function getUserArticleArrayList() {
+      if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -393,6 +398,7 @@ function MyArticles() {
                 )
                   : myArtPageScheduleData.map((item, index) => (
                     <ScheduleBox
+                      key={item?.schedule_id}
                       clicked={index === selectedScheduleIndex}
                       onClick={() => {
                         setSelectedSchedule(item);
@@ -432,7 +438,7 @@ function MyArticles() {
                   </WriteRightArea>
                 </WriteArticleRemind>
               ) : myPublishedArticles?.map((item) => (
-                <ArticlePreviewAndDeleteWrapper>
+                <ArticlePreviewAndDeleteWrapper key={item?.article_id}>
                   <StyledLink to={`/article?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                     <MyArticle>
                       <CoverPhotoInMyArticle
@@ -480,7 +486,7 @@ function MyArticles() {
                   </WriteRightArea>
                 </WriteArticleRemind>
               ) : myDraftArticles?.map((item) => (
-                <ArticlePreviewAndDeleteWrapper>
+                <ArticlePreviewAndDeleteWrapper key={item?.article_id}>
                   <StyledLink to={`/edit?art_id=${item?.article_id}&sch_id=${item?.schedule_id}`}>
                     <MyArticle>
                       <CoverPhotoInMyArticle

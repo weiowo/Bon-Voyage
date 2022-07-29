@@ -13,104 +13,104 @@ import db, { app } from '../utils/firebase-init';
 import CloseIcon from '../pages/images/close_style.png';
 
 const SignInModalBackground = styled.div`
-width:100vw;
-height:100vh;
-position:fixed;
-top:0;
-bottom:0;
-left:0;
-right:0;
-background-color:rgba(0, 0, 0, 0.7);
-display:flex;
-justify-content:center;
-align-items:center;
-display:flex;
-z-index:100;
+  width:100vw;
+  height:100vh;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background-color:rgba(0, 0, 0, 0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  display:flex;
+  z-index:100;
 `;
 
 const ModalBox = styled.div`
-display:flex;
-width:30vw;
-height:30vw;
-background-color:white;
-z-index:10;
-border-radius:10px;
-z-index:200;
-position: relative;
-align-items:center;
-justify-content:center;
-@media screen and (max-width:1200px){
-  width:350px;
-  height:350px;
-}
-@media screen and (max-width:450px){
-  width:330px;
-  height:330px;
-}
+  display:flex;
+  width:30vw;
+  height:30vw;
+  background-color:white;
+  z-index:10;
+  border-radius:10px;
+  z-index:200;
+  position: relative;
+  align-items:center;
+  justify-content:center;
+  @media screen and (max-width:1200px){
+    width:350px;
+    height:350px;
+  }
+  @media screen and (max-width:450px){
+    width:330px;
+    height:330px;
+  }
 `;
 
 const SignUpArea = styled.div`
-display:${(props) => (props.active ? 'flex' : 'none')};
-width:80%;
-height:80%;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-gap:10px;
-@media screen and (max-width:1200px){
-  width:90%;
-  height:90%;
-}
+  display:${(props) => (props.active ? 'flex' : 'none')};
+  width:80%;
+  height:80%;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  @media screen and (max-width:1200px){
+    width:90%;
+    height:90%;
+  }
 `;
 
 const SignInSignUpTitle = styled.div`
-width:80%;
-height:30px;
-font-weight:600;
-font-size:20px;
-color:#296D98;
+  width:80%;
+  height:30px;
+  font-weight:600;
+  font-size:20px;
+  color:#296D98;
 `;
 
 const SignUpInOutButton = styled.button`
-width:80%;
-height:40px;
-background-color:#87CEE8;
-color:white;
-font-weight:550;
-font-size:14px;
-border:none;
-border-radius:5px;
-cursor:pointer;
+  width:80%;
+  height:40px;
+  background-color:#87CEE8;
+  color:white;
+  font-weight:550;
+  font-size:14px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
 `;
 
 const EmailPasswordInput = styled.input`
-width:80%;
-height:40px;
-border:none;
-font-size:17px;
-outline:none;
-padding-left:15px;
-border:1px solid grey;
-border-radius:3px;
+  width:80%;
+  height:40px;
+  border:none;
+  font-size:17px;
+  outline:none;
+  padding-left:15px;
+  border:1px solid grey;
+  border-radius:3px;
 `;
 
 const GoToSignUpButton = styled.button`
-width:30%;
-height:35px;
-background-color:#296D98;
-color:white;
-font-weight:500;
-border-radius:5px;
-border:none;
-cursor:pointer;
+  width:30%;
+  height:35px;
+  background-color:#296D98;
+  color:white;
+  font-weight:500;
+  border-radius:5px;
+  border:none;
+  cursor:pointer;
 `;
 
 const StyledIcon = styled.img`
-width:28px;
-height:28px;
-position:absolute;
-top:20px;
-right:20px;
+  width:28px;
+  height:28px;
+  position:absolute;
+  top:20px;
+  right:20px;
 `;
 
 function SignIn() {

@@ -10,7 +10,6 @@ import Home from './pages/Home';
 import ChooseDate from './pages/ChooseDate';
 import MySchedules from './pages/MySchedules';
 import Map from './pages/Map';
-// import SearchHome from './pages/SearchHome';
 import City from './pages/City';
 import Carousel from './components/Carousel';
 import CityAreaInHomePage from './components/CityInHome';
@@ -49,8 +48,6 @@ function App() {
       }
     });
   }, [auth, setUser]);
-
-  // 拿使用者現有位置
 
   function getCurrentLatLng() {
     if ('geolocation' in navigator) {

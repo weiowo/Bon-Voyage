@@ -14,83 +14,83 @@ import SmallScreenNavBar, {
 import { auth } from '../../utils/firebase-init';
 
 const Header = styled.header`
-position:absolute;
-display:flex;
-justify-content:space-between;
-align-items:center;
-width:100vw;
-height:60px;
-background-color:#a9a9a9;
-@media screen and (max-width:800px){
-  display:none;
-}`;
-
-const SmallGreyHeader = styled.div`
-display:none;
-@media screen and (max-width:800px){
+  position:absolute;
   display:flex;
   justify-content:space-between;
   align-items:center;
   width:100vw;
-  position:fixed;
-  top:0;
-  z-index:1000;
-  height:${(props) => (props.active ? '60px' : '65px')};
+  height:60px;
   background-color:#a9a9a9;
-  box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
+  @media screen and (max-width:800px){
+    display:none;
+}`;
+
+const SmallGreyHeader = styled.div`
+  display:none;
+  @media screen and (max-width:800px){
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    width:100vw;
+    position:fixed;
+    top:0;
+    z-index:1000;
+    height:${(props) => (props.active ? '60px' : '65px')};
+    background-color:#a9a9a9;
+    box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
 }`;
 
 const Logo = styled.div`
-width:150px;
-height:30px;
-font-weight:700;
-font-size:25px;
-margin-left:20px;
-color:white;
-margin-top:0px;
-@media screen and (max-width:800px){
-  width:auto;
-  height:100%;
-  font-size:20px;
-  z-index:10;
-  position:absolute;
-  top:20px;
+  width:150px;
+  height:30px;
+  font-weight:700;
+  font-size:25px;
+  margin-left:20px;
+  color:white;
+  margin-top:0px;
+  @media screen and (max-width:800px){
+    width:auto;
+    height:100%;
+    font-size:20px;
+    z-index:10;
+    position:absolute;
+    top:20px;
 }`;
 
 const NavBar = styled.div`
-display:flex;
-align-items:center;
-gap:15px;
-width:500px;
-height:30px;
-color:${(props) => (props.active ? 'black' : 'white')};
-font-weight:600;
-margin-top:0px;
-@media screen and (max-width:800px){
-  display:none;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  width:500px;
+  height:30px;
+  color:${(props) => (props.active ? 'black' : 'white')};
+  font-weight:600;
+  margin-top:0px;
+  @media screen and (max-width:800px){
+    display:none;
 }`;
 
 const ProfilePageNav = styled.div`
-width:auto;
-padding:8px 10px;
-border-radius:10px;
-border:1px solid white;
-cursor:pointer;
+  width:auto;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid white;
+  cursor:pointer;
 `;
 
 const StyleNavLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:white;
-&:hover {
-  border-bottom:1.5px solid white;
-}
+  cursor:pointer;
+  text-decoration:none;
+  color:white;
+  &:hover {
+    border-bottom:1.5px solid white;
+  }
 `;
 
 const ProfileNavLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:white;
+  cursor:pointer;
+  text-decoration:none;
+  color:white;
 `;
 
 function GreyHeaderComponent() {

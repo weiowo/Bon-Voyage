@@ -34,340 +34,360 @@ import AddFriendButton, {
 import Line from '../components/Line';
 
 const PageWrapper = styled.div`
-width:100vw;
-height:calc(100vh-60px);
-display:flex;
-flex-direction:row;
-padding-top:60px;
-@media screen and (max-width:800px){
-justify-content:center;
-}
-@media screen and (max-width:748px){
-  flex-direction:column;
-  flex-shrink:0;
+  width:100vw;
   height:calc(100vh-60px);
+  display:flex;
+  flex-direction:row;
+  padding-top:60px;
+  @media screen and (max-width:800px){
+  justify-content:center;
+  }
+  @media screen and (max-width:748px){
+    flex-direction:column;
+    flex-shrink:0;
+    height:calc(100vh-60px);
 }`;
 
 const SmallScreenLine = styled.div`
-display:none;
-@media screen and (max-width:800px){
-  display:flex;
-width:1.8px;
-height:85vh;
-background-color:#D3D3D3;
-align-items:center;
-margin-top:20px;
-@media screen and (max-width:748px){
   display:none;
+  @media screen and (max-width:800px){
+    display:flex;
+  width:1.8px;
+  height:85vh;
+  background-color:#D3D3D3;
+  align-items:center;
+  margin-top:20px;
+  @media screen and (max-width:748px){
+    display:none;
+  }
 }`;
 
 const ChoicesWrapper = styled.div` 
-width:33vw;
-height:90vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:20px;
-overflow:auto;
-height:calc(100vh-80px);
-flex-shrink:0;
-padding-bottom:5px;
-&::-webkit-scrollbar-track {
-  -webkit-box-shadow: transparent;
-  border-radius: 10px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar {
-  width: 6px;
-  background-color:transparent;
-}
-&::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: transparent;
-  background-color:#D3D3D3;
-}
-@media screen and (max-width:800px){
-  width:40vw;
-}
-@media screen and (max-width:748px){
+  width:33vw;
+  height:90vh;
+  display:flex;
   flex-direction:column;
-  width:100vw;
-  height:35vh;
-  gap:10px;
+  align-items:center;
+  gap:20px;
+  overflow:auto;
+  height:calc(100vh - 80px);
   flex-shrink:0;
-  overflow:hidden;
-  padding-bottom:0px;
-  margin-bottom:0px;
+  padding-bottom:5px;
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: transparent;
+    border-radius: 10px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: transparent;
+    background-color:#D3D3D3;
+  }
+  @media screen and (max-width:800px){
+    width:40vw;
+  }
+  @media screen and (max-width:748px){
+    flex-direction:column;
+    width:100vw;
+    height:35vh;
+    gap:10px;
+    flex-shrink:0;
+    overflow:hidden;
+    padding-bottom:0px;
+    margin-bottom:0px;
 }`;
 
 const TitleAndCreateArea = styled.div`
-display:flex;
-width:26vw;
-height:auto;
-align-items:flex-end;
-gap:20px;
-margin-top:30px;
-justify-content:left;
-margin-bottom:15px;
-@media screen and (max-width:748px){
-width:100%;
-display:flex;
-height:80px;
-margin-top:10px;
-align-items:center;
-margin-bottom:0px;
-justify-content:center;
-}`;
+  display:flex;
+  width:26vw;
+  height:auto;
+  align-items:flex-end;
+  gap:20px;
+  margin-top:30px;
+  justify-content:left;
+  margin-bottom:15px;
+  @media screen and (max-width:748px){
+  width:100%;
+  display:flex;
+  height:80px;
+  margin-top:10px;
+  align-items:center;
+  margin-bottom:0px;
+  justify-content:center;
+  }
+`;
 
 const ExistedSchedules = styled.div`
-display:flex;
-flex-direction:column;
-gap:15px;
-@media screen and (max-width:748px){
-  width:100vw;
-  height:23vh;
-  margin-left:30px;
-  flex-direction:row;
-  overflow:scroll;
-  padding-top:0px;
-  padding-bottom:0px;
-  flex-shrink:0;
-}`;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  @media screen and (max-width:748px){
+    width:100vw;
+    height:23vh;
+    margin-left:30px;
+    flex-direction:row;
+    overflow:scroll;
+    padding-top:0px;
+    padding-bottom:0px;
+    flex-shrink:0;
+  }
+`;
 
 const SchedulePreview = styled.div`
-display:flex;
-width:40vw;
-height:auto;
-align-items:flex-end;
-gap:20px;
-margin-top:30px;
-justify-content:left;
-margin-bottom:15px;
-@media screen and (max-width:748px){
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  margin-top:10px;
-}`;
+  display:flex;
+  width:40vw;
+  height:auto;
+  align-items:flex-end;
+  gap:20px;
+  margin-top:30px;
+  justify-content:left;
+  margin-bottom:15px;
+  @media screen and (max-width:748px){
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    margin-top:10px;
+  }
+`;
 
 const MyScheduleTitle = styled.div`
-font-weight:700;
-font-size:25px;
-height:30px;
-@media screen and (max-width:800px){
-  font-size:22px;
-}`;
+  font-weight:700;
+  font-size:25px;
+  height:30px;
+  @media screen and (max-width:800px){
+    font-size:22px;
+  }
+`;
 
 const SchedulePreviewTitle = styled.div`
-font-weight:700;
-font-size:25px;
-height:30px;
-@media screen and (max-width:800px){
-  font-size:22px;
-}`;
+  font-weight:700;
+  font-size:25px;
+  height:30px;
+  @media screen and (max-width:800px){
+    font-size:22px;
+  }
+`;
 
 const CreateNewScheduleButton = styled.button`
-width:80px;
-height:20px;
-background-color:#1c2e4a;
-color:white;
-border-radius:3px;
-border:none;
-font-size:12px;
-font-weight:500;
-@media screen and (max-width:800px){
   width:80px;
   height:20px;
-  flex-shrink:0;
-}
+  background-color:#1c2e4a;
+  color:white;
+  border-radius:3px;
+  border:none;
+  font-size:12px;
+  font-weight:500;
+  @media screen and (max-width:800px){
+    width:80px;
+    height:20px;
+    flex-shrink:0;
+  }
 `;
 
 const ViewDetailButton = styled.button`
-width:70px;
-height:20px;
-background-color:#1c2e4a;
-color:white;
-border-radius:3px;
-border:none;
-font-size:12px;
-font-weight:500;
-cursor:pointer;
-@media screen and (max-width:800px){
   width:70px;
   height:20px;
-  flex-shrink:0;
-}
+  background-color:#1c2e4a;
+  color:white;
+  border-radius:3px;
+  border:none;
+  font-size:12px;
+  font-weight:500;
+  cursor:pointer;
+  @media screen and (max-width:800px){
+    width:70px;
+    height:20px;
+    flex-shrink:0;
+  }
 `;
 
 const SelectedScheduleWrapper = styled.div`
-width:42vw;
-height:auto;
-display:flex;
-flex-direction:column;
-align-items:left;
-margin-left:50px;
-gap:15px;
-@media screen and (max-width:800px){
-  margin-left:20px;
-  width:50vw;
-}
-@media screen and (max-width:748px){
-  width:100vw;
-  margin-left:0px;
-  height:53vh;
-  align-items:center;
-}
+  width:42vw;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:left;
+  margin-left:50px;
+  gap:15px;
+  @media screen and (max-width:800px){
+    margin-left:20px;
+    width:50vw;
+  }
+  @media screen and (max-width:748px){
+    width:100vw;
+    margin-left:0px;
+    height:53vh;
+    align-items:center;
+  }
 `;
 
 const SelectedSchedulePhoto = styled.div`
-padding-left:15px;
-padding-bottom:10px;
-opacity:1;
-flex-direction:column;
-justify-content:flex-end;
-background-image: url(${RecCover3});
-width:35vw;
-height:12vw;
-position:relative;
-border-radius:20px;
-background-size:cover;
-background-repeat: no-repeat;
-background-color: rgb(0, 0, 0, 0.2);
-background-blend-mode: multiply;
-@media screen and (max-width:800px){
-  width:85%;
-  height:150px;
-}
-@media screen and (max-width:748px){
-  width:85vw;
-  margin-left:0px;
-  align-items:center;
-  height:120px;
-}
+  padding-left:15px;
+  padding-bottom:10px;
+  opacity:1;
+  flex-direction:column;
+  justify-content:flex-end;
+  background-image: url(${RecCover3});
+  width:35vw;
+  height:12vw;
+  position:relative;
+  border-radius:20px;
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-color: rgb(0, 0, 0, 0.2);
+  background-blend-mode: multiply;
+  @media screen and (max-width:800px){
+    width:85%;
+    height:150px;
+  }
+  @media screen and (max-width:748px){
+    width:85vw;
+    margin-left:0px;
+    align-items:center;
+    height:120px;
+  }
 `;
 
 const SelectedScheduleTitle = styled.div`
-color:white;
-font-weight:800;
-font-size:30px;
-position:absolute;
-bottom:20px;
+  color:white;
+  font-weight:800;
+  font-size:30px;
+  position:absolute;
+  bottom:20px;
 `;
 
 const ScheduleMemberContainer = styled.div`
-display:flex;
-align-items:center;
-width:35.7vw;
-height:80px;
-gap:15px;
-overflow:scroll;
-@media screen and (max-width:800px){
-  width:85%;
-  height:70px;
-}
-@media screen and (max-width:700px){
-  width:85%;
+  display:flex;
+  align-items:center;
+  width:35.7vw;
   height:80px;
-}
+  gap:15px;
+  overflow:scroll;
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: transparent;
+    border-radius: 10px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color:transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: transparent;
+    background-color:#D3D3D3;
+  }
+  @media screen and (max-width:800px){
+    width:85%;
+    height:70px;
+  }
+  @media screen and (max-width:700px){
+    width:85%;
+    height:80px;
+  }
 `;
 
 const ScheduleMemberWord = styled.div`
-align-items:center;
-justify-content:center;
-width:50px;
-font-size:25px;
-font-weight:600;
-height:50px;
-color:white;
-border-radius:50%;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-display:${(props) => (props.hovered ? 'flex' : 'none')};
-cursor:pointer;
-@media screen and (max-width:800px){
-  height:32px;
-  width:32px;
-  font-size:15px;
-  flex-shrink:0;
-}
-@media screen and (max-width:740px){
-  height:50px;
+  align-items:center;
+  justify-content:center;
   width:50px;
   font-size:25px;
-  flex-shrink:0;
-}
+  font-weight:600;
+  height:50px;
+  color:white;
+  border-radius:50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display:${(props) => (props.hovered ? 'flex' : 'none')};
+  cursor:pointer;
+  @media screen and (max-width:800px){
+    height:32px;
+    width:32px;
+    font-size:15px;
+    flex-shrink:0;
+  }
+  @media screen and (max-width:740px){
+    height:50px;
+    width:50px;
+    font-size:25px;
+    flex-shrink:0;
+  }
 `;
 
 const ScheduleMemberPhoto = styled.img`
-width:50px;
-height:50px;
-border-radius:50%;
-text-align:center;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-display:${(props) => (props.hovered ? 'none' : 'block')};
-cursor:pointer;
-object-fit: cover;
-@media screen and (max-width:800px){
-  height:32px;
-  width:32px;
-  flex-shrink:0;
-}
-@media screen and (max-width:740px){
-  height:50px;
   width:50px;
-}
+  height:50px;
+  border-radius:50%;
+  text-align:center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display:${(props) => (props.hovered ? 'none' : 'block')};
+  cursor:pointer;
+  object-fit: cover;
+  @media screen and (max-width:800px){
+    height:32px;
+    width:32px;
+    flex-shrink:0;
+  }
+  @media screen and (max-width:740px){
+    height:50px;
+    width:50px;
+  }
 `;
 
 const StyledLink = styled(Link)`
-cursor:pointer;
-text-decoration:none;
-color:white;
-border:none;
+  cursor:pointer;
+  text-decoration:none;
+  color:white;
+  border:none;
 `;
 
 const CalendarBox = styled.div`
-width:35vw;
-height:120px;
-border-radius:15px;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-@media screen and (max-width:800px){
-  width:85%;
+  width:35vw;
   height:120px;
-}
+  border-radius:15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  @media screen and (max-width:800px){
+    width:85%;
+    height:120px;
+  }
 `;
 
 const CalendarBoxTitle = styled.div`
-display:flex;
-padding-left:20px;
-color:white;
-font-weight:600;
-font-size:18px;
-text-shadow:1px 1px 2px black;
-align-items:center;
-border-top-right-radius:inherit;
-border-top-left-radius:inherit;
-width:35vw;
-height:30%;
-background: linear-gradient(
-  312deg,
-  rgb(178, 228, 238) 0%,
-  rgb(161, 176, 246) 100%
-);
-@media screen and (max-width:800px){
-  width:100%;
-}
+  display:flex;
+  padding-left:20px;
+  color:white;
+  font-weight:600;
+  font-size:18px;
+  text-shadow:1px 1px 2px black;
+  align-items:center;
+  border-top-right-radius:inherit;
+  border-top-left-radius:inherit;
+  width:35vw;
+  height:30%;
+  background: linear-gradient(
+    312deg,
+    rgb(178, 228, 238) 0%,
+    rgb(161, 176, 246) 100%
+  );
+  @media screen and (max-width:800px){
+    width:100%;
+  }
 `;
 
 const DateArea = styled.div`
-display:flex;
-height:70%;
-color:black;
-font-weight:600;
-font-size:25px;
-align-items:center;
-justify-content:center;
-@media screen and (max-width:748px){
-  font-size:23px;
-}
+  display:flex;
+  height:70%;
+  color:black;
+  font-weight:600;
+  font-size:25px;
+  align-items:center;
+  justify-content:center;
+  @media screen and (max-width:748px){
+    font-size:23px;
+  }
 `;
 
 function MySchedules() {
@@ -381,6 +401,8 @@ function MySchedules() {
   const [showMemberPhoto, setShowMemberPhoto] = useState(false);
   const [searchInputIsActive, setSearchInputIsActive] = useState(true);
   const [searchResultIsActive, setSearchResultIsActive] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
+  // const [deleteIndex, setDeleteIndex] = useState('');
   const navigate = useNavigate();
   const [targetIndex, setTargetIndex] = useState(null);
 
@@ -405,9 +427,9 @@ function MySchedules() {
     return undefined;
   }, [user.uid, setSchedules]);
 
-  function deleteScheduleOfTheUser(targetDeleteIndex) {
+  function deleteScheduleOfTheUser() {
     setSchedules(schedules?.filter(
-      (item, index) => index !== targetDeleteIndex,
+      (item) => item.schedule_id !== deleteId,
     ));
   }
 
@@ -593,73 +615,23 @@ function MySchedules() {
                   <ExistedSchedules>
                     {schedules?.map((item, index) => (
                       <ExistedSchedule
-                        key={`${item?.schedule_id}`}
-                        data-position={index}
+                        key={item?.schedule_id}
                         isSelected={index === targetIndex}
                       >
-                        <div
-                          className="modal-background"
-                        >
-                          <div
-                            className="modal"
-                          >
-                            <DeleteModalTitle
-                              key={`${item?.schedule_id}and${item?.title}`}
-
-                            >
-                              Delete
-                            </DeleteModalTitle>
-                            <DeleteAsk
-                              key={`${item?.schedule_id}+${item?.title}+${item?.end_date}`}
-                            >
-                              確認要刪除嗎？
-
-                            </DeleteAsk>
-                            <DeleteButtonArea
-                              key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.end_date}`}
-                            >
-                              <NoDeleteButton
-                                key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
-                                onClick={() => closeModal()}
-                                type="button"
-                              >
-                                取消
-                              </NoDeleteButton>
-                              <ConfirmDeleteButton
-                                key={`${item?.deleted}`}
-                                onClick={() => {
-                                  deleteScheduleOfTheUser(index);
-                                  closeModal(); deleteCertainSchedule(item.schedule_id);
-                                }}
-                                type="button"
-                              >
-                                確認
-
-                              </ConfirmDeleteButton>
-                            </DeleteButtonArea>
-                          </div>
-                        </div>
                         <PhotoArea
-                          key={`${item?.title}`}
                           src={SQUARE_COVER[index % 5]}
                         />
-                        <ScheduleRightPart
-                          key={`${item?.embark_date}+${item?.end_date}`}
-
-                        >
+                        <ScheduleRightPart>
                           <ExistedScheuleTitle
-                            key={`${item?.title}+${item?.deleted}`}
                             id={item?.schedule_id}
                           >
                             {item?.title}
                           </ExistedScheuleTitle>
-                          <ButtonArea
-                            key={`${item?.embark_date}and`}
-                          >
-                            <Button key={`${item?.schedule_id}+${item?.end_date}`} onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
+                          <ButtonArea>
+                            <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
                               選擇
                             </Button>
-                            <Button key={`${item?.title}+${item?.end_date}`} className="button" onClick={() => { toggleModal(); }} id={item?.schedule_id} type="button">
+                            <Button className="button" onClick={() => { toggleModal(); setDeleteId(item?.schedule_id); }} id={item?.schedule_id} type="button">
                               刪除
                             </Button>
                           </ButtonArea>
@@ -667,16 +639,12 @@ function MySchedules() {
 
                         <SmallScheduleRightPart>
                           <ExistedScheuleTitle
-                            key={`${item?.title}+${item?.deleted}+${item?.end_date}`}
                             id={item?.schedule_id}
                           >
                             {item.title}
                           </ExistedScheuleTitle>
-                          <ButtonArea
-                            key={`${item?.schedule_id}+${item?.title}+${item?.deleted}+${item?.end_date}`}
-                          >
+                          <ButtonArea>
                             <Button
-                              key={`${item?.schedule_id}+${item?.title}+${item?.embark_date}+${item?.deleted}`}
                               onClick={() => {
                                 setTargetIndex(index);
                                 getSelectedSchedule(item?.schedule_id);
@@ -687,7 +655,6 @@ function MySchedules() {
                               選擇
                             </Button>
                             <Button
-                              key={`${item?.schedule_id}+${item?.title}+${item?.end_date}+${item?.deleted}+${item?.embark_date}`}
                               onClick={() => toggleModal()}
                               id={item?.schedule_id}
                               type="button"
@@ -698,7 +665,43 @@ function MySchedules() {
                         </SmallScheduleRightPart>
                       </ExistedSchedule>
                     ))}
+                    <div
+                      className="modal-background"
+                    >
+                      <div
+                        className="modal"
+                      >
+                        <DeleteModalTitle>
+                          Delete
+                        </DeleteModalTitle>
+                        <DeleteAsk>
+                          確認要刪除嗎？
+
+                        </DeleteAsk>
+                        <DeleteButtonArea>
+                          <NoDeleteButton
+                            onClick={() => closeModal()}
+                            type="button"
+                          >
+                            取消
+                          </NoDeleteButton>
+                          <ConfirmDeleteButton
+                            onClick={() => {
+                              console.log('indexxxx', deleteId);
+                              deleteScheduleOfTheUser(deleteId);
+                              closeModal();
+                              deleteCertainSchedule(deleteId);
+                            }}
+                            type="button"
+                          >
+                            確認
+
+                          </ConfirmDeleteButton>
+                        </DeleteButtonArea>
+                      </div>
+                    </div>
                   </ExistedSchedules>
+
                 )}
             </ChoicesWrapper>
             <Line />

@@ -1,70 +1,126 @@
-# Getting Started with Create React App
+# Bon Voyage <img align="center" width="35px" src="./public/suitcase-2.png"/>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+> #### A World Exploring and Trip Planning Website           
+>
+> <img align="center" width="25px" src="./src/pages/images/travel.png"/>  Fun fact: `"Bon Voyage!"` means "Have a nice trip!" in French.
 
-In the project directory, you can run:
+  - [Motivation](#motivation)
+  - [Embark Now!](#embark-now)
+  - [Development skills and utilized tools](#developed-with--and)
+  - [Features](#features)
+      - [`Create your travel schedules`<br/>](#create-your-travel-schedules)
+      - [`Add friends to schedules and chat with them.`](#add-friends-to-schedules-and-chat-with-them)
+      - [`Adjust schedule detail`](#adjust-schedule-detail)
+      - [`Search travel destinations`](#search-travel-destinations)
+      - [`Search places by different categories`](#search-places-by-different-categories)
+      - [`Edit & publish travel blogs`](#edit--publish-travel-blogs)
+      - [`Discover travel blogs written by others`](#discover-travel-blogs-written-by-others)
+      - [`Virtual Reality`](#virtual-reality)
+      - [`Add to favorite`](#add-to-favorite)
+  - [Contact](#contact)
 
-### `npm start`
+## Motivation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+"Life is a journey, not a destination", so goes the saying. Scheduling a new trip from tourist-attraction searching to arrange travel itineary is always pretty time-consuming. Not to mention writing travel blogs on recalling places been to. "Bon Voyage" aims to integrate all these features and give users a wonderful user experiences before and after a trip!
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Embark Now!
 
-### `npm test`
+Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+##### <em>Reminder: For a more thorough user experience, please allow location access and sign up.</em>
 
-### `npm run build`
+## Developed with <img align="center" width="24px" src="./src/pages/images/heart.png"/> and
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Front-End Fundamentals
+  - React / React Hooks
+  - React-Router
+  - Styled Components / CSS Keyframes
+  - Google Maps API Services: Places API (Place Detail, Nearby Search), Direction, Distance, Geocoding API.
+  - Web onDrag / onDrop API
+- Firebase Services
+  - Authentication
+  - Firestore Database
+  - Cloud Storage
+  - Hosting
+- Packages
+  - immer
+  - useImmer
+  - @react-google-maps/api
+  - use-places-autocomplete
+  - react-router-hash-link
+  - swiper.js
+  - react-datepicker
+- Other
+  - Tool: ESLint
+  - Version Control: Git / GitHub
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### `Create your travel schedules`<br/>
+Create new schedules and add places by searching.
+<br/>
 
-### `npm run eject`
+![Create your travel schedules](./readme_assets/create_schedule.gif)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+#### `Add friends to schedules and chat with them.`
+- Invite friends to join schedules.
+- Chat with friends and get instant messages from them.
+<br/>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+![Add friends to schedules](./readme_assets/add_friend_chat.gif)
+#### `Adjust schedule detail`
+- Real-time update when other members edit.
+- Drag and drop function to to change order.
+- Get direction, distance and driving time right after adding new places.
+- Mark routes and place in different days with different colors.
+<br/>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![Adjust schedule detail](./readme_assets/drag.gif)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### `Search travel destinations`
+Search tourist-attractions / restaurants / hotels and add to existed schedules.
+<br/>
 
-## Learn More
+![Search travel destinations](./readme_assets/paris.gif)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### `Search places by different categories`
+Search places by categories such as Food / Camping / Nightlife / Family /Couple / Shopping / Religion / Artistic.
+<br/>
 
-### Code Splitting
+![Search places by different categories](./readme_assets/category_search.gif)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+#### `Edit & publish travel blogs`
+Based on existed schedules, write contents and add images to share with others.
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+![Edit & publish travel blogs](./readme_assets/export_write_article.gif)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+#### `Discover travel blogs written by others`
+Read travel blogs written by other users and scroll to specified area on clicking titles.
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+![Discover travel blogs](./readme_assets/read_article.gif)
 
-### Deployment
+#### `Virtual Reality`
+Experience VR in 360 degree photo, get closer to the monuments, just like being at the place in person.
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+![Virtual Reality](./readme_assets/vr.gif)
 
-### `npm run build` fails to minify
+#### `Add to favorite`
+Click star and add favorite places and articles to my-favorite area.
+<br/>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![Add to favorite](./readme_assets/add_favo.gif)
+
+## Contact
+
+Feel free to contact if you have any suggestions!
+<br/>
+Weiwei WANG / wutamy77@gmail.com
+

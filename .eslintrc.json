@@ -25,6 +25,14 @@
         "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["draft"] }],
         "camelcase":["error", {"allow":["main_text", "place_id", "secondary_text"],  "ignoreDestructuring" : true, "properties": "never"}]
     },
+    "overrides": [
+        {
+         "files": ["*Home.js"],
+            "rules": {
+               "jsx-a11y/label-has-associated-control": "off"   
+            }
+        }
+       ],
     "globals": {
         "google": "readonly"
     }
