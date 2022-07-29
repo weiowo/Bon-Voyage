@@ -1,6 +1,7 @@
 import styled from 'styled-components/macro';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
   setPersistence, browserSessionPersistence, updateProfile,
@@ -147,7 +148,6 @@ function SignIn() {
   function signUp() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         const userCredentialData = userCredential;
         const userData = auth.currentUser;
         updateProfile(
@@ -157,10 +157,12 @@ function SignIn() {
             photoURL: defaultPhoto[Math.floor(Math.random() * defaultPhoto.length)],
           },
         );
-        console.log('signUp', userData);
         console.log('successful', userCredentialData);
-        alert('成功創立帳號囉!');
-        // 在firestore上面創立一個新的user並給予相應的欄位
+        Swal.fire({
+          title: '成功創立帳號～',
+          text: '準備開啟令人期待的旅程囉！',
+          icon: 'success',
+        });
         const createNewUserData = doc(db, 'users', userData.uid);
         setDoc(createNewUserData, ({
           ...newUser,
@@ -171,30 +173,30 @@ function SignIn() {
         }));
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        alert(errorMessage);
+        Swal.fire({
+          title: '發生了一點錯誤～',
+          text: errorMessage,
+          icon: 'warning',
+        });
       });
   }
 
   function signIn() {
-    // 透過firebase的功能，存用戶的資訊到local storage
     setPersistence(auth, browserSessionPersistence)
       .then(async () => {
-        console.log(auth, email, password);
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const userCredentialData = userCredential;
-        const userData = auth.currentUser;
         console.log('userCredentialData', userCredentialData);
-        console.log('userData', userData);
-        alert('成功登入囉～');
+        Swal.fire({
+          title: '成功登入囉～',
+          text: '準備開啟令人期待的旅程囉！',
+          icon: 'success',
+        });
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        alert(errorMessage);
+        Swal.fire(errorMessage);
       });
   }
 
@@ -224,36 +226,4 @@ function SignIn() {
   );
 }
 
-//   function setPersistenceInLocal() {
-//     setPersistence(auth, browserSessionPersistence)
-//       .then(() => {
-//         console.log(auth, email, password);
-//         return signInWithEmailAndPassword(auth, email, password);
-//       })
-//       .catch((error) => {
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//         console.log(errorCode, errorMessage);
-//       });
-//   }
-
-//   signInWithEmailAndPassword(auth, email, password)
-//     .then((userCredential) => {
-//       // Signed in
-//       const { user } = userCredential;
-//       console.log({ user }, 'successfully sign in!');
-//       console.log(user, 'successfully sign in!');
-//       // ...
-//     })
-//     .catch((error) => {
-//       const errorCode = error.code;
-//       const errorMessage = error.message;
-//       console.log(errorCode, errorMessage);
-//       alert(errorMessage);
-//     });
-
 export default SignIn;
-
-// SignIn.propTypes = {
-//   setUser: PropTypes.func.isRequired,
-// };

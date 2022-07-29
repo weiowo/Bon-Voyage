@@ -4,6 +4,7 @@ import {
   collection, doc,
   setDoc, arrayUnion, updateDoc,
 } from 'firebase/firestore';
+import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components/macro';
 import db from '../utils/firebase-init';
@@ -195,7 +196,10 @@ function ChooseDate() {
 
   async function setNewScheduleToDb() {
     if (newScheduleTitle === '') {
-      alert('請填寫旅程名稱哦！');
+      Swal.fire({
+        text: '請填寫旅程名稱！',
+        icon: 'warning',
+      });
     } else {
       const createNewScheduleData = doc(collection(db, 'schedules'));
       await setDoc(

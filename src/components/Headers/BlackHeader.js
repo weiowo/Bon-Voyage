@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   signOut,
@@ -103,16 +104,23 @@ function BlackHeaderComponent() {
 
   function signOutFunction() {
     signOut(auth).then(() => {
-      alert('您已登出囉～');
       navigate({ pathname: '/' });
     }).catch((error) => {
-      console.log(error);
+      Swal.fire({
+        title: '發生了一點錯誤～',
+        text: error,
+        icon: 'warning',
+      });
     });
   }
 
   function CheckLoginBeforeCreateSchedule() {
     if (!user.uid) {
-      alert('請先登入唷～');
+      Swal.fire({
+        title: '請先登入唷！',
+        text: '您即將被導引至登入頁面~',
+        icon: 'warning',
+      });
       navigate({ pathname: '/profile' });
     } else if (user.uid) {
       navigate({ pathname: '/choose-date' });
