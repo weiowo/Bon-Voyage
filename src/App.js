@@ -34,7 +34,7 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const [currentLatLng, setCurrentLatLng] = useState({});
+  const [currentLatLng, setCurrentLatLng] = useState({ lat: 25.03746, lng: 121.564558 });
   const [user, setUser] = useState('');
   const auth = getAuth(app);
 
