@@ -27,8 +27,11 @@
 ## Embark Now!
 
 Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)**
+<br/>
 
-##### <em>Reminder: For a more thorough user experience, please allow location access and sign up.</em>
+##### <em>- Account for experiencing: traveler@gmail.com ; Password: travelergogo123  </em>
+
+##### <em>- Reminder: For a more thorough user experience, please allow location access and sign in / up.</em>
 
 ## Developed with <img align="center" width="24px" src="./src/pages/images/heart.png"/> and
 
