@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import { useLocation, Link } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import UserContext from '../components/UserContextComponent';
 import db from '../utils/firebase-init';
 import Map from './Map';
@@ -598,11 +599,16 @@ function Schedule() {
             </Link>
           </ScheduleTitleAndCompleteButtonArea>
           <DateContainer>
-            <p>
-              {scheduleData ? scheduleData.embark_date : ''}
-              ～
-              {scheduleData ? scheduleData.end_date : '' }
-            </p>
+            { scheduleData?.trip_days
+              ? (
+                <p>
+                  {new Date(Date.parse(scheduleData?.embark_date)
+               + (0 * 86400000))?.toISOString()?.split('T')?.[0]}
+                  { scheduleData?.trip_days.length > 1 ? `～${new Date(Date.parse(scheduleData?.embark_date)
+               + ((scheduleData.trip_days.length - 1) * 86400000))?.toISOString()?.split('T')?.[0]}` : ''}
+                </p>
+              )
+              : ''}
             <AddDayButton type="button" onClick={() => addDayInSchedule()}>＋</AddDayButton>
           </DateContainer>
           <DayContainer>
@@ -611,7 +617,7 @@ function Schedule() {
                 <DayContainerTitle
                   active={dayIndex === choosedDayIndex}
                   onClick={() => { setChoosedDayIndex(dayIndex); }}
-                  key={`${dayIndex - 1}`}
+                  key={uuidv4()}
                   data-position={dayIndex}
                   draggable
                   onDragStart={onDragStart}
