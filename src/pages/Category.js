@@ -332,7 +332,6 @@ function Category({ currentLatLng }) {
     }
 
     const service = new google.maps.places.PlacesService(mapRef.current);
-    // service.nearbySearch(requests, callback);
     requests.forEach((request) => {
       service.nearbySearch(request, (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -517,7 +516,7 @@ function Category({ currentLatLng }) {
       <BlackHeaderComponent />
       <CategoryBanner src={BannerSrc} />
       <PlaceBoxesWrapper>
-        {categoryNearbyData ? categoryNearbyData.map((item, index) => (
+        {categoryNearbyData.length === 0 ? <Loading /> : categoryNearbyData.map((item, index) => (
           <PlaceBoxWrapper
             id={item?.place_id}
             key={item?.place_id}
@@ -543,7 +542,7 @@ function Category({ currentLatLng }) {
               </PlaceBoxBelowPart>
             </PlaceBox>
           </PlaceBoxWrapper>
-        )) : ''}
+        ))}
       </PlaceBoxesWrapper>
       <GoogleMap
         id="map"
