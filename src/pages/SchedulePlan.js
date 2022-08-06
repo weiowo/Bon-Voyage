@@ -347,9 +347,15 @@ function Schedule() {
     setIsEditing(true);
   }
   function updateStayTime(stayTime, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
-    });
+    if (stayTime > 1440) {
+      updateScheduleData((draft) => {
+        draft.trip_days[dayIndex].places[placeIndex].stay_time = 1440;
+      });
+    } else {
+      updateScheduleData((draft) => {
+        draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
+      });
+    }
     setIsEditing(true);
   }
   function updatePlaceTitleBySearch(placeTitle, selectedDayIndex) {
@@ -666,7 +672,7 @@ function Schedule() {
                   <PlaceContainerInputArea>
                     <InputBox style={{ width: '50px' }}>
                       <StyledInput
-                        style={{ width: '30px' }}
+                        style={{ width: '40px' }}
                         value={placeItem?.stay_time}
                         onChange={(e) => {
                           updateStayTime(e.target.value, choosedDayIndex, placeIndex);
