@@ -10,7 +10,6 @@ import {
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import { useLocation, Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import UserContext from '../components/UserContextComponent';
 import db from '../utils/firebase-init';
 import Map from './Map';
@@ -423,8 +422,6 @@ function Schedule() {
     }
   };
 
-  // 監聽是否有訊息更新
-
   useEffect(() => {
     if (existScheduleId) {
       const chatRoomMessageArray = query(collection(db, 'chat_rooms'), where('schedule_id', '==', existScheduleId));
@@ -623,7 +620,7 @@ function Schedule() {
                 <DayContainerTitle
                   active={dayIndex === choosedDayIndex}
                   onClick={() => { setChoosedDayIndex(dayIndex); }}
-                  key={uuidv4()}
+                  key={`${dayIndex - 1}`}
                   data-position={dayIndex}
                   draggable
                   onDragStart={onDragStart}

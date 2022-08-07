@@ -277,6 +277,16 @@ function Category({ currentLatLng }) {
         radius: '10000',
         type: 'amusement_park',
       },
+      {
+        location: currentLatLng,
+        radius: '10000',
+        type: 'museum',
+      },
+      {
+        location: currentLatLng,
+        radius: '10000',
+        type: 'restaurant',
+      },
       ];
     } else if (categoryFromUrl === 'couple') {
       requests = [{
