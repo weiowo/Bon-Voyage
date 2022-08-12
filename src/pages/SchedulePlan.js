@@ -268,8 +268,13 @@ function Schedule() {
     async function getCertainSchedule() {
       const docRef = doc(db, 'schedules', existScheduleId);
       const docSnap = await getDoc(docRef);
+      const data = {
+        ...docSnap.data(),
+        trip_days: docSnap.data().trip_days.map((day, index) => ({ ...day, key: index })),
+      };
+      console.log(data);
       if (docSnap.exists()) {
-        updateScheduleData(docSnap.data());
+        updateScheduleData(data);
       } else {
         console.log('No such document!');
       }
@@ -620,7 +625,7 @@ function Schedule() {
                 <DayContainerTitle
                   active={dayIndex === choosedDayIndex}
                   onClick={() => { setChoosedDayIndex(dayIndex); }}
-                  key={`${dayIndex - 1}`}
+                  key={dayItem.key}
                   data-position={dayIndex}
                   draggable
                   onDragStart={onDragStart}
