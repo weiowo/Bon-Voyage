@@ -242,6 +242,7 @@ function Schedule() {
   }, []);
 
   const [scheduleData, updateScheduleData] = useImmer();
+  console.log(scheduleData);
   const [chatBox, updateChatBox] = useImmer({});
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
