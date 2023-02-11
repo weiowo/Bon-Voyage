@@ -2,7 +2,7 @@ import
 {
   collection, where, query, onSnapshot,
 } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import HeaderComponent from '../components/Headers/Header';
 import AllArticleBaner from './images/all_article_banner.png';

@@ -242,6 +242,7 @@ function Schedule() {
   }, []);
 
   const [scheduleData, updateScheduleData] = useImmer();
+  console.log(scheduleData);
   const [chatBox, updateChatBox] = useImmer({});
   const [recommendList, setRecommendList] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -268,8 +269,13 @@ function Schedule() {
     async function getCertainSchedule() {
       const docRef = doc(db, 'schedules', existScheduleId);
       const docSnap = await getDoc(docRef);
+      const data = {
+        ...docSnap.data(),
+        trip_days: docSnap.data().trip_days.map((day, index) => ({ ...day, key: index })),
+      };
+      console.log(data);
       if (docSnap.exists()) {
-        updateScheduleData(docSnap.data());
+        updateScheduleData(data);
       } else {
         console.log('No such document!');
       }
@@ -346,9 +352,15 @@ function Schedule() {
     setIsEditing(true);
   }
   function updateStayTime(stayTime, dayIndex, placeIndex) {
-    updateScheduleData((draft) => {
-      draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
-    });
+    if (stayTime > 1440) {
+      updateScheduleData((draft) => {
+        draft.trip_days[dayIndex].places[placeIndex].stay_time = 1440;
+      });
+    } else {
+      updateScheduleData((draft) => {
+        draft.trip_days[dayIndex].places[placeIndex].stay_time = stayTime;
+      });
+    }
     setIsEditing(true);
   }
   function updatePlaceTitleBySearch(placeTitle, selectedDayIndex) {
@@ -415,8 +427,6 @@ function Schedule() {
       setInputMessage(''); addNewMessageToFirestoreFirst();
     }
   };
-
-  // 監聽是否有訊息更新
 
   useEffect(() => {
     if (existScheduleId) {
@@ -598,11 +608,16 @@ function Schedule() {
             </Link>
           </ScheduleTitleAndCompleteButtonArea>
           <DateContainer>
-            <p>
-              {scheduleData ? scheduleData.embark_date : ''}
-              ～
-              {scheduleData ? scheduleData.end_date : '' }
-            </p>
+            { scheduleData?.trip_days
+              ? (
+                <p>
+                  {new Date(Date.parse(scheduleData?.embark_date)
+               + (0 * 86400000))?.toISOString()?.split('T')?.[0]}
+                  { scheduleData?.trip_days.length > 1 ? `～${new Date(Date.parse(scheduleData?.embark_date)
+               + ((scheduleData.trip_days.length - 1) * 86400000))?.toISOString()?.split('T')?.[0]}` : ''}
+                </p>
+              )
+              : ''}
             <AddDayButton type="button" onClick={() => addDayInSchedule()}>＋</AddDayButton>
           </DateContainer>
           <DayContainer>
@@ -611,7 +626,7 @@ function Schedule() {
                 <DayContainerTitle
                   active={dayIndex === choosedDayIndex}
                   onClick={() => { setChoosedDayIndex(dayIndex); }}
-                  key={`${dayIndex - 1}`}
+                  key={dayItem.key}
                   data-position={dayIndex}
                   draggable
                   onDragStart={onDragStart}
@@ -660,7 +675,7 @@ function Schedule() {
                   <PlaceContainerInputArea>
                     <InputBox style={{ width: '50px' }}>
                       <StyledInput
-                        style={{ width: '30px' }}
+                        style={{ width: '40px' }}
                         value={placeItem?.stay_time}
                         onChange={(e) => {
                           updateStayTime(e.target.value, choosedDayIndex, placeIndex);
