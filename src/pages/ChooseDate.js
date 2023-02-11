@@ -156,7 +156,9 @@ const SmallCalendarStyle = styled.div`
 
 function ChooseDate() {
   const [startDate, setStartDate] = useState(new Date());
-  const [finishDate, setFinishEndDate] = useState(new Date());
+  console.log('start', startDate);
+  const [finishDate, setFinishDate] = useState(startDate);
+  console.log('finish', finishDate);
   const user = useContext(UserContext);
   const [newScheduleTitle, setNewScheduleTitle] = useState('');
   const navigate = useNavigate();
@@ -246,7 +248,7 @@ function ChooseDate() {
             <DatePicker
               dateFormat="yyyy/MM/dd"
               selected={startDate}
-              onChange={(date) => setStartDate(date)}
+              onChange={(date) => { setStartDate(date); setFinishDate(date); }}
               selectsStart
               startDate={startDate}
               endDate={finishDate}
@@ -258,7 +260,7 @@ function ChooseDate() {
             <DatePicker
               dateFormat="yyyy/MM/dd"
               selected={finishDate}
-              onChange={(date) => setFinishEndDate(date)}
+              onChange={(date) => setFinishDate(date)}
               selectsEnd
               startDate={startDate}
               endDate={finishDate}
@@ -272,7 +274,7 @@ function ChooseDate() {
           <DatePicker
             dateFormat="yyyy/MM/dd"
             selected={startDate}
-            onChange={(date) => setStartDate(date)}
+            onChange={(date) => { setStartDate(date); setFinishDate(date); }}
             selectsStart
             startDate={startDate}
             endDate={finishDate}
@@ -282,7 +284,7 @@ function ChooseDate() {
           <DatePicker
             dateFormat="yyyy/MM/dd"
             selected={finishDate}
-            onChange={(date) => setFinishEndDate(date)}
+            onChange={(date) => setFinishDate(date)}
             selectsEnd
             startDate={startDate}
             endDate={finishDate}
