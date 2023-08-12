@@ -17,7 +17,7 @@ const FooterComponent = styled.div`
 function Footer() {
   return (
     <FooterComponent>
-      Copyright © 2022-Forever Weiwei 版權所有
+      Copyright © 2022-Forever Weiwei
     </FooterComponent>
   );
 }
