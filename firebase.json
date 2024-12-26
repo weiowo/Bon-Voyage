@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "BonVoyage",
+    "site": "bonvoyage-f5e7d",
     "public": "build",
     "ignore": [
       "firebase.json",
