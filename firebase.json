@@ -1,6 +1,7 @@
 {
   "hosting": {
     "site": "BonVoyage",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",
