@@ -13,7 +13,7 @@ import NIGHT_ICON from './images/nightlife.png';
 
 const CategoryWrapper = styled.div`
   align-self:center;
-  margin-top:20px;
+  margin-top:50px;
   width:100vw;
   height:280px;
   display:flex;
