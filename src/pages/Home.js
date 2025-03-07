@@ -11,7 +11,7 @@ import React, {
 import styled from 'styled-components/macro';
 import HeaderComponent
   from '../components/Headers/Header';
-import Carousel from '../components/Carousel';
+// import Carousel from '../components/Carousel';
 import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 import ArticlesInHome from '../components/ArticlesInHome';
@@ -249,7 +249,7 @@ function SearchAtHomePage({ option, setOption }) {
 
 function Home({ currentLatLng, user }) {
   const [option, setOption] = useState('all');
-  const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
+  // const [currentNearbyAttraction, setCurrentNearbyAttraction] = useState([]);
   const [LatLng, setLatLng] = useState({ lat: 25.03746, lng: 121.564558 });
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const { isLoaded } = useLoadScript({
@@ -284,7 +284,7 @@ function Home({ currentLatLng, user }) {
 
     function callback(results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        setCurrentNearbyAttraction(results);
+        // setCurrentNearbyAttraction(results);
       }
     }
 
@@ -330,7 +330,7 @@ function Home({ currentLatLng, user }) {
         options={options}
         onLoad={onMapLoad}
       />
-      <Carousel currentNearbyAttraction={currentNearbyAttraction} />
+      {/* <Carousel currentNearbyAttraction={currentNearbyAttraction} /> */}
       <CategoryAreaInHome currentLatLng={currentLatLng} />
       <CityAreaInHomePage />
       <ArticlesInHome />
