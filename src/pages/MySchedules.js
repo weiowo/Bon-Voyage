@@ -617,6 +617,10 @@ function MySchedules() {
                       <ExistedSchedule
                         key={item?.schedule_id}
                         isSelected={index === targetIndex}
+                        onClick={() => {
+                          setTargetIndex(index);
+                          getSelectedSchedule(item?.schedule_id);
+                        }}
                       >
                         <PhotoArea
                           src={SQUARE_COVER[index % 5]}
@@ -628,10 +632,16 @@ function MySchedules() {
                             {item?.title}
                           </ExistedScheuleTitle>
                           <ButtonArea>
-                            <Button onClick={() => { setTargetIndex(index); getSelectedSchedule(item?.schedule_id); }} id={item?.schedule_id} type="button">
-                              選擇
-                            </Button>
-                            <Button className="button" onClick={() => { toggleModal(); setDeleteId(item?.schedule_id); }} id={item?.schedule_id} type="button">
+                            <Button
+                              className="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleModal();
+                                setDeleteId(item?.schedule_id);
+                              }}
+                              id={item?.schedule_id}
+                              type="button"
+                            >
                               刪除
                             </Button>
                           </ButtonArea>
@@ -687,7 +697,6 @@ function MySchedules() {
                           </NoDeleteButton>
                           <ConfirmDeleteButton
                             onClick={() => {
-                              console.log('indexxxx', deleteId);
                               deleteScheduleOfTheUser(deleteId);
                               closeModal();
                               deleteCertainSchedule(deleteId);

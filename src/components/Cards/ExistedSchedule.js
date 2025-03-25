@@ -12,6 +12,7 @@ const ExistedSchedule = styled.div`
   padding-top:10px;
   padding-bottom:10px;
   border-radius:16px;
+  cursor:pointer;
   flex-shrink:0;
   background-color:${(props) => (props.isSelected ? '#E6D1F2' : '#e7f5fe')};
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
