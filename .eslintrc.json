@@ -27,12 +27,27 @@
     },
     "overrides": [
         {
-         "files": ["*Home.js"],
+            "files": ["*.ts", "*.tsx"],
+            "extends": ["airbnb-typescript"],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "project": "./tsconfig.json"
+            },
+            "plugins": ["@typescript-eslint"],
             "rules": {
-               "jsx-a11y/label-has-associated-control": "off"   
+                "react/require-default-props": "off",
+                "@typescript-eslint/naming-convention": "off",
+                "@typescript-eslint/camelcase": "off",
+                "camelcase": ["error", {"allow":["main_text", "place_id", "secondary_text"],  "ignoreDestructuring" : true, "properties": "never"}]
+            }
+        },
+        {
+            "files": ["*Home.tsx"],
+            "rules": {
+               "jsx-a11y/label-has-associated-control": "off"
             }
         }
-       ],
+    ],
     "globals": {
         "google": "readonly"
     }
