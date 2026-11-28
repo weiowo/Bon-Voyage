@@ -17,17 +17,17 @@ import HeaderComponent from '../components/Headers/Header';
 import type { Article } from '../types';
 
 const PageWrapper = tw.div`
-  w-[100vw] h-[100vh]
+  w-full h-[100vh]
 `;
 
 const ArticleCoverImage = tw.div`
-  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
+  w-full h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
   bg-center object-cover max-tablet-lg:h-[300px]
 `;
 
 const ArticlePageBelowPart = tw.div`
-  w-[100vw] h-[500px] flex-col items-center flex
+  w-full h-[500px] flex-col items-center flex
 `;
 
 const ArticleEditPart = tw.div`

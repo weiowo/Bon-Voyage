@@ -15,13 +15,13 @@ import SmallScreenNavBar, {
 import { auth } from '../../utils/firebase-init';
 
 const Header = tw.header`
-  absolute flex justify-between items-center w-[100vw] h-[60px] bg-[#a9a9a9]
+  absolute flex justify-between items-center w-full h-[60px] bg-[#a9a9a9]
   max-tablet:hidden
 `;
 
 const SmallGreyHeader = tw.div<{ active?: boolean }>`
   hidden max-tablet:flex max-tablet:justify-between max-tablet:items-center
-  max-tablet:w-[100vw] max-tablet:fixed max-tablet:top-[0] max-tablet:z-[1000]
+  max-tablet:w-full max-tablet:fixed max-tablet:top-[0] max-tablet:z-[1000]
   max-tablet:bg-[#a9a9a9]
   ${(p) => (p.active ? 'max-tablet:h-[60px]' : 'max-tablet:h-[65px]')}
   ${(p) => (p.active ? 'max-tablet:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : 'max-tablet:[box-shadow:none]')}

@@ -21,7 +21,7 @@ import type { UserProfile } from '../types';
 const UserPhotoSrc = '/images/seal.webp';
 
 const PageWrapper = tw.div`
-  w-[100vw] h-[100vh] flex pt-[60px] max-tablet:flex max-tablet:flex-col
+  w-full h-[100vh] flex pt-[60px] max-tablet:flex max-tablet:flex-col
   max-tablet:items-center max-tablet:pl-[0px]
 `;
 

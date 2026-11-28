@@ -11,7 +11,6 @@ import produce from 'immer';
 import Swal from 'sweetalert2';
 import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
-import '../views/animation.css';
 import SchedulesWrapper, {
   ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
 } from './Modal/ScheduleChoice';
@@ -33,7 +32,7 @@ const Travel = '/images/travel-2.webp';
 const Suitcase = '/images/suitcase-2.webp';
 
 const NearByPlaceWrapper = tw.div`
-  w-[100vw] h-[340px] flex flex-row items-center justify-center gap-[10px] mt-[20px]
+  w-full h-[340px] flex flex-row items-center justify-center gap-[10px] mt-[20px]
   max-desktop:h-[280px] max-desktop:mt-[20px] max-tablet-lg:flex-col max-tablet-lg:mt-[30px]
   max-tablet-lg:h-[370px]
 `;

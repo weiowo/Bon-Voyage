@@ -38,36 +38,36 @@ import type { NearbyPlaces, Schedule, SchedulePlace } from '../types';
 import PlaceDetailModal from '../components/Modal/PlaceDetailModal';
 
 const Banner = tw.div`
-  w-[100vw] h-[50vw] bg-[url(/images/city.webp)] bg-cover bg-no-repeat
+  w-full h-[50vw] bg-[url(/images/city.webp)] bg-cover bg-no-repeat
   [background-blend-mode:multiply]
 `;
 
 const CityTitle = tw.div`
-  w-[100vw] h-auto z-[10] text-[35px] font-semibold absolute top-[130px]
+  w-full h-auto z-[10] text-[35px] font-semibold absolute top-[130px]
   max-laptop:top-[100px] max-laptop:text-[30px] max-tablet:top-[70px]
   max-tablet:text-[30px] max-mobile:top-[60px] max-mobile:text-[20px]
   max-mobile-xs:top-[50px] max-mobile-xs:text-[20px]
 `;
 
 const ContentArea = tw.div`
-  w-[100vw] h-[400px] flex flex-col
+  w-full h-[400px] flex flex-col
 `;
 
 const AttractionAreaTitle = tw.div`
-  w-[100vw] h-auto text-[26px] flex justify-center mt-[50px] font-semibold
+  w-full h-auto text-[26px] flex justify-center mt-[50px] font-semibold
 `;
 
 const AttractionWrapper = tw.div`
-  flex w-[100vw] h-auto flex-wrap justify-center mt-[0px] max-laptop:gap-[20px]
+  flex w-full h-auto flex-wrap justify-center mt-[0px] max-laptop:gap-[20px]
   max-tablet-lg:gap-[10px] max-tablet:gap-[10px] max-mobile:gap-[10px]
 `;
 
 const RestaurantAreaTitle = tw.div`
-  w-[100vw] h-auto text-[26px] flex justify-center mt-[50px] font-semibold
+  w-full h-auto text-[26px] flex justify-center mt-[50px] font-semibold
 `;
 
 const RestaurantWrapper = tw.div`
-  flex w-[100vw] h-auto flex-wrap justify-center mt-[0px] gap-[30px] max-tablet:gap-[10px]
+  flex w-full h-auto flex-wrap justify-center mt-[0px] gap-[30px] max-tablet:gap-[10px]
   max-mobile:gap-[10px]
 `;
 
