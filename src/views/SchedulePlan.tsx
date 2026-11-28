@@ -314,10 +314,11 @@ function SchedulePlan() {
   useEffect(() => {
     if (existScheduleId) {
       const theScheduleBeingEdited = doc(db, 'schedules', existScheduleId);
-      onSnapshot(theScheduleBeingEdited, (querySnapshot) => {
+      return onSnapshot(theScheduleBeingEdited, (querySnapshot) => {
         updateScheduleData(querySnapshot.data() as Schedule | undefined);
       });
     }
+    return undefined;
   }, [existScheduleId, updateScheduleData]);
 
   const newMessage = {

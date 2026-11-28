@@ -45,12 +45,13 @@ function ProfileSideBarElement() {
   useEffect(() => {
     if (user.uid) {
       const userInfo = doc(db, 'users', user.uid);
-      onSnapshot(userInfo, (querySnapshot) => {
+      return onSnapshot(userInfo, (querySnapshot) => {
         const profile = querySnapshot.data() as UserProfile | undefined;
         setPhotoUrl(profile?.photo_url);
         setUserName(profile?.name);
       });
     }
+    return undefined;
   }, [user.uid]);
 
   return (

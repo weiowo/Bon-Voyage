@@ -477,7 +477,8 @@ function VR() {
           navigation
           effect="coverflow"
           centeredSlides
-          slidesPerView={window.innerWidth < 768 ? 1 : 'auto'}
+          slidesPerView={1}
+          breakpoints={{ 768: { slidesPerView: 'auto' } }}
           loop
           coverflowEffect={{
             rotate: 50,

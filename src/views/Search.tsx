@@ -7,6 +7,7 @@ import {
   GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
 import tw from '@/lib/tw';
+import useMediaQuery from '@/lib/useMediaQuery';
 import type { LatLng } from '../types';
 
 const CloseIcon = '/images/close_style.webp';
@@ -33,6 +34,7 @@ interface SearchProps {
 export default function Search({
   panTo, active, setSelected, onClickClose,
 }: SearchProps) {
+  const isSmallScreen = useMediaQuery('(max-width: 800px)');
   const {
     ready,
     value,
@@ -91,7 +93,7 @@ export default function Search({
           listStyle: 'none',
           textDecoration: 'none',
           backgroundColor: 'white',
-          width: window.innerWidth > 800 ? 'calc( 45vw - 85px )' : 'calc( 100vw - 85px )',
+          width: isSmallScreen ? 'calc( 100vw - 85px )' : 'calc( 45vw - 85px )',
           height: '30px',
           borderBottom:
           '1px black solid',
@@ -117,7 +119,7 @@ export default function Search({
   return (
     <>
       <div style={{
-        position: window.innerWidth > 800 ? 'absolute' : 'fixed',
+        position: isSmallScreen ? 'fixed' : 'absolute',
         left: '20px',
         top: '80px',
         display: 'flex',
