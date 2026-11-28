@@ -15,13 +15,13 @@ const NIGHT_ICON = '/images/nightlife.webp';
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 
 const CategoryWrapper = tw.div`
-  self-center mt-[50px] w-[100vw] h-[280px] flex flex-col items-center max-tablet:w-[100vw]
+  self-center mt-[50px] w-full h-[280px] flex flex-col items-center max-tablet:w-full
   max-tablet:mt-[30px] max-tablet:h-[300px] max-tablet-sm:h-[480px] max-mobile:w-full
   max-mobile:h-[450px] max-mobile:ml-[0px]
 `;
 
 const CategoryWrapperTitle = tw.div`
-  w-[100vw] h-[30px] flex justify-center items-center text-[24px] font-semibold
+  w-full h-[30px] flex justify-center items-center text-[24px] font-semibold
   text-[#1F456E] mb-[30px] max-tablet:text-[24px] max-tablet:mb-[20px]
 `;
 

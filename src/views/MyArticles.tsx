@@ -6,6 +6,7 @@ import {
 import { useNavigate } from '@/lib/router';
 import { useImmer } from 'use-immer';
 import tw from '@/lib/tw';
+import { modalClass, modalBackgroundClass } from '@/lib/modalClass';
 import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import DeleteAsk, {
@@ -175,19 +176,14 @@ function MyArticles() {
     });
   }
 
-  const modal = document.querySelector('.modal');
-  const modalBackground = document.querySelector('.modal-background');
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean | null>(null);
 
   function toggleModal() {
-    modal?.classList.remove('hide');
-    modal?.classList.add('show');
-    modalBackground?.classList.add('show');
+    setDeleteModalOpen(true);
   }
 
   function closeModal() {
-    modal?.classList.remove('show');
-    modal?.classList.add('hide');
-    modalBackground?.classList.remove('show');
+    setDeleteModalOpen(false);
   }
 
   useEffect(() => {
@@ -240,8 +236,8 @@ function MyArticles() {
   return (
     <>
       <GreyHeaderComponent />
-      <div className="modal-background">
-        <div className="modal">
+      <div className={modalBackgroundClass('modal', deleteModalOpen)}>
+        <div className={modalClass('modal', deleteModalOpen)}>
           <DeleteModalTitle>
             Delete
           </DeleteModalTitle>

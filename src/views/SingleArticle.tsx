@@ -18,17 +18,17 @@ import type { Article, UserProfile } from '../types';
 const defaultCover = '/images/schedule_cover_rec3.webp';
 
 const PageWrapper = tw.div`
-  w-[100vw] h-[100vh]
+  w-full h-[100vh]
 `;
 
 const ArticleCoverImage = tw.div`
-  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
+  w-full h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
   bg-center object-cover max-tablet:h-[300px]
 `;
 
 const ArticlePageBelowPart = tw.div`
-  w-[100vw] h-[500px] flex-col items-center flex
+  w-full h-[500px] flex-col items-center flex
 `;
 
 const ArticleAuthorDate = tw.div`

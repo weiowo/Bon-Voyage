@@ -15,7 +15,7 @@ import SmallScreenNavBar, {
 } from './RwdMenu';
 
 const Header = tw.header<{ active?: boolean }>`
-  flex justify-between w-[100vw] fixed z-[2000] top-[0] max-tablet:hidden
+  flex justify-between w-full fixed z-[2000] top-[0] max-tablet:hidden
   ${(p) => (p.active ? 'h-[60px]' : 'h-[65px]')}
   ${(p) => (p.active ? 'bg-[rgba(255,255,255,0.8)]' : 'bg-transparent')}
   ${(p) => (p.active ? '[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : '[box-shadow:none]')}

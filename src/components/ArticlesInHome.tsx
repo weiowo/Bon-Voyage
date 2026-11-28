@@ -20,11 +20,11 @@ const Cover6 = '/images/schedule_cover_rec4.webp';
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 
 const ArticlesAreaWrapper = tw.div`
-  mt-[20px] w-[100vw] h-auto flex flex-col items-center mb-[60px]
+  mt-[20px] w-full h-auto flex flex-col items-center mb-[60px]
 `;
 
 const ArticlesWrapperTitle = tw.div`
-  w-[100vw] h-[30px] flex justify-center items-center text-[24px] font-semibold
+  w-full h-[30px] flex justify-center items-center text-[24px] font-semibold
   text-[#1F456E] mb-[30px] mt-[30px] max-tablet:text-[25px] max-tablet:mb-[10px]
   max-tablet:mt-[20px]
 `;

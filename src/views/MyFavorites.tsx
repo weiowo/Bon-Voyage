@@ -35,7 +35,7 @@ import type {
 import PlaceDetailModal from '../components/Modal/PlaceDetailModal';
 
 const PageWrapper = tw.div`
-  w-[100vw] h-[calc(100vh_-_60px)] flex flex-row pt-[60px] max-tablet:justify-center
+  w-full h-[calc(100vh_-_60px)] flex flex-row pt-[60px] max-tablet:justify-center
 `;
 
 const MyArticlesArea = tw.div`

@@ -21,7 +21,7 @@ import type { UserProfile } from '../types';
 const UserPhotoSrc = '/images/seal.webp';
 
 const PageWrapper = tw.div`
-  w-[100vw] h-[100vh] flex pt-[60px] max-tablet:flex max-tablet:flex-col
+  w-full h-[100vh] flex pt-[60px] max-tablet:flex max-tablet:flex-col
   max-tablet:items-center max-tablet:pl-[0px]
 `;
 
@@ -101,13 +101,14 @@ function Profile() {
   useEffect(() => {
     if (user.uid) {
       const userInfo = doc(db, 'users', user.uid);
-      onSnapshot(userInfo, (querySnapshot) => {
+      return onSnapshot(userInfo, (querySnapshot) => {
         const profile = querySnapshot.data() as UserProfile | undefined;
         setPhotoUrl(profile?.photo_url);
         setUserEmail(profile?.email);
         setUserName(profile?.name);
       });
     }
+    return undefined;
   }, [user.uid]);
 
   async function uploadProfileImg(imageData: File | null | undefined) {

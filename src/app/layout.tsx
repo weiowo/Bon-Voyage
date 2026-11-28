@@ -3,6 +3,8 @@ import Script from 'next/script';
 import type { ReactNode } from 'react';
 import Providers from './providers';
 import './globals.css';
+// Shared modal/loader classes used by several views; CRA loaded all CSS globally.
+import '../views/animation.css';
 
 const GTM_ID = 'GTM-55NW77Z';
 
