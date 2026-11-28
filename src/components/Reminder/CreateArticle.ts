@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const WriteArticleRemind = styled.div`
   width:50%;

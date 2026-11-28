@@ -1,0 +1,23 @@
+# Type-checks, lints and builds every push and pull request.
+# Deploys are handled by Vercel's GitHub integration.
+
+name: CI
+'on':
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run eslint
+      - run: npm run build

@@ -1,5 +1,5 @@
 import type React from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const ModalBackground = styled.div<{ active?: boolean }>`
   width:100vw;

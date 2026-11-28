@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import
 {
@@ -8,13 +8,14 @@ import db from '../utils/firebase-init';
 import MyArticle, {
   CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary, StyledLink,
 } from './Cards/Article';
-import Cover1 from '../pages/images/schedule_cover_rec1.jpg';
-import Cover2 from '../pages/images/schedule_cover_rec5.jpg';
-import Cover3 from '../pages/images/schedule_cover_rec3.jpg';
-import Cover4 from '../pages/images/camping.jpg';
-import Cover5 from '../pages/images/schedule_cover_rec2.jpg';
-import Cover6 from '../pages/images/schedule_cover_rec4.jpg';
 import type { Article } from '../types';
+
+const Cover1 = '/images/schedule_cover_rec1.jpg';
+const Cover2 = '/images/schedule_cover_rec5.jpg';
+const Cover3 = '/images/schedule_cover_rec3.jpg';
+const Cover4 = '/images/camping.jpg';
+const Cover5 = '/images/schedule_cover_rec2.jpg';
+const Cover6 = '/images/schedule_cover_rec4.jpg';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 

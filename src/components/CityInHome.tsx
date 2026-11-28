@@ -1,16 +1,17 @@
 import React from 'react';
-import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
-import ParisSrc from '../pages/images/paris_2.png';
-import KyotoSrc from '../pages/images/kyoto.png';
-import TainanSrc from '../pages/images/tainan.png';
-import AmsterdamSrc from '../pages/images/amsterdam.png';
-import ProvenceSrc from '../pages/images/provence.png';
-import EgyptSrc from '../pages/images/egypt.png';
-import BarcelonaSrc from '../pages/images/barcelona.png';
-import CamBridgeSrc from '../pages/images/cambridge.png';
-import NewYorkSrc from '../pages/images/newyork.png';
-import MexicoSrc from '../pages/images/mexico.png';
+import styled from 'styled-components';
+import { Link } from '@/lib/router';
+
+const ParisSrc = '/images/paris_2.png';
+const KyotoSrc = '/images/kyoto.png';
+const TainanSrc = '/images/tainan.png';
+const AmsterdamSrc = '/images/amsterdam.png';
+const ProvenceSrc = '/images/provence.png';
+const EgyptSrc = '/images/egypt.png';
+const BarcelonaSrc = '/images/barcelona.png';
+const CamBridgeSrc = '/images/cambridge.png';
+const NewYorkSrc = '/images/newyork.png';
+const MexicoSrc = '/images/mexico.png';
 
 const CityAtHomeWrapper = styled.div`
   margin-top:45px;

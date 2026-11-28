@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const ChatRoom = styled.div<{ openChat?: boolean }>`
   z-index:100;

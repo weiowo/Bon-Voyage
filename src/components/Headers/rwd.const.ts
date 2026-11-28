@@ -1,15 +1,15 @@
-import WHITE_MENU_ICON from '../../pages/images/menu_bar.jpg';
-import BLACK_MENU_ICON from '../../pages/images/menu_black.png';
-import CLOSE_ICON from '../../pages/images/close-1.png';
-import USER_IMG from '../../pages/images/seal.png';
-import BLOG_ICON from '../../pages/images/blog.png';
-import DISH_ICON from '../../pages/images/dish.png';
-import TRIP_ICON from '../../pages/images/travel.png';
-import VR_ICON from '../../pages/images/virtual-reality.png';
-import PLAN_ICON from '../../pages/images/suitcase.png';
-import ARTICLE_ICON from '../../pages/images/article.png';
-import ATTRACTION_ICON from '../../pages/images/vacations.png';
-import FAVO_ICON from '../../pages/images/favorite.png';
+const WHITE_MENU_ICON = '/images/menu_bar.jpg';
+const BLACK_MENU_ICON = '/images/menu_black.png';
+const CLOSE_ICON = '/images/close-1.png';
+const USER_IMG = '/images/seal.png';
+const BLOG_ICON = '/images/blog.png';
+const DISH_ICON = '/images/dish.png';
+const TRIP_ICON = '/images/travel.png';
+const VR_ICON = '/images/virtual-reality.png';
+const PLAN_ICON = '/images/suitcase.png';
+const ARTICLE_ICON = '/images/article.png';
+const ATTRACTION_ICON = '/images/vacations.png';
+const FAVO_ICON = '/images/favorite.png';
 
 const RWD_ICON = {
   WHITE_MENU_ICON,

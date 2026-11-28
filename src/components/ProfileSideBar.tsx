@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from '@/lib/router';
 import UserContext from './UserContextComponent';
 import db from '../utils/firebase-init';
 import type { UserProfile } from '../types';

@@ -1,6 +1,6 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router';
 import Swal from 'sweetalert2';
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -11,7 +11,8 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import db, { app } from '../utils/firebase-init';
-import CloseIcon from '../pages/images/close_style.png';
+
+const CloseIcon = '/images/close_style.png';
 
 const SignInModalBackground = styled.div`
   width:100vw;

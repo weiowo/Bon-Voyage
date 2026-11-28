@@ -1,6 +1,6 @@
-import SUITCASE_ICON from '../pages/images/suitcase-2.png';
-import CAR_ICON from '../pages/images/travel-2.png';
-import ADD_FAVO_ICON from '../pages/images/favorite.png';
+const SUITCASE_ICON = '/images/suitcase-2.png';
+const CAR_ICON = '/images/travel-2.png';
+const ADD_FAVO_ICON = '/images/favorite.png';
 
 const REMINDER_ICONS = {
   SUITCASE_ICON,

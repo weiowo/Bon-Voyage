@@ -1,5 +1,5 @@
-import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { Link } from '@/lib/router';
 
 const RemindWrapper = styled.div`
   width:26vw;

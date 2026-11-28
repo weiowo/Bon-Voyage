@@ -3,106 +3,48 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@chakra-ui/react": "^2.2.1",
-    "@googlemaps/react-wrapper": "^1.1.35",
-    "@react-google-maps/api": "^2.12.0",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@react-google-maps/api": "^2.20.8",
     "firebase": "^9.8.3",
     "immer": "^9.0.15",
-    "react": "^18.2.0",
-    "react-datepicker": "^4.8.0",
-    "react-dom": "^18.2.0",
-    "react-gtm-module": "^2.0.11",
-    "react-icons": "^4.4.0",
-    "react-places-autocomplete": "^7.3.0",
-    "react-router-dom": "^6.3.0",
-    "react-router-hash-link": "^2.4.3",
-    "react-scripts": "5.0.1",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-datepicker": "^9.1.0",
+    "react-dom": "^19.3.1",
     "styled-components": "^5.3.5",
     "sweetalert2": "^11.4.24",
-    "sweetalert2-react-content": "^5.0.2",
-    "swiper": "^6.8.4",
-    "use-immer": "^0.7.0",
-    "use-places-autocomplete": "^4.0.0",
-    "uuid": "^8.3.2",
-    "web-vitals": "^2.1.4"
+    "swiper": "^14.5.0",
+    "use-immer": "^0.11.0",
+    "use-places-autocomplete": "^4.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prepare": "husky install",
-    "eslint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
-    "typecheck": "tsc --noEmit"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "**/*.stories.*"
-        ],
-        "rules": {
-          "import/no-anonymous-default-export": "off"
-        }
-      }
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prepare": "husky install"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.5.9",
-    "@storybook/addon-essentials": "^6.5.9",
-    "@storybook/addon-interactions": "^6.5.9",
-    "@storybook/addon-links": "^6.5.9",
-    "@storybook/builder-webpack5": "^6.5.9",
-    "@storybook/manager-webpack5": "^6.5.9",
-    "@storybook/node-logger": "^6.5.9",
-    "@storybook/preset-create-react-app": "^4.1.2",
-    "@storybook/react": "^6.5.9",
-    "@storybook/testing-library": "^0.0.13",
-    "@types/google.maps": "3.49",
-    "@types/jest": "^27.5.2",
+    "@types/google.maps": "^3.67.0",
     "@types/node": "^18.19.130",
-    "@types/react": "^18.3.31",
+    "@types/react": "^19.3.3",
     "@types/react-datepicker": "^4.19.6",
-    "@types/react-dom": "^18.3.7",
-    "@types/react-gtm-module": "^2.0.4",
-    "@types/react-places-autocomplete": "^7.2.14",
-    "@types/react-router-hash-link": "^2.4.10",
+    "@types/react-dom": "^19.3.0",
     "@types/styled-components": "^5.1.36",
-    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "babel-plugin-named-exports-order": "^0.0.2",
     "eslint": "^8.17.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-import-resolver-typescript": "^3.10.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-storybook": "^0.6.1",
     "husky": "^8.0.0",
-    "typescript": "^4.9.5",
-    "webpack": "^5.73.0"
+    "typescript": "5.9"
+  },
+  "engines": {
+    "node": ">=20.9"
   }
 }

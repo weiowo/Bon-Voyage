@@ -1,11 +1,11 @@
-import CAMPING_IMG from '../pages/images/camping_2.jpg';
-import ARTS_IMG from '../pages/images/art.jpg';
-import FAMILY_IMG from '../pages/images/family.jpg';
-import COUPLE_IMG from '../pages/images/couple.jpg';
-import FOOD_IMG from '../pages/images/food2.jpeg';
-import SHOPPING_IMG from '../pages/images/shopping.jpg';
-import NIGHT_IMG from '../pages/images/bar.jpg';
-import RELIGION_IMG from '../pages/images/religion.jpg';
+const CAMPING_IMG = '/images/camping_2.jpg';
+const ARTS_IMG = '/images/art.jpg';
+const FAMILY_IMG = '/images/family.jpg';
+const COUPLE_IMG = '/images/couple.jpg';
+const FOOD_IMG = '/images/food2.jpeg';
+const SHOPPING_IMG = '/images/shopping.jpg';
+const NIGHT_IMG = '/images/bar.jpg';
+const RELIGION_IMG = '/images/religion.jpg';
 
 const BANNER = {
   CAMPING_IMG,

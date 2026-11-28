@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from '@/lib/router';
 import {
   signOut,
 } from 'firebase/auth';

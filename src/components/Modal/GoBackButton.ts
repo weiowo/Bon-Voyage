@@ -1,5 +1,6 @@
-import styled from 'styled-components/macro';
-import leftArrow from '../../pages/images/left-arrow.jpg';
+import styled from 'styled-components';
+
+const leftArrow = '/images/left-arrow.jpg';
 
 const LeftButton = styled.button`
   height:25px;

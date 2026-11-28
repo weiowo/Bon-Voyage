@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const SchedulesWrapper = styled.div`
   width:95%;

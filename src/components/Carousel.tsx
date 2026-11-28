@@ -1,23 +1,17 @@
 import React, {
   useState, useContext, useEffect, useRef, useCallback,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router';
 import { GoogleMap, useLoadScript, type LoadScriptProps } from '@react-google-maps/api';
 import {
   doc, getDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import db from '../utils/firebase-init';
-import ArrowToRightSrc from '../pages/images/arrow-right.png';
-import ArrowToLeftSrc from '../pages/images/arrow-left.png';
-import unfilledStar from '../pages/images/unfilled_star.jpg';
-import Travel from '../pages/images/travel-2.png';
-import Suitcase from '../pages/images/suitcase-2.png';
-import filledStar from '../pages/images/filled_star.jpg';
-import '../pages/animation.css';
+import '../views/animation.css';
 import SchedulesWrapper, {
   ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
 } from './Modal/ScheduleChoice';
@@ -35,6 +29,13 @@ import RemindWrapper, {
   ClickAndAdd, RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
 } from './Reminder/CreateTrip';
 import type { Schedule, SchedulePlace } from '../types';
+
+const ArrowToRightSrc = '/images/arrow-right.png';
+const ArrowToLeftSrc = '/images/arrow-left.png';
+const unfilledStar = '/images/unfilled_star.jpg';
+const Travel = '/images/travel-2.png';
+const Suitcase = '/images/suitcase-2.png';
+const filledStar = '/images/filled_star.jpg';
 
 const NearByPlaceWrapper = styled.div`
   width:100vw;
@@ -254,11 +255,11 @@ function Carousel({ currentNearbyAttraction = [] }: CarouselProps) {
   const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
     libraries,
   });
 
-  const mapRef = useRef<google.maps.Map>();
+  const mapRef = useRef<google.maps.Map | undefined>(undefined);
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
   }, []);

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components/macro';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import { useNavigate, Link, useLocation } from '@/lib/router';
 import Swal from 'sweetalert2';
 import {
   signOut,
