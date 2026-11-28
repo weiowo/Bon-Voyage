@@ -3,7 +3,7 @@
 
 > #### A World Exploring and Trip Planning Website           
 >
-> <img align="center" width="25px" src="./src/pages/images/travel.png"/>  Fun fact: `"Bon Voyage!"` means "Have a nice trip!" in French.
+> <img align="center" width="25px" src="./public/images/travel.png"/>  Fun fact: `"Bon Voyage!"` means "Have a nice trip!" in French.
 
   - [Motivation](#motivation)
   - [Embark Now!](#embark-now)
@@ -33,30 +33,38 @@ Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)
 
 ##### <em>- Reminder: For a more thorough user experience, please allow location access and sign in / up.</em>
 
-## Developed with <img align="center" width="24px" src="./src/pages/images/heart.png"/> and
+## Developed with <img align="center" width="24px" src="./readme_assets/heart.png"/> and
 
 - Front-End Fundamentals
-  - React / React Hooks
-  - React-Router
-  - Styled Components / CSS Keyframes
+  - Next.js (App Router) / React 19 / React Hooks
+  - TypeScript
+  - Tailwind CSS v4 / CSS Keyframes
   - Google Maps API Services: Places API (Place Detail, Nearby Search), Direction, Distance, Geocoding API.
   - Web onDrag / onDrop API
 - Firebase Services
   - Authentication
   - Firestore Database
   - Cloud Storage
-  - Hosting
+- Hosting: Vercel
 - Packages
   - immer
   - useImmer
   - @react-google-maps/api
   - use-places-autocomplete
-  - react-router-hash-link
   - swiper.js
   - react-datepicker
 - Other
   - Tool: ESLint
   - Version Control: Git / GitHub
+  - CI: GitHub Actions (type check, lint, build)
+
+### Run locally
+
+```bash
+cp .env.example .env   # fill in the NEXT_PUBLIC_* values
+npm install
+npm run dev            # http://localhost:3000
+```
 
 ## Features
 
