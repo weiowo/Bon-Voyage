@@ -119,11 +119,6 @@ function MyArticles() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       const profile = docSnap.data() as UserProfile | undefined;
-      if (docSnap.exists()) {
-        console.log('Document data:', profile?.owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getSchedulesFromList() {
         profile?.owned_schedule_ids.forEach(async (item) => {
           const docs = doc(db, 'schedules', item);
@@ -135,8 +130,6 @@ function MyArticles() {
                 draft.push(schedule);
               });
             }
-          } else {
-            console.log('沒有這個行程！');
           }
         });
       }
@@ -203,11 +196,6 @@ function MyArticles() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       const profile = docSnap.data() as UserProfile | undefined;
-      if (docSnap.exists()) {
-        console.log('Document data:', profile?.owned_article_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getArticlesFromList() {
         profile?.owned_article_ids.forEach(async (item) => {
           const docs = doc(db, 'articles', item);

@@ -365,8 +365,6 @@ function Category({ currentLatLng = DEFAULT_LAT_LNG }: CategoryProps) {
       (place, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK && place) {
           setModalDetail(place);
-        } else {
-          console.log('error');
         }
       },
     );

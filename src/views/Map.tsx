@@ -87,8 +87,6 @@ function Map({
     ) {
       if (status === google.maps.places.PlacesServiceStatus.OK && results) {
         setRecommendList(results);
-      } else {
-        console.log('沒有成功');
       }
     }
 

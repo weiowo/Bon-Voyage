@@ -83,9 +83,7 @@ const LogOutButton = tw.button`
 const auth = getAuth(app);
 
 export function signOutFunction() {
-  signOut(auth).then(() => {
-    console.log('使用者已登出');
-  }).catch((error) => {
+  signOut(auth).catch((error) => {
     Swal.fire({
       title: '遇到了一些問題！',
       text: error,

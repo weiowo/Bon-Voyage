@@ -42,6 +42,14 @@
                 "ignoreDestructuring": true,
                 "properties": "never"
             }
+        ],
+        "no-console": [
+            "warn",
+            {
+                "allow": [
+                    "error"
+                ]
+            }
         ]
     },
     "overrides": [

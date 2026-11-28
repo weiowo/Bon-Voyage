@@ -124,11 +124,6 @@ function MyLovedArticles() {
       if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data()?.loved_article_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getLovedArticles() {
         docSnap.data()?.loved_article_ids?.forEach(async (item: string) => {
           const docs = doc(db, 'articles', item);
@@ -162,11 +157,6 @@ function MyLovedArticles() {
       if (!user?.uid) { return; }
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data()?.owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getSchedulesFromList() {
         docSnap.data()?.owned_schedule_ids?.forEach(async (item: string) => {
           const docs = doc(db, 'schedules', item);
@@ -245,8 +235,6 @@ function MyLovedArticles() {
     service.getDetails(placeRequest, (place, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK && place) {
         setModalDetail(place);
-      } else {
-        console.log('error');
       }
     });
   }

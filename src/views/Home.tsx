@@ -111,12 +111,11 @@ function SearchAtHomePage({ option, setOption }: SearchAtHomePageProps) {
         navigate({ pathname: '/city', search: `?lat=${lat}&lng=${lng}&city=${selectedPlaceAtHomePage?.structured_formatting.main_text}&option=${option}` });
       })
       .catch((error) => {
-        console.log('Error: ', error);
+        console.error('Geocoding failed:', error);
       });
   };
 
   const renderSuggestions = () => data.map((suggestion) => {
-    console.log(suggestion);
     const {
       place_id,
       structured_formatting: { main_text, secondary_text },
@@ -199,8 +198,6 @@ function Home({ currentLatLng = DEFAULT_LAT_LNG }: HomeProps) {
       navigator.geolocation.getCurrentPosition((position) => {
         setLatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
       });
-    } else {
-      console.log('geolocation is not available');
     }
   }
   useEffect(() => {

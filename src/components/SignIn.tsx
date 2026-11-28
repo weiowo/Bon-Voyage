@@ -95,7 +95,6 @@ function SignIn() {
             photoURL: defaultPhoto[Math.floor(Math.random() * defaultPhoto.length)],
           },
         );
-        // console.log('successful', userCredentialData);
         Swal.fire({
           title: '成功創立帳號～',
           text: '準備開啟令人期待的旅程囉！',
@@ -125,7 +124,6 @@ function SignIn() {
       .then(async () => {
         await signInWithEmailAndPassword(auth, email, password);
         // const userCredentialData = userCredential;
-        // console.log('userCredentialData', userCredentialData);
         Swal.fire({
           title: '成功登入囉～',
           text: '準備開啟令人期待的旅程囉！',

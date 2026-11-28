@@ -284,11 +284,6 @@ function VR() {
       if (!user.uid) return;
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        console.log('Document data:', docSnap.data()?.owned_schedule_ids);
-      } else {
-        console.log('No such document!');
-      }
       function getSchedulesFromList() {
         docSnap.data()?.owned_schedule_ids?.forEach(async (item: string) => {
           const docs = doc(db, 'schedules', item);

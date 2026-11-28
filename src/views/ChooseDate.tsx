@@ -65,9 +65,7 @@ const SmallCalendarStyle = tw.div`
 
 function ChooseDate() {
   const [startDate, setStartDate] = useState(new Date());
-  console.log('start', startDate);
   const [finishDate, setFinishDate] = useState(startDate);
-  console.log('finish', finishDate);
   const user = useContext(UserContext);
   const [newScheduleTitle, setNewScheduleTitle] = useState('');
   const navigate = useNavigate();

@@ -73,7 +73,7 @@ export default function Search({
         panTo({ lat, lng });
       })
       .catch((error) => {
-        console.log('Error:', error);
+        console.error('Geocoding failed:', error);
       });
   };
 

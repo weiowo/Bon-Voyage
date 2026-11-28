@@ -163,7 +163,6 @@ function SchedulePlan() {
   }, []);
 
   const [scheduleData, updateScheduleData] = useImmer<Schedule | undefined>(undefined);
-  console.log(scheduleData);
   /** Applies `recipe` only once the schedule has loaded. */
   const updateSchedule = (recipe: (draft: Draft<Schedule>) => void) => {
     updateScheduleData((draft) => {
@@ -203,10 +202,7 @@ function SchedulePlan() {
           ...snapData,
           trip_days: snapData.trip_days.map((day, index) => ({ ...day, key: index })),
         };
-        console.log(data);
         updateScheduleData(data);
-      } else {
-        console.log('No such document!');
       }
     }
     async function getChatRoom() {

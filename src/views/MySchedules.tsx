@@ -7,6 +7,7 @@ import {
 } from 'firebase/firestore';
 import { Link, useNavigate } from '@/lib/router';
 import { useImmer } from 'use-immer';
+import Swal from 'sweetalert2';
 import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/Headers/GreyHeader';
@@ -279,7 +280,11 @@ function MySchedules() {
     const userEmailQuery = query(collection(db, 'users'), where('email', '==', searchFriendValue));
     const querySnapShot = await getDocs(userEmailQuery);
     if (querySnapShot.size === 0) {
-      console.log('查無此人！');
+      Swal.fire({
+        title: '查無此人！',
+        text: '請確認對方的電子郵件是否正確。',
+        icon: 'warning',
+      });
     } else {
       querySnapShot.forEach((document) => {
         setSearchedFriendId(document.id);
