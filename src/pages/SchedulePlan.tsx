@@ -265,7 +265,7 @@ function SchedulePlan() {
   console.log(scheduleData);
   /** Applies `recipe` only once the schedule has loaded. */
   const updateSchedule = (recipe: (draft: Draft<Schedule>) => void) => {
-    updateSchedule((draft) => {
+    updateScheduleData((draft) => {
       if (draft) recipe(draft);
     });
   };
