@@ -9,6 +9,7 @@ import { Link, useNavigate } from '@/lib/router';
 import { useImmer } from 'use-immer';
 import Swal from 'sweetalert2';
 import tw from '@/lib/tw';
+import { modalClass, modalBackgroundClass } from '@/lib/modalClass';
 import db from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import UserContext from '../components/UserContextComponent';
@@ -329,34 +330,24 @@ function MySchedules() {
     return () => {};
   }, [selectedSchedule?.schedule_id, setSelectedMembers]);
 
-  const modal = document.querySelector('.modal');
-  const modalBackground = document.querySelector('.modal-background');
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean | null>(null);
 
   function toggleModal() {
-    modal?.classList.remove('hide');
-    modal?.classList.add('show');
-    modalBackground?.classList.add('show');
+    setDeleteModalOpen(true);
   }
 
   function closeModal() {
-    modal?.classList.remove('show');
-    modal?.classList.add('hide');
-    modalBackground?.classList.remove('show');
+    setDeleteModalOpen(false);
   }
 
-  const searchFriendModal = document.querySelector('.search-friend-modal');
-  const searchFriendModalBackground = document.querySelector('.search-friend-modal-background');
+  const [friendModalOpen, setFriendModalOpen] = useState<boolean | null>(null);
 
   function toggleFriendModal() {
-    searchFriendModal?.classList.remove('hide');
-    searchFriendModal?.classList.add('show');
-    searchFriendModalBackground?.classList.add('show');
+    setFriendModalOpen(true);
   }
 
   function closeFriendModal() {
-    searchFriendModal?.classList.remove('show');
-    searchFriendModal?.classList.add('hide');
-    searchFriendModalBackground?.classList.remove('show');
+    setFriendModalOpen(false);
   }
 
   return (
@@ -447,7 +438,10 @@ function MySchedules() {
                               選擇
                             </Button>
                             <Button
-                              onClick={() => toggleModal()}
+                              onClick={() => {
+                                toggleModal();
+                                setDeleteId(item?.schedule_id);
+                              }}
                               id={item?.schedule_id}
                               type="button"
                             >
@@ -458,10 +452,10 @@ function MySchedules() {
                       </ExistedSchedule>
                     ))}
                     <div
-                      className="modal-background"
+                      className={modalBackgroundClass('modal', deleteModalOpen)}
                     >
                       <div
-                        className="modal"
+                        className={modalClass('modal', deleteModalOpen)}
                       >
                         <DeleteModalTitle>
                           Delete
@@ -562,8 +556,8 @@ function MySchedules() {
                       {selectedSchedule?.end_date.split('-').join('/')}
                     </DateArea>
                   </CalendarBox>
-                  <div className="search-friend-modal-background">
-                    <div className="search-friend-modal">
+                  <div className={modalBackgroundClass('search-friend-modal', friendModalOpen)}>
+                    <div className={modalClass('search-friend-modal', friendModalOpen)}>
                       <DeleteModalTitle>
                         揪親朋好友一起玩？
                         <CloseSearch src={CloseSearchIcon} onClick={() => closeFriendModal()} />

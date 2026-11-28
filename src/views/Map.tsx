@@ -5,6 +5,7 @@ import {
   GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
 import type { Updater } from 'use-immer';
+import useMediaQuery from '@/lib/useMediaQuery';
 import Search from './Search';
 import type { LatLng, RouteInfo, Schedule } from '../types';
 
@@ -45,6 +46,7 @@ function Map({
   active = false, setSelected = noop, scheduleData, setDuration = noop, setDistance = noop,
   mapDisplay = false,
 }: MapProps) {
+  const isSmallScreen = useMediaQuery('(max-width: 800px)');
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
     libraries: ['places'],
@@ -185,8 +187,8 @@ function Map({
       <div>
         <GoogleMap
           id="map"
-          mapContainerStyle={window.innerWidth > 800
-            ? mapContainerStyle : smallScreenMapContainerStyle}
+          mapContainerStyle={isSmallScreen
+            ? smallScreenMapContainerStyle : mapContainerStyle}
           zoom={10}
           center={center}
           options={options}
