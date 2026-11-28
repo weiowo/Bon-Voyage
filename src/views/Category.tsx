@@ -40,7 +40,7 @@ const TAP_IMG = '/images/tap.webp';
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 
 const PlaceBoxesWrapper = tw.div`
-  w-[100vw] flex h-auto flex-wrap justify-center gap-[30px] mt-[90px] max-laptop:gap-[20px]
+  w-full flex h-auto flex-wrap justify-center gap-[30px] mt-[90px] max-laptop:gap-[20px]
   max-laptop:w-[95vw] max-laptop:[justify-self:center] max-laptop:m-[0_auto]
   max-laptop:mt-[60px] max-tablet:gap-[5px] max-tablet:w-[95vw]
   max-tablet:[justify-self:center] max-tablet:m-[0_auto] max-tablet:mt-[60px]
@@ -51,7 +51,7 @@ const PlaceBoxesWrapper = tw.div`
 `;
 
 const CategoryBanner = tw.img`
-  w-[100vw] h-[100vh] max-tablet:h-auto
+  w-full h-[100vh] max-tablet:h-auto
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

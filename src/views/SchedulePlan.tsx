@@ -36,7 +36,7 @@ import type {
 } from '../types';
 
 const ScheduleWrapper = tw.div`
-  flex w-[100vw] h-[100vh] gap-[0px] pt-[60px]
+  flex w-full h-[100vh] gap-[0px] pt-[60px]
 `;
 
 const LeftContainer = tw.div<{ active?: boolean; show?: boolean }>`
@@ -46,7 +46,7 @@ const LeftContainer = tw.div<{ active?: boolean; show?: boolean }>`
   [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar]:w-[3px]
   [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:hidden max-tablet:w-[100vw]
+  [&::-webkit-scrollbar-thumb]:hidden max-tablet:w-full
   ${(p) => (p.active ? 'hidden' : 'flex')}
   ${(p) => (p.show ? 'max-tablet:flex' : 'max-tablet:hidden')}
 `;
@@ -84,7 +84,7 @@ const CompleteButton = tw.button<{ isEditing?: boolean }>`
 const AddAndSearchBox = tw.div<{ active?: boolean }>`
   w-[45vw] h-[calc(100vh_-_60px)] relative
   [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] z-[10]
-  max-tablet:w-[100vw]
+  max-tablet:w-full
   ${(p) => (p.active ? 'block' : 'hidden')}
 `;
 

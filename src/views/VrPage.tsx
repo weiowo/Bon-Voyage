@@ -73,7 +73,7 @@ const RemindText = tw.div`
 `;
 
 const VRModalBackground = tw.div<{ active?: boolean }>`
-  w-[100vw] h-[100vh] fixed top-[0] bottom-[0] left-[0] right-[0] bg-[rgba(0,0,0,0.7)]
+  w-full h-[100vh] fixed top-[0] bottom-[0] left-[0] right-[0] bg-[rgba(0,0,0,0.7)]
   justify-center items-center z-[500]
   ${(p) => (p.active ? 'flex' : 'hidden')}
 `;
@@ -153,7 +153,7 @@ const LeftButton = tw.button`
 `;
 
 const TransparentBackground = tw.div`
-  w-[100vw] h-[450px] bg-white opacity-[0.4] z-[100] absolute top-[30%]
+  w-full h-[450px] bg-white opacity-[0.4] z-[100] absolute top-[30%]
 `;
 
 const CurrentSchedulesTitle = tw.div`

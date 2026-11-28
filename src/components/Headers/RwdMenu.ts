@@ -67,7 +67,7 @@ export const CloseIcon = tw.img<{ active?: boolean }>`
 `;
 
 export const SmallHeader = tw.div<{ active?: boolean }>`
-  hidden max-tablet:flex max-tablet:justify-between max-tablet:w-[100vw]
+  hidden max-tablet:flex max-tablet:justify-between max-tablet:w-full
   max-tablet:fixed max-tablet:top-[0] max-tablet:z-[1000]
   ${(p) => (p.active ? 'max-tablet:h-[60px]' : 'max-tablet:h-[65px]')}
   ${(p) => (p.active ? 'max-tablet:bg-[rgba(255,255,255,0.8)]' : 'max-tablet:bg-transparent')}
@@ -76,7 +76,7 @@ export const SmallHeader = tw.div<{ active?: boolean }>`
 
 export const Background = tw.div<{ active?: boolean }>`
   hidden max-tablet:fixed max-tablet:top-[0px] max-tablet:[justify-content:right]
-  max-tablet:w-[100vw] max-tablet:h-[100vh] max-tablet:bg-[rgb(0,0,0,0.5)]
+  max-tablet:w-full max-tablet:h-[100vh] max-tablet:bg-[rgb(0,0,0,0.5)]
   max-tablet:z-[1000]
   ${(p) => (p.active ? 'max-tablet:flex' : 'max-tablet:hidden')}
 `;

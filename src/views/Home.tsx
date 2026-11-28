@@ -14,14 +14,13 @@ import HeaderComponent
 import CategoryAreaInHome from './CategoryInHome';
 import CityAreaInHomePage from '../components/CityInHome';
 import ArticlesInHome from '../components/ArticlesInHome';
-import './animation.css';
 import Footer from '../components/Footer';
 import type { LatLng } from '../types';
 
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 
 const HomeTopAreaWrapper = tw.div`
-  w-[100vw] h-[100vh] flex flex-col
+  w-full h-[100vh] flex flex-col
   bg-[url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9)]
   items-center relative bg-cover bg-no-repeat [background-blend-mode:multiply]
   max-tablet:h-[70vw]

@@ -15,7 +15,6 @@ import UserContext from '../components/UserContextComponent';
 import REMINDER_ICONS from '../constants/reminder.icon';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import SignIn from '../components/SignIn';
-import './animation.css';
 import SQUARE_COVER from '../constants/schedule.square.cover';
 import ExistedSchedule, {
   ExistedScheuleTitle, PhotoArea, ScheduleRightPart, SmallScheduleRightPart, ButtonArea, Button,
@@ -36,7 +35,7 @@ const Add = '/images/invite.webp';
 const CloseSearchIcon = '/images/close-1.webp';
 
 const PageWrapper = tw.div`
-  w-[100vw] flex flex-row pt-[60px] max-tablet:justify-center
+  w-full flex flex-row pt-[60px] max-tablet:justify-center
   max-tablet-sm:flex-col max-tablet-sm:shrink-0
 `;
 
@@ -54,7 +53,7 @@ const ChoicesWrapper = tw.div`
   [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
   [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-tablet:w-[40vw] max-tablet-sm:flex-col
-  max-tablet-sm:w-[100vw] max-tablet-sm:h-[35vh] max-tablet-sm:gap-[10px] max-tablet-sm:shrink-0
+  max-tablet-sm:w-full max-tablet-sm:h-[35vh] max-tablet-sm:gap-[10px] max-tablet-sm:shrink-0
   max-tablet-sm:overflow-hidden max-tablet-sm:pb-[0px] max-tablet-sm:mb-[0px]
 `;
 
@@ -65,7 +64,7 @@ const TitleAndCreateArea = tw.div`
 `;
 
 const ExistedSchedules = tw.div`
-  flex flex-col gap-[15px] max-tablet-sm:w-[100vw] max-tablet-sm:h-[23vh] max-tablet-sm:ml-[30px]
+  flex flex-col gap-[15px] max-tablet-sm:w-full max-tablet-sm:h-[23vh] max-tablet-sm:ml-[30px]
   max-tablet-sm:flex-row max-tablet-sm:overflow-scroll max-tablet-sm:pt-[0px] max-tablet-sm:pb-[0px]
   max-tablet-sm:shrink-0
 `;
@@ -96,7 +95,7 @@ const ViewDetailButton = tw.button`
 
 const SelectedScheduleWrapper = tw.div`
   w-[42vw] h-auto flex flex-col [align-items:left] ml-[50px] gap-[15px]
-  max-tablet:ml-[20px] max-tablet:w-[50vw] max-tablet-sm:w-[100vw] max-tablet-sm:ml-[0px]
+  max-tablet:ml-[20px] max-tablet:w-[50vw] max-tablet-sm:w-full max-tablet-sm:ml-[0px]
   max-tablet-sm:h-[53vh] max-tablet-sm:items-center
 `;
 

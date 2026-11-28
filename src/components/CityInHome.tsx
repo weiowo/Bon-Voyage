@@ -3,22 +3,22 @@ import { Link } from '@/lib/router';
 import tw from '@/lib/tw';
 
 const CityAtHomeWrapper = tw.div`
-  mt-[45px] w-[100vw] h-[520px] flex flex-col items-center max-tablet:h-[850px]
+  mt-[45px] w-full h-[520px] flex flex-col items-center overflow-x-clip max-tablet:h-[850px]
   max-mobile-lg:h-[740px]
 `;
 
 const CityAtHomeWrapperTitle = tw.div`
-  w-[100vw] h-[30px] flex justify-center items-center text-[24px] font-semibold
+  w-full h-[30px] flex justify-center items-center text-[24px] font-semibold
   text-[#1F456E] mb-[60px] max-tablet:text-[25px] max-tablet:mb-[30px]
 `;
 
 const CityAtHomeBelowPart = tw.div`
-  w-[100vw] h-auto flex flex-row justify-center gap-[10px] max-tablet:flex-col
+  w-full h-auto flex flex-row justify-center gap-[10px] max-tablet:flex-col
   max-tablet:gap-[15px]
 `;
 
 const SmallScreenCity = tw.div`
-  w-[50%] flex gap-[15px] max-tablet:w-[100vw] max-tablet:flex max-tablet:justify-center
+  w-[50%] flex gap-[15px] max-tablet:w-full max-tablet:flex max-tablet:justify-center
   max-tablet:gap-[15px]
 `;
 
