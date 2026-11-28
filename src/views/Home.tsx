@@ -236,7 +236,7 @@ function Home({ currentLatLng = DEFAULT_LAT_LNG }: HomeProps) {
 
   if (!isLoaded) {
     return (
-      <div className="progress container">
+      <div className="progress">
         <span />
         <span />
         <span />

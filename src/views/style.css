@@ -58,7 +58,7 @@
   background-size: 400% 400%;
 }
 
-.vr-container .swiper-container {
+.vr-container .swiper {
   width: 70%;
   /* position: absolute; */
   /* left: 50%; */
@@ -72,7 +72,7 @@
 }
 
 @media (max-width: 768px) {
-  .vr-container .swiper-container {
+  .vr-container .swiper {
     bottom: 25vw;
     top:25%;
     /* padding-bottom: 8vw; */
@@ -85,7 +85,7 @@
 }
 
 @media (max-width: 1130px) {
-  .vr-container .swiper-container {
+  .vr-container .swiper {
     width: 80%;
   }
 }
