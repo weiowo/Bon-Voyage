@@ -3,8 +3,7 @@
 import {
   createContext, useContext, useEffect, useState, type ReactNode,
 } from 'react';
-import { onAuthStateChanged, getAuth } from 'firebase/auth';
-import { app } from '@/utils/firebase-init';
+import { onAuthStateChanged } from 'firebase/auth';
 import UserContext, { type UserContextValue } from '@/components/UserContextComponent';
 
 export type LatLng = { lat: number; lng: number };
@@ -22,10 +21,19 @@ export default function Providers({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserContextValue>({});
 
   useEffect(() => {
-    const auth = getAuth(app);
-    return onAuthStateChanged(auth, (userData) => {
-      if (userData) setUser(userData);
+    // Firebase is initialised in the browser only, never during server prerendering.
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+    import('@/utils/firebase-init').then(({ auth }) => {
+      if (cancelled) return;
+      unsubscribe = onAuthStateChanged(auth, (userData) => {
+        if (userData) setUser(userData);
+      });
     });
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, []);
 
   useEffect(() => {
