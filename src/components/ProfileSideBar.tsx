@@ -1,92 +1,39 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from '@/lib/router';
+import tw from '@/lib/tw';
 import UserContext from './UserContextComponent';
 import db from '../utils/firebase-init';
 import type { UserProfile } from '../types';
 
-const ProfileSideBar = styled.div`
-  width:20vw;
-  height:calc(100vh-40px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  margin-top:60px;
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const ProfileSideBar = tw.div`
+  w-[20vw] flex flex-col items-center mt-[60px] max-tablet:hidden
 `;
 
-const SideNavBar = styled.div`
-  margin-top:60px;
-  height:auto;
-  width:auto;
-  display:flex;
-  flex-direction:column;
-  gap:30px;
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const SideNavBar = tw.div`
+  mt-[60px] h-auto w-auto flex flex-col gap-[30px] max-tablet:hidden
 `;
 
-const UserPhoto = styled.img`
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  margin-left:23px;
-  object-fit:cover;
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const UserPhoto = tw.img`
+  w-[30px] h-[30px] rounded-[50%] ml-[23px] object-cover max-tablet:hidden
 `;
 
-const UserName = styled.div`
-  font-size:15px;
-  font-weight:600;
-  margin-left:15px;
-  height:auto;
-  width:75px;
-  @media screen and (max-width:880px){
-    margin-left:10px;
-  }
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const UserName = tw.div`
+  text-[15px] font-semibold ml-[15px] h-auto w-[75px] max-tablet-lg:ml-[10px]
+  max-tablet:hidden
 `;
 
-const NavBarChoice = styled.div`
-  font-weight:600;
-  font-size:15px;
-  color:grey;
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const NavBarChoice = tw.div`
+  font-semibold text-[15px] [color:grey] max-tablet:hidden
 `;
 
-const UserNameLogoBox = styled.div`
-  width:160px;
-  height:50px;
-  border-radius:30px;
-  border:1px solid grey;
-  display:flex;
-  align-items:center;
-  height:auto;
-  padding-top:7px;
-  padding-bottom:7px;
-  @media screen and (max-width:880px){
-    width:150px;
-  }
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const UserNameLogoBox = tw.div`
+  w-[160px] rounded-[30px] [border:1px_solid_grey] flex items-center h-auto pt-[7px]
+  pb-[7px] max-tablet-lg:w-[150px] max-tablet:hidden
 `;
 
-export const LinkWithoutDefaultStyle = styled(Link)`
-  text-decoration:none;
-  &:hover {
-    border-bottom:1.5px solid grey;
-  }
+export const LinkWithoutDefaultStyle = tw(Link)`
+  [text-decoration:none] hover:[border-bottom:1.5px_solid_grey]
 `;
 
 function ProfileSideBarElement() {

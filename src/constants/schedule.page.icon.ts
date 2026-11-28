@@ -1,14 +1,14 @@
-import BLUE_BIN_ICON from '../pages/images/trash_blue.png';
-import GREY_BIN_ICON from '../pages/images/bin.png';
-import GO_BACK_ICON from '../pages/images/arrow-left.png';
-import CLOCK_ICON from '../pages/images/clockBlue.png';
-import CAR_ICON from '../pages/images/sports-car.png';
-import DRAG_ICON from '../pages/images/drag-and-drop.png';
-import WHITE_BIN_ICON from '../pages/images/white-bin.png';
-import WHITE_DRAG_ICON from '../pages/images/drag.png';
-import PLUS_ICON from '../pages/images/plus.png';
-import SPEAK_ICON from '../pages/images/speak.png';
-import CLOSE_CHAT_ICON from '../pages/images/close-1.png';
+const BLUE_BIN_ICON = '/images/trash_blue.webp';
+const GREY_BIN_ICON = '/images/bin.webp';
+const GO_BACK_ICON = '/images/arrow-left.webp';
+const CLOCK_ICON = '/images/clockBlue.webp';
+const CAR_ICON = '/images/sports-car.webp';
+const DRAG_ICON = '/images/drag-and-drop.webp';
+const WHITE_BIN_ICON = '/images/white-bin.webp';
+const WHITE_DRAG_ICON = '/images/drag.webp';
+const PLUS_ICON = '/images/plus.webp';
+const SPEAK_ICON = '/images/speak.webp';
+const CLOSE_CHAT_ICON = '/images/close-1.webp';
 
 const ICONS = {
   BLUE_BIN_ICON,

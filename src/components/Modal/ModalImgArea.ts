@@ -1,65 +1,18 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const ModalImgArea = styled.div`
-  width:25vw;
-  height:22vw;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px;
-  @media screen and (max-width:1200px){
-    width:50%;
-    height:70%;
-  }
-  @media screen and (max-width:630px){
-    width:100%;
-    height:60%;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:20px;
-    padding-bottom:40px;
-  }
-  @media screen and (max-width:575px){
-    width:90%;
-    height:60%;
-    padding-bottom:30px;
-  }
-  @media screen and (max-width:430px){
-    height:50%;
-    gap:8px;
-  }
+const ModalImgArea = tw.div`
+  w-[25vw] h-[22vw] flex flex-wrap items-center gap-[10px] max-desktop:w-[50%]
+  max-desktop:h-[70%] max-mobile-lg:w-full max-mobile-lg:h-[60%] max-mobile-lg:flex-wrap
+  max-mobile-lg:justify-center max-mobile-lg:gap-[20px] max-mobile-lg:pb-[40px]
+  max-mobile-lg:w-[90%] max-mobile-lg:h-[60%] max-mobile-lg:pb-[30px] max-mobile-sm:h-[50%]
+  max-mobile-sm:gap-[8px]
 `;
 
-export const ModalImg = styled.img`
-  width:10vw;
-  height:10vw;
-  border-radius:10px;
-  object-fit: cover;
-  @media screen and (max-width:1200px){
-    width:120px;
-    height:120px;
-  }
-  @media screen and (max-width:630px){
-    width:170px;
-    height:130px;
-    flex-shrink:0;
-  }
-  @media screen and (max-width:575px){
-    width:140px;
-    height:115px;
-  }
-  @media screen and (max-width:480px){
-    width:120px;
-    height:100px;
-  }
-  @media screen and (max-width:430px){
-    width:110px;
-    height:100px;
-  }
-  @media screen and (max-width:390px){
-    width:120px;
-    height:100px;
-  }
+export const ModalImg = tw.img`
+  w-[10vw] h-[10vw] rounded-[10px] object-cover max-desktop:w-[120px]
+  max-desktop:h-[120px] max-mobile-lg:w-[170px] max-mobile-lg:h-[130px] max-mobile-lg:shrink-0
+  max-mobile-lg:w-[140px] max-mobile-lg:h-[115px] max-mobile-md:w-[120px] max-mobile-md:h-[100px]
+  max-mobile-sm:w-[110px] max-mobile-sm:h-[100px] max-mobile-xs:w-[120px] max-mobile-xs:h-[100px]
 `;
 
 export default ModalImgArea;

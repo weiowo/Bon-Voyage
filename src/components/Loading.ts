@@ -1,13 +1,8 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const Loading = styled.div`
-  margin: auto;
-  margin-top:50px;
-  border: 10px solid #EAF0F6;
-  border-radius: 50%;
-  border-top: 10px solid #E6D1F2;
-  width: 70px;
-  height: 70px;
-  animation: spinner 3s linear infinite;
+const Loading = tw.div`
+  m-auto mt-[50px] [border-right:10px_solid_#EAF0F6] [border-bottom:10px_solid_#EAF0F6]
+  [border-left:10px_solid_#EAF0F6] rounded-[50%] [border-top:10px_solid_#E6D1F2] w-[70px]
+  h-[70px] [animation:spinner_3s_linear_infinite]
 `;
 export default Loading;

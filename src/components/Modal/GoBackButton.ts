@@ -1,25 +1,10 @@
-import styled from 'styled-components/macro';
-import leftArrow from '../../pages/images/left-arrow.jpg';
+import tw from '@/lib/tw';
 
-const LeftButton = styled.button`
-  height:25px;
-  width:25px;
-  position:absolute;
-  background-image: url(${leftArrow});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  left:20px;
-  top:20px;
-  text-align:center;
-  border:none;
-  border-radius:50%;
-  color:white;
-  cursor:pointer;
-  @media screen and (max-width:400px){
-    left:15px;
-    top:15px;
-}`;
+const LeftButton = tw.button`
+  h-[25px] w-[25px] absolute bg-[url(/images/left-arrow.webp)] bg-cover bg-no-repeat
+  bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] left-[20px] top-[20px] text-center
+  [border:none] rounded-[50%] text-white cursor-pointer max-mobile-xs:left-[15px]
+  max-mobile-xs:top-[15px]
+`;
 
 export default LeftButton;

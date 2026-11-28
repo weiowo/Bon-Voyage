@@ -1,0 +1,25 @@
+# Type-checks, lints and builds every push and pull request.
+# Deploys are handled by Vercel's GitHub integration.
+
+name: CI
+'on':
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Reads the pnpm version from package.json "packageManager".
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm eslint
+      - run: pnpm build

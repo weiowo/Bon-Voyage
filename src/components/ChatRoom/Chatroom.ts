@@ -1,182 +1,76 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const ChatRoom = styled.div<{ openChat?: boolean }>`
-  z-index:100;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:300px;
-  height:300px;
-  border-top-right-radius:10px;
-  border-top-left-radius:10px;
-  border-bottom:none;
-  position: fixed;
-  bottom: 0px;
-  right:50px;
-  background-color:white;
-  display:${(props) => (props.openChat ? 'flex' : 'none')};
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  @media screen and (max-width:800px){
-    right:30px;
-}
+const ChatRoom = tw.div<{ openChat?: boolean }>`
+  z-[100] flex-col items-center w-[300px] h-[300px] [border-top-right-radius:10px]
+  [border-top-left-radius:10px] [border-bottom:none] fixed bottom-[0px] right-[50px]
+  bg-white [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
+  max-tablet:right-[30px]
+  ${(p) => (p.openChat ? 'flex' : 'hidden')}
 `;
 
-export const UnreadMessage = styled.div<{ active?: boolean }>`
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background-color:red;
-  color:white;
-  font-size:12px;
-  font-weight:500;
-  position:fixed;
-  bottom:85px;
-  right:120px;
-  z-index:300;
-  animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
-  @media screen and (max-width:800px){
-    bottom:75px;
-    right:80px;
-}`;
-
-export const ChatIcon = styled.img<{ openChat?: boolean; active?: boolean }>`
-  position: fixed;
-  bottom: 50px;
-  right:80px;
-  z-index:100;
-  width:50px;
-  height:50px;
-  cursor:pointer;
-  display:${(props) => (props.openChat ? 'none' : 'block')};
-  animation:${(props) => (props.active ? 'hithere 1.1s ease infinite' : 'none')};
-  @media screen and (max-width:800px){
-    bottom:40px;
-    right:40px;
-}`;
-
-export const CloseIcon = styled.img`
-  width:15px;
-  height:15px;
-  position:absolute;
-  right:20px;
-  cursor:pointer;
+export const UnreadMessage = tw.div<{ active?: boolean }>`
+  flex items-center justify-center w-[20px] h-[20px] rounded-[50%] [background-color:red]
+  text-white text-[12px] font-medium fixed bottom-[85px] right-[120px] z-[300]
+  max-tablet:bottom-[75px] max-tablet:right-[80px]
+  ${(p) => (p.active ? '[animation:hithere_1.1s_ease_infinite]' : '[animation:none]')}
 `;
 
-export const ChatRoomTitle = styled.div`
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:40px;
-  background: linear-gradient(
-    312deg,
-    rgb(178, 228, 238) 0%,
-    rgb(161, 176, 255) 100%
-  );
-  color:black;
-  width:100%;
-  font-size:15px;
-  position:relative;
-  border-top-right-radius:10px;
-  border-top-left-radius:10px;
-  font-weight:500;
-  letter-spacing:5px;
+export const ChatIcon = tw.img<{ openChat?: boolean; active?: boolean }>`
+  fixed bottom-[50px] right-[80px] z-[100] w-[50px] h-[50px] cursor-pointer
+  max-tablet:bottom-[40px] max-tablet:right-[40px]
+  ${(p) => (p.openChat ? 'hidden' : 'block')}
+  ${(p) => (p.active ? '[animation:hithere_1.1s_ease_infinite]' : '[animation:none]')}
 `;
 
-export const MessagesDisplayArea = styled.div`
-  display:flex;
-  flex-direction:column;
-  overflow-y:scroll;
-  overflow-wrap: break-word;
-  height:250px;
-  width:100%;
-  gap:15px;
-  padding-left:1px;
-  padding-right:3px;
-  padding-top:10px;
-  padding-bottom:15px;
+export const CloseIcon = tw.img`
+  w-[15px] h-[15px] absolute right-[20px] cursor-pointer
 `;
 
-export const MessageBox = styled.div`
-  padding-left:10px;
-  display:flex;
-  width:auto;
-  height:35px;
-  border-radius:3px;
-  align-items:center;
-  align-self:flex-start;
-  flex-shrink:0;
+export const ChatRoomTitle = tw.div`
+  flex items-center justify-center h-[40px]
+  [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,255)_100%)] text-black
+  w-full text-[15px] relative [border-top-right-radius:10px] [border-top-left-radius:10px]
+  font-medium tracking-[5px]
 `;
 
-export const NameMessage = styled.div`
-  width:100%;
-  display:flex;
-  flex-direction:column;
+export const MessagesDisplayArea = tw.div`
+  flex flex-col overflow-y-scroll [overflow-wrap:break-word] h-[250px] w-full gap-[15px]
+  pl-[1px] pr-[3px] pt-[10px] pb-[15px]
 `;
 
-export const Name = styled.div`
-  width:100%;
-  font-size:12px;
-  font-weight:500;
-  color:#616161;
-  margin-left:5px;
-  text-align:left;
+export const MessageBox = tw.div`
+  pl-[10px] flex w-auto h-[35px] rounded-[3px] items-center self-start shrink-0
 `;
 
-export const Message = styled.div`
-  margin-left:5px;
-  padding-left:10px;
-  padding-right:10px;
-  border-radius:3px;
-  height:25px;
-  display:flex;
-  align-items:center;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  background-color:#D6ECF3;
-  font-size:14px;
+export const NameMessage = tw.div`
+  w-full flex flex-col
 `;
 
-export const UserPhoto = styled.img`
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  object-fit: cover;
+export const Name = tw.div`
+  w-full text-[12px] font-medium text-[#616161] ml-[5px] text-left
 `;
 
-export const EnterArea = styled.div`
-  width:100%;
-  height:50px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  justify-content:space-between;
-  padding-left:10px;
-  padding-right:10px;
-  background-color:#D3D3D3;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+export const Message = tw.div`
+  ml-[5px] pl-[10px] pr-[10px] rounded-[3px] h-[25px] flex items-center
+  [overflow-wrap:break-word] [word-wrap:break-word] bg-[#D6ECF3] text-[14px]
 `;
 
-export const MessageInput = styled.input`
-  width:80%;
-  height:22px;
-  border-radius:3px;
-  border: black 1px solid;
-  border:none;
-  padding-left:5px;
-  font-size:15px;
-  outline:none;
-  overflow-wrap: break-word;
+export const UserPhoto = tw.img`
+  w-[30px] h-[30px] rounded-[50%] object-cover
 `;
 
-export const EnterMessageButton = styled.button`
-  width:auto;
-  height:20px;
-  border-radius:2px;
-  cursor:pointer;
-  border:none;
+export const EnterArea = tw.div`
+  w-full h-[50px] flex items-center gap-[10px] justify-between pl-[10px] pr-[10px]
+  bg-[#D3D3D3] [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
+`;
+
+export const MessageInput = tw.input`
+  w-[80%] h-[22px] rounded-[3px] [border:none] pl-[5px] text-[15px] [outline:none]
+  [overflow-wrap:break-word]
+`;
+
+export const EnterMessageButton = tw.button`
+  w-auto h-[20px] rounded-[2px] cursor-pointer [border:none]
 `;
 
 export default ChatRoom;

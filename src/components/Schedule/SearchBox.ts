@@ -1,100 +1,39 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const ResultsArea = styled.div`
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  height:85%;
-  position:fixed;
-  bottom:0;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+const ResultsArea = tw.div`
+  flex flex-col items-center h-[85%] fixed bottom-[0] max-tablet:w-full
 `;
 
-export const SearchedPlace = styled.div`
-  width:45vw;
-  height:80px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:30px;
-  margin-bottom:5px;
-  margin-top:20px;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+export const SearchedPlace = tw.div`
+  w-[45vw] h-[80px] flex items-center justify-center gap-[30px] mb-[5px] mt-[20px]
+  max-tablet:w-full
 `;
 
-export const RecommendPlaces = styled.div`
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  height:90vh;
-  width:45vw;
-  overflow:scroll;
-  background-color:#e7f5fe;
-  border-top:1px solid black;
-  padding-top:20px;
-  gap:10px;
-  font-size:16px;
-  font-weight:450;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+export const RecommendPlaces = tw.div`
+  flex flex-col items-center h-[90vh] w-[45vw] overflow-scroll bg-[#e7f5fe]
+  [border-top:1px_solid_black] pt-[20px] gap-[10px] text-[16px] [font-weight:450]
+  max-tablet:w-full
 `;
 
-export const RecommendPlace = styled.div`
-  gap:30px;
-  display:flex;
-  justify-content:space-between;
-  width:90%;
-  border:1.5px #226788 solid;
-  border-radius:15px;
-  padding-top:20px;
-  padding-bottom:20px;
-  background-color:white;
-  @media screen and (max-width:800px){
-    width:90%;
-  }
+export const RecommendPlace = tw.div`
+  gap-[30px] flex justify-between w-[90%] [border:1.5px_#226788_solid] rounded-[15px]
+  pt-[20px] pb-[20px] bg-white max-tablet:w-[90%]
 `;
 
-export const RecommendPlaceLeftArea = styled.div`
-  display:flex;
-  width:50%;
-  flex-direction:column;
-  justify-content:center;
-  margin-left:30px;
-  gap:10px;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+export const RecommendPlaceLeftArea = tw.div`
+  flex w-[50%] flex-col justify-center ml-[30px] gap-[10px] max-tablet:w-full
 `;
 
-export const RecommendPlaceTitle = styled.div`
-  font-weight:600;
-  font-size:15px;
-  text-align:left;
-  width:270px;
-  color:#226788;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+export const RecommendPlaceTitle = tw.div`
+  font-semibold text-[15px] text-left w-[270px] text-[#226788] max-tablet:w-full
 `;
 
-export const SearchedPlaceTitle = styled.div`
-  font-weight:600;
-  font-size:25px;
-  text-align:left;
-  width:auto;
-  color:#226788;
+export const SearchedPlaceTitle = tw.div`
+  font-semibold text-[25px] text-left w-auto text-[#226788]
 `;
 
-export const RecommendPlcePhoto = styled.img`
-  width:90px;
-  height:90px;
-  border-radius:15px;
-  margin-right:30px;
+export const RecommendPlcePhoto = tw.img`
+  w-[90px] h-[90px] rounded-[15px] mr-[30px]
 `;
 
 export default ResultsArea;

@@ -1,6 +1,5 @@
-import styled from 'styled-components/macro';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/lib/router';
 import Swal from 'sweetalert2';
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -10,108 +9,49 @@ import {
   doc,
   setDoc,
 } from 'firebase/firestore';
+import tw from '@/lib/tw';
 import db, { app } from '../utils/firebase-init';
-import CloseIcon from '../pages/images/close_style.png';
 
-const SignInModalBackground = styled.div`
-  width:100vw;
-  height:100vh;
-  position:fixed;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  background-color:rgba(0, 0, 0, 0.7);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  display:flex;
-  z-index:100;
+const CloseIcon = '/images/close_style.webp';
+
+const SignInModalBackground = tw.div`
+  w-[100vw] h-[100vh] fixed top-[0] bottom-[0] left-[0] right-[0] bg-[rgba(0,0,0,0.7)]
+  justify-center items-center flex z-[100]
 `;
 
-const ModalBox = styled.div`
-  display:flex;
-  width:30vw;
-  height:30vw;
-  background-color:white;
-  z-index:10;
-  border-radius:10px;
-  z-index:200;
-  position: relative;
-  align-items:center;
-  justify-content:center;
-  @media screen and (max-width:1200px){
-    width:350px;
-    height:350px;
-  }
-  @media screen and (max-width:450px){
-    width:330px;
-    height:330px;
-  }
+const ModalBox = tw.div`
+  flex w-[30vw] h-[30vw] bg-white rounded-[10px] z-[200] relative items-center
+  justify-center max-desktop:w-[350px] max-desktop:h-[350px] max-mobile-md:w-[330px]
+  max-mobile-md:h-[330px]
 `;
 
-const SignUpArea = styled.div<{ active?: boolean }>`
-  display:${(props) => (props.active ? 'flex' : 'none')};
-  width:80%;
-  height:80%;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  @media screen and (max-width:1200px){
-    width:90%;
-    height:90%;
-  }
+const SignUpArea = tw.div<{ active?: boolean }>`
+  w-[80%] h-[80%] flex-col items-center justify-center gap-[10px] max-desktop:w-[90%]
+  max-desktop:h-[90%]
+  ${(p) => (p.active ? 'flex' : 'hidden')}
 `;
 
-const SignInSignUpTitle = styled.div`
-  width:80%;
-  height:30px;
-  font-weight:600;
-  font-size:20px;
-  color:#296D98;
+const SignInSignUpTitle = tw.div`
+  w-[80%] h-[30px] font-semibold text-[20px] text-[#296D98]
 `;
 
-const SignUpInOutButton = styled.button`
-  width:80%;
-  height:40px;
-  background-color:#87CEE8;
-  color:white;
-  font-weight:550;
-  font-size:14px;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
+const SignUpInOutButton = tw.button`
+  w-[80%] h-[40px] bg-[#87CEE8] text-white [font-weight:550] text-[14px] [border:none]
+  rounded-[5px] cursor-pointer
 `;
 
-const EmailPasswordInput = styled.input`
-  width:80%;
-  height:40px;
-  border:none;
-  font-size:17px;
-  outline:none;
-  padding-left:15px;
-  border:1px solid grey;
-  border-radius:3px;
+const EmailPasswordInput = tw.input`
+  w-[80%] h-[40px] text-[17px] [outline:none] pl-[15px] [border:1px_solid_grey]
+  rounded-[3px]
 `;
 
-const GoToSignUpButton = styled.button`
-  width:30%;
-  height:35px;
-  background-color:#296D98;
-  color:white;
-  font-weight:500;
-  border-radius:5px;
-  border:none;
-  cursor:pointer;
+const GoToSignUpButton = tw.button`
+  w-[30%] h-[35px] bg-[#296D98] text-white font-medium rounded-[5px] [border:none]
+  cursor-pointer
 `;
 
-const StyledIcon = styled.img`
-  width:28px;
-  height:28px;
-  position:absolute;
-  top:20px;
-  right:20px;
+const StyledIcon = tw.img`
+  w-[28px] h-[28px] absolute top-[20px] right-[20px]
 `;
 
 function SignIn() {
@@ -155,7 +95,6 @@ function SignIn() {
             photoURL: defaultPhoto[Math.floor(Math.random() * defaultPhoto.length)],
           },
         );
-        // console.log('successful', userCredentialData);
         Swal.fire({
           title: '成功創立帳號～',
           text: '準備開啟令人期待的旅程囉！',
@@ -185,7 +124,6 @@ function SignIn() {
       .then(async () => {
         await signInWithEmailAndPassword(auth, email, password);
         // const userCredentialData = userCredential;
-        // console.log('userCredentialData', userCredentialData);
         Swal.fire({
           title: '成功登入囉～',
           text: '準備開啟令人期待的旅程囉！',
