@@ -1,122 +1,51 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const SchedulesWrapper = styled.div`
-  width:95%;
-  height:95%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  overflow:auto;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
+const SchedulesWrapper = tw.div`
+  w-[95%] h-[95%] flex flex-col items-center overflow-auto
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3]
 `;
 
-export const ConfirmDayButton = styled.button`
-  width:20%;
-  height:35px;
-  background: linear-gradient(
-    312deg,
-    rgb(178, 228, 238) 0%,
-    rgb(161, 176, 246) 100%
-  );
-  border-radius:25px;
-  border:none;
-  color:black;
-  font-weight:600;
-  font-size:16px;
-  cursor:pointer;
+export const ConfirmDayButton = tw.button`
+  w-[20%] h-[35px]
+  [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,246)_100%)]
+  rounded-[25px] [border:none] text-black font-semibold text-[16px] cursor-pointer
 `;
 
-export const CurrentSchedulesTitle = styled.div`
-  width:100%;
-  height:30px;
-  font-size:17px;
-  font-weight:600;
-  margin-top:20px;
-  margin-bottom:10px;
+export const CurrentSchedulesTitle = tw.div`
+  w-full h-[30px] text-[17px] font-semibold mt-[20px] mb-[10px]
 `;
 
-export const ScheduleBoxWrapper = styled.div`
-  display:flex;
-  flex-flow:wrap;
-  height:auto;
-  width:auto;
-  align-items:center;
-  justify-content:center;
-  gap:15px;
-  padding-top:10px;
-  padding-bottom:20px;
-  padding-left:2px;
-  &:after {
-    content: "";
-    width:220px;
-  }
-  overflow:auto;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
+export const ScheduleBoxWrapper = tw.div`
+  flex [flex-flow:wrap] h-auto w-auto items-center justify-center gap-[15px] pt-[10px]
+  pb-[20px] pl-[2px] after:content-[""] after:w-[220px] overflow-auto
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3]
 `;
 
-export const ScheduleBox = styled.div<{ clicked?: boolean }>`
-  display:flex;
-  align-items:center;
-  width:220px;
-  height:60px;
-  border-radius:10px;
-  background-color:#e7f5fe;
-  cursor:pointer;
-  background-color:${(props) => (props.clicked ? '#E6D1F2' : '#e7f5fe')};
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  &:hover {
-    background-color:#E6D1F2;
-}`;
-
-export const ScheduleTitle = styled.div`
-  width:170px;
-  text-align:left;
-  height:auto;
-  font-weight:500;
-  font-size:15px;
-  margin-left:20px;
+export const ScheduleBox = tw.div<{ clicked?: boolean }>`
+  flex items-center w-[220px] h-[60px] rounded-[10px] cursor-pointer
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] hover:bg-[#E6D1F2]
+  ${(p) => (p.clicked ? 'bg-[#E6D1F2]' : 'bg-[#e7f5fe]')}
 `;
 
-export const ChooseButton = styled.button<{ clicked?: boolean }>`
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:60px;
-  height:25px;
-  border-radius:10px;
-  border:1px solid #296D98;
-  font-size:13px;
-  font-weight:550;
-  margin-right:10px;
-  cursor:pointer;
-  background-color:${(props) => (props.clicked ? 'grey' : 'white')};
-  color:${(props) => (props.clicked ? 'white' : 'black')};
+export const ScheduleTitle = tw.div`
+  w-[170px] text-left h-auto font-medium text-[15px] ml-[20px]
+`;
+
+export const ChooseButton = tw.button<{ clicked?: boolean }>`
+  flex items-center justify-center w-[60px] h-[25px] rounded-[10px]
+  [border:1px_solid_#296D98] text-[13px] [font-weight:550] mr-[10px] cursor-pointer
+  ${(p) => (p.clicked ? '[background-color:grey]' : 'bg-white')}
+  ${(p) => (p.clicked ? 'text-white' : 'text-black')}
 `;
 
 export default SchedulesWrapper;

@@ -1,23 +1,9 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const CloseModalButton = styled.button`
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:25px;
-  width:25px;
-  position:absolute;
-  right:20px;
-  top:20px;
-  text-align:center;
-  border:none;
-  border-radius:50%;
-  background-color:black;
-  color:white;
-  cursor:pointer;
-  @media screen and (max-width:400px){
-    right:15px;
-    top:15px;
-}`;
+const CloseModalButton = tw.button`
+  flex items-center justify-center h-[25px] w-[25px] absolute right-[20px] top-[20px]
+  text-center [border:none] rounded-[50%] bg-black text-white cursor-pointer
+  max-mobile-xs:right-[15px] max-mobile-xs:top-[15px]
+`;
 
 export default CloseModalButton;

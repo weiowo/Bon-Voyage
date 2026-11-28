@@ -1,17 +1,11 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const ModalPlaceTitle = styled.div`
-  font-size:26px;
-  font-weight:600;
-  width:80%;
-  @media screen and (max-width:480px){
-    font-size:20px;
-    width:90%;
-}`;
+const ModalPlaceTitle = tw.div`
+  text-[26px] font-semibold w-[80%] max-mobile-md:text-[20px] max-mobile-md:w-[90%]
+`;
 
-export const ModalPlaceAddress = styled.div`
-  width:80%;
-  color:#696969;
+export const ModalPlaceAddress = tw.div`
+  w-[80%] text-[#696969]
 `;
 
 export default ModalPlaceTitle;

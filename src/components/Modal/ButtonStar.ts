@@ -1,33 +1,16 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const ButtonStarArea = styled.div`
-  width:100%;
-  height:auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+const ButtonStarArea = tw.div`
+  w-full h-auto flex items-center justify-center
 `;
 
-export const AddFavoriteIcon = styled.img`
-  width:25px;
-  height:25px;
-  cursor:pointer;
-  position:absolute;
-  right:15%;
-  justify-self:right;
+export const AddFavoriteIcon = tw.img`
+  w-[25px] h-[25px] cursor-pointer absolute right-[15%] [justify-self:right]
 `;
 
-export const AddToScheduleButton = styled.button`
-  width:10vw;
-  height:30px;
-  border-radius:5px;
-  background-color:grey;
-  font-weight:500;
-  border:none;
-  color:white;
-  cursor:pointer;
-  @media screen and (max-width:1200px){
-    width:110px;
-}`;
+export const AddToScheduleButton = tw.button`
+  w-[10vw] h-[30px] rounded-[5px] [background-color:grey] font-medium [border:none]
+  text-white cursor-pointer max-desktop:w-[110px]
+`;
 
 export default ButtonStarArea;

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from '@/lib/router';
 import {
   signOut,
 } from 'firebase/auth';
+import tw from '@/lib/tw';
 import UserContext from '../UserContextComponent';
 import RWD_ICON from './rwd.const';
 import SmallScreenNavBar, {
@@ -14,86 +14,41 @@ import SmallScreenNavBar, {
 } from './RwdMenu';
 import { auth } from '../../utils/firebase-init';
 
-const Header = styled.header<{ active?: boolean }>`
-  position:absolute;
-  display:flex;
-  justify-content:space-between;
-  width:100vw;
-  position:fixed;
-  z-index:500;
-  top:0;
-  height:${(props) => (props.active ? '60px' : '65px')};
-  background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
-  box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
-  @media screen and (max-width:800px){
-  display:none;
-}`;
-
-const Logo = styled.div<{ active?: boolean }>`
-  width:150px;
-  height:30px;
-  font-weight:700;
-  font-size:25px;
-  margin-left:20px;
-  color:black;
-  margin-top:${(props) => (props.active ? '15px' : '20px')};
-  @media screen and (max-width:800px){
-    width:auto;
-    height:auto;
-    font-size:20px;
-    margin-left:10px;
-    margin-top:10px;
-    z-index:10;
-    position:absolute;
-}`;
-
-const NavBar = styled.div<{ active?: boolean }>`
-  display:flex;
-  align-items:center;
-  gap:15px;
-  width:500px;
-  height:30px;
-  color:${(props) => (props.active ? 'black' : 'white')};
-  font-weight:600;
-  margin-top:${(props) => (props.active ? '15px' : '25px')};
-  @media screen and (max-width:800px){
-    display:none;
-}`;
-
-const ProfilePageNav = styled.div`
-  width:auto;
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid black;
-  cursor:pointer;
+const Header = tw.header<{ active?: boolean }>`
+  flex justify-between w-[100vw] fixed z-[500] top-[0] max-tablet:hidden
+  ${(p) => (p.active ? 'h-[60px]' : 'h-[65px]')}
+  ${(p) => (p.active ? 'bg-[rgba(255,255,255,0.8)]' : 'bg-transparent')}
+  ${(p) => (p.active ? '[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : '[box-shadow:none]')}
 `;
 
-const StyleNavLink = styled(Link)<{ $active?: boolean }>`
-  cursor:pointer;
-  text-decoration:none;
-  color:black;
-  &:hover {
-    border-bottom:1.5px solid black;
-  }
-  @media screen and (max-width:800px){
-    font-size:20px;
-    margin-left:10px;
-    width:150px;
-    position:absolute;
-    margin-top:${(props) => (props.$active ? '8px' : '0px')};
-}`;
+const Logo = tw.div<{ active?: boolean }>`
+  w-[150px] h-[30px] font-bold text-[25px] ml-[20px] text-black max-tablet:w-auto
+  max-tablet:h-auto max-tablet:text-[20px] max-tablet:ml-[10px] max-tablet:mt-[10px]
+  max-tablet:z-[10] max-tablet:absolute
+  ${(p) => (p.active ? 'mt-[15px]' : 'mt-[20px]')}
+`;
 
-const ProfileNavLink = styled(Link)<{ $active?: boolean }>`
-  cursor:pointer;
-  text-decoration:none;
-  color:black;
-  @media screen and (max-width:800px){
-    font-size:20px;
-    margin-left:10px;
-    width:150px;
-    position:absolute;
-    margin-top:${(props) => (props.$active ? '8px' : '0px')};
-}`;
+const NavBar = tw.div<{ active?: boolean }>`
+  flex items-center gap-[15px] w-[500px] h-[30px] font-semibold max-tablet:hidden
+  ${(p) => (p.active ? 'text-black' : 'text-white')}
+  ${(p) => (p.active ? 'mt-[15px]' : 'mt-[25px]')}
+`;
+
+const ProfilePageNav = tw.div`
+  w-auto p-[8px_10px] rounded-[10px] [border:1px_solid_black] cursor-pointer
+`;
+
+const StyleNavLink = tw(Link)<{ $active?: boolean }>`
+  cursor-pointer [text-decoration:none] text-black hover:[border-bottom:1.5px_solid_black]
+  max-tablet:text-[20px] max-tablet:ml-[10px] max-tablet:w-[150px] max-tablet:absolute
+  ${(p) => (p.$active ? 'max-tablet:mt-[8px]' : 'max-tablet:mt-[0px]')}
+`;
+
+const ProfileNavLink = tw(Link)<{ $active?: boolean }>`
+  cursor-pointer [text-decoration:none] text-black max-tablet:text-[20px]
+  max-tablet:ml-[10px] max-tablet:w-[150px] max-tablet:absolute
+  ${(p) => (p.$active ? 'max-tablet:mt-[8px]' : 'max-tablet:mt-[0px]')}
+`;
 
 function BlackHeaderComponent() {
   const user = useContext(UserContext);

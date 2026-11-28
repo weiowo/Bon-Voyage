@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components/macro';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from '@/lib/router';
 import Swal from 'sweetalert2';
 import {
   signOut,
 } from 'firebase/auth';
+import tw from '@/lib/tw';
 import UserContext from '../UserContextComponent';
 import RWD_ICON from './rwd.const';
 import SmallScreenNavBar, {
@@ -14,84 +14,40 @@ import SmallScreenNavBar, {
 } from './RwdMenu';
 import { auth } from '../../utils/firebase-init';
 
-const Header = styled.header`
-  position:absolute;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  width:100vw;
-  height:60px;
-  background-color:#a9a9a9;
-  @media screen and (max-width:800px){
-    display:none;
-}`;
-
-const SmallGreyHeader = styled.div<{ active?: boolean }>`
-  display:none;
-  @media screen and (max-width:800px){
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    width:100vw;
-    position:fixed;
-    top:0;
-    z-index:1000;
-    height:${(props) => (props.active ? '60px' : '65px')};
-    background-color:#a9a9a9;
-    box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
-}`;
-
-const Logo = styled.div`
-  width:150px;
-  height:30px;
-  font-weight:700;
-  font-size:25px;
-  margin-left:20px;
-  color:white;
-  margin-top:0px;
-  @media screen and (max-width:800px){
-    width:auto;
-    height:100%;
-    font-size:20px;
-    z-index:10;
-    position:absolute;
-    top:20px;
-}`;
-
-const NavBar = styled.div<{ active?: boolean }>`
-  display:flex;
-  align-items:center;
-  gap:15px;
-  width:500px;
-  height:30px;
-  color:${(props) => (props.active ? 'black' : 'white')};
-  font-weight:600;
-  margin-top:0px;
-  @media screen and (max-width:800px){
-    display:none;
-}`;
-
-const ProfilePageNav = styled.div`
-  width:auto;
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid white;
-  cursor:pointer;
+const Header = tw.header`
+  absolute flex justify-between items-center w-[100vw] h-[60px] bg-[#a9a9a9]
+  max-tablet:hidden
 `;
 
-const StyleNavLink = styled(Link)`
-  cursor:pointer;
-  text-decoration:none;
-  color:white;
-  &:hover {
-    border-bottom:1.5px solid white;
-  }
+const SmallGreyHeader = tw.div<{ active?: boolean }>`
+  hidden max-tablet:flex max-tablet:justify-between max-tablet:items-center
+  max-tablet:w-[100vw] max-tablet:fixed max-tablet:top-[0] max-tablet:z-[1000]
+  max-tablet:bg-[#a9a9a9]
+  ${(p) => (p.active ? 'max-tablet:h-[60px]' : 'max-tablet:h-[65px]')}
+  ${(p) => (p.active ? 'max-tablet:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : 'max-tablet:[box-shadow:none]')}
 `;
 
-const ProfileNavLink = styled(Link)`
-  cursor:pointer;
-  text-decoration:none;
-  color:white;
+const Logo = tw.div`
+  w-[150px] h-[30px] font-bold text-[25px] ml-[20px] text-white mt-[0px] max-tablet:w-auto
+  max-tablet:h-full max-tablet:text-[20px] max-tablet:z-[10] max-tablet:absolute
+  max-tablet:top-[20px]
+`;
+
+const NavBar = tw.div<{ active?: boolean }>`
+  flex items-center gap-[15px] w-[500px] h-[30px] font-semibold mt-[0px] max-tablet:hidden
+  ${(p) => (p.active ? 'text-black' : 'text-white')}
+`;
+
+const ProfilePageNav = tw.div`
+  w-auto p-[8px_10px] rounded-[10px] [border:1px_solid_white] cursor-pointer
+`;
+
+const StyleNavLink = tw(Link)`
+  cursor-pointer [text-decoration:none] text-white hover:[border-bottom:1.5px_solid_white]
+`;
+
+const ProfileNavLink = tw(Link)`
+  cursor-pointer [text-decoration:none] text-white
 `;
 
 function GreyHeaderComponent() {

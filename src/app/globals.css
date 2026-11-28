@@ -1,0 +1,51 @@
+/*
+ * Tailwind without Preflight: the site was designed on browser default styles.
+ * Utilities are imported unlayered so they keep the same cascade position the
+ * old styled-components rules had relative to third-party CSS (Swiper, react-datepicker).
+ */
+@layer theme;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css";
+
+@source "../";
+
+/*
+ * Desktop-first breakpoints. `max-tablet:` applies at widths <= 800px, etc.
+ * Values are N+1 because Tailwind max-* variants are exclusive (width < value).
+ */
+@theme {
+  --breakpoint-wide: 1281px; /* max-wide: = width <= 1280px */
+  --breakpoint-desktop: 1201px; /* max-desktop: = width <= 1200px */
+  --breakpoint-laptop: 1001px; /* max-laptop: = width <= 1000px */
+  --breakpoint-tablet-lg: 901px; /* max-tablet-lg: = width <= 900px */
+  --breakpoint-tablet: 801px; /* max-tablet: = width <= 800px */
+  --breakpoint-tablet-sm: 751px; /* max-tablet-sm: = width <= 750px */
+  --breakpoint-phablet: 701px; /* max-phablet: = width <= 700px */
+  --breakpoint-mobile-lg: 601px; /* max-mobile-lg: = width <= 600px */
+  --breakpoint-mobile: 501px; /* max-mobile: = width <= 500px */
+  --breakpoint-mobile-md: 481px; /* max-mobile-md: = width <= 480px */
+  --breakpoint-mobile-sm: 431px; /* max-mobile-sm: = width <= 430px */
+  --breakpoint-mobile-xs: 401px; /* max-mobile-xs: = width <= 400px */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App {
+  text-align: center;
+}

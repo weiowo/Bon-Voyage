@@ -1,11 +1,11 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true
     },
     "extends": [
         "plugin:react/recommended",
-        "react-app",
         "airbnb",
         "airbnb/hooks"
     ],
@@ -22,33 +22,90 @@
     "rules": {
         "react/jsx-filename-extension": 0,
         "react/react-in-jsx-scope": 0,
-        "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["draft"] }],
-        "camelcase":["error", {"allow":["main_text", "place_id", "secondary_text"],  "ignoreDestructuring" : true, "properties": "never"}]
+        "no-param-reassign": [
+            "error",
+            {
+                "props": true,
+                "ignorePropertyModificationsFor": [
+                    "draft"
+                ]
+            }
+        ],
+        "camelcase": [
+            "error",
+            {
+                "allow": [
+                    "main_text",
+                    "place_id",
+                    "secondary_text"
+                ],
+                "ignoreDestructuring": true,
+                "properties": "never"
+            }
+        ],
+        "no-console": [
+            "warn",
+            {
+                "allow": [
+                    "error"
+                ]
+            }
+        ]
     },
     "overrides": [
         {
-            "files": ["*.ts", "*.tsx"],
-            "extends": ["airbnb-typescript"],
+            "files": [
+                "*.ts",
+                "*.tsx"
+            ],
+            "extends": [
+                "airbnb-typescript"
+            ],
             "parser": "@typescript-eslint/parser",
             "parserOptions": {
                 "project": "./tsconfig.json"
             },
-            "plugins": ["@typescript-eslint"],
+            "plugins": [
+                "@typescript-eslint"
+            ],
             "rules": {
                 "react/require-default-props": "off",
                 "@typescript-eslint/naming-convention": "off",
                 "@typescript-eslint/camelcase": "off",
-                "camelcase": ["error", {"allow":["main_text", "place_id", "secondary_text"],  "ignoreDestructuring" : true, "properties": "never"}]
+                "camelcase": [
+                    "error",
+                    {
+                        "allow": [
+                            "main_text",
+                            "place_id",
+                            "secondary_text"
+                        ],
+                        "ignoreDestructuring": true,
+                        "properties": "never"
+                    }
+                ]
             }
         },
         {
-            "files": ["*Home.tsx"],
+            "files": [
+                "*Home.tsx"
+            ],
             "rules": {
-               "jsx-a11y/label-has-associated-control": "off"
+                "jsx-a11y/label-has-associated-control": "off"
             }
         }
     ],
     "globals": {
         "google": "readonly"
+    },
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "project": "./tsconfig.json"
+            }
+        },
+        "react": {
+            "version": "detect"
+        }
     }
 }

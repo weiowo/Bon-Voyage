@@ -1,67 +1,29 @@
-import styled from 'styled-components/macro';
+import tw from '@/lib/tw';
 
-const DeleteAsk = styled.div`
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:600;
-  font-size:20px;
-  margin-top:30px;
+const DeleteAsk = tw.div`
+  w-full flex items-center justify-center font-semibold text-[20px] mt-[30px]
 `;
 
-export const DeleteButtonArea = styled.div`
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:20px;
+export const DeleteButtonArea = tw.div`
+  w-full flex justify-center items-center gap-[20px]
 `;
 
-export const ConfirmDeleteButton = styled.button`
-  width:30%;
-  height:30px;
-  background-color:#e7f5fe;
-  font-weight:550;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:16px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+export const ConfirmDeleteButton = tw.button`
+  w-[30%] h-[30px] bg-[#e7f5fe] [font-weight:550] [border:none] rounded-[10px]
+  cursor-pointer text-[16px]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
 `;
 
-export const NoDeleteButton = styled.button`
-  width:30%;
-  height:30px;
-  background-color:#E6D1F2;
-  font-weight:550;
-  border:none;
-  border-radius:10px;
-  font-size:16px;
-  cursor:pointer;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+export const NoDeleteButton = tw.button`
+  w-[30%] h-[30px] bg-[#E6D1F2] [font-weight:550] [border:none] rounded-[10px] text-[16px]
+  cursor-pointer [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
 `;
 
-export const DeleteModalTitle = styled.div`
-  display: flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  position:absolute;
-  color:white;
-  text-shadow:1px 1px 2px black;
-  top:0;
-  font-weight:500;
-  width:100%;
-  height:40px;
-  border-top-right-radius:inherit;
-  border-top-left-radius:inherit;
-  background: rgb(167, 176, 215);
-  background: linear-gradient(
-    312deg,
-    rgb(178, 228, 238) 0%,
-    rgb(161, 176, 246) 100%
-  );
+export const DeleteModalTitle = tw.div`
+  flex items-center justify-center text-[20px] absolute text-white
+  [text-shadow:1px_1px_2px_black] top-[0] font-medium w-full h-[40px]
+  [border-top-right-radius:inherit] [border-top-left-radius:inherit]
+  [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,246)_100%)]
 `;
 
 export default DeleteAsk;

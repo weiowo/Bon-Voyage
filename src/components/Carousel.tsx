@@ -1,230 +1,97 @@
 import React, {
   useState, useContext, useEffect, useRef, useCallback,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@/lib/router';
 import { GoogleMap, useLoadScript, type LoadScriptProps } from '@react-google-maps/api';
 import {
   doc, getDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
-import styled from 'styled-components/macro';
 import Swal from 'sweetalert2';
+import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
-import ArrowToRightSrc from '../pages/images/arrow-right.png';
-import ArrowToLeftSrc from '../pages/images/arrow-left.png';
-import unfilledStar from '../pages/images/unfilled_star.jpg';
-import Travel from '../pages/images/travel-2.png';
-import Suitcase from '../pages/images/suitcase-2.png';
-import filledStar from '../pages/images/filled_star.jpg';
-import '../pages/animation.css';
+import '../views/animation.css';
 import SchedulesWrapper, {
   ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
 } from './Modal/ScheduleChoice';
 import LeftButton from './Modal/GoBackButton';
 import UserContext from './UserContextComponent';
 import Loading from './Loading';
-import ModalImgArea, { ModalImg } from './Modal/ModalImgArea';
 import Modal from './Modal/Modal';
-import ModalLeftArea from './Modal/ModalLeftArea';
 import CloseModalButton from './Modal/CloseButton';
-import ButtonStarArea, { AddToScheduleButton, AddFavoriteIcon } from './Modal/ButtonStar';
-import ModalPlaceTitle, { ModalPlaceAddress } from './Modal/ModalText';
 import PLACE_PHOTO from '../constants/place.photo';
 import RemindWrapper, {
   ClickAndAdd, RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
 } from './Reminder/CreateTrip';
 import type { Schedule, SchedulePlace } from '../types';
+import PlaceDetailModal from './Modal/PlaceDetailModal';
 
-const NearByPlaceWrapper = styled.div`
-  width:100vw;
-  height:340px;
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  margin-top:20px;
-  @media screen and (max-width:1180px){
-    height:280px;
-    margin-top:20px;
-  }
-  @media screen and (max-width:900px){
-    flex-direction:column;
-    margin-top:30px;
-    height:370px;
-  }
+const ArrowToRightSrc = '/images/arrow-right.webp';
+const ArrowToLeftSrc = '/images/arrow-left.webp';
+const Travel = '/images/travel-2.webp';
+const Suitcase = '/images/suitcase-2.webp';
+
+const NearByPlaceWrapper = tw.div`
+  w-[100vw] h-[340px] flex flex-row items-center justify-center gap-[10px] mt-[20px]
+  max-desktop:h-[280px] max-desktop:mt-[20px] max-tablet-lg:flex-col max-tablet-lg:mt-[30px]
+  max-tablet-lg:h-[370px]
 `;
 
-const NearByPlaceLeftArea = styled.div`
-  width:15vw;
-  height:350px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  @media screen and (max-width:900px){
-    width:80vw;
-    height:100px;
-    margin-right:0px;
-  }
+const NearByPlaceLeftArea = tw.div`
+  w-[15vw] h-[350px] flex flex-col items-center justify-center max-tablet-lg:w-[80vw]
+  max-tablet-lg:h-[100px] max-tablet-lg:mr-[0px]
 `;
 
-const NearbyPlaceTitle = styled.div`
-  font-size:25px;
-  color:#1F456E;
-  font-weight:600;
-  margin-bottom:15px;
-  @media screen and (max-width:900px){
-    margin-bottom:5px;
-    font-size:24px;
-    margin-bottom:15px;
-  }
+const NearbyPlaceTitle = tw.div`
+  text-[25px] text-[#1F456E] font-semibold mb-[15px] max-tablet-lg:text-[24px]
+  max-tablet-lg:mb-[15px]
 `;
 
-const NearByPlaceDescription = styled.div`
-  font-size:12px;
-  color:grey;
-  font-weight:600;
-  margin-bottom:15px;
-  @media screen and (max-width:900px){
-    font-size:16px;
-    margin-bottom:25px;
-  }
+const NearByPlaceDescription = tw.div`
+  text-[12px] [color:grey] font-semibold mb-[15px] max-tablet-lg:text-[16px]
+  max-tablet-lg:mb-[25px]
 `;
 
-const NearByViewMoreButton = styled.button`
-  display:none;
-  width:130px;
-  height:40px;
-  color:white;
-  border:none;
-  background-color:#0492c2;
-  border-radius:5px;
-  color:white;
-  font-weight:600;
-  letter-spacing:3px;
-  @media screen and (max-width:900px){
-    display:none;
-  }
+const NearByViewMoreButton = tw.button`
+  hidden w-[130px] h-[40px] [border:none] bg-[#0492c2] rounded-[5px] text-white
+  font-semibold tracking-[3px] max-tablet-lg:hidden
 `;
 
-const CardsWrapper = styled.div`
-  width:800px;
-  height:290px;
-  display:flex; 
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap;
-  position:relative;
-  overflow:hidden;
-  z-index:1;
-  gap:20px;
-  @media screen and (max-width:1180px){
-    width:650px;
-    margin-right:0px;
-  }
-  @media screen and (max-width:900px){
-  display:none;
-  }
+const CardsWrapper = tw.div`
+  w-[800px] h-[290px] flex flex-col items-center justify-center flex-wrap relative
+  overflow-hidden z-[1] gap-[20px] max-desktop:w-[650px] max-desktop:mr-[0px]
+  max-tablet-lg:hidden
 `;
 
-const SmallScreenCards = styled.div`
-  display:none;
-  @media screen and (max-width:900px){
-    width:95%;
-    height:200px;
-    display:flex; 
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    position:relative;
-    overflow:hidden;
-    z-index:1;
-  }
-  @media screen and (max-width:900px){
-    width:100%;
-  }
-  @media screen and (max-width:500px){
-    height:160px;
-    overflow:auto;
-    width:100%;
-  }
+const SmallScreenCards = tw.div`
+  hidden max-tablet-lg:h-[200px] max-tablet-lg:flex max-tablet-lg:flex-col
+  max-tablet-lg:items-center max-tablet-lg:justify-center max-tablet-lg:flex-wrap
+  max-tablet-lg:relative max-tablet-lg:overflow-hidden max-tablet-lg:z-[1] max-tablet-lg:w-full
+  max-mobile:h-[160px] max-mobile:overflow-auto max-mobile:w-full
 `;
 
-const Cards = styled.div`
-  display:flex;
-  padding-left:15px;
-  padding-bottom:10px;
-  opacity:1;
-  flex-direction:column;
-  justify-content:flex-end;
-  width:180px;
-  height:240px;
-  color:white;
-  font-weight:600;
-  position:relative;
-  text-align:left;
-  overflow:hidden;
-  border-radius:10px;
-  cursor:pointer;
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  @media screen and (max-width:1180px){
-    width:140px;
-    height:180px;
-  }
-  @media screen and (max-width:900px){
-    width:30%;
-    height:280px;
-    font-size:13px;
-  }
-  @media screen and (max-width:500px){
-    width:30%;
-    height:180px;
-  }
-  @media screen and (max-width:500px){
-    height:150px;
-  }
+const Cards = tw.div`
+  flex pl-[15px] pb-[10px] opacity-[1] flex-col justify-end w-[180px] h-[240px] text-white
+  font-semibold relative text-left overflow-hidden rounded-[10px] cursor-pointer bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] max-desktop:w-[140px]
+  max-desktop:h-[180px] max-tablet-lg:w-[30%] max-tablet-lg:h-[280px] max-tablet-lg:text-[13px]
+  max-mobile:w-[30%] max-mobile:h-[150px]
 `;
 
-const SmallScreenCardsWrapper = styled.div`
-  display:none;
-  @media screen and (max-width:900px){
-    display:flex;
-    width:90%;
-    align-items:center;
-    gap:10px;
-  }
-  @media screen and (max-width:500px){
-    width:100%;
-    gap:0px;
-    padding-right:3px;
-    padding-left:3px;
-  }
+const SmallScreenCardsWrapper = tw.div`
+  hidden max-tablet-lg:flex max-tablet-lg:w-[90%] max-tablet-lg:items-center
+  max-tablet-lg:gap-[10px] max-mobile:w-full max-mobile:gap-[0px] max-mobile:pr-[3px]
+  max-mobile:pl-[3px]
 `;
 
-const Arrow = styled.img`
-  width:40px;
-  height:40px;
-  cursor:pointer;
-  @media screen and (max-width:900px){
-  display:none;
-  }
+const Arrow = tw.img`
+  w-[40px] h-[40px] cursor-pointer max-tablet-lg:hidden
 `;
 
-const SmallScreenArrow = styled.img`
-  display:none;
-  @media screen and (max-width:900px){
-    display:block;
-    width:25px;
-    height:25px;
-    cursor:pointer;
-  }
+const SmallScreenArrow = tw.img`
+  hidden max-tablet-lg:block max-tablet-lg:w-[25px] max-tablet-lg:h-[25px]
+  max-tablet-lg:cursor-pointer
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];
@@ -254,11 +121,11 @@ function Carousel({ currentNearbyAttraction = [] }: CarouselProps) {
   const [clickedPlaceAddress, setClickedPlaceAddress] = useState('');
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
     libraries,
   });
 
-  const mapRef = useRef<google.maps.Map>();
+  const mapRef = useRef<google.maps.Map | undefined>(undefined);
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
   }, []);
@@ -410,41 +277,14 @@ function Carousel({ currentNearbyAttraction = [] }: CarouselProps) {
         mapContainerStyle={mapContainerStyle}
         onLoad={onMapLoad}
       />
-      <Modal active={modalIsActive} flexDirection="row">
-        {modalDetail
-          ? (
-            <>
-              <ModalLeftArea>
-                <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-                <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                <ButtonStarArea>
-                  <AddToScheduleButton
-                    onClick={() => { handleUserOrNot(); }}
-                  >
-                    加入行程
-                  </AddToScheduleButton>
-                  <AddFavoriteIcon
-                    onClick={() => { handleFavorite(modalDetail.place_id); }}
-                    src={liked ? filledStar : unfilledStar}
-                  />
-                </ButtonStarArea>
-              </ModalLeftArea>
-              <ModalImgArea>
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : PLACE_PHOTO[0]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : PLACE_PHOTO[1]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : PLACE_PHOTO[2]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : PLACE_PHOTO[3]} />
-              </ModalImgArea>
-              <CloseModalButton
-                type="button"
-                onClick={() => { handleModalClose(); }}
-              >
-                X
-              </CloseModalButton>
-            </>
-          )
-          : <Loading />}
-      </Modal>
+      <PlaceDetailModal
+        active={modalIsActive}
+        place={modalDetail}
+        liked={liked}
+        onAddToSchedule={() => handleUserOrNot()}
+        onToggleFavorite={(placeId) => handleFavorite(placeId)}
+        onClose={() => handleModalClose()}
+      />
       <Modal
         active={chooseScheduleModalIsActive}
         flexDirection="column"
