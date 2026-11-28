@@ -31,8 +31,8 @@ import AddFriendButton, {
 import Line from '../components/Line';
 import type { Article, Schedule, UserProfile } from '../types';
 
-const Add = '/images/invite.png';
-const CloseSearchIcon = '/images/close-1.png';
+const Add = '/images/invite.webp';
+const CloseSearchIcon = '/images/close-1.webp';
 
 const PageWrapper = tw.div`
   w-[100vw] flex flex-row pt-[60px] max-[801px]:justify-center
@@ -101,7 +101,7 @@ const SelectedScheduleWrapper = tw.div`
 
 const SelectedSchedulePhoto = tw.div`
   pl-[15px] pb-[10px] opacity-[1] flex-col justify-end
-  bg-[url(/images/schedule_cover_rec3.jpg)] w-[35vw] h-[12vw] relative rounded-[20px]
+  bg-[url(/images/schedule_cover_rec3.webp)] w-[35vw] h-[12vw] relative rounded-[20px]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply]
   max-[801px]:w-[85%] max-[801px]:h-[150px] max-[749px]:w-[85vw] max-[749px]:ml-[0px]
   max-[749px]:items-center max-[749px]:h-[120px]

@@ -21,7 +21,7 @@ const PageWrapper = tw.div`
 `;
 
 const ArticleCoverImage = tw.div`
-  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.jpeg)]
+  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
   bg-center object-cover max-[901px]:h-[300px]
 `;
@@ -40,7 +40,7 @@ const ArticleCoverPhoto = tw.input`
 
 const ArticleCoverPhotoWrapper = tw.label`
   w-[50vw] h-[350px] ml-[5px] mt-[2px] rounded-[3px] [outline:none] [border:none]
-  bg-[url(/images/cover_photo_default.png)] bg-cover bg-no-repeat
+  bg-[url(/images/cover_photo_default.webp)] bg-cover bg-no-repeat
   [background-blend-mode:multiply] bg-center shrink-0
   [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] cursor-pointer object-cover max-[901px]:w-[55vw]
   max-[751px]:w-[80vw]

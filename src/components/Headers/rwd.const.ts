@@ -1,15 +1,15 @@
-const WHITE_MENU_ICON = '/images/menu_bar.jpg';
-const BLACK_MENU_ICON = '/images/menu_black.png';
-const CLOSE_ICON = '/images/close-1.png';
-const USER_IMG = '/images/seal.png';
-const BLOG_ICON = '/images/blog.png';
-const DISH_ICON = '/images/dish.png';
-const TRIP_ICON = '/images/travel.png';
-const VR_ICON = '/images/virtual-reality.png';
-const PLAN_ICON = '/images/suitcase.png';
-const ARTICLE_ICON = '/images/article.png';
-const ATTRACTION_ICON = '/images/vacations.png';
-const FAVO_ICON = '/images/favorite.png';
+const WHITE_MENU_ICON = '/images/menu_bar.webp';
+const BLACK_MENU_ICON = '/images/menu_black.webp';
+const CLOSE_ICON = '/images/close-1.webp';
+const USER_IMG = '/images/seal.webp';
+const BLOG_ICON = '/images/blog.webp';
+const DISH_ICON = '/images/dish.webp';
+const TRIP_ICON = '/images/travel.webp';
+const VR_ICON = '/images/virtual-reality.webp';
+const PLAN_ICON = '/images/suitcase.webp';
+const ARTICLE_ICON = '/images/article.webp';
+const ATTRACTION_ICON = '/images/vacations.webp';
+const FAVO_ICON = '/images/favorite.webp';
 
 const RWD_ICON = {
   WHITE_MENU_ICON,

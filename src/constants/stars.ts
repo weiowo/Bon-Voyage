@@ -1,5 +1,5 @@
-const EMPTY_STAR = '/images/unfilled_star.jpg';
-const FULL_STAR = '/images/filled_star.jpg';
+const EMPTY_STAR = '/images/unfilled_star.webp';
+const FULL_STAR = '/images/filled_star.webp';
 
 const STAR = {
   EMPTY_STAR,

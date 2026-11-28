@@ -1,12 +1,12 @@
-const ANKORWAT = '/images/Angkor_Wat.jpeg';
-const BARCELONA = '/images/bacelona.jpeg';
-const JAPAN = '/images/japan.jpeg';
-const MACHUPICHU = '/images/Machu_Picchu.jpeg';
-const MOUNT_RUSHMORE = '/images/Mount_Rushmore.jpeg';
-const PARIS = '/images/paris.jpeg';
-const PYRAMID = '/images/pyramid.jpeg';
-const RIO = '/images/rio.jpeg';
-const ROME = '/images/rome.jpeg';
+const ANKORWAT = '/images/Angkor_Wat.webp';
+const BARCELONA = '/images/bacelona.webp';
+const JAPAN = '/images/japan.webp';
+const MACHUPICHU = '/images/Machu_Picchu.webp';
+const MOUNT_RUSHMORE = '/images/Mount_Rushmore.webp';
+const PARIS = '/images/paris.webp';
+const PYRAMID = '/images/pyramid.webp';
+const RIO = '/images/rio.webp';
+const ROME = '/images/rome.webp';
 
 const vrPlaces = [
   {

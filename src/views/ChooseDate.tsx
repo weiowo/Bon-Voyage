@@ -45,7 +45,7 @@ const EmbarkEndDateTitle = tw.div`
 `;
 
 const ModalBackgroud = tw.div`
-  w-[100vw] h-[100vh] fixed flex justify-center items-center bg-[url(/images/travel2.jpg)]
+  w-[100vw] h-[100vh] fixed flex justify-center items-center bg-[url(/images/travel2.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] bg-center
 `;
 

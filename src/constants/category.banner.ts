@@ -1,11 +1,11 @@
-const CAMPING_IMG = '/images/camping_2.jpg';
-const ARTS_IMG = '/images/art.jpg';
-const FAMILY_IMG = '/images/family.jpg';
-const COUPLE_IMG = '/images/couple.jpg';
-const FOOD_IMG = '/images/food2.jpeg';
-const SHOPPING_IMG = '/images/shopping.jpg';
-const NIGHT_IMG = '/images/bar.jpg';
-const RELIGION_IMG = '/images/religion.jpg';
+const CAMPING_IMG = '/images/camping_2.webp';
+const ARTS_IMG = '/images/art.webp';
+const FAMILY_IMG = '/images/family_banner.webp';
+const COUPLE_IMG = '/images/couple.webp';
+const FOOD_IMG = '/images/food2.webp';
+const SHOPPING_IMG = '/images/shopping_banner.webp';
+const NIGHT_IMG = '/images/bar.webp';
+const RELIGION_IMG = '/images/religion_banner.webp';
 
 const BANNER = {
   CAMPING_IMG,

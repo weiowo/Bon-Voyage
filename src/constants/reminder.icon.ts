@@ -1,6 +1,6 @@
-const SUITCASE_ICON = '/images/suitcase-2.png';
-const CAR_ICON = '/images/travel-2.png';
-const ADD_FAVO_ICON = '/images/favorite.png';
+const SUITCASE_ICON = '/images/suitcase-2.webp';
+const CAR_ICON = '/images/travel-2.webp';
+const ADD_FAVO_ICON = '/images/favorite.webp';
 
 const REMINDER_ICONS = {
   SUITCASE_ICON,

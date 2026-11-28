@@ -42,7 +42,7 @@ import REMINDER_ICONS from '../constants/reminder.icon';
 import type { NearbyPlaces, Schedule, SchedulePlace } from '../types';
 
 const Banner = tw.div`
-  w-[100vw] h-[50vw] bg-[url(/images/city.png)] bg-cover bg-no-repeat
+  w-[100vw] h-[50vw] bg-[url(/images/city.webp)] bg-cover bg-no-repeat
   [background-blend-mode:multiply]
 `;
 

@@ -18,7 +18,7 @@ import SignIn from '../components/SignIn';
 import { UpperLine, MyPageTitle } from './MyArticles';
 import type { UserProfile } from '../types';
 
-const UserPhotoSrc = '/images/seal.png';
+const UserPhotoSrc = '/images/seal.webp';
 
 const PageWrapper = tw.div`
   w-[100vw] h-[100vh] flex pt-[60px] max-[801px]:flex max-[801px]:flex-col
@@ -40,7 +40,7 @@ const MyProfilePhoto = tw.img`
 `;
 
 const CameraIcon = tw.label`
-  bottom-[0px] right-[0px] w-[55px] h-[55px] absolute bg-[url(/images/camera_blue.png)]
+  bottom-[0px] right-[0px] w-[55px] h-[55px] absolute bg-[url(/images/camera_blue.webp)]
   bg-cover bg-no-repeat [background-blend-mode:multiply] bg-center cursor-pointer
 `;
 

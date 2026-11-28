@@ -8,12 +8,12 @@ import type { Updater } from 'use-immer';
 import Search from './Search';
 import type { LatLng, RouteInfo, Schedule } from '../types';
 
-const PINK_STAR = '/images/smile_star_pink.png';
-const ORANGE_STAR = '/images/smile_star_orange.png';
-const YELLOW_STAR = '/images/smile_star_yellow.png';
-const GREEN_STAR = '/images/smile_star_green.png';
-const BLUE_STAR = '/images/smile_star_blue.png';
-const PURPLE_STAR = '/images/smile_star_purple.png';
+const PINK_STAR = '/images/smile_star_pink.webp';
+const ORANGE_STAR = '/images/smile_star_orange.webp';
+const YELLOW_STAR = '/images/smile_star_yellow.webp';
+const GREEN_STAR = '/images/smile_star_green.webp';
+const BLUE_STAR = '/images/smile_star_blue.webp';
+const PURPLE_STAR = '/images/smile_star_purple.webp';
 
 let service: google.maps.places.PlacesService;
 

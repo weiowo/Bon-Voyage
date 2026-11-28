@@ -32,7 +32,7 @@ const TainanWrapper = tw.div`
 `;
 
 const Tainan = tw.div`
-  absolute bg-center rounded-[10px] w-full h-full bg-[url(/images/tainan.png)] bg-cover
+  absolute bg-center rounded-[10px] w-full h-full bg-[url(/images/tainan.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.25)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.2)]
 `;
@@ -50,7 +50,7 @@ const BarcelonaWrapper = tw.div`
 `;
 
 const Barcelona = tw.div`
-  relative rounded-[10px] bg-center w-full h-full bg-[url(/images/barcelona.png)] bg-cover
+  relative rounded-[10px] bg-center w-full h-full bg-[url(/images/barcelona.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.2)] max-[801px]:w-[20vw]
 `;
@@ -79,7 +79,7 @@ const SecondVerticalBlcokWrapper = tw.div`
 `;
 
 const SecondVerticalBlcok = tw.div`
-  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/kyoto.png)] bg-cover
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/kyoto.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.1)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.2)]
 `;
@@ -102,7 +102,7 @@ const NewYorkWrapper = tw.div`
 `;
 
 const NewYork = tw.div`
-  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/newyork.png)] bg-cover
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/newyork.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.2)]
 `;
@@ -117,7 +117,7 @@ const CamBridgeWrapper = tw.div`
 `;
 
 const CamBridge = tw.div`
-  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/cambridge.png)] bg-cover
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/cambridge.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.2)]
 `;
@@ -132,7 +132,7 @@ const AmsterdamWrapper = tw.div`
 `;
 
 const Amsterdam = tw.div`
-  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/amsterdam.png)] bg-cover
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/amsterdam.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.25)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.2)]
 `;
@@ -147,7 +147,7 @@ const FourthVerticalBlockWrapper = tw.div`
 `;
 
 const FourthVerticalBlock = tw.div`
-  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/paris_2.png)] bg-cover
+  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/paris_2.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.1)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.1)] max-[581px]:hidden
 `;
@@ -168,7 +168,7 @@ const MexicoWrapper = tw.div`
 `;
 
 const Mexico = tw.div`
-  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/mexico.png)] bg-cover
+  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/mexico.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.1)]
 `;
@@ -183,7 +183,7 @@ const EgyptWrapper = tw.div`
 `;
 
 const Egypt = tw.div`
-  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/egypt.png)] bg-cover
+  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/egypt.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.15)] [background-blend-mode:multiply] [transition:0.8s]
   hover:[transform:scale(1.2)]
 `;

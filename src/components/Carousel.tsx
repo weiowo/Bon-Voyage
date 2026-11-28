@@ -30,12 +30,12 @@ import RemindWrapper, {
 } from './Reminder/CreateTrip';
 import type { Schedule, SchedulePlace } from '../types';
 
-const ArrowToRightSrc = '/images/arrow-right.png';
-const ArrowToLeftSrc = '/images/arrow-left.png';
-const unfilledStar = '/images/unfilled_star.jpg';
-const Travel = '/images/travel-2.png';
-const Suitcase = '/images/suitcase-2.png';
-const filledStar = '/images/filled_star.jpg';
+const ArrowToRightSrc = '/images/arrow-right.webp';
+const ArrowToLeftSrc = '/images/arrow-left.webp';
+const unfilledStar = '/images/unfilled_star.webp';
+const Travel = '/images/travel-2.webp';
+const Suitcase = '/images/suitcase-2.webp';
+const filledStar = '/images/filled_star.webp';
 
 const NearByPlaceWrapper = tw.div`
   w-[100vw] h-[340px] flex flex-row items-center justify-center gap-[10px] mt-[20px]

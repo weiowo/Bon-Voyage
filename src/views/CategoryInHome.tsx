@@ -3,14 +3,14 @@ import { useNavigate } from '@/lib/router';
 import tw from '@/lib/tw';
 import type { LatLng } from '../types';
 
-const CAMPING_ICON = '/images/camp.png';
-const ART_ICON = '/images/art-museum.png';
-const FAMILY_ICON = '/images/family.png';
-const COUPLE_ICON = '/images/heart_pink.png';
-const FOOD_ICON = '/images/food.png';
-const SHOPPING_ICON = '/images/shopping.png';
-const RELIGION_ICON = '/images/religion.png';
-const NIGHT_ICON = '/images/nightlife.png';
+const CAMPING_ICON = '/images/camp.webp';
+const ART_ICON = '/images/art-museum.webp';
+const FAMILY_ICON = '/images/family.webp';
+const COUPLE_ICON = '/images/heart_pink.webp';
+const FOOD_ICON = '/images/food.webp';
+const SHOPPING_ICON = '/images/shopping.webp';
+const RELIGION_ICON = '/images/religion.webp';
+const NIGHT_ICON = '/images/nightlife.webp';
 
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 

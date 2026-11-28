@@ -12,7 +12,7 @@ import {
 import tw from '@/lib/tw';
 import db, { app } from '../utils/firebase-init';
 
-const CloseIcon = '/images/close_style.png';
+const CloseIcon = '/images/close_style.webp';
 
 const SignInModalBackground = tw.div`
   w-[100vw] h-[100vh] fixed top-[0] bottom-[0] left-[0] right-[0] bg-[rgba(0,0,0,0.7)]

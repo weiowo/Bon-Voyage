@@ -21,7 +21,7 @@ import BlackHeaderComponent from '../components/Headers/BlackHeader';
 import STAR from '../constants/stars';
 import type { Schedule, SchedulePlace } from '../types';
 
-const rightArrow = '/images/up-arrow.png';
+const rightArrow = '/images/up-arrow.webp';
 
 const PageTitle = tw.div`
   w-full h-[30px] text-[30px] text-white [text-shadow:2px_2px_3px_black] font-semibold
@@ -147,7 +147,7 @@ const CloseModalButton = tw.button`
 `;
 
 const LeftButton = tw.button`
-  h-[25px] w-[25px] absolute bg-[url(/images/left-arrow.jpg)] bg-cover bg-no-repeat
+  h-[25px] w-[25px] absolute bg-[url(/images/left-arrow.webp)] bg-cover bg-no-repeat
   bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] left-[20px] top-[20px] text-center
   [border:none] rounded-[50%] text-white cursor-pointer
 `;

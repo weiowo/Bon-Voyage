@@ -19,7 +19,7 @@ const PageWrapper = tw.div`
 `;
 
 const ArticleCoverImage = tw.div`
-  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/all_article_banner.png)]
+  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/all_article_banner.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
   bg-center max-[801px]:h-[280px]
 `;

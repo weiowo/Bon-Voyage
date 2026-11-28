@@ -34,10 +34,10 @@ import type {
   Article, ArticleStatus, Schedule, UserProfile,
 } from '../types';
 
-const Travel = '/images/travel-2.png';
-const Suitcase = '/images/suitcase-2.png';
-const greyTrashCanSrc = '/images/bin.png';
-const WriteRemindIcon = '/images/picture.png';
+const Travel = '/images/travel-2.webp';
+const Suitcase = '/images/suitcase-2.webp';
+const greyTrashCanSrc = '/images/bin.webp';
+const WriteRemindIcon = '/images/picture.webp';
 
 const ConfirmWritingButton = tw.button`
   w-[80px] h-[35px] bg-[#598BAF] text-white rounded-[10px] [border:none] shrink-0

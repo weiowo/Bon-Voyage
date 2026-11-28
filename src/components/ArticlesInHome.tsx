@@ -10,12 +10,12 @@ import MyArticle, {
 } from './Cards/Article';
 import type { Article } from '../types';
 
-const Cover1 = '/images/schedule_cover_rec1.jpg';
-const Cover2 = '/images/schedule_cover_rec5.jpg';
-const Cover3 = '/images/schedule_cover_rec3.jpg';
-const Cover4 = '/images/camping.jpg';
-const Cover5 = '/images/schedule_cover_rec2.jpg';
-const Cover6 = '/images/schedule_cover_rec4.jpg';
+const Cover1 = '/images/schedule_cover_rec1.webp';
+const Cover2 = '/images/schedule_cover_rec5.webp';
+const Cover3 = '/images/schedule_cover_rec3.webp';
+const Cover4 = '/images/camping.webp';
+const Cover5 = '/images/schedule_cover_rec2.webp';
+const Cover6 = '/images/schedule_cover_rec4.webp';
 
 export const defaultArticleCoverPhoto = [Cover1, Cover2, Cover3, Cover4, Cover5, Cover6];
 

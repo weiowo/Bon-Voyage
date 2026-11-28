@@ -39,7 +39,7 @@ import PlaceBoxWrapper, {
 } from '../components/Cards/PlaceBox';
 import type { LatLng, Schedule, SchedulePlace } from '../types';
 
-const TAP_IMG = '/images/tap.png';
+const TAP_IMG = '/images/tap.webp';
 
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 

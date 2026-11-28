@@ -3,7 +3,7 @@
 
 > #### A World Exploring and Trip Planning Website           
 >
-> <img align="center" width="25px" src="./public/images/travel.png"/>  Fun fact: `"Bon Voyage!"` means "Have a nice trip!" in French.
+> <img align="center" width="25px" src="./public/images/travel.webp"/>  Fun fact: `"Bon Voyage!"` means "Have a nice trip!" in French.
 
   - [Motivation](#motivation)
   - [Embark Now!](#embark-now)

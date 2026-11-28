@@ -9,7 +9,7 @@ import {
 import tw from '@/lib/tw';
 import type { LatLng } from '../types';
 
-const CloseIcon = '/images/close_style.png';
+const CloseIcon = '/images/close_style.webp';
 
 const SearchInput = tw.input<{ clicked?: boolean }>`
   w-[calc(45vw_-_85px)] h-[35px] [border:1px_solid_grey] rounded-[5px] text-[15px] z-[20]

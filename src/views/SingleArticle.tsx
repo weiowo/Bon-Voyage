@@ -15,14 +15,14 @@ import UserContext from '../components/UserContextComponent';
 import STAR from '../constants/stars';
 import type { Article, UserProfile } from '../types';
 
-const defaultCover = '/images/schedule_cover_rec3.jpg';
+const defaultCover = '/images/schedule_cover_rec3.webp';
 
 const PageWrapper = tw.div`
   w-[100vw] h-[100vh]
 `;
 
 const ArticleCoverImage = tw.div`
-  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.jpeg)]
+  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
   bg-center object-cover max-[801px]:h-[300px]
 `;
