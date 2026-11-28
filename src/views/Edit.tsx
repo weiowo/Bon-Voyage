@@ -357,7 +357,7 @@ function EditPage() {
             <ScheduleSummaryPart>
               {article ? article?.trip_days?.map((dayItem, dayIndex) => (
                 <ScheduleSummaryDayAndPlacePart>
-                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/edit#day-${dayIndex + 1}`}>
+                  <HashLink style={{ textDecoration: 'none' }} smooth to={{ pathname: '/edit', search, hash: `day-${dayIndex + 1}` }}>
                     <ScheduleSummaryDayPart>
                       第
                       {dayIndex + 1}
@@ -370,7 +370,7 @@ function EditPage() {
                   />
                   <ScheduleSummaryPlacePart>
                     {dayItem?.places ? dayItem?.places.map((placeItem, placeIndex) => (
-                      <HashLink style={{ textDecoration: 'none', color: 'black' }} smooth to={`/edit#place-${dayIndex + 1}-${placeIndex + 1}`}>
+                      <HashLink style={{ textDecoration: 'none', color: 'black' }} smooth to={{ pathname: '/edit', search, hash: `place-${dayIndex + 1}-${placeIndex + 1}` }}>
                         <SummaryPlaceTitle>
                           {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
                         </SummaryPlaceTitle>

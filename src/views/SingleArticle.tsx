@@ -245,7 +245,7 @@ function ShowArticle() {
             <ScheduleSummaryPart>
               {shownArticle ? shownArticle?.trip_days?.map((dayItem, dayIndex) => (
                 <ScheduleSummaryDayAndPlacePart key={`${dayIndex + 10}place`}>
-                  <HashLink style={{ textDecoration: 'none' }} smooth to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#day-${dayIndex + 1}`}>
+                  <HashLink style={{ textDecoration: 'none' }} smooth to={{ pathname: '/article', search, hash: `day-${dayIndex + 1}` }}>
                     <ScheduleSummaryDayPart>
                       第
                       {dayIndex + 1}
@@ -263,7 +263,7 @@ function ShowArticle() {
                         key={`${placeItem?.place_title}`}
                         style={{ textDecoration: 'none', color: 'black' }}
                         smooth
-                        to={`/article?art_id=GJ3ZQAffaMY0NaLwMDgi&sch_id=iV3Cg33AFsZ6XghDIZRc#place-${dayIndex + 1}-${placeIndex + 1}`}
+                        to={{ pathname: '/article', search, hash: `place-${dayIndex + 1}-${placeIndex + 1}` }}
                       >
                         <SummaryPlaceTitle>
                           {placeItem.place_title ? placeItem.place_title : '沒有景點唷'}
