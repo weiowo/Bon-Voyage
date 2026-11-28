@@ -1,65 +1,18 @@
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-const ModalImgArea = styled.div`
-  width:25vw;
-  height:22vw;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px;
-  @media screen and (max-width:1200px){
-    width:50%;
-    height:70%;
-  }
-  @media screen and (max-width:630px){
-    width:100%;
-    height:60%;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:20px;
-    padding-bottom:40px;
-  }
-  @media screen and (max-width:575px){
-    width:90%;
-    height:60%;
-    padding-bottom:30px;
-  }
-  @media screen and (max-width:430px){
-    height:50%;
-    gap:8px;
-  }
+const ModalImgArea = tw.div`
+  w-[25vw] h-[22vw] flex flex-wrap items-center gap-[10px] max-[1201px]:w-[50%]
+  max-[1201px]:h-[70%] max-[631px]:w-full max-[631px]:h-[60%] max-[631px]:flex-wrap
+  max-[631px]:justify-center max-[631px]:gap-[20px] max-[631px]:pb-[40px]
+  max-[576px]:w-[90%] max-[576px]:h-[60%] max-[576px]:pb-[30px] max-[431px]:h-[50%]
+  max-[431px]:gap-[8px]
 `;
 
-export const ModalImg = styled.img`
-  width:10vw;
-  height:10vw;
-  border-radius:10px;
-  object-fit: cover;
-  @media screen and (max-width:1200px){
-    width:120px;
-    height:120px;
-  }
-  @media screen and (max-width:630px){
-    width:170px;
-    height:130px;
-    flex-shrink:0;
-  }
-  @media screen and (max-width:575px){
-    width:140px;
-    height:115px;
-  }
-  @media screen and (max-width:480px){
-    width:120px;
-    height:100px;
-  }
-  @media screen and (max-width:430px){
-    width:110px;
-    height:100px;
-  }
-  @media screen and (max-width:390px){
-    width:120px;
-    height:100px;
-  }
+export const ModalImg = tw.img`
+  w-[10vw] h-[10vw] rounded-[10px] object-cover max-[1201px]:w-[120px]
+  max-[1201px]:h-[120px] max-[631px]:w-[170px] max-[631px]:h-[130px] max-[631px]:shrink-0
+  max-[576px]:w-[140px] max-[576px]:h-[115px] max-[481px]:w-[120px] max-[481px]:h-[100px]
+  max-[431px]:w-[110px] max-[431px]:h-[100px] max-[391px]:w-[120px] max-[391px]:h-[100px]
 `;
 
 export default ModalImgArea;

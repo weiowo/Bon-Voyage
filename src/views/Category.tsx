@@ -2,7 +2,6 @@ import React,
 {
   useCallback, useRef, useEffect, useState, useContext,
 } from 'react';
-import styled from 'styled-components';
 import {
   doc, updateDoc, getDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
@@ -11,6 +10,7 @@ import { useImmer } from 'use-immer';
 import produce from 'immer';
 import { GoogleMap, useLoadScript, type LoadScriptProps } from '@react-google-maps/api';
 import { useLocation, useNavigate } from '@/lib/router';
+import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
 import BlackHeaderComponent
   from '../components/Headers/BlackHeader';
@@ -43,55 +43,19 @@ const TAP_IMG = '/images/tap.png';
 
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 
-const PlaceBoxesWrapper = styled.div`
-  width:100vw;
-  display:flex;
-  height:auto;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:30px;
-  margin-top:90px;
-  @media screen and (max-width:970px){
-    gap:20px;
-    width:95vw;
-    justify-self:center;
-    margin:0 auto;
-    margin-top:60px;
-  }
-  @media screen and (max-width:805px){
-    gap:5px;
-    width:95vw;
-    justify-self:center;
-    margin:0 auto;
-    margin-top:60px;
-  }
-  @media screen and (max-width:756px){
-    gap:0px;
-    width:95vw;
-    justify-self:center;
-    margin:0 auto;
-    margin-top:60px;
-  }
-  @media screen and (max-width:745px){
-    gap:20px;
-    width:80vw;
-    justify-self:center;
-    margin:0 auto;
-    margin-top:60px;
-  }
-  @media screen and (max-width:465px){
-    gap:5px;
-    width:90vw;
-    margin-top:40px;
-  }
+const PlaceBoxesWrapper = tw.div`
+  w-[100vw] flex h-auto flex-wrap justify-center gap-[30px] mt-[90px] max-[971px]:gap-[20px]
+  max-[971px]:w-[95vw] max-[971px]:[justify-self:center] max-[971px]:m-[0_auto]
+  max-[971px]:mt-[60px] max-[806px]:gap-[5px] max-[806px]:w-[95vw]
+  max-[806px]:[justify-self:center] max-[806px]:m-[0_auto] max-[806px]:mt-[60px]
+  max-[757px]:gap-[0px] max-[757px]:w-[95vw] max-[757px]:[justify-self:center]
+  max-[757px]:m-[0_auto] max-[757px]:mt-[60px] max-[746px]:gap-[20px] max-[746px]:w-[80vw]
+  max-[746px]:[justify-self:center] max-[746px]:m-[0_auto] max-[746px]:mt-[60px]
+  max-[466px]:gap-[5px] max-[466px]:w-[90vw] max-[466px]:mt-[40px]
 `;
 
-const CategoryBanner = styled.img`
-  width:100vw;
-  height:100vh;
-  @media screen and (max-width:800px){
-  height:auto;
-  }
+const CategoryBanner = tw.img`
+  w-[100vw] h-[100vh] max-[801px]:h-auto
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

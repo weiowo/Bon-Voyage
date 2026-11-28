@@ -1,74 +1,33 @@
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-export const FoundAsk = styled.div`
-  width:100%;
-  font-weight:600;
-  font-size:18px;
+export const FoundAsk = tw.div`
+  w-full font-semibold text-[18px]
 `;
 
-export const CloseSearch = styled.img`
-  position:absolute;
-  right:20px;
-  width:18px;
-  height:18px;
-  cursor:pointer;
+export const CloseSearch = tw.img`
+  absolute right-[20px] w-[18px] h-[18px] cursor-pointer
 `;
 
-export const InviteFriendInput = styled.input`
-  border:none;
-  font-size:16px;
-  padding-left:3px;
-  width:80%;
-  border-bottom:1px solid black;
-  outline:none;
-  margin-top:20px;
+export const InviteFriendInput = tw.input`
+  [border-top:none] [border-right:none] [border-left:none] text-[16px] pl-[3px] w-[80%]
+  [border-bottom:1px_solid_black] [outline:none] mt-[20px]
 `;
 
-export const InviteFriendBelowArea = styled.div<{ active?: boolean }>`
-  display:${(props) => (props.active ? 'flex' : 'none')};
-  flex-direction:column;
-  align-items:center;
-  gap:30px;
-  justify-content:center;
-  width:100%;
-  margin-top:20px;
+export const InviteFriendBelowArea = tw.div<{ active?: boolean }>`
+  flex-col items-center gap-[30px] justify-center w-full mt-[20px]
+  ${(p) => (p.active ? 'flex' : 'hidden')}
 `;
 
-export const ConfirmSearchButton = styled.button`
-  width:30%;
-  height:35px;
-  border-radius:8px;
-  color:white;
-  font-weight:550;
-  font-size:16px;
-  border:none;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  text-shadow:1px 1px 2px black;
-  background: linear-gradient(
-    312deg,
-    rgb(178, 228, 238) 0%,
-    rgb(161, 176, 246) 100%
-  );
-  @media screen and (max-width:800px){
-    width:50%;
-  }
+export const ConfirmSearchButton = tw.button`
+  w-[30%] h-[35px] rounded-[8px] text-white [font-weight:550] text-[16px] [border:none] flex
+  items-center justify-center cursor-pointer [text-shadow:1px_1px_2px_black]
+  [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,246)_100%)]
+  max-[801px]:w-[50%]
 `;
 
-const AddFriendButton = styled.img`
-  width:55px;
-  height:55px;
-  cursor:pointer;
-  @media screen and (max-width:800px){
-    width:35px;
-    height:35px;
-  }
-  @media screen and (max-width:748px){
-    width:55px;
-    height:55px;
-  }
+const AddFriendButton = tw.img`
+  w-[55px] h-[55px] cursor-pointer max-[801px]:w-[35px] max-[801px]:h-[35px]
+  max-[749px]:w-[55px] max-[749px]:h-[55px]
 `;
 
 export default AddFriendButton;

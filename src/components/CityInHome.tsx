@@ -1,545 +1,195 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Link } from '@/lib/router';
+import tw from '@/lib/tw';
 
-const ParisSrc = '/images/paris_2.png';
-const KyotoSrc = '/images/kyoto.png';
-const TainanSrc = '/images/tainan.png';
-const AmsterdamSrc = '/images/amsterdam.png';
-const ProvenceSrc = '/images/provence.png';
-const EgyptSrc = '/images/egypt.png';
-const BarcelonaSrc = '/images/barcelona.png';
-const CamBridgeSrc = '/images/cambridge.png';
-const NewYorkSrc = '/images/newyork.png';
-const MexicoSrc = '/images/mexico.png';
-
-const CityAtHomeWrapper = styled.div`
-  margin-top:45px;
-  width:100vw;
-  height:520px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  @media screen and (max-width:800px){
-    height:850px;
-  }
-  @media screen and (max-width:580px){
-    height:740px;
-  }
+const CityAtHomeWrapper = tw.div`
+  mt-[45px] w-[100vw] h-[520px] flex flex-col items-center max-[801px]:h-[850px]
+  max-[581px]:h-[740px]
 `;
 
-const CityAtHomeWrapperTitle = styled.div`
-  width:100vw;
-  height:30px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:24px;
-  font-weight:600;
-  color:#1F456E;
-  margin-bottom:60px;
-  @media screen and (max-width:800px){
-    font-size:25px;
-    margin-bottom:30px;
-  }
+const CityAtHomeWrapperTitle = tw.div`
+  w-[100vw] h-[30px] flex justify-center items-center text-[24px] font-semibold
+  text-[#1F456E] mb-[60px] max-[801px]:text-[25px] max-[801px]:mb-[30px]
 `;
 
-const CityAtHomeBelowPart = styled.div`
-  width:100vw;
-  height:auto;
-  display:flex;
-  flex-direction:row;
-  justify-content:center;
-  gap:10px;
-  @media screen and (max-width:800px){
-    flex-direction:column;
-    gap:15px;
-  }
+const CityAtHomeBelowPart = tw.div`
+  w-[100vw] h-auto flex flex-row justify-center gap-[10px] max-[801px]:flex-col
+  max-[801px]:gap-[15px]
 `;
 
-const SmallScreenCity = styled.div`
-  width:50%;
-  display:flex;
-  gap:15px;
-  @media screen and (max-width:800px){
-    width:100vw;
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  }
+const SmallScreenCity = tw.div`
+  w-[50%] flex gap-[15px] max-[801px]:w-[100vw] max-[801px]:flex max-[801px]:justify-center
+  max-[801px]:gap-[15px]
 `;
 
-const FirstVerticalBlock = styled.div`
-  width:33.5vw;
-  height:430px;
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  @media screen and (max-width:800px){
-    width:60vw;
-    height: 380px;
-  }
-  @media screen and (max-width:580px){
-    height: 330px;
-  }
+const FirstVerticalBlock = tw.div`
+  w-[33.5vw] h-[430px] flex flex-col gap-[15px] max-[801px]:w-[60vw] max-[801px]:h-[380px]
+  max-[581px]:h-[330px]
 `;
 
-const TainanWrapper = styled.div`
-  position:relative;
-  width:33.5vw;
-  height:290px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:60vw;
-  }
+const TainanWrapper = tw.div`
+  relative w-[33.5vw] h-[290px] overflow-hidden rounded-[10px] max-[801px]:w-[60vw]
 `;
 
-const Tainan = styled.div`
-  position:absolute;
-  background-position: center;
-  border-radius:10px;
-  width:100%;
-  height:100%;
-  background-image: url(${TainanSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.25);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
+const Tainan = tw.div`
+  absolute bg-center rounded-[10px] w-full h-full bg-[url(/images/tainan.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.25)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.2)]
 `;
 
-const TainanTitle = styled.div`
-  font-size:30px;
-  font-weight:700;
-  color:white;
-  position:absolute;
-  bottom:20px;
-  left:20px;
+const TainanTitle = tw.div`
+  text-[30px] font-bold text-white absolute bottom-[20px] left-[20px]
 `;
 
-const FirstVerticalBlockBelowPart = styled.div`
-  width:33.5vw;
-  height:140px;
-  display:flex;
-  gap:15px;
-  @media screen and (max-width:800px){
-    width:60vw;
-  }
+const FirstVerticalBlockBelowPart = tw.div`
+  w-[33.5vw] h-[140px] flex gap-[15px] max-[801px]:w-[60vw]
 `;
 
-const BarcelonaWrapper = styled.div`
-  position:relative;
-  width:13vw;
-  height:140px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:20vw;
-  }
+const BarcelonaWrapper = tw.div`
+  relative w-[13vw] h-[140px] overflow-hidden rounded-[10px] max-[801px]:w-[20vw]
 `;
 
-const Barcelona = styled.div`
-  position:relative;
-  border-radius:10px;
-  background-position: center;
-  width:100%;
-  height:100%;
-  background-image: url(${BarcelonaSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
-  @media screen and (max-width:800px){
-    width:20vw;
-  }
+const Barcelona = tw.div`
+  relative rounded-[10px] bg-center w-full h-full bg-[url(/images/barcelona.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.2)] max-[801px]:w-[20vw]
 `;
 
-const BarcelonaTitle = styled.div`
-  font-size:18px;
-  font-weight:600;
-  color:white;
-  position:absolute;
-  top:12px;
-  left:12px;
+const BarcelonaTitle = tw.div`
+  text-[18px] font-semibold text-white absolute top-[12px] left-[12px]
 `;
 
-const ProvenceWrapper = styled.div`
-  position:relative;
-  width:20vw;
-  height:140px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:40vw;
-  }
+const ProvenceWrapper = tw.div`
+  relative w-[20vw] h-[140px] overflow-hidden rounded-[10px] max-[801px]:w-[40vw]
 `;
 
-const Provence = styled.div`
-  position:relative;
-  border-radius:10px;
-  background-position: center;
-  width:20vw;
-  height:140px;
-  background-image: url(${ProvenceSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.1);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
-  @media screen and (max-width:800px){
-    width:40vw;
-  }
+const Provence = tw.div`
+  relative rounded-[10px] bg-center w-[20vw] h-[140px] bg-[url(/images/provence.png)]
+  bg-cover bg-no-repeat bg-[rgb(0,0,0,0.1)] [background-blend-mode:multiply]
+  [transition:0.8s] hover:[transform:scale(1.2)] max-[801px]:w-[40vw]
 `;
 
-const ProvenceTitle = styled.div`
-  font-size:18px;
-  font-weight:600;
-  color:white;
-  position:absolute;
-  bottom:12px;
-  right:12px;
+const ProvenceTitle = tw.div`
+  text-[18px] font-semibold text-white absolute bottom-[12px] right-[12px]
 `;
 
-const SecondVerticalBlcokWrapper = styled.div`
-  position:relative;
-  width:14.5vw;
-  height:430px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:40vw;
-    height: 380px;
-  }
-  @media screen and (max-width:580px){
-    height: 330px;
-  }
+const SecondVerticalBlcokWrapper = tw.div`
+  relative w-[14.5vw] h-[430px] overflow-hidden rounded-[10px] max-[801px]:w-[40vw]
+  max-[801px]:h-[380px] max-[581px]:h-[330px]
 `;
 
-const SecondVerticalBlcok = styled.div`
-  position:absolute;
-  border-radius:10px;
-  background-position: center;
-  width:100%;
-  height:100%;
-  background-image: url(${KyotoSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.1);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
+const SecondVerticalBlcok = tw.div`
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/kyoto.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.1)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.2)]
 `;
 
-const KyotoTitle = styled.div`
-  font-size:24px;
-  font-weight:600;
-  color:white;
-  position:absolute;
-  top:20px;
-  left:20px;
+const KyotoTitle = tw.div`
+  text-[24px] font-semibold text-white absolute top-[20px] left-[20px]
 `;
 
-const ThridVerticalBlock = styled.div`
-  width:19vw;
-  height:430px;
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  @media screen and (max-width:800px){
-    width:40vw;
-    height: 380px;
-  }
-  @media screen and (max-width:580px){
-    height: 330px;
-  }
+const ThridVerticalBlock = tw.div`
+  w-[19vw] h-[430px] flex flex-col gap-[15px] max-[801px]:w-[40vw] max-[801px]:h-[380px]
+  max-[581px]:h-[330px]
 `;
 
-const ThridVerticalBlockUpperPart = styled.div`
-  width:19vw;
-  height:172px;
-  display:flex;
-  gap:15px;
-  @media screen and (max-width:800px){
-    width:40vw;
-  }
-  @media screen and (max-width:580px){
-    width:52vw;
-  }
+const ThridVerticalBlockUpperPart = tw.div`
+  w-[19vw] h-[172px] flex gap-[15px] max-[801px]:w-[40vw] max-[581px]:w-[52vw]
 `;
 
-const NewYorkWrapper = styled.div`
-  position:relative;
-  width:7.7vw;
-  height:172px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:15vw;
-  }
-  @media screen and (max-width:800px){
-    width:21vw;
-  }
+const NewYorkWrapper = tw.div`
+  relative w-[7.7vw] h-[172px] overflow-hidden rounded-[10px] max-[801px]:w-[21vw]
 `;
 
-const NewYork = styled.div`
-  position:absolute;
-  border-radius:10px;
-  background-position: center;
-  width:100%;
-  height:100%;
-  background-image: url(${NewYorkSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
+const NewYork = tw.div`
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/newyork.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.2)]
 `;
 
-const NewYorkTitle = styled.div`
-  font-size:13px;
-  font-weight:600;
-  color:white;
-  position:absolute;
-  top:10px;
-  right:12px;
+const NewYorkTitle = tw.div`
+  text-[13px] font-semibold text-white absolute top-[10px] right-[12px]
 `;
 
-const CamBridgeWrapper = styled.div`
-  position:relative;
-  width:11.3vw;
-  height:172px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:25vw;
-  }
-  @media screen and (max-width:580px){
-    width:31vw;
-  }
+const CamBridgeWrapper = tw.div`
+  relative w-[11.3vw] h-[172px] overflow-hidden rounded-[10px] max-[801px]:w-[25vw]
+  max-[581px]:w-[31vw]
 `;
 
-const CamBridge = styled.div`
-  position:absolute;
-  border-radius:10px;
-  background-position: center;
-  width:100%;
-  height:100%;
-  background-image: url(${CamBridgeSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
+const CamBridge = tw.div`
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/cambridge.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.2)]
 `;
 
-const CamBridgeTitle = styled.div`
-  font-size:16px;
-  font-weight:600;
-  color:white;
-  position:absolute;
-  bottom:10px;
-  left:10px;
+const CamBridgeTitle = tw.div`
+  text-[16px] font-semibold text-white absolute bottom-[10px] left-[10px]
 `;
 
-const AmsterdamWrapper = styled.div`
-  position:relative;
-  width:19vw;
-  height:258px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:40vw;
-  }
-  @media screen and (max-width:580px){
-    width:52vw;
-  }
+const AmsterdamWrapper = tw.div`
+  relative w-[19vw] h-[258px] overflow-hidden rounded-[10px] max-[801px]:w-[40vw]
+  max-[581px]:w-[52vw]
 `;
 
-const Amsterdam = styled.div`
-  position:absolute;
-  border-radius:10px;
-  background-position: center;
-  width:100%;
-  height:100%;
-  background-image: url(${AmsterdamSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.25);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
+const Amsterdam = tw.div`
+  absolute rounded-[10px] bg-center w-full h-full bg-[url(/images/amsterdam.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.25)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.2)]
 `;
 
-const AmsterdamTitle = styled.div`
-  position:absolute;
-  font-size:22px;
-  font-weight:600;
-  color:white;
-  position:absolute;
-  bottom:15px;
-  left:15px;
+const AmsterdamTitle = tw.div`
+  text-[22px] font-semibold text-white absolute bottom-[15px] left-[15px]
 `;
 
-const FourthVerticalBlockWrapper = styled.div`
-  position:relative;
-  width:18vw;
-  height:430px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:25vw;
-    height: 380px;
-  }
+const FourthVerticalBlockWrapper = tw.div`
+  relative w-[18vw] h-[430px] overflow-hidden rounded-[10px] max-[801px]:w-[25vw]
+  max-[801px]:h-[380px]
 `;
 
-const FourthVerticalBlock = styled.div`
-  position:absolute;
-  border-radius:10px;
-  width:100%;
-  height:100%;
-  background-position: center;
-  background-image: url(${ParisSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.1);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.1);
-  }
-  @media screen and (max-width:580px){
-    display:none;
-  }
+const FourthVerticalBlock = tw.div`
+  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/paris_2.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.1)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.1)] max-[581px]:hidden
 `;
 
-const ParisTitle = styled.div`
-  font-size:26px;
-  font-weight:600;
-  color:white;
-  position:absolute;
-  bottom:15px;
-  right:15px;
-  @media screen and (max-width:580px){
-    display:none;
-  }
+const ParisTitle = tw.div`
+  text-[26px] font-semibold text-white absolute bottom-[15px] right-[15px]
+  max-[581px]:hidden
 `;
 
-const FifthVerticalBlock = styled.div`
-width:15vw;
-height:430px;
-display:flex;
-flex-direction:column;
-gap:15px;
-@media screen and (max-width:800px){
-  width:35vw;
-  height: 380px;
-}
-@media screen and (max-width:580px){
-  width:45vw;
-  height:330px;
-}
+const FifthVerticalBlock = tw.div`
+  w-[15vw] h-[430px] flex flex-col gap-[15px] max-[801px]:w-[35vw] max-[801px]:h-[380px]
+  max-[581px]:w-[45vw] max-[581px]:h-[330px]
 `;
 
-const MexicoWrapper = styled.div`
-position:relative;
-width:15vw;
-height:245px;
-overflow:hidden;
-border-radius:10px;
-@media screen and (max-width:800px){
-  width:35vw;
-}
-@media screen and (max-width:580px){
-  width:45vw;
-}
+const MexicoWrapper = tw.div`
+  relative w-[15vw] h-[245px] overflow-hidden rounded-[10px] max-[801px]:w-[35vw]
+  max-[581px]:w-[45vw]
 `;
 
-const Mexico = styled.div`
-  position:absolute;
-  border-radius:10px;
-  width:100%;
-  height:100%;
-  background-position: center;
-  background-image: url(${MexicoSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.1);
-  }
+const Mexico = tw.div`
+  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/mexico.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.1)]
 `;
 
-const MexicoTitle = styled.div`
-  font-size:18px;
-  font-weight:550;
-  color:white;
-  position:absolute;
-  top:12px;
-  left:12px;
+const MexicoTitle = tw.div`
+  text-[18px] [font-weight:550] text-white absolute top-[12px] left-[12px]
 `;
 
-const EgyptWrapper = styled.div`
-  position:relative;
-  width:15vw;
-  height:185px;
-  overflow:hidden;
-  border-radius:10px;
-  @media screen and (max-width:800px){
-    width:35vw;
-  }
-  @media screen and (max-width:580px){
-    width:45vw;
-    height:185px;
-  }
+const EgyptWrapper = tw.div`
+  relative w-[15vw] h-[185px] overflow-hidden rounded-[10px] max-[801px]:w-[35vw]
+  max-[581px]:w-[45vw] max-[581px]:h-[185px]
 `;
 
-const Egypt = styled.div`
-  position:absolute;
-  border-radius:10px;
-  width:100%;
-  height:100%;
-  background-position: center;
-  background-image: url(${EgyptSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.15);
-  background-blend-mode: multiply;
-  transition:0.8s;
-  &:hover {
-      transform: scale(1.2);
-  }
+const Egypt = tw.div`
+  absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/egypt.png)] bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.15)] [background-blend-mode:multiply] [transition:0.8s]
+  hover:[transform:scale(1.2)]
 `;
 
-const EgyptTitle = styled.div`
-  font-size:16px;
-  font-weight:550;
-  color:white;
-  position:absolute;
-  bottom:12px;
-  left:18px;
+const EgyptTitle = tw.div`
+  text-[16px] [font-weight:550] text-white absolute bottom-[12px] left-[18px]
 `;
 
 function CityAreaInHomePage() {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useImmer } from 'use-immer';
 import { useNavigate } from '@/lib/router';
@@ -9,6 +8,7 @@ import {
 } from 'firebase/firestore';
 import { EffectCoverflow, Navigation } from 'swiper/modules';
 import produce from 'immer';
+import tw from '@/lib/tw';
 import UserContext from '../components/UserContextComponent';
 import db from '../utils/firebase-init';
 import 'swiper/css';
@@ -21,469 +21,180 @@ import BlackHeaderComponent from '../components/Headers/BlackHeader';
 import STAR from '../constants/stars';
 import type { Schedule, SchedulePlace } from '../types';
 
-const leftArrow = '/images/left-arrow.jpg';
 const rightArrow = '/images/up-arrow.png';
 
-const PageTitle = styled.div`
-  width:100%;
-  height:30px;
-  font-size:30px;
-  color:white;
-  text-shadow:2px 2px 3px black;
-  font-weight:600;
-  @media screen and (max-width:768px){
-    width:85%;
-    font-size:23px;
-  }
+const PageTitle = tw.div`
+  w-full h-[30px] text-[30px] text-white [text-shadow:2px_2px_3px_black] font-semibold
+  max-[769px]:w-[85%] max-[769px]:text-[23px]
 `;
 
-const TitleStarArea = styled.div`
-  width:100%;
-  height:auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+const TitleStarArea = tw.div`
+  w-full h-auto flex items-center justify-center
 `;
 
-const ConfirmChooseDayButton = styled.button`
-  width:20%;
-  height:35px;
-  background: linear-gradient(
-    312deg,
-    rgb(178, 228, 238) 0%,
-    rgb(161, 176, 246) 100%
-  );
-  border-radius:25px;
-  border:none;
-  color:black;
-  font-weight:600;
-  font-size:16px;
-  cursor:pointer;
+const ConfirmChooseDayButton = tw.button`
+  w-[20%] h-[35px]
+  [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,246)_100%)]
+  rounded-[25px] [border:none] text-black font-semibold text-[16px] cursor-pointer
 `;
 
-const PlaceBox = styled.div`
-  width:100%;
-  height:100%;
-  border-radius:5px;
-  cursor:pointer;
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.15);
-  background-blend-mode: multiply;
-  background-position:center;
+const PlaceBox = tw.div`
+  w-full h-full rounded-[5px] cursor-pointer bg-cover bg-no-repeat bg-[rgb(0,0,0,0.15)]
+  [background-blend-mode:multiply] bg-center
 `;
 
-const PlaceTitle = styled.div`
-  position:absolute;
-  left:15px;
-  top:12px;
-  font-size:20px;
-  font-weight:600;
-  color:white;
-  text-shadow:1px 1px 2px black;
+const PlaceTitle = tw.div`
+  absolute left-[15px] top-[12px] text-[20px] font-semibold text-white
+  [text-shadow:1px_1px_2px_black]
 `;
 
-const AddFavoriteIcon = styled.img`
-  width:25px;
-  height:25px;
-  cursor:pointer;
-  position:absolute;
-  right:15%;
-  justify-self:right;
+const AddFavoriteIcon = tw.img`
+  w-[25px] h-[25px] cursor-pointer absolute right-[15%] [justify-self:right]
 `;
 
-const PlaceCountryTitle = styled.div`
-  @import url("https://fonts.googleapis.com/css2?family=Pangolin&display=swap");
-  font-family: "Pangolin", sans-serif;
-  position:absolute;
-  right:15px;
-  bottom:12px;
-  font-size:26px;
-  font-weight:600;
-  color:#CEE8F0;
-  text-shadow:1px 1px 2px black;
+const PlaceCountryTitle = tw.div`
+  [font-family:"Pangolin",sans-serif] absolute right-[15px] bottom-[12px] text-[26px]
+  font-semibold text-[#CEE8F0] [text-shadow:1px_1px_2px_black]
 `;
 
-const PlaceEngishTitle = styled.div`
-  position:absolute;
-  left:15px;
-  top:40px;
-  font-size:16px;
-  font-weight:600;
-  color:#F4E6D3;
-  text-shadow:1px 1px 2px black;
+const PlaceEngishTitle = tw.div`
+  absolute left-[15px] top-[40px] text-[16px] font-semibold text-[#F4E6D3]
+  [text-shadow:1px_1px_2px_black]
 `;
 
-const RemindArrow = styled.img`
-  width:50px;
-  height:auto;
-  position:absolute;
-  bottom:20px;
-  right:20px;
-  animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
-  @media screen and (max-width:882px){
-    display:none;
-    }
+const RemindArrow = tw.img`
+  w-[50px] h-auto absolute bottom-[20px] right-[20px]
+  [animation:bounce_1600ms_infinite_cubic-bezier(0.445,0.05,0.55,0.95)] max-[883px]:hidden
 `;
 
-const RemindText = styled.div`
-  width:60px;
-  height:auto;
-  position:absolute;
-  bottom:-10px;
-  right:20px;
-  font-weight:550;
-  font-size:12px;
-  border-radius:3px;
-  border:1px solid black;
-  @media screen and (max-width:882px){
-    display:none;
-    }
+const RemindText = tw.div`
+  w-[60px] h-auto absolute bottom-[-10px] right-[20px] [font-weight:550] text-[12px]
+  rounded-[3px] [border:1px_solid_black] max-[883px]:hidden
 `;
 
-const VRModalBackground = styled.div<{ active?: boolean }>`
-  width:100vw;
-  height:100vh;
-  position:fixed;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  background-color:rgba(0, 0, 0, 0.7);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  display:${(props) => (props.active ? 'flex' : 'none')};
-  z-index:500;
+const VRModalBackground = tw.div<{ active?: boolean }>`
+  w-[100vw] h-[100vh] fixed top-[0] bottom-[0] left-[0] right-[0] bg-[rgba(0,0,0,0.7)]
+  justify-center items-center z-[500]
+  ${(p) => (p.active ? 'flex' : 'hidden')}
 `;
 
-const ModalBox = styled.div`
-  display:flex;
-  width:80vw;
-  height:40vw;
-  background-color:white;
-  border-radius:10px;
-  position: relative;
-  align-items:center;
-  z-index:1500;
-  flex-direction:row;
-  @media screen and (max-width:1344px){
-    height:80vh;
-  }
-  @media screen and (max-width:1133px){
-    height:85vh;
-    width:90vw;
-  }
-  @media screen and (max-width:882px){
-    height:80vh;
-    width:90vw;
-    flex-direction:column;
-  }
+const ModalBox = tw.div`
+  flex w-[80vw] h-[40vw] bg-white rounded-[10px] relative items-center z-[1500] flex-row
+  max-[1345px]:h-[80vh] max-[1134px]:h-[85vh] max-[1134px]:w-[90vw] max-[883px]:h-[80vh]
+  max-[883px]:w-[90vw] max-[883px]:flex-col
 `;
 
-const ModalImgArea = styled.div`
-  width:60%;
-  height:100%;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px;
-  @media screen and (max-width:882px){
-    width:100%;
-    justify-content:center;
-  }
+const ModalImgArea = tw.div`
+  w-[60%] h-full flex flex-wrap items-center gap-[10px] max-[883px]:w-full
+  max-[883px]:justify-center
 `;
 
-const ModalLeftArea = styled.div`
-  width:40%;
-  height:85%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:left;
-  gap:15px;
-  position:relative;
-  @media screen and (max-width:945px){
-    height:90%;
-  }
-  @media screen and (max-width:882px){
-    margin-top:20px;
-    width:100%;
-    height:50%;
-    gap:5px;
-  }
+const ModalLeftArea = tw.div`
+  w-[40%] h-[85%] flex flex-col items-center [justify-content:left] gap-[15px] relative
+  max-[946px]:h-[90%] max-[883px]:mt-[20px] max-[883px]:w-full max-[883px]:h-[50%]
+  max-[883px]:gap-[5px]
 `;
 
-const IFrame = styled.iframe`
-  width:90%;
-  height:90%;
-  border:0;
-  border-radius:13px;
-  cursor:pointer;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  @media screen and (max-width:882px){
-    width:90%;
-    height:95%;
-  }
+const IFrame = tw.iframe`
+  w-[90%] h-[90%] [border:0] rounded-[13px] cursor-pointer
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] max-[883px]:w-[90%]
+  max-[883px]:h-[95%]
 `;
 
-const ModalPlaceTitle = styled.div`
-  font-size:30px;
-  font-weight:600;
-  width:75%;
-  @media screen and (max-width:882px){
-    font-size:25px;
-  }
+const ModalPlaceTitle = tw.div`
+  text-[30px] font-semibold w-[75%] max-[883px]:text-[25px]
 `;
 
-const ModalPlaceSubtitle = styled.div`
-  font-size:18px;
-  font-weight:550;
-  width:75%;
-  color:grey;
-  @media screen and (max-width:1344px){
-    font-size:16px;
-  }
-  @media screen and (max-width:1133px){
-    font-size:15px;
-  }
-  @media screen and (max-width:945px){
-    font-size:14px;
-  }
-  @media screen and (max-width:882px){
-  display:none;
-  }
+const ModalPlaceSubtitle = tw.div`
+  text-[18px] [font-weight:550] w-[75%] [color:grey] max-[1345px]:text-[16px]
+  max-[1134px]:text-[15px] max-[946px]:text-[14px] max-[883px]:hidden
 `;
 
-const ModalPlaceDescription = styled.div`
-  font-size:15px;
-  width:75%;
-  text-align: justify;
-  height:auto;
-  @media screen and (max-width:882px){
-    width:85%;
-  }
+const ModalPlaceDescription = tw.div`
+  text-[15px] w-[75%] text-justify h-auto max-[883px]:w-[85%]
 `;
 
-const SeperateLine = styled.div`
-  width:75%;
-  height:1.5px;
-  margin-top:10px;
-  margin-bottom:10px;
-  background-color:black;
-  flex-shrink:0;
-  @media screen and (max-width:882px){
-    width:85%;
-    margin-top:5px;
-    margin-bottom:5px;
-  }
+const SeperateLine = tw.div`
+  w-[75%] h-[1.5px] mt-[10px] mb-[10px] bg-black shrink-0 max-[883px]:w-[85%]
+  max-[883px]:mt-[5px] max-[883px]:mb-[5px]
 `;
 
-const ModalPlaceAddress = styled.div`
-  width:75%;
-  color:#696969;
-  font-size:13px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:10px;
-  text-align:justify;
-  @media screen and (max-width:882px){
-    display:none;
-  }
-  `;
-
-const ModalPlaceCountry = styled.div`
-  width:20%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:20px;
-  background-color:black;
-  padding:5px 5px 5px 5px;
-  border-radius:3px;
-  color:white;
-  font-weight:500;
+const ModalPlaceAddress = tw.div`
+  w-[75%] text-[#696969] text-[13px] flex flex-col items-start gap-[10px] text-justify
+  max-[883px]:hidden
 `;
 
-const AddToScheduleButton = styled.button`
-  width:20%;
-  height:40px;
-  border-radius:5px;
-  background-color:grey;
-  font-weight:500;
-  border:none;
-  color:white;
-  cursor:pointer;
-  font-size:15px;
-  @media screen and (max-width:1133px){
-    width:35%;
-  }
-  @media screen and (max-width:882px){
-    display:none;
-  }
+const ModalPlaceCountry = tw.div`
+  w-[20%] flex items-center justify-center h-[20px] bg-black p-[5px_5px_5px_5px]
+  rounded-[3px] text-white font-medium
 `;
 
-const SmallScreenAddButton = styled.button`
-  display:none;
-  @media screen and (max-width:882px){
-    display:block;
-    width:200px;
-    height:40px;
-    flex-shrink:0;
-    border-radius:25px;
-    background-color:grey;
-    font-weight:500;
-    border:none;
-    color:white;
-    cursor:pointer;
-    font-size:17px;
-    margin-bottom:30px;
-    margin-top:10px;
-  }
+const AddToScheduleButton = tw.button`
+  w-[20%] h-[40px] rounded-[5px] [background-color:grey] font-medium [border:none]
+  text-white cursor-pointer text-[15px] max-[1134px]:w-[35%] max-[883px]:hidden
 `;
 
-const CloseModalButton = styled.button`
-  height:25px;
-  width:25px;
-  position:absolute;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  right:20px;
-  top:20px;
-  text-align:center;
-  border:none;
-  border-radius:50%;
-  background-color:black;
-  color:white;
-  cursor:pointer;
+const SmallScreenAddButton = tw.button`
+  hidden max-[883px]:block max-[883px]:w-[200px] max-[883px]:h-[40px] max-[883px]:shrink-0
+  max-[883px]:rounded-[25px] max-[883px]:[background-color:grey] max-[883px]:font-medium
+  max-[883px]:[border:none] max-[883px]:text-white max-[883px]:cursor-pointer
+  max-[883px]:text-[17px] max-[883px]:mb-[30px] max-[883px]:mt-[10px]
 `;
 
-const LeftButton = styled.button`
-  height:25px;
-  width:25px;
-  position:absolute;
-  background-image: url(${leftArrow});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  left:20px;
-  top:20px;
-  text-align:center;
-  border:none;
-  border-radius:50%;
-  color:white;
-  cursor:pointer;
+const CloseModalButton = tw.button`
+  h-[25px] w-[25px] absolute flex items-center justify-center right-[20px] top-[20px]
+  text-center [border:none] rounded-[50%] bg-black text-white cursor-pointer
 `;
 
-const TransparentBackground = styled.div`
-  width:100vw;
-  height:450px;
-  background-color:white;
-  opacity:0.4;
-  z-index:100;
-  position:absolute;
-  top:30%;
+const LeftButton = tw.button`
+  h-[25px] w-[25px] absolute bg-[url(/images/left-arrow.jpg)] bg-cover bg-no-repeat
+  bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] left-[20px] top-[20px] text-center
+  [border:none] rounded-[50%] text-white cursor-pointer
 `;
 
-const CurrentSchedulesTitle = styled.div`
-  width:100%;
-  height:30px;
-  font-size:17px;
-  font-weight:600;
-  margin-top:20px;
-  margin-bottom:10px;
+const TransparentBackground = tw.div`
+  w-[100vw] h-[450px] bg-white opacity-[0.4] z-[100] absolute top-[30%]
 `;
 
-const ScheduleChoicesBoxWrapper = styled.div`
-  display:flex;
-  flex-flow:wrap;
-  height:auto;
-  width:80%;
-  align-items:center;
-  justify-content:center;
-  gap:15px;
-  padding-top:10px;
-  padding-bottom:20px;
-  padding-left:2px;
-  &:after {
-    content: "";
-    width:455px;
-  }
-  overflow:auto;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 5px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
+const CurrentSchedulesTitle = tw.div`
+  w-full h-[30px] text-[17px] font-semibold mt-[20px] mb-[10px]
 `;
 
-const Loading = styled.div`
-  margin: auto;
-  border: 10px solid #EAF0F6;
-  border-radius: 50%;
-  border-top: 10px solid #FF7A59;
-  width: 70px;
-  height: 70px;
-  animation: spinner 3s linear infinite;
+const ScheduleChoicesBoxWrapper = tw.div`
+  flex [flex-flow:wrap] h-auto w-[80%] items-center justify-center gap-[15px] pt-[10px]
+  pb-[20px] pl-[2px] after:content-[""] after:w-[455px] overflow-auto
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3]
 `;
 
-const ScheduleChoicesBox = styled.div<{ clicked?: boolean }>`
-  display:flex;
-  align-items:center;
-  width:220px;
-  height:60px;
-  border-radius:10px;
-  cursor:pointer;
-  background-color:${(props) => (props.clicked ? '#E6D1F2' : '#e7f5fe')};
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  &:hover {
-    background-color:#E6D1F2;
-  }
+const Loading = tw.div`
+  m-auto [border-right:10px_solid_#EAF0F6] [border-bottom:10px_solid_#EAF0F6]
+  [border-left:10px_solid_#EAF0F6] rounded-[50%] [border-top:10px_solid_#FF7A59] w-[70px]
+  h-[70px] [animation:spinner_3s_linear_infinite]
 `;
 
-const ScheduleChoiceTitle = styled.div`
-  width:170px;
-  text-align:left;
-  height:auto;
-  font-weight:500;
-  font-size:15px;
-  margin-left:20px;
+const ScheduleChoicesBox = tw.div<{ clicked?: boolean }>`
+  flex items-center w-[220px] h-[60px] rounded-[10px] cursor-pointer
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] hover:bg-[#E6D1F2]
+  ${(p) => (p.clicked ? 'bg-[#E6D1F2]' : 'bg-[#e7f5fe]')}
 `;
 
-const ModalContentWrapper = styled.div`
-  width:80%;
-  height:80%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  z-index:500;
-  overflow:auto;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 5px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
+const ScheduleChoiceTitle = tw.div`
+  w-[170px] text-left h-auto font-medium text-[15px] ml-[20px]
+`;
+
+const ModalContentWrapper = tw.div`
+  w-[80%] h-[80%] flex flex-col items-center z-[500] overflow-auto
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[5px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3]
 `;
 
 function VR() {

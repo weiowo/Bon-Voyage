@@ -4,12 +4,12 @@ import React, {
 import Swal from 'sweetalert2';
 import { useLocation, useNavigate } from '@/lib/router';
 import { GoogleMap, useLoadScript, type LoadScriptProps } from '@react-google-maps/api';
-import styled from 'styled-components';
 import {
   doc, getDoc, updateDoc, arrayRemove, arrayUnion, setDoc,
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
+import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
 import BlackHeaderComponent from '../components/Headers/BlackHeader';
 import UserContext from '../components/UserContextComponent';
@@ -41,105 +41,38 @@ import PLACE_PHOTO from '../constants/place.photo';
 import REMINDER_ICONS from '../constants/reminder.icon';
 import type { NearbyPlaces, Schedule, SchedulePlace } from '../types';
 
-const CITY_BG = '/images/city.png';
-
-const Banner = styled.div`
-  width:100vw;
-  height:50vw;
-  background-image: url(${CITY_BG});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-blend-mode: multiply;
+const Banner = tw.div`
+  w-[100vw] h-[50vw] bg-[url(/images/city.png)] bg-cover bg-no-repeat
+  [background-blend-mode:multiply]
 `;
 
-const CityTitle = styled.div`
-  width:100vw;
-  height:auto;
-  z-index:10;
-  font-size:35px;
-  font-weight:600;
-  position:absolute;
-  top:130px;
-  @media screen and (max-width:1000px){
-    top:100px;
-    font-size:30px;
-  }
-  @media screen and (max-width:800px){
-    top:70px;
-    font-size:30px;
-  }
-  @media screen and (max-width:520px){
-    top:60px;
-    font-size:20px;
-  }
-  @media screen and (max-width:400px){
-    top:50px;
-    font-size:20px;
-  }
+const CityTitle = tw.div`
+  w-[100vw] h-auto z-[10] text-[35px] font-semibold absolute top-[130px]
+  max-[1001px]:top-[100px] max-[1001px]:text-[30px] max-[801px]:top-[70px]
+  max-[801px]:text-[30px] max-[521px]:top-[60px] max-[521px]:text-[20px]
+  max-[401px]:top-[50px] max-[401px]:text-[20px]
 `;
 
-const ContentArea = styled.div`
-  width:100vw;
-  height:400px;
-  display:flex;
-  flex-direction:column;
+const ContentArea = tw.div`
+  w-[100vw] h-[400px] flex flex-col
 `;
 
-const AttractionAreaTitle = styled.div`
-  width:100vw;
-  height:auto;
-  font-size:26px;
-  display:flex;
-  justify-content:center;
-  margin-top:50px;
-  font-weight:600;
+const AttractionAreaTitle = tw.div`
+  w-[100vw] h-auto text-[26px] flex justify-center mt-[50px] font-semibold
 `;
 
-const AttractionWrapper = styled.div`
-  display:flex;
-  width:100vw;
-  height:auto;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-top:0px;
-  @media screen and (max-width:1000px){
-    gap:20px;
-  }
-  @media screen and (max-width:890px){
-    gap:10px;
-  }
-  @media screen and (max-width:777px){
-    gap:10px;
-  }
-  @media screen and (max-width:513px){
-    gap:10px;
-  }
+const AttractionWrapper = tw.div`
+  flex w-[100vw] h-auto flex-wrap justify-center mt-[0px] max-[1001px]:gap-[20px]
+  max-[891px]:gap-[10px] max-[778px]:gap-[10px] max-[514px]:gap-[10px]
 `;
 
-const RestaurantAreaTitle = styled.div`
-  width:100vw;
-  height:auto;
-  font-size:26px;
-  display:flex;
-  justify-content:center;
-  margin-top:50px;
-  font-weight:600;
+const RestaurantAreaTitle = tw.div`
+  w-[100vw] h-auto text-[26px] flex justify-center mt-[50px] font-semibold
 `;
 
-const RestaurantWrapper = styled.div`
-  display:flex;
-  width:100vw;
-  height:auto;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin-top:0px;
-  gap:30px;
-  @media screen and (max-width:777px){
-    gap:10px;
-  }
-  @media screen and (max-width:513px){
-    gap:10px;
-  }
+const RestaurantWrapper = tw.div`
+  flex w-[100vw] h-auto flex-wrap justify-center mt-[0px] gap-[30px] max-[778px]:gap-[10px]
+  max-[514px]:gap-[10px]
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

@@ -7,368 +7,137 @@ import { HashLink, useLocation, useNavigate } from '@/lib/router';
 import React, { useEffect } from 'react';
 import { useImmer } from 'use-immer';
 import type { Draft } from 'immer';
-import styled from 'styled-components';
 import {
   ref, uploadBytes,
   getDownloadURL,
 } from 'firebase/storage';
+import tw from '@/lib/tw';
 import db, { storage } from '../utils/firebase-init';
 import HeaderComponent from '../components/Headers/Header';
 import type { Article } from '../types';
 
-const ShareBanner2 = '/images/share_banner2.jpeg';
-const CoverDefaultPhoto = '/images/cover_photo_default.png';
-
-const PageWrapper = styled.div`
-  width:100vw;
-  height:100vh;
+const PageWrapper = tw.div`
+  w-[100vw] h-[100vh]
 `;
 
-const ArticleCoverImage = styled.div`
-  width:100vw;
-  height:500px;
-  align-items:center;
-  justify-content:center;
-  background-image: url(${ShareBanner2});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  position:relative;
-  background-position:center;
-  object-fit:cover;
-  @media screen and (max-width:900px){
-    height:300px;
-  }
+const ArticleCoverImage = tw.div`
+  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.jpeg)]
+  bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
+  bg-center object-cover max-[901px]:h-[300px]
 `;
 
-const ArticlePageBelowPart = styled.div`
-  width:100vw;
-  height:500px;
-  flex-direction:column;
-  align-items:center;
-  display:flex;
+const ArticlePageBelowPart = tw.div`
+  w-[100vw] h-[500px] flex-col items-center flex
 `;
 
-const ArticleEditPart = styled.div`
-  width:75vw;
-  height:auto;
-  display:flex;
-  justify-content:center;
-  @media screen and (max-width:900px){
-    width:85vw;
-  }
+const ArticleEditPart = tw.div`
+  w-[75vw] h-auto flex justify-center max-[901px]:w-[85vw]
 `;
 
-const ArticleCoverPhoto = styled.input`
-  display:none;
+const ArticleCoverPhoto = tw.input`
+  hidden
 `;
 
-const ArticleCoverPhotoWrapper = styled.label`
-  width:50vw;
-  height:350px;
-  margin-left:5px;
-  margin-top:2px;
-  border-radius:3px;
-  outline:none;
-  border:1px solid black;
-  border:none;
-  background-image: url(${CoverDefaultPhoto});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-blend-mode: multiply;
-  background-position:center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  cursor:pointer;
-  object-fit:cover;
-  @media screen and (max-width:900px){
-    width:55vw;
-  }
-  @media screen and (max-width:900px){
-    width:55vw;
-  }
-  @media screen and (max-width:750px){
-    width:80vw;
-  }
+const ArticleCoverPhotoWrapper = tw.label`
+  w-[50vw] h-[350px] ml-[5px] mt-[2px] rounded-[3px] [outline:none] [border:none]
+  bg-[url(/images/cover_photo_default.png)] bg-cover bg-no-repeat
+  [background-blend-mode:multiply] bg-center shrink-0
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] cursor-pointer object-cover max-[901px]:w-[55vw]
+  max-[751px]:w-[80vw]
 `;
 
-const Description = styled.textarea`
-  padding-left:10px;
-  padding-top:10px;
-  width:calc(50vw - 3px);
-  margin-left:3px;
-  margin-bottom:10px;
-  height:100px;
-  font-size:16px;
-  margin-top:20px;
-  outline:none;
-  flex-shrink: 0;
-  border-radius:5px;
-  border: none;
-  background-color: transparent;
-  resize: none;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  @media screen and (max-width:900px){
-    width:calc(55vw - 3px);
-    margin-top:10px;
-  }
-  @media screen and (max-width:750px){
-    width:80vw;
-  }
+const Description = tw.textarea`
+  pl-[10px] pt-[10px] w-[calc(50vw_-_3px)] ml-[3px] mb-[10px] h-[100px] text-[16px]
+  mt-[20px] [outline:none] shrink-0 rounded-[5px] [border:none] bg-transparent [resize:none]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-[901px]:w-[calc(55vw_-_3px)]
+  max-[901px]:mt-[10px] max-[751px]:w-[80vw]
 `;
 
-const ArticleTitleButtonArea = styled.div`
-  width:75vw;
-  height:auto;
-  display:flex;
-  @media screen and (max-width:900px){
-    width:85vw;
-    justify-content:space-between;
-    gap:0px;
-  }
+const ArticleTitleButtonArea = tw.div`
+  w-[75vw] h-auto flex max-[901px]:w-[85vw] max-[901px]:justify-between
+  max-[901px]:gap-[0px]
 `;
 
-const ArticleTitle = styled.input`
-  width:55vw;
-  height:auto;
-  font-size:35px;
-  font-weight:600;
-  text-align:left;
-  margin-top:20px;
-  margin-bottom:20px;
-  outline:none;
-  border:none;
-  @media screen and (max-width:900px){
-    width:60vw;
-  }
-  @media screen and (max-width:750px){
-    width:50vw;
-    font-size:27px;
-  }
+const ArticleTitle = tw.input`
+  w-[55vw] h-auto text-[35px] font-semibold text-left mt-[20px] mb-[20px] [outline:none]
+  [border:none] max-[901px]:w-[60vw] max-[751px]:w-[50vw] max-[751px]:text-[27px]
 `;
 
-const EditingPart = styled.div`
-  width:55vw;
-  height:600px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:5px;
-  overflow:auto;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
-  @media screen and (max-width:900px){
-    width:60vw;
-  }
-  @media screen and (max-width:750px){
-    width:85vw
-  }
+const EditingPart = tw.div`
+  w-[55vw] h-[600px] flex flex-col items-start gap-[5px] overflow-auto
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[901px]:w-[60vw] max-[751px]:w-[85vw]
 `;
 
-const PlaceArea = styled.div`
-  width:calc(50vw - 3px);
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  @media screen and (max-width:900px){
-    width:calc(55vw - 3px);
-  }
-  @media screen and (max-width:750px){
-    width:80vw;
-  }
+const PlaceArea = tw.div`
+  w-[calc(50vw_-_3px)] flex flex-col items-start max-[901px]:w-[calc(55vw_-_3px)]
+  max-[751px]:w-[80vw]
 `;
 
-const ScheduleSummaryPart = styled.div`
-  width:20vw;
-  height:auto;
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  margin-left:20px;
-  padding-left:10px;
-  @media screen and (max-width:900px){
-    width:25vw;
-  }
-  @media screen and (max-width:750px){
-  display:none;
-  }
+const ScheduleSummaryPart = tw.div`
+  w-[20vw] h-auto flex flex-col gap-[15px] ml-[20px] pl-[10px] max-[901px]:w-[25vw]
+  max-[751px]:hidden
 `;
 
-const ScheduleSummaryDayAndPlacePart = styled.div`
-  display:flex;
-  width:20vw;
-  height:auto;
-  gap:10px;
-  align-items:flex-start;
-  padding-left:15px;
-  @media screen and (max-width:900px){
-    width:25vw;
-  }
+const ScheduleSummaryDayAndPlacePart = tw.div`
+  flex w-[20vw] h-auto gap-[10px] items-start pl-[15px] max-[901px]:w-[25vw]
 `;
 
-const ScheduleSummaryDayPart = styled.div`
-  width:5vw;
-  height:auto;
-  border-radius:2px;
-  background-color:#729DC8;
-  color:white;
-  font-weight:550;
-  gap:10px;
-  @media screen and (max-width:900px){
-    width:7vw;
-  }
+const ScheduleSummaryDayPart = tw.div`
+  w-[5vw] h-auto rounded-[2px] bg-[#729DC8] text-white [font-weight:550] gap-[10px]
+  max-[901px]:w-[7vw]
 `;
 
-const ScheduleSummaryPlacePart = styled.div`
-  width:15vw;
-  height:auto;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  @media screen and (max-width:900px){
-    width:18vw;
-  }
+const ScheduleSummaryPlacePart = tw.div`
+  w-[15vw] h-auto flex flex-col gap-[8px] max-[901px]:w-[18vw]
 `;
 
-const SummaryPlaceTitle = styled.div`
-  font-weight:500;
-  font-size:15px;
-  text-align:left;
+const SummaryPlaceTitle = tw.div`
+  font-medium text-[15px] text-left
 `;
 
-const DayTitle = styled.div`
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:70px;
-  height:30px;
-  background-color:#296D98;
-  border-radius:3px;
-  letter-spacing:2px;
-  font-weight:550;
-  color:white;
+const DayTitle = tw.div`
+  flex items-center justify-center w-[70px] h-[30px] bg-[#296D98] rounded-[3px]
+  tracking-[2px] [font-weight:550] text-white
 `;
 
-const PlaceTitle = styled.div`
-  display:flex;
-  align-items:center;
-  justify-content:left;
-  width:auto;
-  height:30px;
-  padding-left:10px;
-  margin-bottom:0px;
-  margin-right:20px;
-  font-weight:600;
-  font-size:18px;
-  letter-spacing:2px;
-  @media screen and (max-width:900px){
-    height:40px;
-  }
+const PlaceTitle = tw.div`
+  flex items-center [justify-content:left] w-auto h-[30px] pl-[10px] mb-[0px] mr-[20px]
+  font-semibold text-[18px] tracking-[2px] max-[901px]:h-[40px]
 `;
 
-const PlaceImg = styled.img`
-  width:100px;
-  height:100px;
-  position:relative;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+const PlaceImg = tw.img`
+  w-[100px] h-[100px] relative [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)]
 `;
 
-const ImgDisplayArea = styled.div`
-  display:flex;
-  width:55vw;
-  height:auto;
-  gap:10px;
-  margin-left:10px;
-  position:relative;
+const ImgDisplayArea = tw.div`
+  flex w-[55vw] h-auto gap-[10px] ml-[10px] relative
 `;
 
-const DeletePlaceImgButton = styled.button`
-  position:absolute;
-  top:5px;
-  right:5px;
-  z-index:10;
-  border-radius:50%;
-  cursor:pointer;
-  background-color:red;
-  border:1px solid red;
-  color:white;
-  font-weight:550;
-  height:20px;
-  width:20px;
-  border:none;
+const DeletePlaceImgButton = tw.button`
+  absolute top-[5px] right-[5px] z-[10] rounded-[50%] cursor-pointer [background-color:red]
+  text-white [font-weight:550] h-[20px] w-[20px] [border:none]
 `;
 
-const ButtonArea = styled.div`
-  width:20vw;
-  height:auto;
-  display:flex;
-  align-items:center;
-  justify-content:left;
-  gap:20px;
-  margin-left:15px;
-  @media screen and (max-width:750px){
-    width:20vw;
-    gap:10px;
-    margin-left:0px;
-  }
-  @media screen and (max-width:450px){
-    width:30vw;
-  }
+const ButtonArea = tw.div`
+  w-[20vw] h-auto flex items-center [justify-content:left] gap-[20px] ml-[15px]
+  max-[751px]:w-[20vw] max-[751px]:gap-[10px] max-[751px]:ml-[0px] max-[451px]:w-[30vw]
 `;
 
-const SaveButton = styled.button`
-  width:70px;
-  height:40px;
-  background-color:#296D98;
-  color:white;
-  border-radius:5px;
-  border:none;
-  font-size:16px;
-  cursor:pointer;
-  font-weight:600;
-  flex-shrink:0;
-  @media screen and (max-width:750px){
-    width:50px;
-    font-size:13px;
-  }
-  @media screen and (max-width:450px){
-    width:50px;
-    font-size:13px;
-  }
+const SaveButton = tw.button`
+  w-[70px] h-[40px] bg-[#296D98] text-white rounded-[5px] [border:none] text-[16px]
+  cursor-pointer font-semibold shrink-0 max-[751px]:w-[50px] max-[751px]:text-[13px]
+  max-[451px]:w-[50px] max-[451px]:text-[13px]
 `;
 
-const PublishedButton = styled.button`
-  width:70px;
-  height:40px;
-  background-color:#296D98;
-  color:white;
-  border-radius:5px;
-  border:none;
-  cursor:pointer;
-  font-size:16px;
-  font-weight:600;
-  flex-shrink:0;
-  @media screen and (max-width:750px){
-    width:50px;
-    font-size:13px;
-  }
-  @media screen and (max-width:450px){
-    width:50px;
-    font-size:13px;
-  }
+const PublishedButton = tw.button`
+  w-[70px] h-[40px] bg-[#296D98] text-white rounded-[5px] [border:none] cursor-pointer
+  text-[16px] font-semibold shrink-0 max-[751px]:w-[50px] max-[751px]:text-[13px]
+  max-[451px]:w-[50px] max-[451px]:text-[13px]
 `;
 
 function EditPage() {

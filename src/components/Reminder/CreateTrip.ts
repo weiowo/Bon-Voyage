@@ -1,108 +1,39 @@
-import styled from 'styled-components';
 import { Link } from '@/lib/router';
+import tw from '@/lib/tw';
 
-const RemindWrapper = styled.div`
-  width:26vw;
-  height:180px;
-  display:flex;
-  gap:20px;
-  @media screen and (max-width:1180px){
-    width:100%;
-    height:150px;
-  }
-  @media screen and (max-width:1000px){
-    width:100%;
-  }
-  @media screen and (max-width:748px){
-    justify-content:center;
-    width:100%;
-  }
-  @media screen and (max-width:480px){
-    height:130px;
-}`;
-
-export const StyledBlackLink = styled(Link)`
-  cursor:pointer;
-  text-decoration:none;
-  color:black;
-  border:none;
+const RemindWrapper = tw.div`
+  w-[26vw] h-[180px] flex gap-[20px] max-[1181px]:w-full max-[1181px]:h-[150px]
+  max-[1001px]:w-full max-[749px]:justify-center max-[749px]:w-full max-[481px]:h-[130px]
 `;
 
-export const ClickAndAdd = styled.div`
-  width:80px;
-  height:auto;
-  font-size:15px;
-  background-color:white;
-  position:absolute;
-  bottom:35px;
-  font-weight:600;
-  left:10px;
-  border: 1.5px solid black;
-  border-radius:5px;
-  cursor:pointer;
-  @media screen and (max-width:400px){
-    font-size:13px;
-    left:5px;
-}`;
+export const StyledBlackLink = tw(Link)`
+  cursor-pointer [text-decoration:none] text-black [border:none]
+`;
 
-export const RemindText = styled.div`
-  width:100%;
-  font-weight:550;
-  font-size:15px;
-  text-align:left;
-  @media screen and (max-width:1180px){
-    font-size:13px;
-  }
-  @media screen and (max-width:400px){
-    font-size:13px;
-  }`;
+export const ClickAndAdd = tw.div`
+  w-[80px] h-auto text-[15px] bg-white absolute bottom-[35px] font-semibold left-[10px]
+  [border:1.5px_solid_black] rounded-[5px] cursor-pointer max-[401px]:text-[13px]
+  max-[401px]:left-[5px]
+`;
 
-export const RemindIcon = styled.img`
-  width:180px;
-  height:180px;
-  @media screen and (max-width:1180px){
-    width:150px;
-    height:150px;
-  }
-  @media screen and (max-width:1000px){
-    width:140px;
-    height:140px;
-  }
-  @media screen and (max-width:480px){
-    width:130px;
-    height:130px;
-}`;
+export const RemindText = tw.div`
+  w-full [font-weight:550] text-[15px] text-left max-[1181px]:text-[13px]
+  max-[401px]:text-[13px]
+`;
 
-export const SuitcaseIcon = styled.img`
-  width: 100px;
-  height:100px;
-  @media screen and (max-width:1000px){
-    width:95px;
-    height:95px;
-  }
-  @media screen and (max-width:480px){
-    height:90px;
-    width:90px;
-}`;
+export const RemindIcon = tw.img`
+  w-[180px] h-[180px] max-[1181px]:w-[150px] max-[1181px]:h-[150px] max-[1001px]:w-[140px]
+  max-[1001px]:h-[140px] max-[481px]:w-[130px] max-[481px]:h-[130px]
+`;
 
-export const RemindRightPart = styled.div`
-  width:70%;
-  height:180px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  position:relative;
-  @media screen and (max-width:1180px){
-    height:150px;
-  }
-  @media screen and (max-width:1000px){
-    height:140px;
-  }
-  @media screen and (max-width:1000px){
-    width:auto;
-  }
-  @media screen and (max-width:480px){
-    height:130px;
-}`;
+export const SuitcaseIcon = tw.img`
+  w-[100px] h-[100px] max-[1001px]:w-[95px] max-[1001px]:h-[95px] max-[481px]:h-[90px]
+  max-[481px]:w-[90px]
+`;
+
+export const RemindRightPart = tw.div`
+  w-[70%] h-[180px] flex flex-col justify-between relative max-[1181px]:h-[150px]
+  max-[1001px]:h-[140px] max-[1001px]:w-auto max-[481px]:h-[130px]
+`;
 
 export default RemindWrapper;

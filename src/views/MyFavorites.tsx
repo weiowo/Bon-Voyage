@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import React, {
   useEffect, useContext, useState, useRef, useCallback,
@@ -10,6 +9,7 @@ import { Link, useNavigate } from '@/lib/router';
 import { GoogleMap, useLoadScript, type LoadScriptProps } from '@react-google-maps/api';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
+import tw from '@/lib/tw';
 import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
 import db from '../utils/firebase-init';
@@ -40,117 +40,48 @@ import type {
   Article, Attraction, Schedule, SchedulePlace,
 } from '../types';
 
-const PageWrapper = styled.div`
-  width:100vw;
-  height:calc(100vh - 60px);
-  display:flex;
-  flex-direction:row;
-  padding-top:60px;
-  @media screen and (max-width:800px){
-  justify-content:center;
-  }
+const PageWrapper = tw.div`
+  w-[100vw] h-[calc(100vh_-_60px)] flex flex-row pt-[60px] max-[801px]:justify-center
 `;
 
-const MyArticlesArea = styled.div`
-  width:80vw;
-  height:85vh;
-  display:flex;
-  flex-direction:column;
-  padding-left:50px;
-  margin-top:30px;
-  @media screen and (max-width:800px){
-    padding-left:0px;
-  }
-  @media screen and (max-width:800px){
-    width:93vw;
-  }
+const MyArticlesArea = tw.div`
+  w-[80vw] h-[85vh] flex flex-col pl-[50px] mt-[30px] max-[801px]:pl-[0px]
+  max-[801px]:w-[93vw]
 `;
 
-const MyPageTitle = styled.div`
-  width:90%;
-  height:auto;
-  font-size:28px;
-  font-weight:600;
-  text-align:left;
-  @media screen and (max-width:800px){
-    text-align:center;
-    font-size:25px;
-    width:100%;
-  }
+const MyPageTitle = tw.div`
+  w-[90%] h-auto text-[28px] font-semibold text-left max-[801px]:text-center
+  max-[801px]:text-[25px] max-[801px]:w-full
 `;
 
-const Tabs = styled.div`
-  display:flex;
-  width:90%;
-  height:auto;
-  gap:20px;
-  margin-top:10px;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+const Tabs = tw.div`
+  flex w-[90%] h-auto gap-[20px] mt-[10px] max-[801px]:w-full
 `;
 
-const Tab = styled.div<{ isClicked?: boolean }>`
-  width:50px;
-  height:30px;
-  font-size:15px;
-  font-weight:500;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background-color:${(props) => (props.isClicked ? '#E6D1F2' : '')};
-  color:${(props) => (props.isClicked ? 'black' : 'grey')};
-  cursor:pointer;
+const Tab = tw.div<{ isClicked?: boolean }>`
+  w-[50px] h-[30px] text-[15px] font-medium flex items-center justify-center cursor-pointer
+  ${(p) => (p.isClicked ? 'bg-[#E6D1F2]' : '')}
+  ${(p) => (p.isClicked ? 'text-black' : '[color:grey]')}
 `;
 
-const MyArticlesContainer = styled.div<{ isClicked?: boolean }>`
-  width:90%;
-  flex-wrap:wrap;
-  gap:15px;
-  margin-top:10px;
-  padding-bottom:10px;
-  padding-left:5px;
-  display:${(props) => (props.isClicked ? 'flex' : 'none')};
-  overflow:auto;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
-  @media screen and (max-width:800px){
-    width:100%;
-    justify-content:center;
-    padding-left:0px;
-  }
-  @media screen and (max-width:380px){
-    gap:5px;
-  }
+const MyArticlesContainer = tw.div<{ isClicked?: boolean }>`
+  w-[90%] flex-wrap gap-[15px] mt-[10px] pb-[10px] pl-[5px] overflow-auto
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-full max-[801px]:justify-center
+  max-[801px]:pl-[0px] max-[381px]:gap-[5px]
+  ${(p) => (p.isClicked ? 'flex' : 'hidden')}
 `;
 
-const UpperLine = styled.div`
-  height:1px;
-  flex-shrink:0;
-  background-color:grey;
-  width:90%;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+const UpperLine = tw.div`
+  h-[1px] shrink-0 [background-color:grey] w-[90%] max-[801px]:w-full
 `;
 
-const StyledLink = styled(Link)`
-  cursor:pointer;
-  text-decoration:none;
-  color:white;
-  border:none;
+const StyledLink = tw(Link)`
+  cursor-pointer [text-decoration:none] text-white [border:none]
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

@@ -1,15 +1,7 @@
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-const Line = styled.div`
-  display:flex;
-  width:1.8px;
-  height:85vh;
-  background-color:#D3D3D3;
-  align-items:center;
-  margin-top:20px;
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const Line = tw.div`
+  flex w-[1.8px] h-[85vh] bg-[#D3D3D3] items-center mt-[20px] max-[801px]:hidden
 `;
 
 export default Line;

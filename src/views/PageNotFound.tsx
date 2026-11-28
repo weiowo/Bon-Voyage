@@ -1,16 +1,9 @@
-import styled from 'styled-components';
 import { Link } from '@/lib/router';
+import tw from '@/lib/tw';
 
-const PageNotFoundBanner = '/images/404.svg';
-
-const PageWrapper = styled.div`
-  width:100vw;
-  height:100vh;
-  background-image: url(${PageNotFoundBanner});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-position:center;
-  cursor:pointer;
+const PageWrapper = tw.div`
+  w-[100vw] h-[100vh] bg-[url(/images/404.svg)] bg-cover bg-no-repeat bg-center
+  cursor-pointer
 `;
 
 function PageNotFound() {

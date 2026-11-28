@@ -1,73 +1,35 @@
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-const DayContainer = styled.div`
-  height:60px;
-  display:flex;
-  width:100%;
-  justify-content:left;
-  box-shadow: 3px 4px 8px 0px rgba(0, 0, 0, 0.2);
-  gap:5px;
-  z-index:15;
-  overflow:scroll;
-  flex-shrink:0;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    display:none;
-  }
-  &::-webkit-scrollbar {
-    width: 3px;
-    display:none;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    display:none;
-  }
+const DayContainer = tw.div`
+  h-[60px] flex w-full [justify-content:left] [box-shadow:3px_4px_8px_0px_rgba(0,0,0,0.2)]
+  gap-[5px] z-[15] overflow-scroll shrink-0
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:hidden
+  [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar]:hidden
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:hidden
 `;
 
-export const DayContainerTitle = styled.div<{ active?: boolean }>`
-  display:flex;
-  align-items:center;
-  font-size:12px;
-  justify-content:center;
-  width:100px;
-  height:60px;
-  color:#616161;
-  flex-shrink:0;
-  cursor:move;
-  border: 0.5px solid #616161;
-  font-weight:600;
-  letter-spacing:1.5px;
-  background-color:${(props) => (props.active ? '#63B5DC' : 'white')};
-  color:${(props) => (props.active ? 'white' : '#616161')};
+export const DayContainerTitle = tw.div<{ active?: boolean }>`
+  flex items-center text-[12px] justify-center w-[100px] h-[60px] shrink-0 cursor-move
+  [border:0.5px_solid_#616161] font-semibold tracking-[1.5px]
+  ${(p) => (p.active ? 'bg-[#63B5DC]' : 'bg-white')}
+  ${(p) => (p.active ? 'text-white' : 'text-[#616161]')}
 `;
 
-export const DayContainerBoxes = styled.div`
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-  height: 75vh;
-  overflow:auto;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 3px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
+export const DayContainerBoxes = tw.div`
+  flex flex-col gap-[20px] h-[75vh] overflow-auto
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3]
 `;
 
-export const DragIcon = styled.img`
-  width:20px;
-  height:20px;
+export const DragIcon = tw.img`
+  w-[20px] h-[20px]
 `;
 
 export default DayContainer;

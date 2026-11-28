@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import {
   GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
@@ -11,6 +10,7 @@ import {
 import { useImmer } from 'use-immer';
 import type { Draft } from 'immer';
 import { useLocation, Link } from '@/lib/router';
+import tw from '@/lib/tw';
 import UserContext from '../components/UserContextComponent';
 import db from '../utils/firebase-init';
 import Map from './Map';
@@ -35,181 +35,82 @@ import type {
   ChatRoom as ChatRoomData, RouteInfo, Schedule, SchedulePlace, TripDay,
 } from '../types';
 
-const ScheduleWrapper = styled.div`
-  display:flex;
-  width:100vw;
-  height:100vh;
-  gap:0px;
-  padding-top:60px;
+const ScheduleWrapper = tw.div`
+  flex w-[100vw] h-[100vh] gap-[0px] pt-[60px]
 `;
 
-const LeftContainer = styled.div<{ active?: boolean; show?: boolean }>`
-  overflow:scroll;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:45vw;
-  overflow:scroll;
-  height:calc( 100vh - 60px );
-  display:${(props) => (props.active ? 'none' : 'flex')};
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index:10;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-  }
-  &::-webkit-scrollbar {
-    width: 3px;
-    display:none;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    display:none;
-  }
-  @media screen and (max-width:800px){
-    width:100vw;
-    display:${(props) => (props.show ? 'flex' : 'none')};
-  }
+const LeftContainer = tw.div<{ active?: boolean; show?: boolean }>`
+  flex-col items-center w-[45vw] overflow-scroll h-[calc(100vh_-_60px)]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] z-[10]
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar]:w-[3px]
+  [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:hidden max-[801px]:w-[100vw]
+  ${(p) => (p.active ? 'hidden' : 'flex')}
+  ${(p) => (p.show ? 'max-[801px]:flex' : 'max-[801px]:hidden')}
 `;
 
-const RightContainer = styled.div`
-  width:55vw;
-  height:calc(100vh-60px);
-  @media screen and (max-width:800px){
-    display:block;
-    width:0vw;
-    height:0vh;
-  }
+const RightContainer = tw.div`
+  w-[55vw] max-[801px]:block max-[801px]:w-[0vw] max-[801px]:h-[0vh]
 `;
 
-const AddDayButton = styled.button`
-  width:26px;
-  height:26px;
-  background-color:#C1C1C1;
-  border-radius:50%;
-  margin-bottom:0px;
-  border:none;
-  color:white;
-  font-weight:800;
-  font-size:16px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
+const AddDayButton = tw.button`
+  w-[26px] h-[26px] bg-[#C1C1C1] rounded-[50%] mb-[0px] [border:none] text-white
+  font-extrabold text-[16px] flex justify-center items-center cursor-pointer
 `;
 
-const ScheduleTitleAndCompleteButtonArea = styled.div`
-  width:40vw;
-  justify-content:space-between;
-  height:auto;
-  display:flex;
-  align-items:center;
-  margin-top:20px;
-  gap:20px;
-  @media screen and (max-width:800px){
-    width:100%;
-    padding-right:20px;
-    padding-left:20px;
-  }
+const ScheduleTitleAndCompleteButtonArea = tw.div`
+  w-[40vw] justify-between h-auto flex items-center mt-[20px] gap-[20px] max-[801px]:w-full
+  max-[801px]:pr-[20px] max-[801px]:pl-[20px]
 `;
 
-const ScheduleTitle = styled.div`
-  color:#226788;
-  font-weight:800;
-  font-size:17px;
+const ScheduleTitle = tw.div`
+  text-[#226788] font-extrabold text-[17px]
 `;
 
-const DateContainer = styled.div`
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  width:40vw;
-  gap:15px;
-  font-weight:600;
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+const DateContainer = tw.div`
+  flex justify-center items-center w-[40vw] gap-[15px] font-semibold max-[801px]:w-full
 `;
 
-const CompleteButton = styled.button<{ isEditing?: boolean }>`
-  width:50px;
-  height:30px;
-  border-radius:10px;
-  border: solid #226788 2px;
-  font-weight:600;
-  cursor:pointer;
-  justify-self:end;
-  justify-self:right;
-  background-color:${(props) => (props.isEditing ? '#226788' : 'white')};
-  color:${(props) => (props.isEditing ? 'white' : '#226788')};
-  animation:${(props) => (props.isEditing ? 'hithere 1.1s ease 3' : 'none')};
+const CompleteButton = tw.button<{ isEditing?: boolean }>`
+  w-[50px] h-[30px] rounded-[10px] [border:solid_#226788_2px] font-semibold cursor-pointer
+  [justify-self:right]
+  ${(p) => (p.isEditing ? 'bg-[#226788]' : 'bg-white')}
+  ${(p) => (p.isEditing ? 'text-white' : 'text-[#226788]')}
+  ${(p) => (p.isEditing ? '[animation:hithere_1.1s_ease_3]' : '[animation:none]')}
 `;
 
-const AddAndSearchBox = styled.div<{ active?: boolean }>`
-  width:45vw;
-  height:calc(100vh - 60px);
-  position:relative;
-  display:${(props) => (props.active ? 'block' : 'none')};
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index:10;
-  @media screen and (max-width:800px){
-    width:100vw;
-  }
+const AddAndSearchBox = tw.div<{ active?: boolean }>`
+  w-[45vw] h-[calc(100vh_-_60px)] relative
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] z-[10]
+  max-[801px]:w-[100vw]
+  ${(p) => (p.active ? 'block' : 'hidden')}
 `;
 
-const AddToPlaceButton = styled.button`
-  height:30px;
-  width:100px;
-  background-color:#63B5DC;
-  border-radius:8px;
-  border:none;
-  font-weight:600;
-  color:white;
-  cursor:pointer;
+const AddToPlaceButton = tw.button`
+  h-[30px] w-[100px] bg-[#63B5DC] rounded-[8px] [border:none] font-semibold text-white
+  cursor-pointer
 `;
 
-const GoBackIcon = styled.img`
-  width:32px;
-  height:32px;
+const GoBackIcon = tw.img`
+  w-[32px] h-[32px]
 `;
 
-const ChooseShowMapOrSchedule = styled.div`
-  display:none;
-  @media screen and (max-width:800px){
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    font-size:15px;
-    font-weight:600;
-    color:white;
-    width:100%;
-    height:50px;
-    border:none;
-    background-color: #226788;
-    padding-bottom:10px;
-    padding-top:10px;
-    cursor:pointer;
-    position:fixed;
-    bottom:0;
-    z-index:50;
-  }
+const ChooseShowMapOrSchedule = tw.div`
+  hidden max-[801px]:flex max-[801px]:items-center max-[801px]:justify-center
+  max-[801px]:gap-[10px] max-[801px]:text-[15px] max-[801px]:font-semibold
+  max-[801px]:text-white max-[801px]:w-full max-[801px]:h-[50px] max-[801px]:[border:none]
+  max-[801px]:bg-[#226788] max-[801px]:pb-[10px] max-[801px]:pt-[10px]
+  max-[801px]:cursor-pointer max-[801px]:fixed max-[801px]:bottom-[0] max-[801px]:z-[50]
 `;
 
-const SeperateLine = styled.div`
-  height:90%;
-  width:1.2px;
-  background-color:white;
+const SeperateLine = tw.div`
+  h-[90%] w-[1.2px] bg-white
 `;
 
-const SchdeuleMapButton = styled.button`
-  background-color:transparent;
-  font-weight:600;
-  width:100%;
-  color:white;
-  border:none;
-  cursor:pointer;
+const SchdeuleMapButton = tw.button`
+  bg-transparent font-semibold w-full text-white [border:none] cursor-pointer
 `;
 
 interface DayDnDState {

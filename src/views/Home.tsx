@@ -7,7 +7,7 @@ import { GoogleMap, useLoadScript, type LoadScriptProps } from '@react-google-ma
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 import HeaderComponent
   from '../components/Headers/Header';
 // import Carousel from '../components/Carousel';
@@ -20,127 +20,46 @@ import type { LatLng } from '../types';
 
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 
-const HomeTopAreaWrapper = styled.div`
-  width:100vw;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  background-image: url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9);
-  align-items:center;
-  position:relative;
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-blend-mode: multiply;
-  @media screen and (max-width:800px){
-    height:70vw;
-  }
+const HomeTopAreaWrapper = tw.div`
+  w-[100vw] h-[100vh] flex flex-col
+  bg-[url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9)]
+  items-center relative bg-cover bg-no-repeat [background-blend-mode:multiply]
+  max-[801px]:h-[70vw]
 `;
 
-const SearchBarBackground = styled.div`
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  width:73vw;
-  height:90px;
-  border-radius:15px;
-  position:absolute;
-  bottom:30px;
-  background-color:rgba(255, 255, 255, 0.4);
-  @media screen and (max-width:600px){
-    width:86vw;
-    height:73px;
-  }
+const SearchBarBackground = tw.div`
+  flex flex-col justify-center items-center w-[73vw] h-[90px] rounded-[15px] absolute
+  bottom-[30px] bg-[rgba(255,255,255,0.4)] max-[601px]:w-[86vw] max-[601px]:h-[73px]
 `;
 
-const SearchBarLittleWrapper = styled.div`
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  width:70vw;
-  justify-content:space-between;
-  height:50px;
-  background-color:white;
-  padding-left:20px;
-  padding-right:20px;
-  position:absolute;
-  @media screen and (max-width:600px){
-    width:80vw;
-  }
+const SearchBarLittleWrapper = tw.div`
+  rounded-[10px] flex items-center w-[70vw] justify-between h-[50px] bg-white pl-[20px]
+  pr-[20px] absolute max-[601px]:w-[80vw]
 `;
 
-const SearchInput = styled.input`
-  display:flex;
-  flex-direction:column;
-  width:70vw;
-  height:30px;
-  border:none;
-  height:50px;
-  cursor:pointer;
-  font-size:17px;
-  box-sizing:border-box;
-  padding-left:10px;
-  outline: none;
-  @media screen and (max-width:600px){
-    width:80%;
-  }
+const SearchInput = tw.input`
+  flex flex-col w-[70vw] [border:none] h-[50px] cursor-pointer text-[17px] box-border
+  pl-[10px] [outline:none] max-[601px]:w-[80%]
 `;
 
-const Ulist = styled.ul`
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  width:70vw;
-  height:auto;
-  z-index:10;
-  position:absolute;
-  top:60px;
-  background-color:white;
-  padding-left:0px;
-  border:1px grey solid;
-  margin-top:15px;
-  margin-bottom:0px;
-  border-radius:15px;
-  @media screen and (max-width:600px){
-    width:80vw;
-  }
+const Ulist = tw.ul`
+  flex flex-col items-center w-[70vw] h-auto z-[10] absolute top-[60px] bg-white pl-[0px]
+  [border:1px_grey_solid] mt-[15px] mb-[0px] rounded-[15px] max-[601px]:w-[80vw]
 `;
 
-const List = styled.li`
-width:69vw;
-font-weight:500;
-margin-top:2px;
-margin-bottom:2px;
-height:30px;
-border-radius:10px;
-display:flex;
-justify-content:center;
-align-items:center;
-cursor:pointer;
-&:hover {
-  color:white;
-  background-color:#67B7D1;
-}
-@media screen and (max-width:600px){
-  width:78vw;
-}`;
-
-const OptionForm = styled.form`
-width:70px;
-display:flex;
-border:none;
+const List = tw.li`
+  w-[69vw] font-medium mt-[2px] mb-[2px] h-[30px] rounded-[10px] flex justify-center
+  items-center cursor-pointer hover:text-white hover:bg-[#67B7D1] max-[601px]:w-[78vw]
 `;
 
-const OptionSelect = styled.select`
-width:70px;
-border:none;
-font-weight:500;
-font-size:17px;
-margin-left:0px;
-outline: none;
-@media screen and (max-width:600px){
-  width:60px;
-}`;
+const OptionForm = tw.form`
+  w-[70px] flex [border:none]
+`;
+
+const OptionSelect = tw.select`
+  w-[70px] [border:none] font-medium text-[17px] ml-[0px] [outline:none]
+  max-[601px]:w-[60px]
+`;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];
 

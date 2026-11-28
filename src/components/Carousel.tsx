@@ -8,8 +8,8 @@ import {
 } from 'firebase/firestore';
 import { useImmer } from 'use-immer';
 import produce from 'immer';
-import styled from 'styled-components';
 import Swal from 'sweetalert2';
+import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
 import '../views/animation.css';
 import SchedulesWrapper, {
@@ -37,195 +37,66 @@ const Travel = '/images/travel-2.png';
 const Suitcase = '/images/suitcase-2.png';
 const filledStar = '/images/filled_star.jpg';
 
-const NearByPlaceWrapper = styled.div`
-  width:100vw;
-  height:340px;
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  margin-top:20px;
-  @media screen and (max-width:1180px){
-    height:280px;
-    margin-top:20px;
-  }
-  @media screen and (max-width:900px){
-    flex-direction:column;
-    margin-top:30px;
-    height:370px;
-  }
+const NearByPlaceWrapper = tw.div`
+  w-[100vw] h-[340px] flex flex-row items-center justify-center gap-[10px] mt-[20px]
+  max-[1181px]:h-[280px] max-[1181px]:mt-[20px] max-[901px]:flex-col max-[901px]:mt-[30px]
+  max-[901px]:h-[370px]
 `;
 
-const NearByPlaceLeftArea = styled.div`
-  width:15vw;
-  height:350px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  @media screen and (max-width:900px){
-    width:80vw;
-    height:100px;
-    margin-right:0px;
-  }
+const NearByPlaceLeftArea = tw.div`
+  w-[15vw] h-[350px] flex flex-col items-center justify-center max-[901px]:w-[80vw]
+  max-[901px]:h-[100px] max-[901px]:mr-[0px]
 `;
 
-const NearbyPlaceTitle = styled.div`
-  font-size:25px;
-  color:#1F456E;
-  font-weight:600;
-  margin-bottom:15px;
-  @media screen and (max-width:900px){
-    margin-bottom:5px;
-    font-size:24px;
-    margin-bottom:15px;
-  }
+const NearbyPlaceTitle = tw.div`
+  text-[25px] text-[#1F456E] font-semibold mb-[15px] max-[901px]:text-[24px]
+  max-[901px]:mb-[15px]
 `;
 
-const NearByPlaceDescription = styled.div`
-  font-size:12px;
-  color:grey;
-  font-weight:600;
-  margin-bottom:15px;
-  @media screen and (max-width:900px){
-    font-size:16px;
-    margin-bottom:25px;
-  }
+const NearByPlaceDescription = tw.div`
+  text-[12px] [color:grey] font-semibold mb-[15px] max-[901px]:text-[16px]
+  max-[901px]:mb-[25px]
 `;
 
-const NearByViewMoreButton = styled.button`
-  display:none;
-  width:130px;
-  height:40px;
-  color:white;
-  border:none;
-  background-color:#0492c2;
-  border-radius:5px;
-  color:white;
-  font-weight:600;
-  letter-spacing:3px;
-  @media screen and (max-width:900px){
-    display:none;
-  }
+const NearByViewMoreButton = tw.button`
+  hidden w-[130px] h-[40px] [border:none] bg-[#0492c2] rounded-[5px] text-white
+  font-semibold tracking-[3px] max-[901px]:hidden
 `;
 
-const CardsWrapper = styled.div`
-  width:800px;
-  height:290px;
-  display:flex; 
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap;
-  position:relative;
-  overflow:hidden;
-  z-index:1;
-  gap:20px;
-  @media screen and (max-width:1180px){
-    width:650px;
-    margin-right:0px;
-  }
-  @media screen and (max-width:900px){
-  display:none;
-  }
+const CardsWrapper = tw.div`
+  w-[800px] h-[290px] flex flex-col items-center justify-center flex-wrap relative
+  overflow-hidden z-[1] gap-[20px] max-[1181px]:w-[650px] max-[1181px]:mr-[0px]
+  max-[901px]:hidden
 `;
 
-const SmallScreenCards = styled.div`
-  display:none;
-  @media screen and (max-width:900px){
-    width:95%;
-    height:200px;
-    display:flex; 
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    position:relative;
-    overflow:hidden;
-    z-index:1;
-  }
-  @media screen and (max-width:900px){
-    width:100%;
-  }
-  @media screen and (max-width:500px){
-    height:160px;
-    overflow:auto;
-    width:100%;
-  }
+const SmallScreenCards = tw.div`
+  hidden max-[901px]:h-[200px] max-[901px]:flex max-[901px]:flex-col
+  max-[901px]:items-center max-[901px]:justify-center max-[901px]:flex-wrap
+  max-[901px]:relative max-[901px]:overflow-hidden max-[901px]:z-[1] max-[901px]:w-full
+  max-[501px]:h-[160px] max-[501px]:overflow-auto max-[501px]:w-full
 `;
 
-const Cards = styled.div`
-  display:flex;
-  padding-left:15px;
-  padding-bottom:10px;
-  opacity:1;
-  flex-direction:column;
-  justify-content:flex-end;
-  width:180px;
-  height:240px;
-  color:white;
-  font-weight:600;
-  position:relative;
-  text-align:left;
-  overflow:hidden;
-  border-radius:10px;
-  cursor:pointer;
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  @media screen and (max-width:1180px){
-    width:140px;
-    height:180px;
-  }
-  @media screen and (max-width:900px){
-    width:30%;
-    height:280px;
-    font-size:13px;
-  }
-  @media screen and (max-width:500px){
-    width:30%;
-    height:180px;
-  }
-  @media screen and (max-width:500px){
-    height:150px;
-  }
+const Cards = tw.div`
+  flex pl-[15px] pb-[10px] opacity-[1] flex-col justify-end w-[180px] h-[240px] text-white
+  font-semibold relative text-left overflow-hidden rounded-[10px] cursor-pointer bg-cover
+  bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] max-[1181px]:w-[140px]
+  max-[1181px]:h-[180px] max-[901px]:w-[30%] max-[901px]:h-[280px] max-[901px]:text-[13px]
+  max-[501px]:w-[30%] max-[501px]:h-[150px]
 `;
 
-const SmallScreenCardsWrapper = styled.div`
-  display:none;
-  @media screen and (max-width:900px){
-    display:flex;
-    width:90%;
-    align-items:center;
-    gap:10px;
-  }
-  @media screen and (max-width:500px){
-    width:100%;
-    gap:0px;
-    padding-right:3px;
-    padding-left:3px;
-  }
+const SmallScreenCardsWrapper = tw.div`
+  hidden max-[901px]:flex max-[901px]:w-[90%] max-[901px]:items-center
+  max-[901px]:gap-[10px] max-[501px]:w-full max-[501px]:gap-[0px] max-[501px]:pr-[3px]
+  max-[501px]:pl-[3px]
 `;
 
-const Arrow = styled.img`
-  width:40px;
-  height:40px;
-  cursor:pointer;
-  @media screen and (max-width:900px){
-  display:none;
-  }
+const Arrow = tw.img`
+  w-[40px] h-[40px] cursor-pointer max-[901px]:hidden
 `;
 
-const SmallScreenArrow = styled.img`
-  display:none;
-  @media screen and (max-width:900px){
-    display:block;
-    width:25px;
-    height:25px;
-    cursor:pointer;
-  }
+const SmallScreenArrow = tw.img`
+  hidden max-[901px]:block max-[901px]:w-[25px] max-[901px]:h-[25px]
+  max-[901px]:cursor-pointer
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

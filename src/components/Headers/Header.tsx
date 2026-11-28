@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { useNavigate, Link, useLocation } from '@/lib/router';
 import {
   signOut,
 } from 'firebase/auth';
+import tw from '@/lib/tw';
 import UserContext from '../UserContextComponent';
 import { auth } from '../../utils/firebase-init';
 import RWD_ICON from './rwd.const';
@@ -14,86 +14,46 @@ import SmallScreenNavBar, {
   SmallNavText, Menu, CloseIcon, SmallHeader, Background,
 } from './RwdMenu';
 
-const Header = styled.header<{ active?: boolean }>`
-  position:absolute;
-  display:flex;
-  justify-content:space-between;
-  width:100vw;
-  position:fixed;
-  z-index:2000;
-  top:0;
-  height:${(props) => (props.active ? '60px' : '65px')};
-  background-color:${(props) => (props.active ? 'rgba(255, 255, 255, 0.8)' : 'transparent')};
-  box-shadow: ${(props) => (props.active ? '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' : 'none')};
-  @media screen and (max-width:800px){
-  display:none;
-}`;
-
-const Logo = styled.div<{ active?: boolean }>`
-  width:150px;
-  height:30px;
-  font-weight:700;
-  font-size:25px;
-  margin-left:20px;
-  color:${(props) => (props.active ? 'black' : 'white')};
-  margin-top:${(props) => (props.active ? '15px' : '20px')};
-  @media screen and (max-width:800px){
-    width:auto;
-    height:auto;
-    font-size:20px;
-    margin-left:10px;
-    margin-top:10px;
-    z-index:10;
-    position:absolute;
-}`;
-
-const NavBar = styled.div<{ active?: boolean }>`
-  display:flex;
-  align-items:center;
-  gap:15px;
-  width:500px;
-  height:30px;
-  color:${(props) => (props.active ? 'black' : 'white')};
-  font-weight:600;
-  margin-top:${(props) => (props.active ? '15px' : '25px')};
-  @media screen and (max-width:800px){
-    display:none;
-}`;
-
-const ProfilePageNav = styled.div<{ active?: boolean }>`
-  width:auto;
-  padding:8px 10px;
-  border-radius:10px;
-  border:${(props) => (props.active ? '1px solid black' : '1px solid white;')};
-  cursor:pointer;
+const Header = tw.header<{ active?: boolean }>`
+  flex justify-between w-[100vw] fixed z-[2000] top-[0] max-[801px]:hidden
+  ${(p) => (p.active ? 'h-[60px]' : 'h-[65px]')}
+  ${(p) => (p.active ? 'bg-[rgba(255,255,255,0.8)]' : 'bg-transparent')}
+  ${(p) => (p.active ? '[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : '[box-shadow:none]')}
 `;
 
-const StyleNavLink = styled(Link)<{ $active?: boolean }>`
-  cursor:pointer;
-  text-decoration:none;
-  color:${(props) => (props.$active ? 'black' : 'white')};
-  &:hover {
-    border-bottom:${(props) => (props.$active ? '1.5px solid black' : '1.5px solid white')};
-  }
-  @media screen and (max-width:800px){
-    font-size:20px;
-    margin-left:10px;
-    width:150px;
-    position:absolute;
-    margin-top:${(props) => (props.$active ? '8px' : '0px')};
-}`;
+const Logo = tw.div<{ active?: boolean }>`
+  w-[150px] h-[30px] font-bold text-[25px] ml-[20px] max-[801px]:w-auto max-[801px]:h-auto
+  max-[801px]:text-[20px] max-[801px]:ml-[10px] max-[801px]:mt-[10px] max-[801px]:z-[10]
+  max-[801px]:absolute
+  ${(p) => (p.active ? 'text-black' : 'text-white')}
+  ${(p) => (p.active ? 'mt-[15px]' : 'mt-[20px]')}
+`;
 
-const ProfileNavLink = styled(Link)<{ $active?: boolean }>`
-  cursor:pointer;
-  text-decoration:none;
-  color:${(props) => (props.$active ? 'black' : 'white')};
-  @media screen and (max-width:800px){
-    font-size:20px;
-    margin-left:10px;
-    width:150px;
-    position:absolute;
-    margin-top:${(props) => (props.$active ? '8px' : '0px')};
-}`;
+const NavBar = tw.div<{ active?: boolean }>`
+  flex items-center gap-[15px] w-[500px] h-[30px] font-semibold max-[801px]:hidden
+  ${(p) => (p.active ? 'text-black' : 'text-white')}
+  ${(p) => (p.active ? 'mt-[15px]' : 'mt-[25px]')}
+`;
+
+const ProfilePageNav = tw.div<{ active?: boolean }>`
+  w-auto p-[8px_10px] rounded-[10px] cursor-pointer
+  ${(p) => (p.active ? '[border:1px_solid_black]' : '[border:1px_solid_white]')}
+`;
+
+const StyleNavLink = tw(Link)<{ $active?: boolean }>`
+  cursor-pointer [text-decoration:none] max-[801px]:text-[20px] max-[801px]:ml-[10px]
+  max-[801px]:w-[150px] max-[801px]:absolute
+  ${(p) => (p.$active ? 'text-black' : 'text-white')}
+  ${(p) => (p.$active ? 'hover:[border-bottom:1.5px_solid_black]' : 'hover:[border-bottom:1.5px_solid_white]')}
+  ${(p) => (p.$active ? 'max-[801px]:mt-[8px]' : 'max-[801px]:mt-[0px]')}
+`;
+
+const ProfileNavLink = tw(Link)<{ $active?: boolean }>`
+  cursor-pointer [text-decoration:none] max-[801px]:text-[20px] max-[801px]:ml-[10px]
+  max-[801px]:w-[150px] max-[801px]:absolute
+  ${(p) => (p.$active ? 'text-black' : 'text-white')}
+  ${(p) => (p.$active ? 'max-[801px]:mt-[8px]' : 'max-[801px]:mt-[0px]')}
+`;
 
 function getBorderBottomByPathname(pathname: string, headerBackground: boolean) {
   if (pathname === '/all-articles' && headerBackground) {

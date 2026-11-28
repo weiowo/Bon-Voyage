@@ -8,285 +8,115 @@ import React, {
 } from 'react';
 import Swal from 'sweetalert2';
 import { useImmer } from 'use-immer';
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 import HeaderComponent from '../components/Headers/Header';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
 import STAR from '../constants/stars';
 import type { Article, UserProfile } from '../types';
 
-const ShareBanner2 = '/images/share_banner2.jpeg';
 const defaultCover = '/images/schedule_cover_rec3.jpg';
 
-const PageWrapper = styled.div`
-  width:100vw;
-  height:100vh;
+const PageWrapper = tw.div`
+  w-[100vw] h-[100vh]
 `;
 
-const ArticleCoverImage = styled.div`
-  width:100vw;
-  height:500px;
-  align-items:center;
-  justify-content:center;
-  background-image: url(${ShareBanner2});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  position:relative;
-  background-position:center;
-  object-fit: cover;
-  @media screen and (max-width:800px){
-    height:300px;
-  }
+const ArticleCoverImage = tw.div`
+  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.jpeg)]
+  bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
+  bg-center object-cover max-[801px]:h-[300px]
 `;
 
-const ArticlePageBelowPart = styled.div`
-  width:100vw;
-  height:500px;
-  flex-direction:column;
-  align-items:center;
-  display:flex;
+const ArticlePageBelowPart = tw.div`
+  w-[100vw] h-[500px] flex-col items-center flex
 `;
 
-const ArticleAuthorDate = styled.div`
-  color:grey;
-  font-weight:600;
+const ArticleAuthorDate = tw.div`
+  [color:grey] font-semibold
 `;
 
-const ArticleEditPart = styled.div`
-  width:75vw;
-  height:auto;
-  display:flex;
-  justify-content:space-between;
-  @media screen and (max-width:800px){
-    width:85vw;
-  }
+const ArticleEditPart = tw.div`
+  w-[75vw] h-auto flex justify-between max-[801px]:w-[85vw]
 `;
 
-const AddFavoriteIcon = styled.img`
-  width:30px;
-  height:30px;
-  cursor:pointer;
+const AddFavoriteIcon = tw.img`
+  w-[30px] h-[30px] cursor-pointer
 `;
 
-const ArticleCoverPhotoWrapper = styled.img`
-  width:50vw;
-  height:380px;
-  margin-left:5px;
-  margin-top:2px;
-  border-radius:3px;
-  outline:none;
-  border:1px solid black;
-  border:none;
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-blend-mode: multiply;
-  background-position:center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  object-fit: cover;
-  @media screen and (max-width:680px){
-    width:100%;
-    height:auto;
-  }
+const ArticleCoverPhotoWrapper = tw.img`
+  w-[50vw] h-[380px] ml-[5px] mt-[2px] rounded-[3px] [outline:none] [border:none] bg-cover
+  bg-no-repeat [background-blend-mode:multiply] bg-center shrink-0
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] object-cover max-[681px]:w-full
+  max-[681px]:h-auto
 `;
 
-const Description = styled.div`
-  text-align:left;
-  padding-left:10px;
-  padding-top:10px;
-  width:calc(50vw - 3px);
-  margin-left:3px;
-  margin-bottom:10px;
-  height:auto;
-  font-size:16px;
-  margin-top:20px;
-  outline:none;
-  flex-shrink: 0;
-  border-radius:5px;
-  border: none;
-  @media screen and (max-width:680px){
-    width:100%;
-  }
+const Description = tw.div`
+  text-left pl-[10px] pt-[10px] w-[calc(50vw_-_3px)] ml-[3px] mb-[10px] h-auto text-[16px]
+  mt-[20px] [outline:none] shrink-0 rounded-[5px] [border:none] max-[681px]:w-full
 `;
 
-const ArticleTitleButtonArea = styled.div`
-  width:75vw;
-  height:auto;
-  display:flex;
-  @media screen and (max-width:800px){
-    width:85vw;
-  }
+const ArticleTitleButtonArea = tw.div`
+  w-[75vw] h-auto flex max-[801px]:w-[85vw]
 `;
 
-const ArticleTitle = styled.div`
-  width:50vw;
-  height:auto;
-  font-size:35px;
-  font-weight:600;
-  text-align:left;
-  margin-top:20px;
-  margin-bottom:20px;
-  outline:none;
-  border:none;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  @media screen and (max-width:800px){
-    width:55vw;
-  }
-  @media screen and (max-width:680px){
-    width:100%;
-  }
+const ArticleTitle = tw.div`
+  w-[50vw] h-auto text-[35px] font-semibold text-left mt-[20px] mb-[20px] [outline:none]
+  [border:none] flex items-center justify-between max-[801px]:w-[55vw] max-[681px]:w-full
 `;
 
-const EditingPart = styled.div`
-  width:51vw;
-  height:600px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:5px;
-  overflow-y:auto;
-  overflow-x:hidden;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
-  @media screen and (max-width:800px){
-    width:56vw;
-  }
-  @media screen and (max-width:680px){
-    width:100%;
-  }
+const EditingPart = tw.div`
+  w-[51vw] h-[600px] flex flex-col items-start gap-[5px] overflow-y-auto overflow-x-hidden
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-[56vw] max-[681px]:w-full
 `;
 
-const PlaceArea = styled.div`
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
+const PlaceArea = tw.div`
+  w-full flex flex-col items-start
 `;
 
-const ScheduleSummaryPart = styled.div`
-  width:20vw;
-  height:auto;
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  margin-left:20px;
-  padding-left:10px;
-  @media screen and (max-width:800px){
-    width:25vw;
-    padding-left:0px;
-    margin-left:0px;
-  }
-  @media screen and (max-width:680px){
-    display:none;
-  }
+const ScheduleSummaryPart = tw.div`
+  w-[20vw] h-auto flex flex-col gap-[15px] ml-[20px] pl-[10px] max-[801px]:w-[25vw]
+  max-[801px]:pl-[0px] max-[801px]:ml-[0px] max-[681px]:hidden
 `;
 
-const ScheduleSummaryDayAndPlacePart = styled.div`
-  display:flex;
-  width:20vw;
-  height:auto;
-  gap:10px;
-  align-items:flex-start;
-  padding-left:15px;
-  @media screen and (max-width:800px){
-    width:25vw;
-  }
+const ScheduleSummaryDayAndPlacePart = tw.div`
+  flex w-[20vw] h-auto gap-[10px] items-start pl-[15px] max-[801px]:w-[25vw]
 `;
 
-const ScheduleSummaryDayPart = styled.div`
-  width:5vw;
-  height:auto;
-  border-radius:2px;
-  background-color:#729DC8;
-  color:white;
-  font-weight:550;
-  gap:10px;
-  cursor:pointer;
-  @media screen and (max-width:800px){
-    width:7vw;
-  }
+const ScheduleSummaryDayPart = tw.div`
+  w-[5vw] h-auto rounded-[2px] bg-[#729DC8] text-white [font-weight:550] gap-[10px]
+  cursor-pointer max-[801px]:w-[7vw]
 `;
 
-const ScheduleSummaryPlacePart = styled.div`
-  width:15vw;
-  height:auto;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  cursor:pointer;
+const ScheduleSummaryPlacePart = tw.div`
+  w-[15vw] h-auto flex flex-col gap-[8px] cursor-pointer
 `;
 
-const SummaryPlaceTitle = styled.div`
-  font-weight:500;
-  font-size:15px;
-  text-align:left;
+const SummaryPlaceTitle = tw.div`
+  font-medium text-[15px] text-left
 `;
 
-const DayTitle = styled.div`
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:70px;
-  height:30px;
-  background-color:#296D98;
-  border-radius:3px;
-  letter-spacing:2px;
-  font-weight:550;
-  color:white;
+const DayTitle = tw.div`
+  flex items-center justify-center w-[70px] h-[30px] bg-[#296D98] rounded-[3px]
+  tracking-[2px] [font-weight:550] text-white
 `;
 
-const PlaceTitle = styled.div`
-  display:flex;
-  align-items:center;
-  justify-content:left;
-  width:auto;
-  height:30px;
-  padding-left:10px;
-  margin-bottom:10px;
-  font-weight:600;
-  font-size:18px;
-  letter-spacing:2px;
+const PlaceTitle = tw.div`
+  flex items-center [justify-content:left] w-auto h-[30px] pl-[10px] mb-[10px] font-semibold
+  text-[18px] tracking-[2px]
 `;
 
-const PlaceImg = styled.img`
-  width:100%;
-  height:auto;
-  position:relative;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  object-fit: cover;
-  @media screen and (max-width:680px){
-    width:80vw;
-    height:auto;
-  }
+const PlaceImg = tw.img`
+  w-full h-auto relative [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] object-cover
+  max-[681px]:w-[80vw] max-[681px]:h-auto
 `;
 
-const ImgDisplayArea = styled.div`
-  display:flex;
-  width:50vw;
-  height:auto;
-  gap:10px;
-  margin-left:10px;
-  position:relative;
-  flex-wrap:wrap;
-  @media screen and (max-width:680px){
-    width:80vw;
-  }
+const ImgDisplayArea = tw.div`
+  flex w-[50vw] h-auto gap-[10px] ml-[10px] relative flex-wrap max-[681px]:w-[80vw]
 `;
 
 function ShowArticle() {

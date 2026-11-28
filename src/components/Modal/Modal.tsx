@@ -1,49 +1,18 @@
 import type React from 'react';
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-const ModalBackground = styled.div<{ active?: boolean }>`
-  width:100vw;
-  height:100vh;
-  position:fixed;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  background-color:rgba(0, 0, 0, 0.7);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  display:${(props) => (props.active ? 'flex' : 'none')};
-  z-index:100;
+const ModalBackground = tw.div<{ active?: boolean }>`
+  w-[100vw] h-[100vh] fixed top-[0] bottom-[0] left-[0] right-[0] bg-[rgba(0,0,0,0.7)]
+  justify-center items-center z-[100]
+  ${(p) => (p.active ? 'flex' : 'hidden')}
 `;
 
-const ModalBox = styled.div<{ flexDirection?: React.CSSProperties['flexDirection'] }>`
-  display:flex;
-  width:50vw;
-  height:30vw;
-  flex-direction:${(props) => (props.flexDirection)};
-  background-color:white;
-  z-index:10;
-  border-radius:20px;
-  z-index:200;
-  position: relative;
-  align-items:center;
-  @media screen and (max-width:1200px){
-  width:600px;
-  height:370px;
-  }
-  @media screen and (max-width:630px){
-    width:80vw;
-    height:90vw;
-    flex-direction:column;
-  }
-  @media screen and (max-width:575px){
-    width:80vw;
-    height:110vw;
-  }
-  @media screen and (max-width:430px){
-    height:120vw;
-}`;
+const ModalBox = tw.div<{ flexDirection?: React.CSSProperties['flexDirection'] }>`
+  flex w-[50vw] h-[30vw] bg-white rounded-[20px] z-[200] relative items-center
+  max-[1201px]:w-[600px] max-[1201px]:h-[370px] max-[631px]:w-[80vw] max-[631px]:h-[90vw]
+  max-[631px]:flex-col max-[576px]:w-[80vw] max-[576px]:h-[110vw] max-[431px]:h-[120vw]
+  ${(p) => (p.flexDirection === 'column' ? 'flex-col' : 'flex-row')}
+`;
 
 interface ModalProps {
   children?: React.ReactNode;

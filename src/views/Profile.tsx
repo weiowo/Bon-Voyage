@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   signOut, getAuth, updateProfile,
@@ -9,6 +8,7 @@ import {
 } from 'firebase/storage';
 import { updateDoc, doc, onSnapshot } from 'firebase/firestore';
 import Swal from 'sweetalert2';
+import tw from '@/lib/tw';
 import db, { app, storage } from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import ProfileSideBarElement from '../components/ProfileSideBar';
@@ -19,179 +19,65 @@ import { UpperLine, MyPageTitle } from './MyArticles';
 import type { UserProfile } from '../types';
 
 const UserPhotoSrc = '/images/seal.png';
-const CameraSrc = '/images/camera_blue.png';
 
-const PageWrapper = styled.div`
-  width:100vw;
-  height:100vh;
-  display:flex;
-  padding-top:60px;
-  @media screen and (max-width:800px){
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding-left:0px;
-  }
+const PageWrapper = tw.div`
+  w-[100vw] h-[100vh] flex pt-[60px] max-[801px]:flex max-[801px]:flex-col
+  max-[801px]:items-center max-[801px]:pl-[0px]
 `;
 
-const MyInfoArea = styled.div`
-  margin-top:30px;
-  display:flex;
-  height:80%;
-  width:80vw;
-  flex-direction:column;
-  padding-left:50px;
-  @media screen and (max-width:800px){
-    display:flex;
-    align-items:center;
-    padding-left:0px;
-    height:100%;
-    width:100%;
-  }
+const MyInfoArea = tw.div`
+  mt-[30px] flex h-[80%] w-[80vw] flex-col pl-[50px] max-[801px]:flex
+  max-[801px]:items-center max-[801px]:pl-[0px] max-[801px]:h-full max-[801px]:w-full
 `;
 
-const MyProfileWrapper = styled.div`
-  width:200px;
-  height:200px;
-  border-radius:3px;
-  position:relative;
-  position:relative;
+const MyProfileWrapper = tw.div`
+  w-[200px] h-[200px] rounded-[3px] relative
 `;
 
-const MyProfilePhoto = styled.img`
-  width:180px;
-  height:180px;
-  border-radius:3px;
-  object-fit: cover;
-  outline:none;
-  border:1px solid black;
-  border:none;
-  flex-shrink: 0;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  @media screen and (max-width:800px){
-  border-radius:20px;
-  }
+const MyProfilePhoto = tw.img`
+  w-[180px] h-[180px] rounded-[3px] object-cover [outline:none] [border:none] shrink-0
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-[801px]:rounded-[20px]
 `;
 
-const CameraIcon = styled.label`
-  bottom:0px;
-  right:0px;
-  width:55px;
-  height:55px;
-  position:absolute;
-  background-image: url(${CameraSrc});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-blend-mode: multiply;
-  background-position:center;
-  cursor:pointer;
+const CameraIcon = tw.label`
+  bottom-[0px] right-[0px] w-[55px] h-[55px] absolute bg-[url(/images/camera_blue.png)]
+  bg-cover bg-no-repeat [background-blend-mode:multiply] bg-center cursor-pointer
 `;
 
-const ProfileNameEmailDisplay = styled.div`
-  width:250px;
-  height:auto;
-  display:flex;
-  flex-direction:row;
-  align-items:flex-start;
-  gap:10px;
-  @media screen and (max-width:800px){
-    width:250px;
-    height:auto;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
+const ProfileNameEmailDisplay = tw.div`
+  w-[250px] h-auto flex flex-row items-start gap-[10px] max-[801px]:w-[250px]
+  max-[801px]:h-auto max-[801px]:flex max-[801px]:flex-col max-[801px]:gap-[10px]
 `;
 
-const ProfileNameEmailTitle = styled.div`
-  display:flex;
-  align-items:center;
-  justify-content:left;
-  width:60px;
-  height:30px;
-  font-weight:600;
-  font-size:15px;
-  color:#2E5984;
-  @media screen and (max-width:800px){
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:100%;
-    height:30px;
-    font-weight:600;
-    font-size:15px;
-    color:#2E5984;
-  }
+const ProfileNameEmailTitle = tw.div`
+  flex items-center [justify-content:left] w-[60px] h-[30px] font-semibold text-[15px]
+  text-[#2E5984] max-[801px]:flex max-[801px]:items-center max-[801px]:justify-center
+  max-[801px]:w-full max-[801px]:h-[30px] max-[801px]:font-semibold max-[801px]:text-[15px]
+  max-[801px]:text-[#2E5984]
 `;
 
-const ProfileNamEmailContent = styled.div`
-width:300px;
-height:35px;
-font-size:15px;
-background-color: #CDEEFD;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:20px;
-@media screen and (max-width:800px){
-  width:250px;
-  height:35px;
-  font-size:15px;
-  background-color: #CDEEFD;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:20px;
-}`;
-
-const ProfilePageBelowArea = styled.div`
-  width:80%;
-  margin-top:50px;
-  height:90%;
-  display:flex;
-  gap:20px;
-  font-size:18px;
-  font-weight:600;
-  @media screen and (max-width:800px){
-    flex-direction:column;
-    align-items:center;
-    height:90%;
-    margin-top:30px;
-  }
+const ProfileNamEmailContent = tw.div`
+  w-[300px] h-[35px] text-[15px] bg-[#CDEEFD] [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] flex
+  items-center justify-center rounded-[20px] max-[801px]:w-[250px] max-[801px]:h-[35px]
+  max-[801px]:text-[15px] max-[801px]:bg-[#CDEEFD]
+  max-[801px]:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-[801px]:flex
+  max-[801px]:items-center max-[801px]:justify-center max-[801px]:rounded-[20px]
 `;
 
-const ProfileInfoArea = styled.div`
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  width:50%;
-  height:280px;
-  gap:20px;
-  @media screen and (max-width:800px){
-    align-items:center;
-    width:50%;
-    height:100%;
-  }
+const ProfilePageBelowArea = tw.div`
+  w-[80%] mt-[50px] h-[90%] flex gap-[20px] text-[18px] font-semibold max-[801px]:flex-col
+  max-[801px]:items-center max-[801px]:h-[90%] max-[801px]:mt-[30px]
 `;
 
-const LogOutButton = styled.button`
-  width:100px;
-  height:35px;
-  border:none;
-  margin-top:10px;
-  border-radius:5px;
-  background-color:#2E5984;
-  color:white;
-  font-weight:600;
-  font-size:15px;
-  cursor:pointer;
-  @media screen and (max-width:800px){
-    width:120px;
-    background-color:#2E5984;
-    margin-top:5px;
-  }
+const ProfileInfoArea = tw.div`
+  flex flex-col items-start w-[50%] h-[280px] gap-[20px] max-[801px]:items-center
+  max-[801px]:w-[50%] max-[801px]:h-full
+`;
+
+const LogOutButton = tw.button`
+  w-[100px] h-[35px] [border:none] mt-[10px] rounded-[5px] bg-[#2E5984] text-white
+  font-semibold text-[15px] cursor-pointer max-[801px]:w-[120px] max-[801px]:bg-[#2E5984]
+  max-[801px]:mt-[5px]
 `;
 
 const auth = getAuth(app);

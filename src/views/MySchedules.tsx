@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState, useContext } from 'react';
 import {
@@ -8,6 +7,7 @@ import {
 } from 'firebase/firestore';
 import { Link, useNavigate } from '@/lib/router';
 import { useImmer } from 'use-immer';
+import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
 import GreyHeaderComponent from '../components/Headers/GreyHeader';
 import UserContext from '../components/UserContextComponent';
@@ -31,365 +31,134 @@ import AddFriendButton, {
 import Line from '../components/Line';
 import type { Article, Schedule, UserProfile } from '../types';
 
-const RecCover3 = '/images/schedule_cover_rec3.jpg';
 const Add = '/images/invite.png';
 const CloseSearchIcon = '/images/close-1.png';
 
-const PageWrapper = styled.div`
-  width:100vw;
-  height:calc(100vh-60px);
-  display:flex;
-  flex-direction:row;
-  padding-top:60px;
-  @media screen and (max-width:800px){
-  justify-content:center;
-  }
-  @media screen and (max-width:748px){
-    flex-direction:column;
-    flex-shrink:0;
-    height:calc(100vh-60px);
-}`;
-
-const SmallScreenLine = styled.div`
-  display:none;
-  @media screen and (max-width:800px){
-    display:flex;
-  width:1.8px;
-  height:85vh;
-  background-color:#D3D3D3;
-  align-items:center;
-  margin-top:20px;
-  @media screen and (max-width:748px){
-    display:none;
-  }
-}`;
-
-const ChoicesWrapper = styled.div` 
-  width:33vw;
-  height:90vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:20px;
-  overflow:auto;
-  height:calc(100vh - 80px);
-  flex-shrink:0;
-  padding-bottom:5px;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
-  @media screen and (max-width:800px){
-    width:40vw;
-  }
-  @media screen and (max-width:748px){
-    flex-direction:column;
-    width:100vw;
-    height:35vh;
-    gap:10px;
-    flex-shrink:0;
-    overflow:hidden;
-    padding-bottom:0px;
-    margin-bottom:0px;
-}`;
-
-const TitleAndCreateArea = styled.div`
-  display:flex;
-  width:26vw;
-  height:auto;
-  align-items:flex-end;
-  gap:20px;
-  margin-top:30px;
-  justify-content:left;
-  margin-bottom:15px;
-  @media screen and (max-width:748px){
-  width:100%;
-  display:flex;
-  height:80px;
-  margin-top:10px;
-  align-items:center;
-  margin-bottom:0px;
-  justify-content:center;
-  }
+const PageWrapper = tw.div`
+  w-[100vw] flex flex-row pt-[60px] max-[801px]:justify-center
+  max-[749px]:flex-col max-[749px]:shrink-0
 `;
 
-const ExistedSchedules = styled.div`
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-  @media screen and (max-width:748px){
-    width:100vw;
-    height:23vh;
-    margin-left:30px;
-    flex-direction:row;
-    overflow:scroll;
-    padding-top:0px;
-    padding-bottom:0px;
-    flex-shrink:0;
-  }
+const SmallScreenLine = tw.div`
+  hidden max-[801px]:flex max-[801px]:w-[1.8px] max-[801px]:h-[85vh]
+  max-[801px]:bg-[#D3D3D3] max-[801px]:items-center max-[801px]:mt-[20px]
+  max-[801px]:max-[749px]:hidden
 `;
 
-const SchedulePreview = styled.div`
-  display:flex;
-  width:40vw;
-  height:auto;
-  align-items:flex-end;
-  gap:20px;
-  margin-top:30px;
-  justify-content:left;
-  margin-bottom:15px;
-  @media screen and (max-width:748px){
-    align-items:center;
-    justify-content:center;
-    width:100%;
-    margin-top:10px;
-  }
+const ChoicesWrapper = tw.div`
+  w-[33vw] flex flex-col items-center gap-[20px] overflow-auto h-[calc(100vh_-_80px)]
+  shrink-0 pb-[5px] [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-[40vw] max-[749px]:flex-col
+  max-[749px]:w-[100vw] max-[749px]:h-[35vh] max-[749px]:gap-[10px] max-[749px]:shrink-0
+  max-[749px]:overflow-hidden max-[749px]:pb-[0px] max-[749px]:mb-[0px]
 `;
 
-const MyScheduleTitle = styled.div`
-  font-weight:700;
-  font-size:25px;
-  height:30px;
-  @media screen and (max-width:800px){
-    font-size:22px;
-  }
+const TitleAndCreateArea = tw.div`
+  flex w-[26vw] h-auto items-end gap-[20px] mt-[30px] [justify-content:left] mb-[15px]
+  max-[749px]:w-full max-[749px]:flex max-[749px]:h-[80px] max-[749px]:mt-[10px]
+  max-[749px]:items-center max-[749px]:mb-[0px] max-[749px]:justify-center
 `;
 
-const SchedulePreviewTitle = styled.div`
-  font-weight:700;
-  font-size:25px;
-  height:30px;
-  @media screen and (max-width:800px){
-    font-size:22px;
-  }
+const ExistedSchedules = tw.div`
+  flex flex-col gap-[15px] max-[749px]:w-[100vw] max-[749px]:h-[23vh] max-[749px]:ml-[30px]
+  max-[749px]:flex-row max-[749px]:overflow-scroll max-[749px]:pt-[0px] max-[749px]:pb-[0px]
+  max-[749px]:shrink-0
 `;
 
-const CreateNewScheduleButton = styled.button`
-  width:80px;
-  height:20px;
-  background-color:#1c2e4a;
-  color:white;
-  border-radius:3px;
-  border:none;
-  font-size:12px;
-  font-weight:500;
-  @media screen and (max-width:800px){
-    width:80px;
-    height:20px;
-    flex-shrink:0;
-  }
+const SchedulePreview = tw.div`
+  flex w-[40vw] h-auto items-end gap-[20px] mt-[30px] [justify-content:left] mb-[15px]
+  max-[749px]:items-center max-[749px]:justify-center max-[749px]:w-full
+  max-[749px]:mt-[10px]
 `;
 
-const ViewDetailButton = styled.button`
-  width:70px;
-  height:20px;
-  background-color:#1c2e4a;
-  color:white;
-  border-radius:3px;
-  border:none;
-  font-size:12px;
-  font-weight:500;
-  cursor:pointer;
-  @media screen and (max-width:800px){
-    width:70px;
-    height:20px;
-    flex-shrink:0;
-  }
+const MyScheduleTitle = tw.div`
+  font-bold text-[25px] h-[30px] max-[801px]:text-[22px]
 `;
 
-const SelectedScheduleWrapper = styled.div`
-  width:42vw;
-  height:auto;
-  display:flex;
-  flex-direction:column;
-  align-items:left;
-  margin-left:50px;
-  gap:15px;
-  @media screen and (max-width:800px){
-    margin-left:20px;
-    width:50vw;
-  }
-  @media screen and (max-width:748px){
-    width:100vw;
-    margin-left:0px;
-    height:53vh;
-    align-items:center;
-  }
+const SchedulePreviewTitle = tw.div`
+  font-bold text-[25px] h-[30px] max-[801px]:text-[22px]
 `;
 
-const SelectedSchedulePhoto = styled.div`
-  padding-left:15px;
-  padding-bottom:10px;
-  opacity:1;
-  flex-direction:column;
-  justify-content:flex-end;
-  background-image: url(${RecCover3});
-  width:35vw;
-  height:12vw;
-  position:relative;
-  border-radius:20px;
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  @media screen and (max-width:800px){
-    width:85%;
-    height:150px;
-  }
-  @media screen and (max-width:748px){
-    width:85vw;
-    margin-left:0px;
-    align-items:center;
-    height:120px;
-  }
+const CreateNewScheduleButton = tw.button`
+  w-[80px] h-[20px] bg-[#1c2e4a] text-white rounded-[3px] [border:none] text-[12px]
+  font-medium max-[801px]:w-[80px] max-[801px]:h-[20px] max-[801px]:shrink-0
 `;
 
-const SelectedScheduleTitle = styled.div`
-  color:white;
-  font-weight:800;
-  font-size:30px;
-  position:absolute;
-  bottom:20px;
+const ViewDetailButton = tw.button`
+  w-[70px] h-[20px] bg-[#1c2e4a] text-white rounded-[3px] [border:none] text-[12px]
+  font-medium cursor-pointer max-[801px]:w-[70px] max-[801px]:h-[20px] max-[801px]:shrink-0
 `;
 
-const ScheduleMemberContainer = styled.div`
-  display:flex;
-  align-items:center;
-  width:35.7vw;
-  height:80px;
-  gap:15px;
-  overflow:scroll;
-  &::-webkit-scrollbar-track {
-    -webkit-box-shadow: transparent;
-    border-radius: 10px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color:transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    -webkit-box-shadow: transparent;
-    background-color:#D3D3D3;
-  }
-  @media screen and (max-width:800px){
-    width:85%;
-    height:70px;
-  }
-  @media screen and (max-width:700px){
-    width:85%;
-    height:80px;
-  }
+const SelectedScheduleWrapper = tw.div`
+  w-[42vw] h-auto flex flex-col [align-items:left] ml-[50px] gap-[15px]
+  max-[801px]:ml-[20px] max-[801px]:w-[50vw] max-[749px]:w-[100vw] max-[749px]:ml-[0px]
+  max-[749px]:h-[53vh] max-[749px]:items-center
 `;
 
-const ScheduleMemberWord = styled.div<{ hovered?: boolean }>`
-  align-items:center;
-  justify-content:center;
-  width:50px;
-  font-size:25px;
-  font-weight:600;
-  height:50px;
-  color:white;
-  border-radius:50%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  display:${(props) => (props.hovered ? 'flex' : 'none')};
-  cursor:pointer;
-  @media screen and (max-width:800px){
-    height:32px;
-    width:32px;
-    font-size:15px;
-    flex-shrink:0;
-  }
-  @media screen and (max-width:740px){
-    height:50px;
-    width:50px;
-    font-size:25px;
-    flex-shrink:0;
-  }
+const SelectedSchedulePhoto = tw.div`
+  pl-[15px] pb-[10px] opacity-[1] flex-col justify-end
+  bg-[url(/images/schedule_cover_rec3.jpg)] w-[35vw] h-[12vw] relative rounded-[20px]
+  bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply]
+  max-[801px]:w-[85%] max-[801px]:h-[150px] max-[749px]:w-[85vw] max-[749px]:ml-[0px]
+  max-[749px]:items-center max-[749px]:h-[120px]
 `;
 
-const ScheduleMemberPhoto = styled.img<{ hovered?: boolean }>`
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  text-align:center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  display:${(props) => (props.hovered ? 'none' : 'block')};
-  cursor:pointer;
-  object-fit: cover;
-  @media screen and (max-width:800px){
-    height:32px;
-    width:32px;
-    flex-shrink:0;
-  }
-  @media screen and (max-width:740px){
-    height:50px;
-    width:50px;
-  }
+const SelectedScheduleTitle = tw.div`
+  text-white font-extrabold text-[30px] absolute bottom-[20px]
 `;
 
-const StyledLink = styled(Link)`
-  cursor:pointer;
-  text-decoration:none;
-  color:white;
-  border:none;
+const ScheduleMemberContainer = tw.div`
+  flex items-center w-[35.7vw] h-[80px] gap-[15px] overflow-scroll
+  [&::-webkit-scrollbar-track]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-transparent
+  [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
+  [&::-webkit-scrollbar-thumb]:rounded-[10px]
+  [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-[85%] max-[801px]:h-[70px]
+  max-[701px]:w-[85%] max-[701px]:h-[80px]
 `;
 
-const CalendarBox = styled.div`
-  width:35vw;
-  height:120px;
-  border-radius:15px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  @media screen and (max-width:800px){
-    width:85%;
-    height:120px;
-  }
+const ScheduleMemberWord = tw.div<{ hovered?: boolean }>`
+  items-center justify-center w-[50px] text-[25px] font-semibold h-[50px] text-white
+  rounded-[50%] [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
+  cursor-pointer max-[801px]:h-[32px] max-[801px]:w-[32px] max-[801px]:text-[15px]
+  max-[801px]:shrink-0 max-[741px]:h-[50px] max-[741px]:w-[50px] max-[741px]:text-[25px]
+  max-[741px]:shrink-0
+  ${(p) => (p.hovered ? 'flex' : 'hidden')}
 `;
 
-const CalendarBoxTitle = styled.div`
-  display:flex;
-  padding-left:20px;
-  color:white;
-  font-weight:600;
-  font-size:18px;
-  text-shadow:1px 1px 2px black;
-  align-items:center;
-  border-top-right-radius:inherit;
-  border-top-left-radius:inherit;
-  width:35vw;
-  height:30%;
-  background: linear-gradient(
-    312deg,
-    rgb(178, 228, 238) 0%,
-    rgb(161, 176, 246) 100%
-  );
-  @media screen and (max-width:800px){
-    width:100%;
-  }
+const ScheduleMemberPhoto = tw.img<{ hovered?: boolean }>`
+  w-[50px] h-[50px] rounded-[50%] text-center
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] cursor-pointer
+  object-cover max-[801px]:h-[32px] max-[801px]:w-[32px] max-[801px]:shrink-0
+  max-[741px]:h-[50px] max-[741px]:w-[50px]
+  ${(p) => (p.hovered ? 'hidden' : 'block')}
 `;
 
-const DateArea = styled.div`
-  display:flex;
-  height:70%;
-  color:black;
-  font-weight:600;
-  font-size:25px;
-  align-items:center;
-  justify-content:center;
-  @media screen and (max-width:748px){
-    font-size:23px;
-  }
+const StyledLink = tw(Link)`
+  cursor-pointer [text-decoration:none] text-white [border:none]
+`;
+
+const CalendarBox = tw.div`
+  w-[35vw] h-[120px] rounded-[15px]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] max-[801px]:w-[85%]
+  max-[801px]:h-[120px]
+`;
+
+const CalendarBoxTitle = tw.div`
+  flex pl-[20px] text-white font-semibold text-[18px] [text-shadow:1px_1px_2px_black]
+  items-center [border-top-right-radius:inherit] [border-top-left-radius:inherit] w-[35vw]
+  h-[30%] [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,246)_100%)]
+  max-[801px]:w-full
+`;
+
+const DateArea = tw.div`
+  flex h-[70%] text-black font-semibold text-[25px] items-center justify-center
+  max-[749px]:text-[23px]
 `;
 
 function MySchedules() {

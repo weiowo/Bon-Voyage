@@ -3,38 +3,24 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from 'use-places-autocomplete';
-import styled from 'styled-components';
 import {
   GoogleMap, useLoadScript,
 } from '@react-google-maps/api';
+import tw from '@/lib/tw';
 import type { LatLng } from '../types';
 
 const CloseIcon = '/images/close_style.png';
 
-const SearchInput = styled.input<{ clicked?: boolean }>`
-  display:${(props) => (props.clicked ? 'flex' : 'none')};
-  width: calc( 45vw - 85px );
-  height: 35px;
-  border:1px solid grey;
-  border-radius:5px;
-  font-size:15px;
-  z-index:20;
-  padding-left:10px;
-  outline:none;
-  @media screen and (max-width:800px){
-    width:calc( 100vw - 85px );
-    display:${(props) => (props.clicked ? 'flex' : 'none')};
-  }
+const SearchInput = tw.input<{ clicked?: boolean }>`
+  w-[calc(45vw_-_85px)] h-[35px] [border:1px_solid_grey] rounded-[5px] text-[15px] z-[20]
+  pl-[10px] [outline:none] max-[801px]:w-[calc(100vw_-_85px)]
+  ${(p) => (p.clicked ? 'flex' : 'hidden')}
+  ${(p) => (p.clicked ? 'max-[801px]:flex' : 'max-[801px]:hidden')}
 `;
 
-const CloseSearchIcon = styled.img<{ clicked?: boolean }>`
-  display:${(props) => (props.clicked ? 'block' : 'none')};
-  width:35px;
-  height:35px;
-  position:absolute;
-  cursor:pointer;
-  top:0px;
-  left:calc( 45vw - 70px );
+const CloseSearchIcon = tw.img<{ clicked?: boolean }>`
+  w-[35px] h-[35px] absolute cursor-pointer top-[0px] left-[calc(45vw_-_70px)]
+  ${(p) => (p.clicked ? 'block' : 'hidden')}
 `;
 
 interface SearchProps {

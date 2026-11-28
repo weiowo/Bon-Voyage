@@ -1,26 +1,10 @@
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-const leftArrow = '/images/left-arrow.jpg';
-
-const LeftButton = styled.button`
-  height:25px;
-  width:25px;
-  position:absolute;
-  background-image: url(${leftArrow});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  left:20px;
-  top:20px;
-  text-align:center;
-  border:none;
-  border-radius:50%;
-  color:white;
-  cursor:pointer;
-  @media screen and (max-width:400px){
-    left:15px;
-    top:15px;
-}`;
+const LeftButton = tw.button`
+  h-[25px] w-[25px] absolute bg-[url(/images/left-arrow.jpg)] bg-cover bg-no-repeat
+  bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] left-[20px] top-[20px] text-center
+  [border:none] rounded-[50%] text-white cursor-pointer max-[401px]:left-[15px]
+  max-[401px]:top-[15px]
+`;
 
 export default LeftButton;

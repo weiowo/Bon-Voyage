@@ -1,32 +1,10 @@
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-const ModalLeftArea = styled.div`
-  width:25vw;
-  height:28vw;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  position:relative;
-  @media screen and (max-width:1200px){
-    width:50%;
-    height:80%;
-  }
-  @media screen and (max-width:630px){
-    width:90%;
-    height:50%;
-    gap:20px;
-  }
-  @media screen and (max-width:570px){
-    width:90%;
-    height:45%;
-    gap:20px;
-  }
-  @media screen and (max-width:430px){
-    height:50%;
-  }
-
+const ModalLeftArea = tw.div`
+  w-[25vw] h-[28vw] flex flex-col items-center justify-center gap-[10px] relative
+  max-[1201px]:w-[50%] max-[1201px]:h-[80%] max-[631px]:w-[90%] max-[631px]:h-[50%]
+  max-[631px]:gap-[20px] max-[571px]:w-[90%] max-[571px]:h-[45%] max-[571px]:gap-[20px]
+  max-[431px]:h-[50%]
 `;
 
 export default ModalLeftArea;

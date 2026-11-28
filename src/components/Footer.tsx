@@ -1,17 +1,8 @@
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 
-const FooterComponent = styled.div`
-  width:100vw;
-  height:60px;
-  background-color:#a9a9a9;
-  color:white;
-  font-weight:600;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  flex-shrink:0;
-  margin-top:50px;
+const FooterComponent = tw.div`
+  w-[100vw] h-[60px] bg-[#a9a9a9] text-white font-semibold flex items-center justify-center
+  text-[12px] shrink-0 mt-[50px]
 `;
 
 function Footer() {

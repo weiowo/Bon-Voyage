@@ -3,7 +3,7 @@ import
   collection, where, query, onSnapshot,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 import HeaderComponent from '../components/Headers/Header';
 import db from '../utils/firebase-init';
 import MyArticle, {
@@ -14,28 +14,14 @@ import Footer from '../components/Footer';
 import ARTICLE_COVER from '../constants/article.cover';
 import type { Article } from '../types';
 
-const AllArticleBaner = '/images/all_article_banner.png';
-
-const PageWrapper = styled.div`
-  width:100vw;
-  height:100vh;
+const PageWrapper = tw.div`
+  w-[100vw] h-[100vh]
 `;
 
-const ArticleCoverImage = styled.div`
-  width:100vw;
-  height:500px;
-  align-items:center;
-  justify-content:center;
-  background-image: url(${AllArticleBaner});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  position:relative;
-  background-position:center;
-  @media screen and (max-width:800px){
-    height:280px
-  }
+const ArticleCoverImage = tw.div`
+  w-[100vw] h-[500px] items-center justify-center bg-[url(/images/all_article_banner.png)]
+  bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
+  bg-center max-[801px]:h-[280px]
 `;
 
 function AllArticlePage() {

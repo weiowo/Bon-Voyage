@@ -6,153 +6,61 @@ import {
 } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import DatePicker from 'react-datepicker';
-import styled from 'styled-components';
+import tw from '@/lib/tw';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const TRAVEL_BG = '/images/travel2.jpg';
-
-const CloseModalButton = styled.button`
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:25px;
-  width:25px;
-  position:absolute;
-  right:20px;
-  top:20px;
-  text-align:center;
-  border:none;
-  border-radius:50%;
-  background-color:black;
-  color:white;
-  cursor:pointer;
-  @media screen and (max-width:400px){
-    right:15px;
-    top:15px;
-  }
+const CloseModalButton = tw.button`
+  flex items-center justify-center h-[25px] w-[25px] absolute right-[20px] top-[20px]
+  text-center [border:none] rounded-[50%] bg-black text-white cursor-pointer
+  max-[401px]:right-[15px] max-[401px]:top-[15px]
 `;
 
-const ModelBox = styled.div`
-  width:700px;
-  height:500px;
-  background-color:white;
-  position:relative;
-  z-index:10;
-  border-radius:20px;
-  align-items:center;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:20px;
-  @media screen and (max-width:800px){
-    width:300px;
-    height:350px;
-  }
+const ModelBox = tw.div`
+  w-[700px] h-[500px] bg-white relative z-[10] rounded-[20px] items-center flex flex-col
+  justify-center gap-[20px] max-[801px]:w-[300px] max-[801px]:h-[350px]
 `;
 
-const TripTitleAndInputArea = styled.div`
-  width:80%;
-  height:50px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  @media screen and (max-width:800px){
-  height:auto;
-  }
+const TripTitleAndInputArea = tw.div`
+  w-[80%] h-[50px] flex items-center justify-center max-[801px]:h-auto
 `;
 
-const DatePickerWrapper = styled.div`
-  width:100%;
-  height:auto;
-  display:flex;
-  gap:20px;
-  justify-content:center;
-  @media screen and (max-width:800px){
-    display:none;
-  }
+const DatePickerWrapper = tw.div`
+  w-full h-auto flex gap-[20px] justify-center max-[801px]:hidden
 `;
 
-const TripTitleInput = styled.input`
-  width: 70%;
-  height:22px;
-  font-weight:500;
-  font-size:18px;
-  border:none;
-  background-color:transparent;
-  border-bottom:1px solid black;
-  outline:none;
-  padding-left:10px;
-  padding-left:5px;
-  @media screen and (max-width:800px){
-    font-size:16px;
-  }
+const TripTitleInput = tw.input`
+  w-[70%] h-[22px] font-medium text-[18px] [border-top:none] [border-right:none]
+  [border-left:none] bg-transparent [border-bottom:1px_solid_black] [outline:none] pl-[5px]
+  max-[801px]:text-[16px]
 `;
 
-const EmbarkDateWrpper = styled.div`
-  display:flex;
-  flex-direction:column;
-  width:35%;
-  height:auto;
-  gap:10px;
+const EmbarkDateWrpper = tw.div`
+  flex flex-col w-[35%] h-auto gap-[10px]
 `;
 
-const EmbarkEndDateTitle = styled.div`
-  width:100%;
-  font-weight:550;
-  font-size:16px;
-  color:grey;
-  @media screen and (max-width:800px){
-    font-size:15px;
-  }
+const EmbarkEndDateTitle = tw.div`
+  w-full [font-weight:550] text-[16px] [color:grey] max-[801px]:text-[15px]
 `;
 
-const ModalBackgroud = styled.div`
-  width:100vw;
-  height:100vh;
-  position:fixed;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background-image: url(${TRAVEL_BG});
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-color: rgb(0, 0, 0, 0.2);
-  background-blend-mode: multiply;
-  background-position:center;
+const ModalBackgroud = tw.div`
+  w-[100vw] h-[100vh] fixed flex justify-center items-center bg-[url(/images/travel2.jpg)]
+  bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] bg-center
 `;
 
-const ConfirmedButton = styled.button`
-  width:80px;
-  height:30px;
-  background-color:#296D98;
-  color:white;
-  font-size:14px;
-  font-weight:600;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
+const ConfirmedButton = tw.button`
+  w-[80px] h-[30px] bg-[#296D98] text-white text-[14px] font-semibold [border:none]
+  rounded-[5px] cursor-pointer
 `;
 
-const SmallCalendarWrapper = styled.div`
-  display:none;
-  @media screen and (max-width:800px){
-    display:flex;
-    width:80%;
-    height:50%;
-    flex-direction:column;
-    gap:10px;
-    align-items:center;
-    justify-content:center;
-  }
+const SmallCalendarWrapper = tw.div`
+  hidden max-[801px]:flex max-[801px]:w-[80%] max-[801px]:h-[50%] max-[801px]:flex-col
+  max-[801px]:gap-[10px] max-[801px]:items-center max-[801px]:justify-center
 `;
 
-const SmallCalendarStyle = styled.div`
-  border-radius:10px;
-  height:50px;
-  width:200px;
-  background-color:red;
+const SmallCalendarStyle = tw.div`
+  rounded-[10px] h-[50px] w-[200px] [background-color:red]
 `;
 
 function ChooseDate() {
