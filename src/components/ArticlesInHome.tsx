@@ -25,13 +25,13 @@ const ArticlesAreaWrapper = tw.div`
 
 const ArticlesWrapperTitle = tw.div`
   w-[100vw] h-[30px] flex justify-center items-center text-[24px] font-semibold
-  text-[#1F456E] mb-[30px] mt-[30px] max-[801px]:text-[25px] max-[801px]:mb-[10px]
-  max-[801px]:mt-[20px]
+  text-[#1F456E] mb-[30px] mt-[30px] max-tablet:text-[25px] max-tablet:mb-[10px]
+  max-tablet:mt-[20px]
 `;
 
 export const ArticlesBoxesContainer = tw.div`
   mt-[30px] justify-center items-center w-[85vw] h-auto flex mb-[20px] gap-[30px] flex-wrap
-  max-[801px]:w-[92vw] max-[801px]:gap-[20px]
+  max-tablet:w-[92vw] max-tablet:gap-[20px]
 `;
 
 const CheckMoreButton = tw.button`

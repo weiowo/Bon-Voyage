@@ -39,64 +39,64 @@ const filledStar = '/images/filled_star.webp';
 
 const NearByPlaceWrapper = tw.div`
   w-[100vw] h-[340px] flex flex-row items-center justify-center gap-[10px] mt-[20px]
-  max-[1181px]:h-[280px] max-[1181px]:mt-[20px] max-[901px]:flex-col max-[901px]:mt-[30px]
-  max-[901px]:h-[370px]
+  max-desktop:h-[280px] max-desktop:mt-[20px] max-tablet-lg:flex-col max-tablet-lg:mt-[30px]
+  max-tablet-lg:h-[370px]
 `;
 
 const NearByPlaceLeftArea = tw.div`
-  w-[15vw] h-[350px] flex flex-col items-center justify-center max-[901px]:w-[80vw]
-  max-[901px]:h-[100px] max-[901px]:mr-[0px]
+  w-[15vw] h-[350px] flex flex-col items-center justify-center max-tablet-lg:w-[80vw]
+  max-tablet-lg:h-[100px] max-tablet-lg:mr-[0px]
 `;
 
 const NearbyPlaceTitle = tw.div`
-  text-[25px] text-[#1F456E] font-semibold mb-[15px] max-[901px]:text-[24px]
-  max-[901px]:mb-[15px]
+  text-[25px] text-[#1F456E] font-semibold mb-[15px] max-tablet-lg:text-[24px]
+  max-tablet-lg:mb-[15px]
 `;
 
 const NearByPlaceDescription = tw.div`
-  text-[12px] [color:grey] font-semibold mb-[15px] max-[901px]:text-[16px]
-  max-[901px]:mb-[25px]
+  text-[12px] [color:grey] font-semibold mb-[15px] max-tablet-lg:text-[16px]
+  max-tablet-lg:mb-[25px]
 `;
 
 const NearByViewMoreButton = tw.button`
   hidden w-[130px] h-[40px] [border:none] bg-[#0492c2] rounded-[5px] text-white
-  font-semibold tracking-[3px] max-[901px]:hidden
+  font-semibold tracking-[3px] max-tablet-lg:hidden
 `;
 
 const CardsWrapper = tw.div`
   w-[800px] h-[290px] flex flex-col items-center justify-center flex-wrap relative
-  overflow-hidden z-[1] gap-[20px] max-[1181px]:w-[650px] max-[1181px]:mr-[0px]
-  max-[901px]:hidden
+  overflow-hidden z-[1] gap-[20px] max-desktop:w-[650px] max-desktop:mr-[0px]
+  max-tablet-lg:hidden
 `;
 
 const SmallScreenCards = tw.div`
-  hidden max-[901px]:h-[200px] max-[901px]:flex max-[901px]:flex-col
-  max-[901px]:items-center max-[901px]:justify-center max-[901px]:flex-wrap
-  max-[901px]:relative max-[901px]:overflow-hidden max-[901px]:z-[1] max-[901px]:w-full
-  max-[501px]:h-[160px] max-[501px]:overflow-auto max-[501px]:w-full
+  hidden max-tablet-lg:h-[200px] max-tablet-lg:flex max-tablet-lg:flex-col
+  max-tablet-lg:items-center max-tablet-lg:justify-center max-tablet-lg:flex-wrap
+  max-tablet-lg:relative max-tablet-lg:overflow-hidden max-tablet-lg:z-[1] max-tablet-lg:w-full
+  max-mobile:h-[160px] max-mobile:overflow-auto max-mobile:w-full
 `;
 
 const Cards = tw.div`
   flex pl-[15px] pb-[10px] opacity-[1] flex-col justify-end w-[180px] h-[240px] text-white
   font-semibold relative text-left overflow-hidden rounded-[10px] cursor-pointer bg-cover
-  bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] max-[1181px]:w-[140px]
-  max-[1181px]:h-[180px] max-[901px]:w-[30%] max-[901px]:h-[280px] max-[901px]:text-[13px]
-  max-[501px]:w-[30%] max-[501px]:h-[150px]
+  bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] max-desktop:w-[140px]
+  max-desktop:h-[180px] max-tablet-lg:w-[30%] max-tablet-lg:h-[280px] max-tablet-lg:text-[13px]
+  max-mobile:w-[30%] max-mobile:h-[150px]
 `;
 
 const SmallScreenCardsWrapper = tw.div`
-  hidden max-[901px]:flex max-[901px]:w-[90%] max-[901px]:items-center
-  max-[901px]:gap-[10px] max-[501px]:w-full max-[501px]:gap-[0px] max-[501px]:pr-[3px]
-  max-[501px]:pl-[3px]
+  hidden max-tablet-lg:flex max-tablet-lg:w-[90%] max-tablet-lg:items-center
+  max-tablet-lg:gap-[10px] max-mobile:w-full max-mobile:gap-[0px] max-mobile:pr-[3px]
+  max-mobile:pl-[3px]
 `;
 
 const Arrow = tw.img`
-  w-[40px] h-[40px] cursor-pointer max-[901px]:hidden
+  w-[40px] h-[40px] cursor-pointer max-tablet-lg:hidden
 `;
 
 const SmallScreenArrow = tw.img`
-  hidden max-[901px]:block max-[901px]:w-[25px] max-[901px]:h-[25px]
-  max-[901px]:cursor-pointer
+  hidden max-tablet-lg:block max-tablet-lg:w-[25px] max-tablet-lg:h-[25px]
+  max-tablet-lg:cursor-pointer
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

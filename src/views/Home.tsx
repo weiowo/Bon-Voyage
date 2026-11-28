@@ -24,32 +24,32 @@ const HomeTopAreaWrapper = tw.div`
   w-[100vw] h-[100vh] flex flex-col
   bg-[url(https://firebasestorage.googleapis.com/v0/b/bonvoyage-f5e7d.appspot.com/o/images%2Findex_banner.png?alt=media&token=6f0ccfc9-9f09-42c5-8a08-7f23af64b4c9)]
   items-center relative bg-cover bg-no-repeat [background-blend-mode:multiply]
-  max-[801px]:h-[70vw]
+  max-tablet:h-[70vw]
 `;
 
 const SearchBarBackground = tw.div`
   flex flex-col justify-center items-center w-[73vw] h-[90px] rounded-[15px] absolute
-  bottom-[30px] bg-[rgba(255,255,255,0.4)] max-[601px]:w-[86vw] max-[601px]:h-[73px]
+  bottom-[30px] bg-[rgba(255,255,255,0.4)] max-mobile-lg:w-[86vw] max-mobile-lg:h-[73px]
 `;
 
 const SearchBarLittleWrapper = tw.div`
   rounded-[10px] flex items-center w-[70vw] justify-between h-[50px] bg-white pl-[20px]
-  pr-[20px] absolute max-[601px]:w-[80vw]
+  pr-[20px] absolute max-mobile-lg:w-[80vw]
 `;
 
 const SearchInput = tw.input`
   flex flex-col w-[70vw] [border:none] h-[50px] cursor-pointer text-[17px] box-border
-  pl-[10px] [outline:none] max-[601px]:w-[80%]
+  pl-[10px] [outline:none] max-mobile-lg:w-[80%]
 `;
 
 const Ulist = tw.ul`
   flex flex-col items-center w-[70vw] h-auto z-[10] absolute top-[60px] bg-white pl-[0px]
-  [border:1px_grey_solid] mt-[15px] mb-[0px] rounded-[15px] max-[601px]:w-[80vw]
+  [border:1px_grey_solid] mt-[15px] mb-[0px] rounded-[15px] max-mobile-lg:w-[80vw]
 `;
 
 const List = tw.li`
   w-[69vw] font-medium mt-[2px] mb-[2px] h-[30px] rounded-[10px] flex justify-center
-  items-center cursor-pointer hover:text-white hover:bg-[#67B7D1] max-[601px]:w-[78vw]
+  items-center cursor-pointer hover:text-white hover:bg-[#67B7D1] max-mobile-lg:w-[78vw]
 `;
 
 const OptionForm = tw.form`
@@ -58,7 +58,7 @@ const OptionForm = tw.form`
 
 const OptionSelect = tw.select`
   w-[70px] [border:none] font-medium text-[17px] ml-[0px] [outline:none]
-  max-[601px]:w-[60px]
+  max-mobile-lg:w-[60px]
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

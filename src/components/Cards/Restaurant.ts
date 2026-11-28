@@ -4,8 +4,8 @@ const RestaurantBox = tw.div`
   flex items-center w-[350px] h-[160px] mt-[20px] cursor-pointer bg-[#FAFAFA] pl-[38px]
   rounded-[15px] [border:#3f3f3f_solid_1px]
   [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
-  max-[778px]:mt-[15px] max-[778px]:w-[330px] max-[778px]:pl-[25px] max-[514px]:mt-[15px]
-  max-[514px]:w-[330px] max-[514px]:pl-[25px]
+  max-tablet:mt-[15px] max-tablet:w-[330px] max-tablet:pl-[25px] max-mobile:mt-[15px]
+  max-mobile:w-[330px] max-mobile:pl-[25px]
 `;
 
 export const RestaurantPhoto = tw.img`

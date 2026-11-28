@@ -45,21 +45,21 @@ const ConfirmWritingButton = tw.button`
 `;
 
 const PageWrapper = tw.div`
-  w-[100vw] flex flex-row pt-[60px] max-[801px]:justify-center
+  w-[100vw] flex flex-row pt-[60px] max-tablet:justify-center
 `;
 
 const MyArticlesArea = tw.div`
-  w-[80vw] h-[85vh] flex flex-col pl-[50px] mt-[30px] max-[801px]:pl-[0px]
-  max-[801px]:w-[93vw]
+  w-[80vw] h-[85vh] flex flex-col pl-[50px] mt-[30px] max-tablet:pl-[0px]
+  max-tablet:w-[93vw]
 `;
 
 export const MyPageTitle = tw.div`
-  w-[90%] h-auto text-[28px] font-semibold text-left max-[801px]:text-center
-  max-[801px]:text-[25px] max-[801px]:w-full
+  w-[90%] h-auto text-[28px] font-semibold text-left max-tablet:text-center
+  max-tablet:text-[25px] max-tablet:w-full
 `;
 
 const Tabs = tw.div`
-  flex w-[90%] h-auto gap-[20px] mt-[10px] max-[801px]:w-full
+  flex w-[90%] h-auto gap-[20px] mt-[10px] max-tablet:w-full
 `;
 
 const Tab = tw.div<{ isClicked?: boolean }>`
@@ -75,28 +75,28 @@ const MyArticlesContainer = tw.div<{ isClicked?: boolean }>`
   [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
   [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-full max-[801px]:justify-center
-  max-[801px]:pl-[0px] max-[381px]:gap-[5px]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-tablet:w-full max-tablet:justify-center
+  max-tablet:pl-[0px] max-mobile-xs:gap-[5px]
   ${(p) => (p.isClicked ? 'flex' : 'hidden')}
 `;
 
 export const UpperLine = tw.div`
-  h-[1px] shrink-0 [background-color:grey] w-[90%] max-[801px]:w-full
+  h-[1px] shrink-0 [background-color:grey] w-[90%] max-tablet:w-full
 `;
 
 const ArticlePreviewAndDeleteWrapper = tw.div`
-  relative w-[190px] h-[250px] max-[1201px]:w-[160px] max-[1201px]:h-[200px]
+  relative w-[190px] h-[250px] max-desktop:w-[160px] max-desktop:h-[200px]
 `;
 
 const DeletePublishedArticleIcon = tw.img`
   w-[20px] h-[20px] absolute top-[140px] right-[20px] cursor-pointer z-[200]
-  max-[1201px]:top-[115px] max-[1201px]:right-[20px] max-[381px]:top-[115px]
-  max-[381px]:right-[30px] max-[381px]:w-[18px] max-[381px]:h-[18px]
+  max-desktop:top-[115px] max-desktop:right-[20px] max-mobile-xs:top-[115px]
+  max-mobile-xs:right-[30px] max-mobile-xs:w-[18px] max-mobile-xs:h-[18px]
 `;
 
 const DeleteDraftArticleIcon = tw.img`
   w-[20px] h-[20px] z-[300] absolute top-[140px] right-[20px] cursor-pointer
-  max-[1201px]:top-[115px] max-[1201px]:right-[20px]
+  max-desktop:top-[115px] max-desktop:right-[20px]
 `;
 
 function MyArticles() {

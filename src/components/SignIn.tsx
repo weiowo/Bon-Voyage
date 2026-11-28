@@ -21,13 +21,13 @@ const SignInModalBackground = tw.div`
 
 const ModalBox = tw.div`
   flex w-[30vw] h-[30vw] bg-white rounded-[10px] z-[200] relative items-center
-  justify-center max-[1201px]:w-[350px] max-[1201px]:h-[350px] max-[451px]:w-[330px]
-  max-[451px]:h-[330px]
+  justify-center max-desktop:w-[350px] max-desktop:h-[350px] max-mobile-md:w-[330px]
+  max-mobile-md:h-[330px]
 `;
 
 const SignUpArea = tw.div<{ active?: boolean }>`
-  w-[80%] h-[80%] flex-col items-center justify-center gap-[10px] max-[1201px]:w-[90%]
-  max-[1201px]:h-[90%]
+  w-[80%] h-[80%] flex-col items-center justify-center gap-[10px] max-desktop:w-[90%]
+  max-desktop:h-[90%]
   ${(p) => (p.active ? 'flex' : 'hidden')}
 `;
 

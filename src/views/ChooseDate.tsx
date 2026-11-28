@@ -14,26 +14,26 @@ import 'react-datepicker/dist/react-datepicker.css';
 const CloseModalButton = tw.button`
   flex items-center justify-center h-[25px] w-[25px] absolute right-[20px] top-[20px]
   text-center [border:none] rounded-[50%] bg-black text-white cursor-pointer
-  max-[401px]:right-[15px] max-[401px]:top-[15px]
+  max-mobile-xs:right-[15px] max-mobile-xs:top-[15px]
 `;
 
 const ModelBox = tw.div`
   w-[700px] h-[500px] bg-white relative z-[10] rounded-[20px] items-center flex flex-col
-  justify-center gap-[20px] max-[801px]:w-[300px] max-[801px]:h-[350px]
+  justify-center gap-[20px] max-tablet:w-[300px] max-tablet:h-[350px]
 `;
 
 const TripTitleAndInputArea = tw.div`
-  w-[80%] h-[50px] flex items-center justify-center max-[801px]:h-auto
+  w-[80%] h-[50px] flex items-center justify-center max-tablet:h-auto
 `;
 
 const DatePickerWrapper = tw.div`
-  w-full h-auto flex gap-[20px] justify-center max-[801px]:hidden
+  w-full h-auto flex gap-[20px] justify-center max-tablet:hidden
 `;
 
 const TripTitleInput = tw.input`
   w-[70%] h-[22px] font-medium text-[18px] [border-top:none] [border-right:none]
   [border-left:none] bg-transparent [border-bottom:1px_solid_black] [outline:none] pl-[5px]
-  max-[801px]:text-[16px]
+  max-tablet:text-[16px]
 `;
 
 const EmbarkDateWrpper = tw.div`
@@ -41,7 +41,7 @@ const EmbarkDateWrpper = tw.div`
 `;
 
 const EmbarkEndDateTitle = tw.div`
-  w-full [font-weight:550] text-[16px] [color:grey] max-[801px]:text-[15px]
+  w-full [font-weight:550] text-[16px] [color:grey] max-tablet:text-[15px]
 `;
 
 const ModalBackgroud = tw.div`
@@ -55,8 +55,8 @@ const ConfirmedButton = tw.button`
 `;
 
 const SmallCalendarWrapper = tw.div`
-  hidden max-[801px]:flex max-[801px]:w-[80%] max-[801px]:h-[50%] max-[801px]:flex-col
-  max-[801px]:gap-[10px] max-[801px]:items-center max-[801px]:justify-center
+  hidden max-tablet:flex max-tablet:w-[80%] max-tablet:h-[50%] max-tablet:flex-col
+  max-tablet:gap-[10px] max-tablet:items-center max-tablet:justify-center
 `;
 
 const SmallCalendarStyle = tw.div`

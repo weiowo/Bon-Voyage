@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 // Named, class-only components built from Tailwind classes:
 //
-//   const Card = tw.div`flex rounded-[8px] max-[800px]:hidden`;
+//   const Card = tw.div`flex rounded-[8px] max-tablet:hidden`;
 //   const Tab = tw.button<{ active?: boolean }>`
 //     px-[12px] ${(p) => (p.active ? 'bg-black text-white' : 'bg-white')}
 //   `;

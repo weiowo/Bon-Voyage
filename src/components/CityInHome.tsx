@@ -3,32 +3,32 @@ import { Link } from '@/lib/router';
 import tw from '@/lib/tw';
 
 const CityAtHomeWrapper = tw.div`
-  mt-[45px] w-[100vw] h-[520px] flex flex-col items-center max-[801px]:h-[850px]
-  max-[581px]:h-[740px]
+  mt-[45px] w-[100vw] h-[520px] flex flex-col items-center max-tablet:h-[850px]
+  max-mobile-lg:h-[740px]
 `;
 
 const CityAtHomeWrapperTitle = tw.div`
   w-[100vw] h-[30px] flex justify-center items-center text-[24px] font-semibold
-  text-[#1F456E] mb-[60px] max-[801px]:text-[25px] max-[801px]:mb-[30px]
+  text-[#1F456E] mb-[60px] max-tablet:text-[25px] max-tablet:mb-[30px]
 `;
 
 const CityAtHomeBelowPart = tw.div`
-  w-[100vw] h-auto flex flex-row justify-center gap-[10px] max-[801px]:flex-col
-  max-[801px]:gap-[15px]
+  w-[100vw] h-auto flex flex-row justify-center gap-[10px] max-tablet:flex-col
+  max-tablet:gap-[15px]
 `;
 
 const SmallScreenCity = tw.div`
-  w-[50%] flex gap-[15px] max-[801px]:w-[100vw] max-[801px]:flex max-[801px]:justify-center
-  max-[801px]:gap-[15px]
+  w-[50%] flex gap-[15px] max-tablet:w-[100vw] max-tablet:flex max-tablet:justify-center
+  max-tablet:gap-[15px]
 `;
 
 const FirstVerticalBlock = tw.div`
-  w-[33.5vw] h-[430px] flex flex-col gap-[15px] max-[801px]:w-[60vw] max-[801px]:h-[380px]
-  max-[581px]:h-[330px]
+  w-[33.5vw] h-[430px] flex flex-col gap-[15px] max-tablet:w-[60vw] max-tablet:h-[380px]
+  max-mobile-lg:h-[330px]
 `;
 
 const TainanWrapper = tw.div`
-  relative w-[33.5vw] h-[290px] overflow-hidden rounded-[10px] max-[801px]:w-[60vw]
+  relative w-[33.5vw] h-[290px] overflow-hidden rounded-[10px] max-tablet:w-[60vw]
 `;
 
 const Tainan = tw.div`
@@ -42,17 +42,17 @@ const TainanTitle = tw.div`
 `;
 
 const FirstVerticalBlockBelowPart = tw.div`
-  w-[33.5vw] h-[140px] flex gap-[15px] max-[801px]:w-[60vw]
+  w-[33.5vw] h-[140px] flex gap-[15px] max-tablet:w-[60vw]
 `;
 
 const BarcelonaWrapper = tw.div`
-  relative w-[13vw] h-[140px] overflow-hidden rounded-[10px] max-[801px]:w-[20vw]
+  relative w-[13vw] h-[140px] overflow-hidden rounded-[10px] max-tablet:w-[20vw]
 `;
 
 const Barcelona = tw.div`
   relative rounded-[10px] bg-center w-full h-full bg-[url(/images/barcelona.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] [transition:0.8s]
-  hover:[transform:scale(1.2)] max-[801px]:w-[20vw]
+  hover:[transform:scale(1.2)] max-tablet:w-[20vw]
 `;
 
 const BarcelonaTitle = tw.div`
@@ -60,13 +60,13 @@ const BarcelonaTitle = tw.div`
 `;
 
 const ProvenceWrapper = tw.div`
-  relative w-[20vw] h-[140px] overflow-hidden rounded-[10px] max-[801px]:w-[40vw]
+  relative w-[20vw] h-[140px] overflow-hidden rounded-[10px] max-tablet:w-[40vw]
 `;
 
 const Provence = tw.div`
   relative rounded-[10px] bg-center w-[20vw] h-[140px] bg-[url(/images/provence.png)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.1)] [background-blend-mode:multiply]
-  [transition:0.8s] hover:[transform:scale(1.2)] max-[801px]:w-[40vw]
+  [transition:0.8s] hover:[transform:scale(1.2)] max-tablet:w-[40vw]
 `;
 
 const ProvenceTitle = tw.div`
@@ -74,8 +74,8 @@ const ProvenceTitle = tw.div`
 `;
 
 const SecondVerticalBlcokWrapper = tw.div`
-  relative w-[14.5vw] h-[430px] overflow-hidden rounded-[10px] max-[801px]:w-[40vw]
-  max-[801px]:h-[380px] max-[581px]:h-[330px]
+  relative w-[14.5vw] h-[430px] overflow-hidden rounded-[10px] max-tablet:w-[40vw]
+  max-tablet:h-[380px] max-mobile-lg:h-[330px]
 `;
 
 const SecondVerticalBlcok = tw.div`
@@ -89,16 +89,16 @@ const KyotoTitle = tw.div`
 `;
 
 const ThridVerticalBlock = tw.div`
-  w-[19vw] h-[430px] flex flex-col gap-[15px] max-[801px]:w-[40vw] max-[801px]:h-[380px]
-  max-[581px]:h-[330px]
+  w-[19vw] h-[430px] flex flex-col gap-[15px] max-tablet:w-[40vw] max-tablet:h-[380px]
+  max-mobile-lg:h-[330px]
 `;
 
 const ThridVerticalBlockUpperPart = tw.div`
-  w-[19vw] h-[172px] flex gap-[15px] max-[801px]:w-[40vw] max-[581px]:w-[52vw]
+  w-[19vw] h-[172px] flex gap-[15px] max-tablet:w-[40vw] max-mobile-lg:w-[52vw]
 `;
 
 const NewYorkWrapper = tw.div`
-  relative w-[7.7vw] h-[172px] overflow-hidden rounded-[10px] max-[801px]:w-[21vw]
+  relative w-[7.7vw] h-[172px] overflow-hidden rounded-[10px] max-tablet:w-[21vw]
 `;
 
 const NewYork = tw.div`
@@ -112,8 +112,8 @@ const NewYorkTitle = tw.div`
 `;
 
 const CamBridgeWrapper = tw.div`
-  relative w-[11.3vw] h-[172px] overflow-hidden rounded-[10px] max-[801px]:w-[25vw]
-  max-[581px]:w-[31vw]
+  relative w-[11.3vw] h-[172px] overflow-hidden rounded-[10px] max-tablet:w-[25vw]
+  max-mobile-lg:w-[31vw]
 `;
 
 const CamBridge = tw.div`
@@ -127,8 +127,8 @@ const CamBridgeTitle = tw.div`
 `;
 
 const AmsterdamWrapper = tw.div`
-  relative w-[19vw] h-[258px] overflow-hidden rounded-[10px] max-[801px]:w-[40vw]
-  max-[581px]:w-[52vw]
+  relative w-[19vw] h-[258px] overflow-hidden rounded-[10px] max-tablet:w-[40vw]
+  max-mobile-lg:w-[52vw]
 `;
 
 const Amsterdam = tw.div`
@@ -142,29 +142,29 @@ const AmsterdamTitle = tw.div`
 `;
 
 const FourthVerticalBlockWrapper = tw.div`
-  relative w-[18vw] h-[430px] overflow-hidden rounded-[10px] max-[801px]:w-[25vw]
-  max-[801px]:h-[380px]
+  relative w-[18vw] h-[430px] overflow-hidden rounded-[10px] max-tablet:w-[25vw]
+  max-tablet:h-[380px]
 `;
 
 const FourthVerticalBlock = tw.div`
   absolute rounded-[10px] w-full h-full bg-center bg-[url(/images/paris_2.webp)] bg-cover
   bg-no-repeat bg-[rgb(0,0,0,0.1)] [background-blend-mode:multiply] [transition:0.8s]
-  hover:[transform:scale(1.1)] max-[581px]:hidden
+  hover:[transform:scale(1.1)] max-mobile-lg:hidden
 `;
 
 const ParisTitle = tw.div`
   text-[26px] font-semibold text-white absolute bottom-[15px] right-[15px]
-  max-[581px]:hidden
+  max-mobile-lg:hidden
 `;
 
 const FifthVerticalBlock = tw.div`
-  w-[15vw] h-[430px] flex flex-col gap-[15px] max-[801px]:w-[35vw] max-[801px]:h-[380px]
-  max-[581px]:w-[45vw] max-[581px]:h-[330px]
+  w-[15vw] h-[430px] flex flex-col gap-[15px] max-tablet:w-[35vw] max-tablet:h-[380px]
+  max-mobile-lg:w-[45vw] max-mobile-lg:h-[330px]
 `;
 
 const MexicoWrapper = tw.div`
-  relative w-[15vw] h-[245px] overflow-hidden rounded-[10px] max-[801px]:w-[35vw]
-  max-[581px]:w-[45vw]
+  relative w-[15vw] h-[245px] overflow-hidden rounded-[10px] max-tablet:w-[35vw]
+  max-mobile-lg:w-[45vw]
 `;
 
 const Mexico = tw.div`
@@ -178,8 +178,8 @@ const MexicoTitle = tw.div`
 `;
 
 const EgyptWrapper = tw.div`
-  relative w-[15vw] h-[185px] overflow-hidden rounded-[10px] max-[801px]:w-[35vw]
-  max-[581px]:w-[45vw] max-[581px]:h-[185px]
+  relative w-[15vw] h-[185px] overflow-hidden rounded-[10px] max-tablet:w-[35vw]
+  max-mobile-lg:w-[45vw] max-mobile-lg:h-[185px]
 `;
 
 const Egypt = tw.div`

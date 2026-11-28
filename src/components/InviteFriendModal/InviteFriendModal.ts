@@ -22,12 +22,12 @@ export const ConfirmSearchButton = tw.button`
   w-[30%] h-[35px] rounded-[8px] text-white [font-weight:550] text-[16px] [border:none] flex
   items-center justify-center cursor-pointer [text-shadow:1px_1px_2px_black]
   [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,246)_100%)]
-  max-[801px]:w-[50%]
+  max-tablet:w-[50%]
 `;
 
 const AddFriendButton = tw.img`
-  w-[55px] h-[55px] cursor-pointer max-[801px]:w-[35px] max-[801px]:h-[35px]
-  max-[749px]:w-[55px] max-[749px]:h-[55px]
+  w-[55px] h-[55px] cursor-pointer max-tablet:w-[35px] max-tablet:h-[35px]
+  max-tablet-sm:w-[55px] max-tablet-sm:h-[55px]
 `;
 
 export default AddFriendButton;

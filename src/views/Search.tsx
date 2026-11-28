@@ -13,9 +13,9 @@ const CloseIcon = '/images/close_style.webp';
 
 const SearchInput = tw.input<{ clicked?: boolean }>`
   w-[calc(45vw_-_85px)] h-[35px] [border:1px_solid_grey] rounded-[5px] text-[15px] z-[20]
-  pl-[10px] [outline:none] max-[801px]:w-[calc(100vw_-_85px)]
+  pl-[10px] [outline:none] max-tablet:w-[calc(100vw_-_85px)]
   ${(p) => (p.clicked ? 'flex' : 'hidden')}
-  ${(p) => (p.clicked ? 'max-[801px]:flex' : 'max-[801px]:hidden')}
+  ${(p) => (p.clicked ? 'max-tablet:flex' : 'max-tablet:hidden')}
 `;
 
 const CloseSearchIcon = tw.img<{ clicked?: boolean }>`

@@ -21,13 +21,13 @@ import type { UserProfile } from '../types';
 const UserPhotoSrc = '/images/seal.webp';
 
 const PageWrapper = tw.div`
-  w-[100vw] h-[100vh] flex pt-[60px] max-[801px]:flex max-[801px]:flex-col
-  max-[801px]:items-center max-[801px]:pl-[0px]
+  w-[100vw] h-[100vh] flex pt-[60px] max-tablet:flex max-tablet:flex-col
+  max-tablet:items-center max-tablet:pl-[0px]
 `;
 
 const MyInfoArea = tw.div`
-  mt-[30px] flex h-[80%] w-[80vw] flex-col pl-[50px] max-[801px]:flex
-  max-[801px]:items-center max-[801px]:pl-[0px] max-[801px]:h-full max-[801px]:w-full
+  mt-[30px] flex h-[80%] w-[80vw] flex-col pl-[50px] max-tablet:flex
+  max-tablet:items-center max-tablet:pl-[0px] max-tablet:h-full max-tablet:w-full
 `;
 
 const MyProfileWrapper = tw.div`
@@ -36,7 +36,7 @@ const MyProfileWrapper = tw.div`
 
 const MyProfilePhoto = tw.img`
   w-[180px] h-[180px] rounded-[3px] object-cover [outline:none] [border:none] shrink-0
-  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-[801px]:rounded-[20px]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-tablet:rounded-[20px]
 `;
 
 const CameraIcon = tw.label`
@@ -45,39 +45,39 @@ const CameraIcon = tw.label`
 `;
 
 const ProfileNameEmailDisplay = tw.div`
-  w-[250px] h-auto flex flex-row items-start gap-[10px] max-[801px]:w-[250px]
-  max-[801px]:h-auto max-[801px]:flex max-[801px]:flex-col max-[801px]:gap-[10px]
+  w-[250px] h-auto flex flex-row items-start gap-[10px] max-tablet:w-[250px]
+  max-tablet:h-auto max-tablet:flex max-tablet:flex-col max-tablet:gap-[10px]
 `;
 
 const ProfileNameEmailTitle = tw.div`
   flex items-center [justify-content:left] w-[60px] h-[30px] font-semibold text-[15px]
-  text-[#2E5984] max-[801px]:flex max-[801px]:items-center max-[801px]:justify-center
-  max-[801px]:w-full max-[801px]:h-[30px] max-[801px]:font-semibold max-[801px]:text-[15px]
-  max-[801px]:text-[#2E5984]
+  text-[#2E5984] max-tablet:flex max-tablet:items-center max-tablet:justify-center
+  max-tablet:w-full max-tablet:h-[30px] max-tablet:font-semibold max-tablet:text-[15px]
+  max-tablet:text-[#2E5984]
 `;
 
 const ProfileNamEmailContent = tw.div`
   w-[300px] h-[35px] text-[15px] bg-[#CDEEFD] [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] flex
-  items-center justify-center rounded-[20px] max-[801px]:w-[250px] max-[801px]:h-[35px]
-  max-[801px]:text-[15px] max-[801px]:bg-[#CDEEFD]
-  max-[801px]:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-[801px]:flex
-  max-[801px]:items-center max-[801px]:justify-center max-[801px]:rounded-[20px]
+  items-center justify-center rounded-[20px] max-tablet:w-[250px] max-tablet:h-[35px]
+  max-tablet:text-[15px] max-tablet:bg-[#CDEEFD]
+  max-tablet:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-tablet:flex
+  max-tablet:items-center max-tablet:justify-center max-tablet:rounded-[20px]
 `;
 
 const ProfilePageBelowArea = tw.div`
-  w-[80%] mt-[50px] h-[90%] flex gap-[20px] text-[18px] font-semibold max-[801px]:flex-col
-  max-[801px]:items-center max-[801px]:h-[90%] max-[801px]:mt-[30px]
+  w-[80%] mt-[50px] h-[90%] flex gap-[20px] text-[18px] font-semibold max-tablet:flex-col
+  max-tablet:items-center max-tablet:h-[90%] max-tablet:mt-[30px]
 `;
 
 const ProfileInfoArea = tw.div`
-  flex flex-col items-start w-[50%] h-[280px] gap-[20px] max-[801px]:items-center
-  max-[801px]:w-[50%] max-[801px]:h-full
+  flex flex-col items-start w-[50%] h-[280px] gap-[20px] max-tablet:items-center
+  max-tablet:w-[50%] max-tablet:h-full
 `;
 
 const LogOutButton = tw.button`
   w-[100px] h-[35px] [border:none] mt-[10px] rounded-[5px] bg-[#2E5984] text-white
-  font-semibold text-[15px] cursor-pointer max-[801px]:w-[120px] max-[801px]:bg-[#2E5984]
-  max-[801px]:mt-[5px]
+  font-semibold text-[15px] cursor-pointer max-tablet:w-[120px] max-tablet:bg-[#2E5984]
+  max-tablet:mt-[5px]
 `;
 
 const auth = getAuth(app);

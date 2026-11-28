@@ -4,20 +4,20 @@ const ChatRoom = tw.div<{ openChat?: boolean }>`
   z-[100] flex-col items-center w-[300px] h-[300px] [border-top-right-radius:10px]
   [border-top-left-radius:10px] [border-bottom:none] fixed bottom-[0px] right-[50px]
   bg-white [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
-  max-[801px]:right-[30px]
+  max-tablet:right-[30px]
   ${(p) => (p.openChat ? 'flex' : 'hidden')}
 `;
 
 export const UnreadMessage = tw.div<{ active?: boolean }>`
   flex items-center justify-center w-[20px] h-[20px] rounded-[50%] [background-color:red]
   text-white text-[12px] font-medium fixed bottom-[85px] right-[120px] z-[300]
-  max-[801px]:bottom-[75px] max-[801px]:right-[80px]
+  max-tablet:bottom-[75px] max-tablet:right-[80px]
   ${(p) => (p.active ? '[animation:hithere_1.1s_ease_infinite]' : '[animation:none]')}
 `;
 
 export const ChatIcon = tw.img<{ openChat?: boolean; active?: boolean }>`
   fixed bottom-[50px] right-[80px] z-[100] w-[50px] h-[50px] cursor-pointer
-  max-[801px]:bottom-[40px] max-[801px]:right-[40px]
+  max-tablet:bottom-[40px] max-tablet:right-[40px]
   ${(p) => (p.openChat ? 'hidden' : 'block')}
   ${(p) => (p.active ? '[animation:hithere_1.1s_ease_infinite]' : '[animation:none]')}
 `;

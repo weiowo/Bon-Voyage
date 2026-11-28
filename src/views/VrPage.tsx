@@ -25,7 +25,7 @@ const rightArrow = '/images/up-arrow.webp';
 
 const PageTitle = tw.div`
   w-full h-[30px] text-[30px] text-white [text-shadow:2px_2px_3px_black] font-semibold
-  max-[769px]:w-[85%] max-[769px]:text-[23px]
+  max-tablet-sm:w-[85%] max-tablet-sm:text-[23px]
 `;
 
 const TitleStarArea = tw.div`
@@ -64,12 +64,12 @@ const PlaceEngishTitle = tw.div`
 
 const RemindArrow = tw.img`
   w-[50px] h-auto absolute bottom-[20px] right-[20px]
-  [animation:bounce_1600ms_infinite_cubic-bezier(0.445,0.05,0.55,0.95)] max-[883px]:hidden
+  [animation:bounce_1600ms_infinite_cubic-bezier(0.445,0.05,0.55,0.95)] max-tablet-lg:hidden
 `;
 
 const RemindText = tw.div`
   w-[60px] h-auto absolute bottom-[-10px] right-[20px] [font-weight:550] text-[12px]
-  rounded-[3px] [border:1px_solid_black] max-[883px]:hidden
+  rounded-[3px] [border:1px_solid_black] max-tablet-lg:hidden
 `;
 
 const VRModalBackground = tw.div<{ active?: boolean }>`
@@ -80,48 +80,48 @@ const VRModalBackground = tw.div<{ active?: boolean }>`
 
 const ModalBox = tw.div`
   flex w-[80vw] h-[40vw] bg-white rounded-[10px] relative items-center z-[1500] flex-row
-  max-[1345px]:h-[80vh] max-[1134px]:h-[85vh] max-[1134px]:w-[90vw] max-[883px]:h-[80vh]
-  max-[883px]:w-[90vw] max-[883px]:flex-col
+  max-wide:h-[80vh] max-desktop:h-[85vh] max-desktop:w-[90vw] max-tablet-lg:h-[80vh]
+  max-tablet-lg:w-[90vw] max-tablet-lg:flex-col
 `;
 
 const ModalImgArea = tw.div`
-  w-[60%] h-full flex flex-wrap items-center gap-[10px] max-[883px]:w-full
-  max-[883px]:justify-center
+  w-[60%] h-full flex flex-wrap items-center gap-[10px] max-tablet-lg:w-full
+  max-tablet-lg:justify-center
 `;
 
 const ModalLeftArea = tw.div`
   w-[40%] h-[85%] flex flex-col items-center [justify-content:left] gap-[15px] relative
-  max-[946px]:h-[90%] max-[883px]:mt-[20px] max-[883px]:w-full max-[883px]:h-[50%]
-  max-[883px]:gap-[5px]
+  max-tablet-lg:h-[90%] max-tablet-lg:mt-[20px] max-tablet-lg:w-full max-tablet-lg:h-[50%]
+  max-tablet-lg:gap-[5px]
 `;
 
 const IFrame = tw.iframe`
   w-[90%] h-[90%] [border:0] rounded-[13px] cursor-pointer
-  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] max-[883px]:w-[90%]
-  max-[883px]:h-[95%]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] max-tablet-lg:w-[90%]
+  max-tablet-lg:h-[95%]
 `;
 
 const ModalPlaceTitle = tw.div`
-  text-[30px] font-semibold w-[75%] max-[883px]:text-[25px]
+  text-[30px] font-semibold w-[75%] max-tablet-lg:text-[25px]
 `;
 
 const ModalPlaceSubtitle = tw.div`
-  text-[18px] [font-weight:550] w-[75%] [color:grey] max-[1345px]:text-[16px]
-  max-[1134px]:text-[15px] max-[946px]:text-[14px] max-[883px]:hidden
+  text-[18px] [font-weight:550] w-[75%] [color:grey] max-wide:text-[16px]
+  max-desktop:text-[15px] max-tablet-lg:text-[14px] max-tablet-lg:hidden
 `;
 
 const ModalPlaceDescription = tw.div`
-  text-[15px] w-[75%] text-justify h-auto max-[883px]:w-[85%]
+  text-[15px] w-[75%] text-justify h-auto max-tablet-lg:w-[85%]
 `;
 
 const SeperateLine = tw.div`
-  w-[75%] h-[1.5px] mt-[10px] mb-[10px] bg-black shrink-0 max-[883px]:w-[85%]
-  max-[883px]:mt-[5px] max-[883px]:mb-[5px]
+  w-[75%] h-[1.5px] mt-[10px] mb-[10px] bg-black shrink-0 max-tablet-lg:w-[85%]
+  max-tablet-lg:mt-[5px] max-tablet-lg:mb-[5px]
 `;
 
 const ModalPlaceAddress = tw.div`
   w-[75%] text-[#696969] text-[13px] flex flex-col items-start gap-[10px] text-justify
-  max-[883px]:hidden
+  max-tablet-lg:hidden
 `;
 
 const ModalPlaceCountry = tw.div`
@@ -131,14 +131,14 @@ const ModalPlaceCountry = tw.div`
 
 const AddToScheduleButton = tw.button`
   w-[20%] h-[40px] rounded-[5px] [background-color:grey] font-medium [border:none]
-  text-white cursor-pointer text-[15px] max-[1134px]:w-[35%] max-[883px]:hidden
+  text-white cursor-pointer text-[15px] max-desktop:w-[35%] max-tablet-lg:hidden
 `;
 
 const SmallScreenAddButton = tw.button`
-  hidden max-[883px]:block max-[883px]:w-[200px] max-[883px]:h-[40px] max-[883px]:shrink-0
-  max-[883px]:rounded-[25px] max-[883px]:[background-color:grey] max-[883px]:font-medium
-  max-[883px]:[border:none] max-[883px]:text-white max-[883px]:cursor-pointer
-  max-[883px]:text-[17px] max-[883px]:mb-[30px] max-[883px]:mt-[10px]
+  hidden max-tablet-lg:block max-tablet-lg:w-[200px] max-tablet-lg:h-[40px] max-tablet-lg:shrink-0
+  max-tablet-lg:rounded-[25px] max-tablet-lg:[background-color:grey] max-tablet-lg:font-medium
+  max-tablet-lg:[border:none] max-tablet-lg:text-white max-tablet-lg:cursor-pointer
+  max-tablet-lg:text-[17px] max-tablet-lg:mb-[30px] max-tablet-lg:mt-[10px]
 `;
 
 const CloseModalButton = tw.button`

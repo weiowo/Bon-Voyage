@@ -1,7 +1,7 @@
 import tw from '@/lib/tw';
 
 const WriteArticleRemind = tw.div`
-  w-[50%] h-[150px] flex mt-[20px] gap-[15px] max-[801px]:w-full max-[801px]:justify-center
+  w-[50%] h-[150px] flex mt-[20px] gap-[15px] max-tablet:w-full max-tablet:justify-center
 `;
 
 export const WriteArticleImg = tw.img`
@@ -9,7 +9,7 @@ export const WriteArticleImg = tw.img`
 `;
 
 export const WriteRightArea = tw.div`
-  w-auto h-[150px] flex flex-col items-center justify-center gap-[20px] max-[801px]:w-auto
+  w-auto h-[150px] flex flex-col items-center justify-center gap-[20px] max-tablet:w-auto
 `;
 
 export const WriteText = tw.div`

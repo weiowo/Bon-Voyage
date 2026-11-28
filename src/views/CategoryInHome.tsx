@@ -15,29 +15,29 @@ const NIGHT_ICON = '/images/nightlife.webp';
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 
 const CategoryWrapper = tw.div`
-  self-center mt-[50px] w-[100vw] h-[280px] flex flex-col items-center max-[801px]:w-[100vw]
-  max-[801px]:mt-[30px] max-[801px]:h-[300px] max-[751px]:h-[480px] max-[501px]:w-full
-  max-[501px]:h-[450px] max-[501px]:ml-[0px]
+  self-center mt-[50px] w-[100vw] h-[280px] flex flex-col items-center max-tablet:w-[100vw]
+  max-tablet:mt-[30px] max-tablet:h-[300px] max-tablet-sm:h-[480px] max-mobile:w-full
+  max-mobile:h-[450px] max-mobile:ml-[0px]
 `;
 
 const CategoryWrapperTitle = tw.div`
   w-[100vw] h-[30px] flex justify-center items-center text-[24px] font-semibold
-  text-[#1F456E] mb-[30px] max-[801px]:text-[24px] max-[801px]:mb-[20px]
+  text-[#1F456E] mb-[30px] max-tablet:text-[24px] max-tablet:mb-[20px]
 `;
 
 const CategoryBoxesContainer = tw.div`
   ml-[80px] mt-[10px] flex justify-center items-center w-[80vw] flex-wrap h-auto
-  max-[1250px]:ml-[30px] max-[1250px]:w-[85vw] max-[1250px]:gap-[15px] max-[801px]:ml-[30px]
-  max-[801px]:w-[85vw] max-[801px]:gap-[10px] max-[751px]:ml-[0px] max-[751px]:mt-[0px]
-  max-[631px]:w-full max-[631px]:mt-[0px] max-[631px]:ml-[0px] max-[501px]:w-full
-  max-[501px]:h-[89s0px] max-[501px]:mt-[20px] max-[501px]:ml-[0px] max-[501px]:gap-[10px]
+  max-wide:ml-[30px] max-wide:w-[85vw] max-wide:gap-[15px] max-tablet:ml-[30px]
+  max-tablet:w-[85vw] max-tablet:gap-[10px] max-tablet-sm:ml-[0px] max-tablet-sm:mt-[0px]
+  max-mobile-lg:w-full max-mobile-lg:mt-[0px] max-mobile-lg:ml-[0px] max-mobile:w-full
+  max-mobile:h-[89s0px] max-mobile:mt-[20px] max-mobile:ml-[0px] max-mobile:gap-[10px]
 `;
 
 const CategoryBox = tw.div`
-  w-[250px] h-[100px] flex items-center gap-[20px] max-[1250px]:w-[200px]
-  max-[1001px]:w-[180px] max-[1001px]:gap-[0px] max-[901px]:w-[170px] max-[901px]:gap-[0px]
-  max-[851px]:w-[150px] max-[751px]:w-[230px] max-[751px]:justify-center max-[501px]:w-[40%]
-  max-[501px]:justify-center max-[501px]:gap-[10px] max-[501px]:h-[80px]
+  w-[250px] h-[100px] flex items-center gap-[20px] max-wide:w-[200px]
+  max-laptop:w-[180px] max-laptop:gap-[0px] max-tablet-lg:w-[170px] max-tablet-lg:gap-[0px]
+  max-tablet-lg:w-[150px] max-tablet-sm:w-[230px] max-tablet-sm:justify-center max-mobile:w-[40%]
+  max-mobile:justify-center max-mobile:gap-[10px] max-mobile:h-[80px]
 `;
 
 const CategoryIcon = tw.img`

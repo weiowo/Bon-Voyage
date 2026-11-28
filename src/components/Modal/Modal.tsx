@@ -9,8 +9,8 @@ const ModalBackground = tw.div<{ active?: boolean }>`
 
 const ModalBox = tw.div<{ flexDirection?: React.CSSProperties['flexDirection'] }>`
   flex w-[50vw] h-[30vw] bg-white rounded-[20px] z-[200] relative items-center
-  max-[1201px]:w-[600px] max-[1201px]:h-[370px] max-[631px]:w-[80vw] max-[631px]:h-[90vw]
-  max-[631px]:flex-col max-[576px]:w-[80vw] max-[576px]:h-[110vw] max-[431px]:h-[120vw]
+  max-desktop:w-[600px] max-desktop:h-[370px] max-mobile-lg:w-[80vw] max-mobile-lg:h-[90vw]
+  max-mobile-lg:flex-col max-mobile-lg:w-[80vw] max-mobile-lg:h-[110vw] max-mobile-sm:h-[120vw]
   ${(p) => (p.flexDirection === 'column' ? 'flex-col' : 'flex-row')}
 `;
 

@@ -7,29 +7,29 @@ import db from '../utils/firebase-init';
 import type { UserProfile } from '../types';
 
 const ProfileSideBar = tw.div`
-  w-[20vw] flex flex-col items-center mt-[60px] max-[801px]:hidden
+  w-[20vw] flex flex-col items-center mt-[60px] max-tablet:hidden
 `;
 
 const SideNavBar = tw.div`
-  mt-[60px] h-auto w-auto flex flex-col gap-[30px] max-[801px]:hidden
+  mt-[60px] h-auto w-auto flex flex-col gap-[30px] max-tablet:hidden
 `;
 
 const UserPhoto = tw.img`
-  w-[30px] h-[30px] rounded-[50%] ml-[23px] object-cover max-[801px]:hidden
+  w-[30px] h-[30px] rounded-[50%] ml-[23px] object-cover max-tablet:hidden
 `;
 
 const UserName = tw.div`
-  text-[15px] font-semibold ml-[15px] h-auto w-[75px] max-[881px]:ml-[10px]
-  max-[801px]:hidden
+  text-[15px] font-semibold ml-[15px] h-auto w-[75px] max-tablet-lg:ml-[10px]
+  max-tablet:hidden
 `;
 
 const NavBarChoice = tw.div`
-  font-semibold text-[15px] [color:grey] max-[801px]:hidden
+  font-semibold text-[15px] [color:grey] max-tablet:hidden
 `;
 
 const UserNameLogoBox = tw.div`
   w-[160px] rounded-[30px] [border:1px_solid_grey] flex items-center h-auto pt-[7px]
-  pb-[7px] max-[881px]:w-[150px] max-[801px]:hidden
+  pb-[7px] max-tablet-lg:w-[150px] max-tablet:hidden
 `;
 
 export const LinkWithoutDefaultStyle = tw(Link)`

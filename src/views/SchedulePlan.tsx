@@ -46,13 +46,13 @@ const LeftContainer = tw.div<{ active?: boolean; show?: boolean }>`
   [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar]:w-[3px]
   [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:hidden max-[801px]:w-[100vw]
+  [&::-webkit-scrollbar-thumb]:hidden max-tablet:w-[100vw]
   ${(p) => (p.active ? 'hidden' : 'flex')}
-  ${(p) => (p.show ? 'max-[801px]:flex' : 'max-[801px]:hidden')}
+  ${(p) => (p.show ? 'max-tablet:flex' : 'max-tablet:hidden')}
 `;
 
 const RightContainer = tw.div`
-  w-[55vw] max-[801px]:block max-[801px]:w-[0vw] max-[801px]:h-[0vh]
+  w-[55vw] max-tablet:block max-tablet:w-[0vw] max-tablet:h-[0vh]
 `;
 
 const AddDayButton = tw.button`
@@ -61,8 +61,8 @@ const AddDayButton = tw.button`
 `;
 
 const ScheduleTitleAndCompleteButtonArea = tw.div`
-  w-[40vw] justify-between h-auto flex items-center mt-[20px] gap-[20px] max-[801px]:w-full
-  max-[801px]:pr-[20px] max-[801px]:pl-[20px]
+  w-[40vw] justify-between h-auto flex items-center mt-[20px] gap-[20px] max-tablet:w-full
+  max-tablet:pr-[20px] max-tablet:pl-[20px]
 `;
 
 const ScheduleTitle = tw.div`
@@ -70,7 +70,7 @@ const ScheduleTitle = tw.div`
 `;
 
 const DateContainer = tw.div`
-  flex justify-center items-center w-[40vw] gap-[15px] font-semibold max-[801px]:w-full
+  flex justify-center items-center w-[40vw] gap-[15px] font-semibold max-tablet:w-full
 `;
 
 const CompleteButton = tw.button<{ isEditing?: boolean }>`
@@ -84,7 +84,7 @@ const CompleteButton = tw.button<{ isEditing?: boolean }>`
 const AddAndSearchBox = tw.div<{ active?: boolean }>`
   w-[45vw] h-[calc(100vh_-_60px)] relative
   [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] z-[10]
-  max-[801px]:w-[100vw]
+  max-tablet:w-[100vw]
   ${(p) => (p.active ? 'block' : 'hidden')}
 `;
 
@@ -98,11 +98,11 @@ const GoBackIcon = tw.img`
 `;
 
 const ChooseShowMapOrSchedule = tw.div`
-  hidden max-[801px]:flex max-[801px]:items-center max-[801px]:justify-center
-  max-[801px]:gap-[10px] max-[801px]:text-[15px] max-[801px]:font-semibold
-  max-[801px]:text-white max-[801px]:w-full max-[801px]:h-[50px] max-[801px]:[border:none]
-  max-[801px]:bg-[#226788] max-[801px]:pb-[10px] max-[801px]:pt-[10px]
-  max-[801px]:cursor-pointer max-[801px]:fixed max-[801px]:bottom-[0] max-[801px]:z-[50]
+  hidden max-tablet:flex max-tablet:items-center max-tablet:justify-center
+  max-tablet:gap-[10px] max-tablet:text-[15px] max-tablet:font-semibold
+  max-tablet:text-white max-tablet:w-full max-tablet:h-[50px] max-tablet:[border:none]
+  max-tablet:bg-[#226788] max-tablet:pb-[10px] max-tablet:pt-[10px]
+  max-tablet:cursor-pointer max-tablet:fixed max-tablet:bottom-[0] max-tablet:z-[50]
 `;
 
 const SeperateLine = tw.div`

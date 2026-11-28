@@ -1,7 +1,7 @@
 import tw from '@/lib/tw';
 
 const ModalPlaceTitle = tw.div`
-  text-[26px] font-semibold w-[80%] max-[481px]:text-[20px] max-[481px]:w-[90%]
+  text-[26px] font-semibold w-[80%] max-mobile-md:text-[20px] max-mobile-md:w-[90%]
 `;
 
 export const ModalPlaceAddress = tw.div`

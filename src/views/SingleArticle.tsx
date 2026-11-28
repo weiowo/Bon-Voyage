@@ -24,7 +24,7 @@ const PageWrapper = tw.div`
 const ArticleCoverImage = tw.div`
   w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
-  bg-center object-cover max-[801px]:h-[300px]
+  bg-center object-cover max-tablet:h-[300px]
 `;
 
 const ArticlePageBelowPart = tw.div`
@@ -36,7 +36,7 @@ const ArticleAuthorDate = tw.div`
 `;
 
 const ArticleEditPart = tw.div`
-  w-[75vw] h-auto flex justify-between max-[801px]:w-[85vw]
+  w-[75vw] h-auto flex justify-between max-tablet:w-[85vw]
 `;
 
 const AddFavoriteIcon = tw.img`
@@ -46,22 +46,22 @@ const AddFavoriteIcon = tw.img`
 const ArticleCoverPhotoWrapper = tw.img`
   w-[50vw] h-[380px] ml-[5px] mt-[2px] rounded-[3px] [outline:none] [border:none] bg-cover
   bg-no-repeat [background-blend-mode:multiply] bg-center shrink-0
-  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] object-cover max-[681px]:w-full
-  max-[681px]:h-auto
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] object-cover max-phablet:w-full
+  max-phablet:h-auto
 `;
 
 const Description = tw.div`
   text-left pl-[10px] pt-[10px] w-[calc(50vw_-_3px)] ml-[3px] mb-[10px] h-auto text-[16px]
-  mt-[20px] [outline:none] shrink-0 rounded-[5px] [border:none] max-[681px]:w-full
+  mt-[20px] [outline:none] shrink-0 rounded-[5px] [border:none] max-phablet:w-full
 `;
 
 const ArticleTitleButtonArea = tw.div`
-  w-[75vw] h-auto flex max-[801px]:w-[85vw]
+  w-[75vw] h-auto flex max-tablet:w-[85vw]
 `;
 
 const ArticleTitle = tw.div`
   w-[50vw] h-auto text-[35px] font-semibold text-left mt-[20px] mb-[20px] [outline:none]
-  [border:none] flex items-center justify-between max-[801px]:w-[55vw] max-[681px]:w-full
+  [border:none] flex items-center justify-between max-tablet:w-[55vw] max-phablet:w-full
 `;
 
 const EditingPart = tw.div`
@@ -71,7 +71,7 @@ const EditingPart = tw.div`
   [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
   [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-[56vw] max-[681px]:w-full
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-tablet:w-[56vw] max-phablet:w-full
 `;
 
 const PlaceArea = tw.div`
@@ -79,17 +79,17 @@ const PlaceArea = tw.div`
 `;
 
 const ScheduleSummaryPart = tw.div`
-  w-[20vw] h-auto flex flex-col gap-[15px] ml-[20px] pl-[10px] max-[801px]:w-[25vw]
-  max-[801px]:pl-[0px] max-[801px]:ml-[0px] max-[681px]:hidden
+  w-[20vw] h-auto flex flex-col gap-[15px] ml-[20px] pl-[10px] max-tablet:w-[25vw]
+  max-tablet:pl-[0px] max-tablet:ml-[0px] max-phablet:hidden
 `;
 
 const ScheduleSummaryDayAndPlacePart = tw.div`
-  flex w-[20vw] h-auto gap-[10px] items-start pl-[15px] max-[801px]:w-[25vw]
+  flex w-[20vw] h-auto gap-[10px] items-start pl-[15px] max-tablet:w-[25vw]
 `;
 
 const ScheduleSummaryDayPart = tw.div`
   w-[5vw] h-auto rounded-[2px] bg-[#729DC8] text-white [font-weight:550] gap-[10px]
-  cursor-pointer max-[801px]:w-[7vw]
+  cursor-pointer max-tablet:w-[7vw]
 `;
 
 const ScheduleSummaryPlacePart = tw.div`
@@ -112,11 +112,11 @@ const PlaceTitle = tw.div`
 
 const PlaceImg = tw.img`
   w-full h-auto relative [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] object-cover
-  max-[681px]:w-[80vw] max-[681px]:h-auto
+  max-phablet:w-[80vw] max-phablet:h-auto
 `;
 
 const ImgDisplayArea = tw.div`
-  flex w-[50vw] h-auto gap-[10px] ml-[10px] relative flex-wrap max-[681px]:w-[80vw]
+  flex w-[50vw] h-auto gap-[10px] ml-[10px] relative flex-wrap max-phablet:w-[80vw]
 `;
 
 function ShowArticle() {

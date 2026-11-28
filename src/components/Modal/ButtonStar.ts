@@ -10,7 +10,7 @@ export const AddFavoriteIcon = tw.img`
 
 export const AddToScheduleButton = tw.button`
   w-[10vw] h-[30px] rounded-[5px] [background-color:grey] font-medium [border:none]
-  text-white cursor-pointer max-[1201px]:w-[110px]
+  text-white cursor-pointer max-desktop:w-[110px]
 `;
 
 export default ButtonStarArea;

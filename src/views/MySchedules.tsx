@@ -35,14 +35,14 @@ const Add = '/images/invite.webp';
 const CloseSearchIcon = '/images/close-1.webp';
 
 const PageWrapper = tw.div`
-  w-[100vw] flex flex-row pt-[60px] max-[801px]:justify-center
-  max-[749px]:flex-col max-[749px]:shrink-0
+  w-[100vw] flex flex-row pt-[60px] max-tablet:justify-center
+  max-tablet-sm:flex-col max-tablet-sm:shrink-0
 `;
 
 const SmallScreenLine = tw.div`
-  hidden max-[801px]:flex max-[801px]:w-[1.8px] max-[801px]:h-[85vh]
-  max-[801px]:bg-[#D3D3D3] max-[801px]:items-center max-[801px]:mt-[20px]
-  max-[801px]:max-[749px]:hidden
+  hidden max-tablet:flex max-tablet:w-[1.8px] max-tablet:h-[85vh]
+  max-tablet:bg-[#D3D3D3] max-tablet:items-center max-tablet:mt-[20px]
+  max-tablet:max-tablet-sm:hidden
 `;
 
 const ChoicesWrapper = tw.div`
@@ -52,59 +52,59 @@ const ChoicesWrapper = tw.div`
   [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
   [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-[40vw] max-[749px]:flex-col
-  max-[749px]:w-[100vw] max-[749px]:h-[35vh] max-[749px]:gap-[10px] max-[749px]:shrink-0
-  max-[749px]:overflow-hidden max-[749px]:pb-[0px] max-[749px]:mb-[0px]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-tablet:w-[40vw] max-tablet-sm:flex-col
+  max-tablet-sm:w-[100vw] max-tablet-sm:h-[35vh] max-tablet-sm:gap-[10px] max-tablet-sm:shrink-0
+  max-tablet-sm:overflow-hidden max-tablet-sm:pb-[0px] max-tablet-sm:mb-[0px]
 `;
 
 const TitleAndCreateArea = tw.div`
   flex w-[26vw] h-auto items-end gap-[20px] mt-[30px] [justify-content:left] mb-[15px]
-  max-[749px]:w-full max-[749px]:flex max-[749px]:h-[80px] max-[749px]:mt-[10px]
-  max-[749px]:items-center max-[749px]:mb-[0px] max-[749px]:justify-center
+  max-tablet-sm:w-full max-tablet-sm:flex max-tablet-sm:h-[80px] max-tablet-sm:mt-[10px]
+  max-tablet-sm:items-center max-tablet-sm:mb-[0px] max-tablet-sm:justify-center
 `;
 
 const ExistedSchedules = tw.div`
-  flex flex-col gap-[15px] max-[749px]:w-[100vw] max-[749px]:h-[23vh] max-[749px]:ml-[30px]
-  max-[749px]:flex-row max-[749px]:overflow-scroll max-[749px]:pt-[0px] max-[749px]:pb-[0px]
-  max-[749px]:shrink-0
+  flex flex-col gap-[15px] max-tablet-sm:w-[100vw] max-tablet-sm:h-[23vh] max-tablet-sm:ml-[30px]
+  max-tablet-sm:flex-row max-tablet-sm:overflow-scroll max-tablet-sm:pt-[0px] max-tablet-sm:pb-[0px]
+  max-tablet-sm:shrink-0
 `;
 
 const SchedulePreview = tw.div`
   flex w-[40vw] h-auto items-end gap-[20px] mt-[30px] [justify-content:left] mb-[15px]
-  max-[749px]:items-center max-[749px]:justify-center max-[749px]:w-full
-  max-[749px]:mt-[10px]
+  max-tablet-sm:items-center max-tablet-sm:justify-center max-tablet-sm:w-full
+  max-tablet-sm:mt-[10px]
 `;
 
 const MyScheduleTitle = tw.div`
-  font-bold text-[25px] h-[30px] max-[801px]:text-[22px]
+  font-bold text-[25px] h-[30px] max-tablet:text-[22px]
 `;
 
 const SchedulePreviewTitle = tw.div`
-  font-bold text-[25px] h-[30px] max-[801px]:text-[22px]
+  font-bold text-[25px] h-[30px] max-tablet:text-[22px]
 `;
 
 const CreateNewScheduleButton = tw.button`
   w-[80px] h-[20px] bg-[#1c2e4a] text-white rounded-[3px] [border:none] text-[12px]
-  font-medium max-[801px]:w-[80px] max-[801px]:h-[20px] max-[801px]:shrink-0
+  font-medium max-tablet:w-[80px] max-tablet:h-[20px] max-tablet:shrink-0
 `;
 
 const ViewDetailButton = tw.button`
   w-[70px] h-[20px] bg-[#1c2e4a] text-white rounded-[3px] [border:none] text-[12px]
-  font-medium cursor-pointer max-[801px]:w-[70px] max-[801px]:h-[20px] max-[801px]:shrink-0
+  font-medium cursor-pointer max-tablet:w-[70px] max-tablet:h-[20px] max-tablet:shrink-0
 `;
 
 const SelectedScheduleWrapper = tw.div`
   w-[42vw] h-auto flex flex-col [align-items:left] ml-[50px] gap-[15px]
-  max-[801px]:ml-[20px] max-[801px]:w-[50vw] max-[749px]:w-[100vw] max-[749px]:ml-[0px]
-  max-[749px]:h-[53vh] max-[749px]:items-center
+  max-tablet:ml-[20px] max-tablet:w-[50vw] max-tablet-sm:w-[100vw] max-tablet-sm:ml-[0px]
+  max-tablet-sm:h-[53vh] max-tablet-sm:items-center
 `;
 
 const SelectedSchedulePhoto = tw.div`
   pl-[15px] pb-[10px] opacity-[1] flex-col justify-end
   bg-[url(/images/schedule_cover_rec3.webp)] w-[35vw] h-[12vw] relative rounded-[20px]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply]
-  max-[801px]:w-[85%] max-[801px]:h-[150px] max-[749px]:w-[85vw] max-[749px]:ml-[0px]
-  max-[749px]:items-center max-[749px]:h-[120px]
+  max-tablet:w-[85%] max-tablet:h-[150px] max-tablet-sm:w-[85vw] max-tablet-sm:ml-[0px]
+  max-tablet-sm:items-center max-tablet-sm:h-[120px]
 `;
 
 const SelectedScheduleTitle = tw.div`
@@ -118,24 +118,24 @@ const ScheduleMemberContainer = tw.div`
   [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
   [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-[85%] max-[801px]:h-[70px]
-  max-[701px]:w-[85%] max-[701px]:h-[80px]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-tablet:w-[85%] max-tablet:h-[70px]
+  max-phablet:w-[85%] max-phablet:h-[80px]
 `;
 
 const ScheduleMemberWord = tw.div<{ hovered?: boolean }>`
   items-center justify-center w-[50px] text-[25px] font-semibold h-[50px] text-white
   rounded-[50%] [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
-  cursor-pointer max-[801px]:h-[32px] max-[801px]:w-[32px] max-[801px]:text-[15px]
-  max-[801px]:shrink-0 max-[741px]:h-[50px] max-[741px]:w-[50px] max-[741px]:text-[25px]
-  max-[741px]:shrink-0
+  cursor-pointer max-tablet:h-[32px] max-tablet:w-[32px] max-tablet:text-[15px]
+  max-tablet:shrink-0 max-tablet-sm:h-[50px] max-tablet-sm:w-[50px] max-tablet-sm:text-[25px]
+  max-tablet-sm:shrink-0
   ${(p) => (p.hovered ? 'flex' : 'hidden')}
 `;
 
 const ScheduleMemberPhoto = tw.img<{ hovered?: boolean }>`
   w-[50px] h-[50px] rounded-[50%] text-center
   [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] cursor-pointer
-  object-cover max-[801px]:h-[32px] max-[801px]:w-[32px] max-[801px]:shrink-0
-  max-[741px]:h-[50px] max-[741px]:w-[50px]
+  object-cover max-tablet:h-[32px] max-tablet:w-[32px] max-tablet:shrink-0
+  max-tablet-sm:h-[50px] max-tablet-sm:w-[50px]
   ${(p) => (p.hovered ? 'hidden' : 'block')}
 `;
 
@@ -145,20 +145,20 @@ const StyledLink = tw(Link)`
 
 const CalendarBox = tw.div`
   w-[35vw] h-[120px] rounded-[15px]
-  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] max-[801px]:w-[85%]
-  max-[801px]:h-[120px]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)] max-tablet:w-[85%]
+  max-tablet:h-[120px]
 `;
 
 const CalendarBoxTitle = tw.div`
   flex pl-[20px] text-white font-semibold text-[18px] [text-shadow:1px_1px_2px_black]
   items-center [border-top-right-radius:inherit] [border-top-left-radius:inherit] w-[35vw]
   h-[30%] [background:linear-gradient(312deg,rgb(178,228,238)_0%,rgb(161,176,246)_100%)]
-  max-[801px]:w-full
+  max-tablet:w-full
 `;
 
 const DateArea = tw.div`
   flex h-[70%] text-black font-semibold text-[25px] items-center justify-center
-  max-[749px]:text-[23px]
+  max-tablet-sm:text-[23px]
 `;
 
 function MySchedules() {

@@ -15,22 +15,22 @@ import SmallScreenNavBar, {
 } from './RwdMenu';
 
 const Header = tw.header<{ active?: boolean }>`
-  flex justify-between w-[100vw] fixed z-[2000] top-[0] max-[801px]:hidden
+  flex justify-between w-[100vw] fixed z-[2000] top-[0] max-tablet:hidden
   ${(p) => (p.active ? 'h-[60px]' : 'h-[65px]')}
   ${(p) => (p.active ? 'bg-[rgba(255,255,255,0.8)]' : 'bg-transparent')}
   ${(p) => (p.active ? '[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : '[box-shadow:none]')}
 `;
 
 const Logo = tw.div<{ active?: boolean }>`
-  w-[150px] h-[30px] font-bold text-[25px] ml-[20px] max-[801px]:w-auto max-[801px]:h-auto
-  max-[801px]:text-[20px] max-[801px]:ml-[10px] max-[801px]:mt-[10px] max-[801px]:z-[10]
-  max-[801px]:absolute
+  w-[150px] h-[30px] font-bold text-[25px] ml-[20px] max-tablet:w-auto max-tablet:h-auto
+  max-tablet:text-[20px] max-tablet:ml-[10px] max-tablet:mt-[10px] max-tablet:z-[10]
+  max-tablet:absolute
   ${(p) => (p.active ? 'text-black' : 'text-white')}
   ${(p) => (p.active ? 'mt-[15px]' : 'mt-[20px]')}
 `;
 
 const NavBar = tw.div<{ active?: boolean }>`
-  flex items-center gap-[15px] w-[500px] h-[30px] font-semibold max-[801px]:hidden
+  flex items-center gap-[15px] w-[500px] h-[30px] font-semibold max-tablet:hidden
   ${(p) => (p.active ? 'text-black' : 'text-white')}
   ${(p) => (p.active ? 'mt-[15px]' : 'mt-[25px]')}
 `;
@@ -41,18 +41,18 @@ const ProfilePageNav = tw.div<{ active?: boolean }>`
 `;
 
 const StyleNavLink = tw(Link)<{ $active?: boolean }>`
-  cursor-pointer [text-decoration:none] max-[801px]:text-[20px] max-[801px]:ml-[10px]
-  max-[801px]:w-[150px] max-[801px]:absolute
+  cursor-pointer [text-decoration:none] max-tablet:text-[20px] max-tablet:ml-[10px]
+  max-tablet:w-[150px] max-tablet:absolute
   ${(p) => (p.$active ? 'text-black' : 'text-white')}
   ${(p) => (p.$active ? 'hover:[border-bottom:1.5px_solid_black]' : 'hover:[border-bottom:1.5px_solid_white]')}
-  ${(p) => (p.$active ? 'max-[801px]:mt-[8px]' : 'max-[801px]:mt-[0px]')}
+  ${(p) => (p.$active ? 'max-tablet:mt-[8px]' : 'max-tablet:mt-[0px]')}
 `;
 
 const ProfileNavLink = tw(Link)<{ $active?: boolean }>`
-  cursor-pointer [text-decoration:none] max-[801px]:text-[20px] max-[801px]:ml-[10px]
-  max-[801px]:w-[150px] max-[801px]:absolute
+  cursor-pointer [text-decoration:none] max-tablet:text-[20px] max-tablet:ml-[10px]
+  max-tablet:w-[150px] max-tablet:absolute
   ${(p) => (p.$active ? 'text-black' : 'text-white')}
-  ${(p) => (p.$active ? 'max-[801px]:mt-[8px]' : 'max-[801px]:mt-[0px]')}
+  ${(p) => (p.$active ? 'max-tablet:mt-[8px]' : 'max-tablet:mt-[0px]')}
 `;
 
 function getBorderBottomByPathname(pathname: string, headerBackground: boolean) {

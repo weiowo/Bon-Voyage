@@ -41,21 +41,21 @@ import type {
 } from '../types';
 
 const PageWrapper = tw.div`
-  w-[100vw] h-[calc(100vh_-_60px)] flex flex-row pt-[60px] max-[801px]:justify-center
+  w-[100vw] h-[calc(100vh_-_60px)] flex flex-row pt-[60px] max-tablet:justify-center
 `;
 
 const MyArticlesArea = tw.div`
-  w-[80vw] h-[85vh] flex flex-col pl-[50px] mt-[30px] max-[801px]:pl-[0px]
-  max-[801px]:w-[93vw]
+  w-[80vw] h-[85vh] flex flex-col pl-[50px] mt-[30px] max-tablet:pl-[0px]
+  max-tablet:w-[93vw]
 `;
 
 const MyPageTitle = tw.div`
-  w-[90%] h-auto text-[28px] font-semibold text-left max-[801px]:text-center
-  max-[801px]:text-[25px] max-[801px]:w-full
+  w-[90%] h-auto text-[28px] font-semibold text-left max-tablet:text-center
+  max-tablet:text-[25px] max-tablet:w-full
 `;
 
 const Tabs = tw.div`
-  flex w-[90%] h-auto gap-[20px] mt-[10px] max-[801px]:w-full
+  flex w-[90%] h-auto gap-[20px] mt-[10px] max-tablet:w-full
 `;
 
 const Tab = tw.div<{ isClicked?: boolean }>`
@@ -71,13 +71,13 @@ const MyArticlesContainer = tw.div<{ isClicked?: boolean }>`
   [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
   [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[801px]:w-full max-[801px]:justify-center
-  max-[801px]:pl-[0px] max-[381px]:gap-[5px]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-tablet:w-full max-tablet:justify-center
+  max-tablet:pl-[0px] max-mobile-xs:gap-[5px]
   ${(p) => (p.isClicked ? 'flex' : 'hidden')}
 `;
 
 const UpperLine = tw.div`
-  h-[1px] shrink-0 [background-color:grey] w-[90%] max-[801px]:w-full
+  h-[1px] shrink-0 [background-color:grey] w-[90%] max-tablet:w-full
 `;
 
 const StyledLink = tw(Link)`

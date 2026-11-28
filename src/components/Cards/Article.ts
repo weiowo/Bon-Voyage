@@ -4,7 +4,7 @@ import tw from '@/lib/tw';
 const MyArticle = tw.div`
   cursor-pointer w-[190px] h-[250px] shrink-0 rounded-[10px]
   [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
-  max-[1201px]:w-[160px] max-[1201px]:h-[200px] max-[451px]:w-[160px] max-[451px]:h-[200px]
+  max-desktop:w-[160px] max-desktop:h-[200px] max-mobile-md:w-[160px] max-mobile-md:h-[200px]
 `;
 
 export const CoverPhotoInMyArticle = tw.img`

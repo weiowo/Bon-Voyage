@@ -23,7 +23,7 @@ const PageWrapper = tw.div`
 const ArticleCoverImage = tw.div`
   w-[100vw] h-[500px] items-center justify-center bg-[url(/images/share_banner2.webp)]
   bg-cover bg-no-repeat bg-[rgb(0,0,0,0.2)] [background-blend-mode:multiply] relative
-  bg-center object-cover max-[901px]:h-[300px]
+  bg-center object-cover max-tablet-lg:h-[300px]
 `;
 
 const ArticlePageBelowPart = tw.div`
@@ -31,7 +31,7 @@ const ArticlePageBelowPart = tw.div`
 `;
 
 const ArticleEditPart = tw.div`
-  w-[75vw] h-auto flex justify-center max-[901px]:w-[85vw]
+  w-[75vw] h-auto flex justify-center max-tablet-lg:w-[85vw]
 `;
 
 const ArticleCoverPhoto = tw.input`
@@ -42,25 +42,25 @@ const ArticleCoverPhotoWrapper = tw.label`
   w-[50vw] h-[350px] ml-[5px] mt-[2px] rounded-[3px] [outline:none] [border:none]
   bg-[url(/images/cover_photo_default.webp)] bg-cover bg-no-repeat
   [background-blend-mode:multiply] bg-center shrink-0
-  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] cursor-pointer object-cover max-[901px]:w-[55vw]
-  max-[751px]:w-[80vw]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] cursor-pointer object-cover max-tablet-lg:w-[55vw]
+  max-tablet-sm:w-[80vw]
 `;
 
 const Description = tw.textarea`
   pl-[10px] pt-[10px] w-[calc(50vw_-_3px)] ml-[3px] mb-[10px] h-[100px] text-[16px]
   mt-[20px] [outline:none] shrink-0 rounded-[5px] [border:none] bg-transparent [resize:none]
-  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-[901px]:w-[calc(55vw_-_3px)]
-  max-[901px]:mt-[10px] max-[751px]:w-[80vw]
+  [box-shadow:0_4px_8px_0_rgba(0,0,0,0.2)] max-tablet-lg:w-[calc(55vw_-_3px)]
+  max-tablet-lg:mt-[10px] max-tablet-sm:w-[80vw]
 `;
 
 const ArticleTitleButtonArea = tw.div`
-  w-[75vw] h-auto flex max-[901px]:w-[85vw] max-[901px]:justify-between
-  max-[901px]:gap-[0px]
+  w-[75vw] h-auto flex max-tablet-lg:w-[85vw] max-tablet-lg:justify-between
+  max-tablet-lg:gap-[0px]
 `;
 
 const ArticleTitle = tw.input`
   w-[55vw] h-auto text-[35px] font-semibold text-left mt-[20px] mb-[20px] [outline:none]
-  [border:none] max-[901px]:w-[60vw] max-[751px]:w-[50vw] max-[751px]:text-[27px]
+  [border:none] max-tablet-lg:w-[60vw] max-tablet-sm:w-[50vw] max-tablet-sm:text-[27px]
 `;
 
 const EditingPart = tw.div`
@@ -70,30 +70,30 @@ const EditingPart = tw.div`
   [&::-webkit-scrollbar]:w-[6px] [&::-webkit-scrollbar]:bg-transparent
   [&::-webkit-scrollbar-thumb]:rounded-[10px]
   [&::-webkit-scrollbar-thumb]:[-webkit-box-shadow:transparent]
-  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-[901px]:w-[60vw] max-[751px]:w-[85vw]
+  [&::-webkit-scrollbar-thumb]:bg-[#D3D3D3] max-tablet-lg:w-[60vw] max-tablet-sm:w-[85vw]
 `;
 
 const PlaceArea = tw.div`
-  w-[calc(50vw_-_3px)] flex flex-col items-start max-[901px]:w-[calc(55vw_-_3px)]
-  max-[751px]:w-[80vw]
+  w-[calc(50vw_-_3px)] flex flex-col items-start max-tablet-lg:w-[calc(55vw_-_3px)]
+  max-tablet-sm:w-[80vw]
 `;
 
 const ScheduleSummaryPart = tw.div`
-  w-[20vw] h-auto flex flex-col gap-[15px] ml-[20px] pl-[10px] max-[901px]:w-[25vw]
-  max-[751px]:hidden
+  w-[20vw] h-auto flex flex-col gap-[15px] ml-[20px] pl-[10px] max-tablet-lg:w-[25vw]
+  max-tablet-sm:hidden
 `;
 
 const ScheduleSummaryDayAndPlacePart = tw.div`
-  flex w-[20vw] h-auto gap-[10px] items-start pl-[15px] max-[901px]:w-[25vw]
+  flex w-[20vw] h-auto gap-[10px] items-start pl-[15px] max-tablet-lg:w-[25vw]
 `;
 
 const ScheduleSummaryDayPart = tw.div`
   w-[5vw] h-auto rounded-[2px] bg-[#729DC8] text-white [font-weight:550] gap-[10px]
-  max-[901px]:w-[7vw]
+  max-tablet-lg:w-[7vw]
 `;
 
 const ScheduleSummaryPlacePart = tw.div`
-  w-[15vw] h-auto flex flex-col gap-[8px] max-[901px]:w-[18vw]
+  w-[15vw] h-auto flex flex-col gap-[8px] max-tablet-lg:w-[18vw]
 `;
 
 const SummaryPlaceTitle = tw.div`
@@ -107,7 +107,7 @@ const DayTitle = tw.div`
 
 const PlaceTitle = tw.div`
   flex items-center [justify-content:left] w-auto h-[30px] pl-[10px] mb-[0px] mr-[20px]
-  font-semibold text-[18px] tracking-[2px] max-[901px]:h-[40px]
+  font-semibold text-[18px] tracking-[2px] max-tablet-lg:h-[40px]
 `;
 
 const PlaceImg = tw.img`
@@ -125,19 +125,19 @@ const DeletePlaceImgButton = tw.button`
 
 const ButtonArea = tw.div`
   w-[20vw] h-auto flex items-center [justify-content:left] gap-[20px] ml-[15px]
-  max-[751px]:w-[20vw] max-[751px]:gap-[10px] max-[751px]:ml-[0px] max-[451px]:w-[30vw]
+  max-tablet-sm:w-[20vw] max-tablet-sm:gap-[10px] max-tablet-sm:ml-[0px] max-mobile-md:w-[30vw]
 `;
 
 const SaveButton = tw.button`
   w-[70px] h-[40px] bg-[#296D98] text-white rounded-[5px] [border:none] text-[16px]
-  cursor-pointer font-semibold shrink-0 max-[751px]:w-[50px] max-[751px]:text-[13px]
-  max-[451px]:w-[50px] max-[451px]:text-[13px]
+  cursor-pointer font-semibold shrink-0 max-tablet-sm:w-[50px] max-tablet-sm:text-[13px]
+  max-mobile-md:w-[50px] max-mobile-md:text-[13px]
 `;
 
 const PublishedButton = tw.button`
   w-[70px] h-[40px] bg-[#296D98] text-white rounded-[5px] [border:none] cursor-pointer
-  text-[16px] font-semibold shrink-0 max-[751px]:w-[50px] max-[751px]:text-[13px]
-  max-[451px]:w-[50px] max-[451px]:text-[13px]
+  text-[16px] font-semibold shrink-0 max-tablet-sm:w-[50px] max-tablet-sm:text-[13px]
+  max-mobile-md:w-[50px] max-mobile-md:text-[13px]
 `;
 
 function EditPage() {

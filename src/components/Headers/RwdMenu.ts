@@ -2,12 +2,12 @@ import { Link } from '@/lib/router';
 import tw from '@/lib/tw';
 
 const SmallScreenNavBar = tw.div<{ active?: boolean }>`
-  hidden max-[801px]:fixed max-[801px]:top-[0px] max-[801px]:flex-col
-  max-[801px]:items-center max-[801px]:w-[45vw] max-[801px]:h-[100vh] max-[801px]:gap-[6px]
-  max-[801px]:right-[0] max-[801px]:z-[500] max-[801px]:bg-white
-  max-[801px]:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
-  max-[501px]:w-[60vw]
-  ${(p) => (p.active ? 'max-[801px]:flex' : 'max-[801px]:hidden')}
+  hidden max-tablet:fixed max-tablet:top-[0px] max-tablet:flex-col
+  max-tablet:items-center max-tablet:w-[45vw] max-tablet:h-[100vh] max-tablet:gap-[6px]
+  max-tablet:right-[0] max-tablet:z-[500] max-tablet:bg-white
+  max-tablet:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]
+  max-mobile:w-[60vw]
+  ${(p) => (p.active ? 'max-tablet:flex' : 'max-tablet:hidden')}
 `;
 
 export const HamburgerMenuLink = tw(Link)`
@@ -54,31 +54,31 @@ export const SmallNavText = tw.div`
 `;
 
 export const Menu = tw.img<{ active?: boolean }>`
-  hidden max-[801px]:w-[23px] max-[801px]:h-[23px] max-[801px]:fixed max-[801px]:top-[15px]
-  max-[801px]:right-[15px] max-[801px]:cursor-pointer
-  ${(p) => (p.active ? 'max-[801px]:hidden' : 'max-[801px]:block')}
+  hidden max-tablet:w-[23px] max-tablet:h-[23px] max-tablet:fixed max-tablet:top-[15px]
+  max-tablet:right-[15px] max-tablet:cursor-pointer
+  ${(p) => (p.active ? 'max-tablet:hidden' : 'max-tablet:block')}
 `;
 
 export const CloseIcon = tw.img<{ active?: boolean }>`
-  hidden max-[801px]:w-[15px] max-[801px]:h-[15px] max-[801px]:absolute
-  max-[801px]:top-[18px] max-[801px]:right-[18px] max-[801px]:cursor-pointer
-  max-[801px]:z-[1000]
-  ${(p) => (p.active ? 'max-[801px]:block' : 'max-[801px]:hidden')}
+  hidden max-tablet:w-[15px] max-tablet:h-[15px] max-tablet:absolute
+  max-tablet:top-[18px] max-tablet:right-[18px] max-tablet:cursor-pointer
+  max-tablet:z-[1000]
+  ${(p) => (p.active ? 'max-tablet:block' : 'max-tablet:hidden')}
 `;
 
 export const SmallHeader = tw.div<{ active?: boolean }>`
-  hidden max-[801px]:flex max-[801px]:justify-between max-[801px]:w-[100vw]
-  max-[801px]:fixed max-[801px]:top-[0] max-[801px]:z-[1000]
-  ${(p) => (p.active ? 'max-[801px]:h-[60px]' : 'max-[801px]:h-[65px]')}
-  ${(p) => (p.active ? 'max-[801px]:bg-[rgba(255,255,255,0.8)]' : 'max-[801px]:bg-transparent')}
-  ${(p) => (p.active ? 'max-[801px]:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : 'max-[801px]:[box-shadow:none]')}
+  hidden max-tablet:flex max-tablet:justify-between max-tablet:w-[100vw]
+  max-tablet:fixed max-tablet:top-[0] max-tablet:z-[1000]
+  ${(p) => (p.active ? 'max-tablet:h-[60px]' : 'max-tablet:h-[65px]')}
+  ${(p) => (p.active ? 'max-tablet:bg-[rgba(255,255,255,0.8)]' : 'max-tablet:bg-transparent')}
+  ${(p) => (p.active ? 'max-tablet:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : 'max-tablet:[box-shadow:none]')}
 `;
 
 export const Background = tw.div<{ active?: boolean }>`
-  hidden max-[801px]:fixed max-[801px]:top-[0px] max-[801px]:[justify-content:right]
-  max-[801px]:w-[100vw] max-[801px]:h-[100vh] max-[801px]:bg-[rgb(0,0,0,0.5)]
-  max-[801px]:z-[1000]
-  ${(p) => (p.active ? 'max-[801px]:flex' : 'max-[801px]:hidden')}
+  hidden max-tablet:fixed max-tablet:top-[0px] max-tablet:[justify-content:right]
+  max-tablet:w-[100vw] max-tablet:h-[100vh] max-tablet:bg-[rgb(0,0,0,0.5)]
+  max-tablet:z-[1000]
+  ${(p) => (p.active ? 'max-tablet:flex' : 'max-tablet:hidden')}
 `;
 
 export default SmallScreenNavBar;

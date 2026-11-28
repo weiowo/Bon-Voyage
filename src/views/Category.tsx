@@ -44,18 +44,18 @@ const TAP_IMG = '/images/tap.webp';
 const DEFAULT_LAT_LNG: LatLng = { lat: 25.03746, lng: 121.564558 };
 
 const PlaceBoxesWrapper = tw.div`
-  w-[100vw] flex h-auto flex-wrap justify-center gap-[30px] mt-[90px] max-[971px]:gap-[20px]
-  max-[971px]:w-[95vw] max-[971px]:[justify-self:center] max-[971px]:m-[0_auto]
-  max-[971px]:mt-[60px] max-[806px]:gap-[5px] max-[806px]:w-[95vw]
-  max-[806px]:[justify-self:center] max-[806px]:m-[0_auto] max-[806px]:mt-[60px]
-  max-[757px]:gap-[0px] max-[757px]:w-[95vw] max-[757px]:[justify-self:center]
-  max-[757px]:m-[0_auto] max-[757px]:mt-[60px] max-[746px]:gap-[20px] max-[746px]:w-[80vw]
-  max-[746px]:[justify-self:center] max-[746px]:m-[0_auto] max-[746px]:mt-[60px]
-  max-[466px]:gap-[5px] max-[466px]:w-[90vw] max-[466px]:mt-[40px]
+  w-[100vw] flex h-auto flex-wrap justify-center gap-[30px] mt-[90px] max-laptop:gap-[20px]
+  max-laptop:w-[95vw] max-laptop:[justify-self:center] max-laptop:m-[0_auto]
+  max-laptop:mt-[60px] max-tablet:gap-[5px] max-tablet:w-[95vw]
+  max-tablet:[justify-self:center] max-tablet:m-[0_auto] max-tablet:mt-[60px]
+  max-tablet-sm:gap-[0px] max-tablet-sm:w-[95vw] max-tablet-sm:[justify-self:center]
+  max-tablet-sm:m-[0_auto] max-tablet-sm:mt-[60px] max-tablet-sm:gap-[20px] max-tablet-sm:w-[80vw]
+  max-tablet-sm:[justify-self:center] max-tablet-sm:m-[0_auto] max-tablet-sm:mt-[60px]
+  max-mobile-md:gap-[5px] max-mobile-md:w-[90vw] max-mobile-md:mt-[40px]
 `;
 
 const CategoryBanner = tw.img`
-  w-[100vw] h-[100vh] max-[801px]:h-auto
+  w-[100vw] h-[100vh] max-tablet:h-auto
 `;
 
 const libraries: LoadScriptProps['libraries'] = ['places'];

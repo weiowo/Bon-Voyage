@@ -16,25 +16,25 @@ import { auth } from '../../utils/firebase-init';
 
 const Header = tw.header`
   absolute flex justify-between items-center w-[100vw] h-[60px] bg-[#a9a9a9]
-  max-[801px]:hidden
+  max-tablet:hidden
 `;
 
 const SmallGreyHeader = tw.div<{ active?: boolean }>`
-  hidden max-[801px]:flex max-[801px]:justify-between max-[801px]:items-center
-  max-[801px]:w-[100vw] max-[801px]:fixed max-[801px]:top-[0] max-[801px]:z-[1000]
-  max-[801px]:bg-[#a9a9a9]
-  ${(p) => (p.active ? 'max-[801px]:h-[60px]' : 'max-[801px]:h-[65px]')}
-  ${(p) => (p.active ? 'max-[801px]:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : 'max-[801px]:[box-shadow:none]')}
+  hidden max-tablet:flex max-tablet:justify-between max-tablet:items-center
+  max-tablet:w-[100vw] max-tablet:fixed max-tablet:top-[0] max-tablet:z-[1000]
+  max-tablet:bg-[#a9a9a9]
+  ${(p) => (p.active ? 'max-tablet:h-[60px]' : 'max-tablet:h-[65px]')}
+  ${(p) => (p.active ? 'max-tablet:[box-shadow:0_4px_8px_0_rgba(0,0,0,0.2),0_6px_20px_0_rgba(0,0,0,0.19)]' : 'max-tablet:[box-shadow:none]')}
 `;
 
 const Logo = tw.div`
-  w-[150px] h-[30px] font-bold text-[25px] ml-[20px] text-white mt-[0px] max-[801px]:w-auto
-  max-[801px]:h-full max-[801px]:text-[20px] max-[801px]:z-[10] max-[801px]:absolute
-  max-[801px]:top-[20px]
+  w-[150px] h-[30px] font-bold text-[25px] ml-[20px] text-white mt-[0px] max-tablet:w-auto
+  max-tablet:h-full max-tablet:text-[20px] max-tablet:z-[10] max-tablet:absolute
+  max-tablet:top-[20px]
 `;
 
 const NavBar = tw.div<{ active?: boolean }>`
-  flex items-center gap-[15px] w-[500px] h-[30px] font-semibold mt-[0px] max-[801px]:hidden
+  flex items-center gap-[15px] w-[500px] h-[30px] font-semibold mt-[0px] max-tablet:hidden
   ${(p) => (p.active ? 'text-black' : 'text-white')}
 `;
 
