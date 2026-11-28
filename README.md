@@ -62,8 +62,8 @@ Let's unfold a wonderful trip : **[Bon Voyage](https://bonvoyage-f5e7d.web.app/)
 
 ```bash
 cp .env.example .env   # fill in the NEXT_PUBLIC_* values
-npm install
-npm run dev            # http://localhost:3000
+pnpm install
+pnpm dev               # http://localhost:3000
 ```
 
 ## Features

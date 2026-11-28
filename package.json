@@ -2,6 +2,7 @@
   "name": "bon-voyage",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.4",
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
     "@react-google-maps/api": "^2.20.8",
