@@ -18,12 +18,8 @@ import RemindWrapper, {
   ClickAndAdd, RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
 } from '../components/Reminder/CreateTrip';
 import Loading from '../components/Loading';
-import ModalImgArea, { ModalImg } from '../components/Modal/ModalImgArea';
 import Modal from '../components/Modal/Modal';
-import ModalLeftArea from '../components/Modal/ModalLeftArea';
 import CloseModalButton from '../components/Modal/CloseButton';
-import ButtonStarArea, { AddToScheduleButton, AddFavoriteIcon } from '../components/Modal/ButtonStar';
-import ModalPlaceTitle, { ModalPlaceAddress } from '../components/Modal/ModalText';
 import RestaurantBox, {
   RestaurantPhoto, RestaurantBoxRightContent, RestaurantTitle,
   RestaurantDescription, RestaurantSeeMoreButton,
@@ -36,10 +32,10 @@ import SchedulesWrapper, {
   ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
 } from '../components/Modal/ScheduleChoice';
 import LeftButton from '../components/Modal/GoBackButton';
-import STAR from '../constants/stars';
 import PLACE_PHOTO from '../constants/place.photo';
 import REMINDER_ICONS from '../constants/reminder.icon';
 import type { NearbyPlaces, Schedule, SchedulePlace } from '../types';
+import PlaceDetailModal from '../components/Modal/PlaceDetailModal';
 
 const Banner = tw.div`
   w-[100vw] h-[50vw] bg-[url(/images/city.webp)] bg-cover bg-no-repeat
@@ -298,41 +294,14 @@ function City() {
   return (
     <>
       <BlackHeaderComponent />
-      <Modal active={modalIsActive} flexDirection="row">
-        {modalDetail
-          ? (
-            <>
-              <ModalLeftArea>
-                <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-                <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                <ButtonStarArea>
-                  <AddToScheduleButton
-                    onClick={() => { handleUserOrNot(); }}
-                  >
-                    加入行程
-                  </AddToScheduleButton>
-                  <AddFavoriteIcon
-                    onClick={() => { handleFavorite(modalDetail?.place_id); }}
-                    src={liked ? STAR?.FULL_STAR : STAR?.EMPTY_STAR}
-                  />
-                </ButtonStarArea>
-              </ModalLeftArea>
-              <ModalImgArea>
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() || PLACE_PHOTO[0]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() || PLACE_PHOTO[1]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() || PLACE_PHOTO[2]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() || PLACE_PHOTO[3]} />
-              </ModalImgArea>
-              <CloseModalButton
-                type="button"
-                onClick={() => { handleModalClose(); }}
-              >
-                X
-              </CloseModalButton>
-            </>
-          )
-          : <Loading />}
-      </Modal>
+      <PlaceDetailModal
+        active={modalIsActive}
+        place={modalDetail}
+        liked={liked}
+        onAddToSchedule={() => handleUserOrNot()}
+        onToggleFavorite={(placeId) => handleFavorite(placeId)}
+        onClose={() => handleModalClose()}
+      />
       <Modal
         active={chooseScheduleModalIsActive}
         flexDirection="column"

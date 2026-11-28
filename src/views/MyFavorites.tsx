@@ -15,7 +15,6 @@ import ProfileSideBarElement from '../components/ProfileSideBar';
 import db from '../utils/firebase-init';
 import UserContext from '../components/UserContextComponent';
 import REMINDER_ICONS from '../constants/reminder.icon';
-import Loading from '../components/Loading';
 import SchedulesWrapper, {
   ConfirmDayButton, CurrentSchedulesTitle, ScheduleBoxWrapper, ScheduleBox, ScheduleTitle,
 } from '../components/Modal/ScheduleChoice';
@@ -24,14 +23,8 @@ import WriteArticleRemind, {
   WriteArticleImg, WriteRightArea, WriteText, WriteButton,
 } from '../components/Reminder/CreateArticle';
 import Modal from '../components/Modal/Modal';
-import ModalLeftArea from '../components/Modal/ModalLeftArea';
-import ModalImgArea, { ModalImg } from '../components/Modal/ModalImgArea';
 import CloseModalButton from '../components/Modal/CloseButton';
-import ButtonStarArea, { AddToScheduleButton, AddFavoriteIcon } from '../components/Modal/ButtonStar';
-import ModalPlaceTitle, { ModalPlaceAddress } from '../components/Modal/ModalText';
-import PLACE_PHOTO from '../constants/place.photo';
 import ARTICLE_COVER from '../constants/article.cover';
-import STAR from '../constants/stars';
 import Line from '../components/Line';
 import MyArticle, {
   CoverPhotoInMyArticle, MyArticleBelowArea, MyArticleTitle, MyArticleSummary,
@@ -39,6 +32,7 @@ import MyArticle, {
 import type {
   Article, Attraction, Schedule, SchedulePlace,
 } from '../types';
+import PlaceDetailModal from '../components/Modal/PlaceDetailModal';
 
 const PageWrapper = tw.div`
   w-[100vw] h-[calc(100vh_-_60px)] flex flex-row pt-[60px] max-tablet:justify-center
@@ -375,41 +369,14 @@ function MyLovedArticles() {
           </MyArticlesContainer>
         </MyArticlesArea>
       </PageWrapper>
-      <Modal active={modalIsActive} flexDirection="row">
-        {modalDetail
-          ? (
-            <>
-              <ModalLeftArea>
-                <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-                <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                <ButtonStarArea>
-                  <AddToScheduleButton
-                    onClick={() => { handleUserOrNot(); }}
-                  >
-                    加入行程
-                  </AddToScheduleButton>
-                  <AddFavoriteIcon
-                    onClick={() => { handleFavorite(modalDetail.place_id); }}
-                    src={liked ? STAR?.FULL_STAR : STAR?.EMPTY_STAR}
-                  />
-                </ButtonStarArea>
-              </ModalLeftArea>
-              <ModalImgArea>
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : PLACE_PHOTO[0]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : PLACE_PHOTO[1]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : PLACE_PHOTO[2]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : PLACE_PHOTO[3]} />
-              </ModalImgArea>
-              <CloseModalButton
-                type="button"
-                onClick={() => { handleModalClose(); }}
-              >
-                X
-              </CloseModalButton>
-            </>
-          )
-          : <Loading />}
-      </Modal>
+      <PlaceDetailModal
+        active={modalIsActive}
+        place={modalDetail}
+        liked={liked}
+        onAddToSchedule={() => handleUserOrNot()}
+        onToggleFavorite={(placeId) => handleFavorite(placeId)}
+        onClose={() => handleModalClose()}
+      />
       <Modal active={chooseScheduleModalIsActive} flexDirection="column">
         <LeftButton
           type="button"

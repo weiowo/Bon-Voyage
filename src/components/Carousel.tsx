@@ -18,24 +18,19 @@ import SchedulesWrapper, {
 import LeftButton from './Modal/GoBackButton';
 import UserContext from './UserContextComponent';
 import Loading from './Loading';
-import ModalImgArea, { ModalImg } from './Modal/ModalImgArea';
 import Modal from './Modal/Modal';
-import ModalLeftArea from './Modal/ModalLeftArea';
 import CloseModalButton from './Modal/CloseButton';
-import ButtonStarArea, { AddToScheduleButton, AddFavoriteIcon } from './Modal/ButtonStar';
-import ModalPlaceTitle, { ModalPlaceAddress } from './Modal/ModalText';
 import PLACE_PHOTO from '../constants/place.photo';
 import RemindWrapper, {
   ClickAndAdd, RemindIcon, RemindText, SuitcaseIcon, RemindRightPart, StyledBlackLink,
 } from './Reminder/CreateTrip';
 import type { Schedule, SchedulePlace } from '../types';
+import PlaceDetailModal from './Modal/PlaceDetailModal';
 
 const ArrowToRightSrc = '/images/arrow-right.webp';
 const ArrowToLeftSrc = '/images/arrow-left.webp';
-const unfilledStar = '/images/unfilled_star.webp';
 const Travel = '/images/travel-2.webp';
 const Suitcase = '/images/suitcase-2.webp';
-const filledStar = '/images/filled_star.webp';
 
 const NearByPlaceWrapper = tw.div`
   w-[100vw] h-[340px] flex flex-row items-center justify-center gap-[10px] mt-[20px]
@@ -282,41 +277,14 @@ function Carousel({ currentNearbyAttraction = [] }: CarouselProps) {
         mapContainerStyle={mapContainerStyle}
         onLoad={onMapLoad}
       />
-      <Modal active={modalIsActive} flexDirection="row">
-        {modalDetail
-          ? (
-            <>
-              <ModalLeftArea>
-                <ModalPlaceTitle>{modalDetail?.name}</ModalPlaceTitle>
-                <ModalPlaceAddress>{modalDetail?.formatted_address}</ModalPlaceAddress>
-                <ButtonStarArea>
-                  <AddToScheduleButton
-                    onClick={() => { handleUserOrNot(); }}
-                  >
-                    加入行程
-                  </AddToScheduleButton>
-                  <AddFavoriteIcon
-                    onClick={() => { handleFavorite(modalDetail.place_id); }}
-                    src={liked ? filledStar : unfilledStar}
-                  />
-                </ButtonStarArea>
-              </ModalLeftArea>
-              <ModalImgArea>
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[0]?.getUrl() ? modalDetail?.photos?.[0]?.getUrl() : PLACE_PHOTO[0]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[1]?.getUrl() ? modalDetail?.photos?.[1]?.getUrl() : PLACE_PHOTO[1]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[2]?.getUrl() ? modalDetail?.photos?.[2]?.getUrl() : PLACE_PHOTO[2]} />
-                <ModalImg alt="detail_photo" src={modalDetail?.photos?.[3]?.getUrl() ? modalDetail?.photos?.[3]?.getUrl() : PLACE_PHOTO[3]} />
-              </ModalImgArea>
-              <CloseModalButton
-                type="button"
-                onClick={() => { handleModalClose(); }}
-              >
-                X
-              </CloseModalButton>
-            </>
-          )
-          : <Loading />}
-      </Modal>
+      <PlaceDetailModal
+        active={modalIsActive}
+        place={modalDetail}
+        liked={liked}
+        onAddToSchedule={() => handleUserOrNot()}
+        onToggleFavorite={(placeId) => handleFavorite(placeId)}
+        onClose={() => handleModalClose()}
+      />
       <Modal
         active={chooseScheduleModalIsActive}
         flexDirection="column"
